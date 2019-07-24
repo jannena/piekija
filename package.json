@@ -1,0 +1,37 @@
+{
+  "name": "piekija",
+  "version": "1.0.0",
+  "description": "Pieni kirjastojärjestelmä (small library management system)",
+  "main": "index.js",
+  "scripts": {
+    "start:fe": "webpack-dev-server --mode=development",
+    "start:be": "node ./server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jannena/piekija.git"
+  },
+  "author": "Jannena",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/jannena/piekija/issues"
+  },
+  "homepage": "https://github.com/jannena/piekija#readme",
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.37.0",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.7.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.6.6",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
