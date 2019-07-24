@@ -3,9 +3,14 @@
 - username: String
 - passwordHash: String
 - card: String
+- loans: {
+    item: Item
+    dueDate: Date
+}[]
 
 ## Shelf
 - author: User
+- sharedWith: User[]
 - public: Boolean
 - books: {
     book: Book,
@@ -16,11 +21,14 @@
 - timeAdded: Date
 - timeModified: Date
 - title: String
+- description: String
+- image: String (url of the image)
 - ISBN: String
 - type: String
 - year: String
 - classification: String
 - locations: String[]
+- persons: String[]
 - authors: String[]
 - genres: String[]
 - subjects: String[]
@@ -33,7 +41,20 @@
 - id: String
 - record: Record
 - location: Location
-- state: String (ei käytettävissä / lainassa / käytettävissä / rikki / ...)
+- loanType: LoanType
+- state: String (ei käytettävissä / hankinnassa / lainassa / käytettävissä / rikki / ...)
+- stateInfo: {
+    personInCharge: User (loaner, breaker, ...)
+    dueDate: Date
+}
 
 ## Location
 - name: String
+
+## LoanType
+- name: String
+- canPlaceAHold: Boolean
+- canBeLoaned: Boolean
+- canBeRenewed: Boolean
+- renewTimes: Int
+- loanTime: Int
