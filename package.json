@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:fe": "webpack-dev-server --mode=development",
-    "start:be": "node ./server/index.js",
+    "start:be": "nodemon ./server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,7 +26,8 @@
     "babel-loader": "^8.0.6",
     "webpack": "^4.37.0",
     "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.7.2"
+    "webpack-dev-server": "^3.7.2",
+    "nodemon": "^1.19.1"
   },
   "dependencies": {
     "express": "^4.17.1",
