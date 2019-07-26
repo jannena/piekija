@@ -15,7 +15,7 @@ const parse = marc => {
         .slice(1)
         .join("\u001e");
 
-    console.log(fieldData, DIRECTORY.length);
+    // console.log(fieldData, DIRECTORY.length);
 
     let FIELDS = {};
 
@@ -36,13 +36,21 @@ const parse = marc => {
             if (["001", "002", "003", "004", "005", "006", "007", "008", "009"].indexOf(field) === -1) {
                 const indicators = utf8_substr(data, 0, 2).match(/.{1,1}/g);
 
-                const subfields = data
+                const subfields = {};
+                
+                data
                     .split("\u001f")
                     .slice(1)
-                    .map(sf => [sf[0], sf.substring(1)]);
+                    .map(sf => [sf[0], sf.substring(1)])
+                    .forEach(([field, content]) => {
+                        if (subfields[field]) subfields[field].push(content);
+                        else subfields[field] = [content];
+                    });
+                
+                
 
                 data = {
-                    data: data + "\u001e",
+                    data,
                     subfields,
                     indicators
                 };
@@ -52,8 +60,8 @@ const parse = marc => {
             else FIELDS[field] = [data];
         });
 
-    console.log(DIRECTORY
-        .match(/.{1,12}/g));
+    // console.log(DIRECTORY
+    //     .match(/.{1,12}/g));
 
     return {
         LEADER,
@@ -66,7 +74,7 @@ const stringify = marc => {
     // Convert Object to array, sort array by field numbers, convert array back to object
     marc.FIELDS = Object.entries(marc.FIELDS)
         .sort((a, b) => {
-            console.log("vertailu", Number(a[0]), Number(b[0]));
+            // console.log("vertailu", Number(a[0]), Number(b[0]));
             return Number(a[0]) - Number(b[0])
         });
 
@@ -74,16 +82,27 @@ const stringify = marc => {
     let FIELDS = "";
     marc.FIELDS.forEach(([fieldNumber, fields]) => {
         fields.forEach(field => {
-            console.log("field number", fieldNumber);
-            DIRECTORY += fieldNumber + (field.data ? field.data.length : field.length) + FIELDS.length;
-            FIELDS += field.data || field;
+            // console.log("field number", fieldNumber);
+            DIRECTORY += pad(fieldNumber, 3) + pad((field.data ? byteLength(field.data) : byteLength(field)) + 1, 4) + pad(byteLength(FIELDS), 5);
+            FIELDS += (field.data || field) + "\u001e";
         });
     });
-    return marc.LEADER + DIRECTORY + FIELDS;
+    return marc.LEADER + DIRECTORY + "\u001e" + FIELDS + "\u001d";
+};
+
+// Aligns number to right
+const pad = (num, length) => {
+    const s = "000000000" + num;
+    return s.substr(-length);
 };
 
 
-
+// https://stackoverflow.com/questions/5515869/string-length-in-bytes-in-javascript
+function byteLength(str) {
+    // Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
+    var m = encodeURIComponent(str).match(/%[89ABab]/g);
+    return str.length + (m ? m.length : 0);
+}
 // Javascript String.substring handles strings by characters
 // This function handles string cutting by bytes
 // https://stackoverflow.com/questions/11200451/extract-substring-by-utf-8-byte-positions

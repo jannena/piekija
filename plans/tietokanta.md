@@ -42,6 +42,10 @@
 - record: Record
 - location: Location
 - loanType: LoanType
+- ratings: {
+    comment: String,
+    author: User
+}[]
 - state: String (ei käytettävissä / hankinnassa / lainassa / käytettävissä / rikki / ...)
 - stateInfo: {
     personInCharge: User (loaner, breaker, ...)
