@@ -23,18 +23,19 @@
 - title: String
 - description: String
 - image: String (url of the image)
-- ISBN: String
-- type: String
+- ?ISBN: String
+- contentType: String
 - year: String
-- classification: String
+- ?classification: String
 - locations: String[]
 - persons: String[]
-- authors: String[]
+- author: String ("headauthor")
+- authors: String[] (other authors)
 - genres: String[]
 - subjects: String[]
 - languages: String[]
 - links: String[]
-- type: String (marc21 / custom)
+- recordType: String (marc21 / custom)
 - record: String
 
 ## Item
