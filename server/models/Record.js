@@ -49,7 +49,11 @@ const RecordSchema = new mongoose.Schema({
         required: true
     },
     // head language: MARC21: 008: 35-37
-    // other: MARC21: 041
+    language: {
+        type: String,
+        required: true
+    },
+    // other languages: MARC21: 041
     languages: {
         type: [
             { type: String }
