@@ -7,31 +7,73 @@ const marcs = [
 ];
 
 describe("parser can parse marc21 string to JSON", () => {
-    test("#1", () => {
+    describe("#1", () => {
         const parsedMARC = MARC21.parse(marcs[0]);
-        expect(parsedMARC.FIELDS["588"][0].subfields["a"][0]).toBe("Nimeke levystä.");
-        expect(parsedMARC.FIELDS["245"][0].subfields["c"][0]).toBe("Disney presents a Pixar Animation Studios film ; directed by Lee Unkrich ; co-directed by Adrian Molina ; produced by Darla K. Anderson ; original story by Lee Unkrich, Jason Katz, Matthew Aldrich, Adrian Molina ; screenplay by Adrian Molina, Matthew Aldrich.");
-        expect(parsedMARC.FIELDS["856"][0].indicators).toEqual([
-            "4",
-            "2"
-        ]);
+
+        test("parser can parse LEADER correct", () => {
+            expect(parsedMARC.LEADER).toBe("03420cgm a22006855i 4500");
+        });
+        test("parser can parse fields 001-009 correct", () => {
+            expect(parsedMARC.FIELDS["001"][0]).toBe("1723462");
+            expect(parsedMARC.FIELDS["008"][0]).toBe("180815t20182018fi 100|j|||||  |||vafin|c");
+        });
+        test("parsed object does not have data property", () => {
+            expect(parsedMARC.FIELDS["588"][0].data).not.toBeDefined();
+        });
+        test("parser can parse normal data fields (010->)", () => {
+            expect(parsedMARC.FIELDS["588"][0].subfields["a"][0]).toBe("Nimeke levystä.");
+            expect(parsedMARC.FIELDS["650"][2].subfields["a"][0]).toBe("muusikot");
+            expect(parsedMARC.FIELDS["245"][0].subfields["c"][0]).toBe("Disney presents a Pixar Animation Studios film ; directed by Lee Unkrich ; co-directed by Adrian Molina ; produced by Darla K. Anderson ; original story by Lee Unkrich, Jason Katz, Matthew Aldrich, Adrian Molina ; screenplay by Adrian Molina, Matthew Aldrich.");
+            expect(parsedMARC.FIELDS["856"][0].indicators).toEqual([
+                "4",
+                "2"
+            ]);
+        });
     });
 
-    test("#2", () => {
+    describe("#2", () => {
         const parsedMARC = MARC21.parse(marcs[1]);
-        expect(parsedMARC.FIELDS["856"][0].subfields["u"][0]).toBe("http://data.kirjavalitys.fi/data/servlets/ProductRequestServlet?action=getimage&ISBN=9789522880215");
-        expect(parsedMARC.FIELDS["245"][0].subfields["c"][0]).toBe("[teksti:] Tuula Korolainen ; kuvittanut Virpi Talvitie.");
+
+        test("parser can parse LEADER correct", () => {
+            expect(parsedMARC.LEADER).toBe("02019cam a22005654i 4500");
+        });
+        test("parser can parse fields 001-009 correct", () => {
+            expect(parsedMARC.FIELDS["001"][0]).toBe("1351532");
+            expect(parsedMARC.FIELDS["008"][0]).toBe("131028s2013    fi ||||j     |00| p|fin| ");
+        });
+        test("parsed object does not have data property", () => {
+            expect(parsedMARC.FIELDS["856"][0].data).not.toBeDefined();
+        });
+        test("parser can parse normal data fields (010->)", () => {
+            expect(parsedMARC.FIELDS["856"][0].subfields["u"][0]).toBe("http://data.kirjavalitys.fi/data/servlets/ProductRequestServlet?action=getimage&ISBN=9789522880215");
+            expect(parsedMARC.FIELDS["650"][7].subfields["a"][0]).toBe("kuvakirjat");
+            expect(parsedMARC.FIELDS["245"][0].subfields["c"][0]).toBe("[teksti:] Tuula Korolainen ; kuvittanut Virpi Talvitie.");
+        });
     });
 
-    test("#3", () => {
+    describe("#3", () => {
         const parsedMARC = MARC21.parse(marcs[2]);
-        expect(parsedMARC.FIELDS["977"][0].subfields["a"][0]).toBe("3");
-        expect(parsedMARC.FIELDS["655"][0].subfields["a"][0]).toBe("popmusiikki");
-        expect(parsedMARC.FIELDS["648"][0].subfields["a"][0]).toBe("2010-luku");
-        expect(parsedMARC.FIELDS["648"][0].indicators).toEqual([
-            " ",
-            "7"
-        ]);
+
+        test("parser can parse LEADER correct", () => {
+            expect(parsedMARC.LEADER).toBe("01603njm  22004457a 4500");
+        });
+        test("parser can parse fields 001-009 correct", () => {
+            expect(parsedMARC.FIELDS["001"][0]).toBe("2284684");
+            expect(parsedMARC.FIELDS["008"][0]).toBe("140317s2016    xx |||||||||||||| | eng||njm a ");
+        });
+        test("parsed object does not have data property", () => {
+            expect(parsedMARC.FIELDS["977"][0].data).not.toBeDefined();
+        });
+        test("parser can parse normal data fields (010->)", () => {
+            expect(parsedMARC.FIELDS["977"][0].subfields["a"][0]).toBe("3");
+            expect(parsedMARC.FIELDS["700"][2].subfields["e"][0]).toBe("sello");
+            expect(parsedMARC.FIELDS["655"][0].subfields["a"][0]).toBe("popmusiikki");
+            expect(parsedMARC.FIELDS["648"][0].subfields["a"][0]).toBe("2010-luku");
+            expect(parsedMARC.FIELDS["648"][0].indicators).toEqual([
+                " ",
+                "7"
+            ]);
+        });
     });
 
     describe("and stringify it back to marc21 string", () => {
