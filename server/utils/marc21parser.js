@@ -96,7 +96,48 @@ const stringify = marc => {
     return marc.LEADER + DIRECTORY + "\u001e" + FIELDS + "\u001d";
 };
 
+// Get all subfields of one field
+const getSubfields = (parsedMARC, field, subfields) => {
+    let ret = [];
+    subfields.forEach(subfield => {
+        console.log(parsedMARC.FIELDS[field][0].subfields);
+        try {
+            ret = ret.concat(parsedMARC.FIELDS[field][0].subfields[subfield] || []);
+        }
+        catch (e) {
+            return [];
+        }
+    });
+    return ret;
+};
+// Get one subfield of one field
+const getField = (parsedMARC, field, subfield) => {
+    try {
+        console.log("joo", parsedMARC.FIELDS[field][0].subfields);
+        return parsedMARC.FIELDS[field][0].subfields[subfield][0];
+    }
+    catch (e) {
+        return "";
+    }
+};
+// Get one subfield from every fields given
+const getFields = (parsedMARC, fields, subfield) => {
+    let ret = [];
+    fields.forEach(field => {
+        try {
+            const fieldData = parsedMARC.FIELDS[field].map(f => f.subfields[subfield][0])
+            console.log(fieldData);
+            ret = ret.concat(fieldData);
+        }
+        catch (e) { }
+    });
+    return ret;
+};
+
 module.exports = {
     parse,
-    stringify
+    stringify,
+    getField,
+    getFields,
+    getSubfields
 };
