@@ -16,12 +16,10 @@ const RecordSchema = new mongoose.Schema({
         required: true
     },
     description: {
-        type: String,
-        required: true
+        type: String
     },
     image: {
-        type: String,
-        required: true
+        type: String
     },
     // TODO: which MARC21 field?
     contentType: {
@@ -37,8 +35,7 @@ const RecordSchema = new mongoose.Schema({
 
     // MARC21: 100
     author: {
-        type: String,
-        required: true
+        type: String
     },
 
     // MARC21: 700, ?710
@@ -94,14 +91,8 @@ const RecordSchema = new mongoose.Schema({
     links: {
         type: [
             {
-                link: {
-                    type: String,
-                    required: true
-                },
-                title: {
-                    type: String,
-                    required: true
-                }
+                link: { type: String },
+                title: { type: String }
             }
         ],
         required: true

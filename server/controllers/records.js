@@ -16,6 +16,22 @@ recordRouter.get("/", (req, res) => {
         });
 });
 
+// Get one record
+recordRouter.get("/:id", (req, res) => {
+    const id = req.params.id;
+
+    Record
+        .findById(id)
+        .then(result => {
+            if (result) res.json(result);
+            else res.status(404).end();
+        })
+        .catch(err => {
+            res.status(500).json({ error: err.message });
+            console.log(err);
+        });
+});
+
 // Add new record to database
 // This endpoint needs marc21 data. That will be parsed to the database.
 recordRouter.post("/", (req, res) => {
@@ -36,6 +52,7 @@ recordRouter.post("/", (req, res) => {
     }
 
 
+    // TODO: There are catalouging rules.
     const year = parsedMARC.FIELDS["008"][0].substring(7, 11);
 
     const title = MARC21.getField(parsedMARC, "245", "a"); // parsedMARC.FIELDS["245"][0].subfields["a"][0];
@@ -48,7 +65,17 @@ recordRouter.post("/", (req, res) => {
     const locations = MARC21.getFields(parsedMARC, ["651"], "a"); // parsedMARC.FIELDS["651"].map(f => f.subfields["a"][0]);
     const persons = MARC21.getFields(parsedMARC, ["600"], "a"); // parsedMARC.FIELDS["600"].map(f => f.subfields["a"][0]);
 
+    const linkURLs = MARC21.getFields(parsedMARC, ["856"], "u");
+    const linkTexts = MARC21.getFields(parsedMARC, ["856"], "y");
+    const links = linkURLs.map((link, i) => [link, linkTexts[i] || ""]);
+
     const record = {
+        timeAdded: new Date(),
+        timeModified: new Date(),
+        image: "",
+        description: "",
+        contentType: "smaybe book",
+        
         title,
         language,
         languages,
@@ -58,10 +85,24 @@ recordRouter.post("/", (req, res) => {
         genres,
         subjects,
         locations,
-        persons
+        persons,
+        links,
+
+        recordType: "marc21",
+        record: data
     };
 
-    res.status(201).json(record);
+    const newRecord = new Record(record);
+
+    newRecord
+        .save()
+        .then(saved => {
+            res.status(201).json(saved);
+        })
+        .catch(err => {
+            res.status(400).json({ error: err.message });
+            console.log(err);
+        });
 });
 
 module.exports = recordRouter;
