@@ -1,4 +1,6 @@
 
+const { pad, byteLength, utf8_substr } = require("./stringUtils");
+
 const parse = marc => {
     // LEADER: first 24 characters
     const LEADER = marc.substring(0, 24);
@@ -8,12 +10,8 @@ const parse = marc => {
     // DIRECTORY: after LEADER until ASCII 1E
     const DIRECTORY = h[0].substring(24);
 
+    // Start byte of data is saved in the LEADER in characters 12-16
     const startOfData = Number(LEADER.substring(12, 17));
-
-    // FIELDS: everything after directory
-    const fieldData = h
-        .slice(1)
-        .join("\u001e");
 
     // console.log(fieldData, DIRECTORY.length);
 
@@ -32,25 +30,22 @@ const parse = marc => {
 
             let data = utf8_substr(marc, startOfData + start, length - 1);
 
-            // fields 010-> contains indicators (ie. first two characterss) and subfields
+            // fields 010-> contains indicators (ie. first two characters) and subfields
             if (["001", "002", "003", "004", "005", "006", "007", "008", "009"].indexOf(field) === -1) {
                 const indicators = utf8_substr(data, 0, 2).match(/.{1,1}/g);
 
                 const subfields = {};
-                
+
                 data
-                    .split("\u001f")
+                    .split("\u001f") /* Separates field by subfield separator \u001f */
                     .slice(1)
-                    .map(sf => [sf[0], sf.substring(1)])
+                    .map(sf => [sf[0], sf.substring(1)]) /* First character is the subfield code, everything after that is data */
                     .forEach(([field, content]) => {
                         if (subfields[field]) subfields[field].push(content);
                         else subfields[field] = [content];
                     });
-                
-                
 
                 data = {
-                    data,
                     subfields,
                     indicators
                 };
@@ -60,8 +55,6 @@ const parse = marc => {
             else FIELDS[field] = [data];
         });
 
-    // console.log(DIRECTORY
-    //     .match(/.{1,12}/g));
 
     return {
         LEADER,
@@ -80,52 +73,28 @@ const stringify = marc => {
 
     let DIRECTORY = "";
     let FIELDS = "";
+    // Go through every field type (= field number)
     marc.FIELDS.forEach(([fieldNumber, fields]) => {
+        // Go through every field of current field type (= field number)
         fields.forEach(field => {
+            let fieldData = "";
+            // Only fields 010-> have indicators and subfields
+            if (["001", "002", "003", "004", "005", "006", "007", "008", "009"].indexOf(fieldNumber) === -1) {
+                // Add indicators before subfields
+                fieldData = field.indicators.join("");
+                // Convert subfields to marc21
+                Object.entries(field.subfields).forEach(([subfieldCode, subfields]) => {
+                    const mappedSubfields = subfields.map(sf => `\u001f${subfieldCode}${sf}`);
+                    fieldData += mappedSubfields.join("");
+                });
+            }
             // console.log("field number", fieldNumber);
-            DIRECTORY += pad(fieldNumber, 3) + pad((field.data ? byteLength(field.data) : byteLength(field)) + 1, 4) + pad(byteLength(FIELDS), 5);
-            FIELDS += (field.data || field) + "\u001e";
+            DIRECTORY += pad(fieldNumber, 3) + pad((fieldData ? byteLength(fieldData) : byteLength(field)) + 1, 4) + pad(byteLength(FIELDS), 5);
+            FIELDS += (fieldData || field) + "\u001e";
         });
     });
     return marc.LEADER + DIRECTORY + "\u001e" + FIELDS + "\u001d";
 };
-
-// Aligns number to right
-const pad = (num, length) => {
-    const s = "000000000" + num;
-    return s.substr(-length);
-};
-
-
-// https://stackoverflow.com/questions/5515869/string-length-in-bytes-in-javascript
-function byteLength(str) {
-    // Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
-    var m = encodeURIComponent(str).match(/%[89ABab]/g);
-    return str.length + (m ? m.length : 0);
-}
-// Javascript String.substring handles strings by characters
-// This function handles string cutting by bytes
-// https://stackoverflow.com/questions/11200451/extract-substring-by-utf-8-byte-positions
-function encode_utf8(s) {
-    return unescape(encodeURIComponent(s));
-}
-function utf8_substr(str, startInBytes, lengthInBytes) {
-    var resultStr = '';
-    var startInChars = 0;
-    for (bytePos = 0; bytePos < startInBytes; startInChars++) {
-
-        ch = str.charCodeAt(startInChars);
-        bytePos += (ch < 128) ? 1 : encode_utf8(str[startInChars]).length;
-    }
-    end = startInChars + lengthInBytes - 1;
-    for (n = startInChars; startInChars <= end; n++) {
-        ch = str.charCodeAt(n);
-        end -= (ch < 128) ? 1 : encode_utf8(str[n]).length;
-
-        resultStr += str[n];
-    }
-    return resultStr;
-}
 
 module.exports = {
     parse,
