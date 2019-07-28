@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
 const recordRouter = require("./controllers/records");
+const searchRouter = require("./controllers/search");
 
 console.log(config.DATABASE_URI);
 
@@ -18,6 +19,7 @@ mongoose.set("useFindAndModify", true);
 app.use(bodyParser.json());
 
 app.use("/api/record", recordRouter);
+app.use("/api/search", searchRouter);
 
 app.listen({
     port: 3001
