@@ -27,15 +27,15 @@ app.get("/2", (req, res) => {
     res.json(validateQuery([
         "and", [
             ["or", [
-                ["recordType", "custom"],
-                ["subjects", "kissat"],
+                ["recordType", "custom", "is"],
+                ["subjects", "kissat", "is"],
                 ["and", [
-                    ["authors", "Mikko"],
-                    ["locations", "Mikkeli"]
+                    ["authors", "Mikko", "contains"],
+                    ["locations", "Mikkeli", "is"]
                 ]]
             ]],
-            ["location", "Tanska"],
-            ["persons", "Obel"]
+            ["locations", "Tanska", "is"],
+            ["persons", "Obel", "contains"]
         ]
     ]))
 });

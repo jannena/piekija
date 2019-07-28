@@ -1,6 +1,8 @@
 const searchRouter = require("express").Router();
 const Record = require("../models/Record");
 
+const validateQuery = require("../utils/queryValidator");
+
 searchRouter.post("/simple", (req, res) => {
     const query = req.body.query;
 
@@ -43,7 +45,7 @@ searchRouter.post("/advanced", (req, res) => {
     const firstTime = process.hrtime();
 
     Record
-        .find(query)
+        .find(validateQuery(query))
         .then(result => {
             if (!result) res.status(404).json({ error: "no results" });
             else res.json(result);
