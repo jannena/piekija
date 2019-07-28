@@ -8,6 +8,8 @@ const app = express();
 const recordRouter = require("./controllers/records");
 const searchRouter = require("./controllers/search");
 
+const validateQuery = require("./utils/queryValidator");
+
 console.log(config.DATABASE_URI);
 
 mongoose
@@ -20,6 +22,23 @@ app.use(bodyParser.json());
 
 app.use("/api/record", recordRouter);
 app.use("/api/search", searchRouter);
+
+app.get("/2", (req, res) => {
+    res.json(validateQuery([
+        "and", [
+            ["or", [
+                ["recordType", "custom"],
+                ["subjects", "kissat"],
+                ["and", [
+                    ["authors", "Mikko"],
+                    ["locations", "Mikkeli"]
+                ]]
+            ]],
+            ["location", "Tanska"],
+            ["persons", "Obel"]
+        ]
+    ]))
+});
 
 app.listen({
     port: 3001
