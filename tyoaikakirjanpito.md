@@ -5,4 +5,6 @@
 | 26.7. | 1 | marc21-parserin jatkaminen; marc21-parserin testit |
 | 27.7. | 1 | marc21-parser ja sen testit valmiiksi |
 | | 2 | tietueen (record) tietokantaskeema, tietueen REST-rajapinnan aloittaminen |
-| yht. | 7,5 | |
+| 28.7. | 2,5 | Yksinkertaisen ja tarkennetun haun aloittaminen, tarkennetun haun kyselykielen käännin-validoin ja tämän testit |
+| | | |
+| yht. | 10 | |
