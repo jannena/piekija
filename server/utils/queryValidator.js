@@ -8,10 +8,10 @@ const isValidOperator = operator =>
         "description", "recordType", "record"
     ].indexOf(operator) !== -1;
 
-// TODO: contains or is
+// TODO: 
 
 const validateAdvancedQuery = ([operator, value, type]) => {
-    if (!isValidOperator(operator)) throw new Error("Operator is invalid.");
+    if (!isValidOperator(operator)) throw new Error(`Operator ${operator} is invalid.`);
 
     let validatedQuery = {};
 
@@ -28,6 +28,7 @@ const validateAdvancedQuery = ([operator, value, type]) => {
                 }
                 break;
             case "is":
+            default:
                 validatedQuery[newOperator] = value;
                 break;
         }

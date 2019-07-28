@@ -25,19 +25,28 @@ app.use("/api/search", searchRouter);
 
 app.get("/2", (req, res) => {
     res.json(validateQuery([
-        "and", [
-            ["or", [
-                ["recordType", "custom", "is"],
-                ["subjects", "kissat", "is"],
+        "or", [
+            ["and", [
                 ["and", [
-                    ["authors", "Mikko", "contains"],
-                    ["locations", "Mikkeli", "is"]
+                    ["and", [
+                        ["or", [
+                            ["and", [
+                                ["locations", "Suomi", "is"],
+                                ["persons", "Matti", "contains"]
+                            ]]
+                        ]]
+                    ]],
+                    ["authors", "Joku", "contains"],
+                    ["genres", "popmusiikki", "is"],
+                    ["languages", "eng", "is"],
+                    ["languages", "fin", "is"]
                 ]]
             ]],
-            ["locations", "Tanska", "is"],
-            ["persons", "Obel", "contains"]
-        ]
-    ]))
+            ["title", "hei", "contains"],
+            ["year", "2018", "is"],
+            ["record", "lumme", "contains"]
+        ]]
+    ))
 });
 
 app.listen({
