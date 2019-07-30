@@ -8,13 +8,15 @@ const config = (env, argv) => {
     return {
         entry: ["@babel/polyfill", "./client/src/index.js"],
         output: {
-            path: path.resolve(__dirname, "client/build"),
-            filename: "main.js"
+            path: path.resolve(__dirname, "server/build"),
+            filename: "main.js",
+            publicPath: "/"
         },
         devServer: {
-            contentBase: path.resolve(__dirname, "client/build"),
+            contentBase: path.resolve(__dirname, "server/build"),
             compress: true,
-            port: 3000
+            port: 3000,
+            historyApiFallback: true
         },
         devtool: "source-map",
         module: {
