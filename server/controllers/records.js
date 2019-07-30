@@ -74,6 +74,7 @@ recordRouter.post("/", (req, res) => {
         timeModified: new Date(),
         image: "",
         description: "",
+        // TODO: Fix content type
         contentType: "smaybe book",
         
         title,

@@ -63,6 +63,7 @@ const parse = marc => {
 };
 
 
+// TODO: Fix stringification of LEADER. There must be correct record length and starting point of the record in LEADER.
 const stringify = marc => {
     // Convert Object to array, sort array by field numbers, convert array back to object
     marc.FIELDS = Object.entries(marc.FIELDS)
@@ -134,6 +135,7 @@ const getFields = (parsedMARC, fields, subfield) => {
     return ret;
 };
 
+// TODO Create also version that can be used with frontend
 module.exports = {
     parse,
     stringify,
