@@ -3,6 +3,7 @@ const Record = require("../models/Record");
 
 const validateQuery = require("../utils/queryValidator");
 
+// TODO: Also simple search needs a query validatot that can parse Boolean logic
 searchRouter.post("/simple", (req, res) => {
     const query = req.body.query;
 
