@@ -1,6 +1,7 @@
 const config = require("./utils/config");
 
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const bodyParser = require("body-parser");
 const express = require("express");
@@ -19,6 +20,9 @@ mongoose
 mongoose.set("useFindAndModify", true);
 
 app.use(bodyParser.json());
+
+app.use("/", express.static("build"));
+app.use(cors());
 
 app.use("/api/record", recordRouter);
 app.use("/api/search", searchRouter);

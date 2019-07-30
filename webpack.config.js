@@ -6,7 +6,7 @@ const webpack = require("webpack");
 
 const config = (env, argv) => {
     return {
-        entry: ["@babel/polyfill", "./client/src/index.js"],
+        entry: ["@babel/polyfill", "./client/index.js"],
         output: {
             path: path.resolve(__dirname, "server/build"),
             filename: "main.js",
