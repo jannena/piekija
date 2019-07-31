@@ -29,7 +29,7 @@ const RecordSchema = new mongoose.Schema({
 
     // MARC21: 008: 07-10 / 11-14
     year: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -65,22 +65,8 @@ const RecordSchema = new mongoose.Schema({
         ],
         required: true
     },
-    // MARC21: 650, ?653
+    // MARC21: 650, ?653 (also locations and persons 651, 600, 610)
     subjects: {
-        type: [
-            { type: String }
-        ],
-        required: true
-    },
-    // MARC21: 651
-    locations: {
-        type: [
-            { type: String }
-        ],
-        required: true
-    },
-    // MARC21: 600, ?610
-    persons: {
         type: [
             { type: String }
         ],

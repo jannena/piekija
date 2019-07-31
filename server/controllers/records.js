@@ -55,19 +55,27 @@ recordRouter.post("/", (req, res) => {
     // TODO: ohitusindikaattorit
 
     // TODO: There are catalouging rules.
-    const year = parsedMARC.FIELDS["008"][0].substring(7, 11);
+    const year = Number(parsedMARC.FIELDS["008"][0].substring(7, 11));
     const contentType = parsedMARC.LEADER.substring(6, 7);
 
     const title = MARC21.getField(parsedMARC, "245", "a"); // parsedMARC.FIELDS["245"][0].subfields["a"][0];
+    
     const language = parsedMARC.FIELDS["008"][0].substring(35, 38);
-    const languages = MARC21.getSubfields(parsedMARC, "041", ["a", "b", "d", "e", "f", "g", "h", "j"])  // MARC21.getFields(parsedMARC, ["041"], "j");
-    const author = MARC21.getField(parsedMARC, "100", "a"); // parsedMARC.FIELDS["100"][0].subfield["a"][0];
-    const authors = MARC21.getFields(parsedMARC, ["700", "710"], "a");
-    const genres = MARC21.getFields(parsedMARC, ["655"], "a"); // parsedMARC.FIELDS["655"].map(f => f.subfields["a"][0]);
-    const subjects = MARC21.getFields(parsedMARC, ["650", "653"], "a"); // parsedMARC.FIELDS["650"].map(f => f.subfields["a"][0]);
-    const locations = MARC21.getFields(parsedMARC, ["651"], "a"); // parsedMARC.FIELDS["651"].map(f => f.subfields["a"][0]);
-    const persons = MARC21.getFields(parsedMARC, ["600"], "a"); // parsedMARC.FIELDS["600"].map(f => f.subfields["a"][0]);
+    const languagesDuplicates = MARC21.getSubfields(parsedMARC, "041", ["a", "b", "d", "e", "f", "g", "h", "j"]);  // MARC21.getFields(parsedMARC, ["041"], "j");
+    languagesDuplicates.unshift(language);
+    // Remove duplicates in languages
+    const languages = [...new Set(languagesDuplicates)];
 
+    const author = MARC21.getField(parsedMARC, "100", "a"); // parsedMARC.FIELDS["100"][0].subfield["a"][0];
+    const authorsDuplicates = MARC21.getFields(parsedMARC, ["700", "710"], "a");
+    authorsDuplicates.unshift(author);
+    // Remove duplicates in authors
+    const authors = [...new Set(authorsDuplicates)];
+
+    const genres = MARC21.getFields(parsedMARC, ["655"], "a"); // parsedMARC.FIELDS["655"].map(f => f.subfields["a"][0]);
+    const subjects = MARC21.getFields(parsedMARC, ["650", "651", "600", "653"], "a"); // parsedMARC.FIELDS["650"].map(f => f.subfields["a"][0]);
+
+    // TODO: Fix links (there are another ways to store links, too)
     const linkURLs = MARC21.getFields(parsedMARC, ["856"], "u");
     const linkTexts = MARC21.getFields(parsedMARC, ["856"], "y");
     const links = linkURLs.map((link, i) => [link, linkTexts[i] || ""]);
@@ -87,8 +95,6 @@ recordRouter.post("/", (req, res) => {
         year,
         genres,
         subjects,
-        locations,
-        persons,
         links,
 
         recordType: "marc21",

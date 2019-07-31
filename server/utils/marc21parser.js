@@ -134,6 +134,23 @@ const getFields = (parsedMARC, fields, subfield) => {
     });
     return ret;
 };
+// Get all fields and all subfields
+const getFieldsAndSubfields = (parsedMARC, fields, subfields) => {
+    let ret = [];
+    fields.forEach(field => {
+        try {
+            parsedMARC.FIELDS[field].forEach(f => {
+                const fieldData = {};
+                subfields.forEach(subfield => {
+                    if (f.subfields[subfield]) fieldData[subfield] = f.subfields[subfield]
+                });
+                ret.push(fieldData);
+            });
+        }
+        catch (e) {}
+    });
+    return ret;
+};
 
 const contentTypes = {
     a: "Language material",
@@ -159,5 +176,6 @@ module.exports = {
     getField,
     getFields,
     getSubfields,
+    getFieldsAndSubfields,
     contentTypes
 };
