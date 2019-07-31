@@ -135,11 +135,29 @@ const getFields = (parsedMARC, fields, subfield) => {
     return ret;
 };
 
+const contentTypes = {
+    a: "Language material",
+    c: "Notated music",
+    d: "Manuscript notated music",
+    e: "Cartographic material",
+    f: "Manuscript cartographic material",
+    g: "Projected medium",
+    i: "Nonmusical sound recording",
+    j: "Musical sound recording",
+    k: "Two-dimensional nonprojectable graphic",
+    m: "Computer file",
+    o: "Kit",
+    p: "Mixed materials",
+    r: "Three-dimensional artifact or naturally occurring object",
+    t: "Manuscript language material"
+};
+
 // TODO Create also version that can be used with frontend
 module.exports = {
     parse,
     stringify,
     getField,
     getFields,
-    getSubfields
+    getSubfields,
+    contentTypes
 };

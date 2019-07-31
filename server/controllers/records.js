@@ -52,8 +52,11 @@ recordRouter.post("/", (req, res) => {
     }
 
 
+    // TODO: ohitusindikaattorit
+
     // TODO: There are catalouging rules.
     const year = parsedMARC.FIELDS["008"][0].substring(7, 11);
+    const contentType = parsedMARC.LEADER.substring(6, 7);
 
     const title = MARC21.getField(parsedMARC, "245", "a"); // parsedMARC.FIELDS["245"][0].subfields["a"][0];
     const language = parsedMARC.FIELDS["008"][0].substring(35, 38);
@@ -74,8 +77,7 @@ recordRouter.post("/", (req, res) => {
         timeModified: new Date(),
         image: "",
         description: "",
-        // TODO: Fix content type
-        contentType: "smaybe book",
+        contentType,
         
         title,
         language,
