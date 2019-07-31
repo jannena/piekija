@@ -14,6 +14,7 @@ const AdvancedSearchField = ({ query, setQuery }) => {
         // newQuery[index] = e.target.value
         query[index] = e.target.value;
         setQuery(query);
+        console.log("writing to an input", query, JSON.stringify(query), setQuery.toString());
     };
     return (
         <div>
@@ -39,14 +40,15 @@ const AdvancedSearchField = ({ query, setQuery }) => {
 const AdvancedSearchGroup = ({ query, setQuery }) => {
     // Event handlers for new group and field addition
     const addToThisLevel = toBeAdded => {
-        const newQuery = [...query];
-        newQuery[1].push(toBeAdded);
-        setQuery(newQuery);
+        const updatedQuery = [...query];
+        console.log("Here I am", updatedQuery, JSON.stringify(updatedQuery));
+        updatedQuery[1].push(toBeAdded);
+        setQuery(updatedQuery);
     };
     const addNewField = () => addToThisLevel(["record", "", "contains"]);
     const addNewGroup = () => addToThisLevel(["and", []]);
 
-    console.log(setQuery.toString());
+    // console.log(setQuery.toString());
 
     return (
         <div style={QueryGroupStyle}>
@@ -70,22 +72,26 @@ const AdvancedSearchGroup = ({ query, setQuery }) => {
                     query={q}
                     // Since this is a recursive component, we must create a new 'setQuery' function
                     setQuery={newQuery => {
-                        /* console.log("in setQuery function, query[i]", query[i]);
-                        query[i] = newQuery; */
-                        setQuery(newQuery);
+                        // console.log("in setQuery function, query[i]", query[i]);
+                        const updatedQuery = [...query];
+                        updatedQuery[1][i] = newQuery;
+                        setQuery(updatedQuery);
                     }}
                 />
 
                 : <AdvancedSearchField
                     key={i}
                     query={q}
-                    setQuery={newQuery => setQuery(newQuery)}
+                    setQuery={newQuery => {
+                        const updatedQuery = [...query];
+                        updatedQuery[1][i] = newQuery;
+                        setQuery(updatedQuery);
+                    }}
                 />
             )}
         </div>
     );
 };
-
 
 /*
 "or", [
@@ -104,15 +110,15 @@ const AdvancedSearchGroup = ({ query, setQuery }) => {
 const AdvancedSearch = ({ onSearch }) => {
     const [query, setQuery] = useState(["and", []]);
 
-    console.log(query);
+    // console.log(query);
 
     return (
         <div>
             <AdvancedSearchGroup
                 query={query}
                 setQuery={newQuery => {
-                    const updatedQuery = [...query, newQuery];
-                    setQuery(updatedQuery);
+                    console.log("updatedQuery", newQuery, JSON.stringify(newQuery));
+                    setQuery(newQuery);
                 }}
             />
             <button onClick={() => onSearch(query)}>Search</button>

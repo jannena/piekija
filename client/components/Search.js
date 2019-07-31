@@ -7,18 +7,22 @@ import AdvancedSearch from "./AdvancedSearch";
 
 const Search = ({ queryParams, history }) => {
     const [result, setResult] = useState([]);
-    const query = qs.parse(queryParams).q;
+
+    const { type, q: query } = qs.parse(queryParams)
 
     console.log("rendered search");
 
     useEffect(() => {
-        if (query) onSearch(query);
+        if (query) {
+            if (type === "advanced") onAdvancedSearch(JSON.parse(query));
+            else onSearch(query);
+        }
     }, [query]);
 
     const onSearch = query => {
         history.push({
             pathname: "/search",
-            search: `?q=${encodeURI(query)}`
+            search: `?type=simple&q=${encodeURIComponent(query)}`
         });
         searchService
             .simpleSearch(query)
@@ -32,6 +36,12 @@ const Search = ({ queryParams, history }) => {
     };
 
     const onAdvancedSearch = query => {
+        history.push({
+            pathname: "/search",
+            search: `?type=advanced&q=${encodeURIComponent(JSON.stringify(query))}`
+        });
+        console.log(encodeURI(JSON.stringify(query)));
+        console.log(JSON.stringify(query));
         searchService
             .advancedSearch(query)
             .then(result => {
