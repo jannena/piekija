@@ -28,13 +28,25 @@ const Search = ({ queryParams, history }) => {
             .catch(err => {
                 console.log("VIRHE hakutuloksia haettaessa", err, err.message);
             });
-        console.log("requested search results");
+        console.log("requested simple search results");
+    };
+
+    const onAdvancedSearch = query => {
+        searchService
+            .advancedSearch(query)
+            .then(result => {
+                setResult(result)
+            })
+            .catch(err => {
+                console.log("VIRHE hakutuloksia haettaessa", err, err.message);
+            });
+        console.log("requested advanced search results");
     };
 
     return (
         <div>
             <SearchField onSearch={onSearch} />
-            <AdvancedSearch />
+            <AdvancedSearch onSearch={onAdvancedSearch} />
             <hr />
             {result.length === 0
                 ? (!query ? "^" : `No results for ${query}`)
