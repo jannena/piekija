@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import recordService from "../services/recordService";
 import { Link } from "react-router-dom";
+import { Tabs, Tab } from "./Tabs";
+
+const MARC21 = require("../../server/utils/marc21parser");
 
 const Record = ({ id, history: { goBack } }) => {
     const [record, setRecord] = useState(null);
@@ -12,8 +15,11 @@ const Record = ({ id, history: { goBack } }) => {
         recordService
             .get(id)
             .then(result => {
-                setRecord(result);
-                console.log("received record", result);
+                setRecord({
+                    result,
+                    record: MARC21.parse(result.record)
+                });
+                console.log("received record", result, record);
             })
             .catch(err => {
                 console.log(JSON.parse(JSON.stringify(err)), err.message);
@@ -24,14 +30,64 @@ const Record = ({ id, history: { goBack } }) => {
         ? <p>Loading...</p>
         : <div>
             <button onClick={goBack}>&lt; Back</button>
-            <h2>{record.title}</h2>
-            <h3>{record.author}</h3>
+            <h2>{record.result.title}</h2>
+            <div>
+                Classification: Coming soon
+            </div>
+            <div>
+                ISBN/ISSN tms. ...: Coming soon
+            </div>
+            <div>
+                Publisher: ...? ?Coming soon?
+            </div>
+            <div>
+                Appearance: Coming soon
+            </div>
+            <div>
+                Authors:
+                <ul>
+                    {MARC21
+                        .getFieldsAndSubfields(record.record, ["700"], ["a", "e"])
+                        .map(author => <li key={author["a"][0]}>
+                            <Link to={`/search/?type=simple&q=${author["a"][0]}`}>{author["a"][0]}</Link> {author["e"].join(", ")}
+                        </li>)}
+                </ul>
+            </div>
             <div>
                 Subjects:
                 <ul>
-                    {record.subjects.map(s => <li key={s}><Link to={`/search?q=${encodeURI(s)}`}>{s}</Link></li>)}
+                    {record.result.subjects.map(s => <li key={s}><Link to={`/search?q=${encodeURI(s)}`}>{s}</Link></li>)}
                 </ul>
             </div>
+            <div>
+                Genres:
+                <ul>
+                    {record.result.genres.map(g => <li key={g}>{g}</li>)}
+                </ul>
+            </div>
+
+
+            <Tabs titles={["Items", "MARC"]}>
+                <Tab>
+                    <div>eka</div>
+                </Tab>
+                <Tab>
+                    {/* TODO: Maybe search engine for MARC21 fields? */}
+                    <div>LEADER: {record.record.LEADER}</div>
+                    <table>
+                        <tbody>
+                            {Object.entries(record.record.FIELDS)
+                                .sort((a, b) => Number(a[0]) - Number(b[0]))
+                                .map(([fieldNumber, fieldData], i) =>
+                                    <tr key={i}>
+                                        <td>{fieldNumber}</td>
+                                        <td>{String(fieldData)}</td>
+                                    </tr>
+                                )}
+                        </tbody>
+                    </table>
+                </Tab>
+            </Tabs>
         </div>
 };
 
