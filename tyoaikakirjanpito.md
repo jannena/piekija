@@ -7,5 +7,7 @@
 | | 2 | tietueen (record) tietokantaskeema, tietueen REST-rajapinnan aloittaminen |
 | 28.7. | 2,5 | Yksinkertaisen ja tarkennetun haun aloittaminen, tarkennetun haun kyselykielen käännin-validoin ja tämän testit |
 | 30.7. | 2 | Frontendin yksinkertaisen haun toiminnallisuuksien aloittaminen |
-| 31.7. | 2 | Frontednin edistyneen haun toiminnallisuuksien aloittaminen |
-| yht. | 14 | |
+| 31.7. | 2 | Frontendin edistyneen haun toiminnallisuuksien aloittaminen |
+| | 1,5 | Frontendin tietue-näkymän päivittäminen; marc21-parserin päivittäminen |
+| | | |
+| yht. | 15,5 | |
