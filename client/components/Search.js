@@ -3,6 +3,7 @@ import searchService from "../services/searchService";
 import SearchField from "./SearchField";
 import qs from "query-string";
 import { Link } from "react-router-dom";
+import AdvancedSearch from "./AdvancedSearch";
 
 const Search = ({ queryParams, history }) => {
     const [result, setResult] = useState([]);
@@ -33,6 +34,7 @@ const Search = ({ queryParams, history }) => {
     return (
         <div>
             <SearchField onSearch={onSearch} />
+            <AdvancedSearch />
             <hr />
             {result.length === 0
                 ? (!query ? "^" : `No results for ${query}`)
