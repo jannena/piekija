@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import recordService from "../services/recordService";
 import { Link } from "react-router-dom";
 import { Tabs, Tab } from "./Tabs";
+import MARC21Screen from "./MARC21Screen";
 
 const MARC21 = require("../../server/utils/marc21parser");
 
@@ -73,19 +74,7 @@ const Record = ({ id, history: { goBack } }) => {
                 </Tab>
                 <Tab>
                     {/* TODO: Maybe search engine for MARC21 fields? */}
-                    <div>LEADER: {record.record.LEADER}</div>
-                    <table>
-                        <tbody>
-                            {Object.entries(record.record.FIELDS)
-                                .sort((a, b) => Number(a[0]) - Number(b[0]))
-                                .map(([fieldNumber, fieldData], i) =>
-                                    <tr key={i}>
-                                        <td>{fieldNumber}</td>
-                                        <td>{String(fieldData)}</td>
-                                    </tr>
-                                )}
-                        </tbody>
-                    </table>
+                    <MARC21Screen parsedMARC={record.record} />
                 </Tab>
             </Tabs>
         </div>
