@@ -8,6 +8,8 @@
 | 28.7. | 2,5 | Yksinkertaisen ja tarkennetun haun aloittaminen, tarkennetun haun kyselykielen käännin-validoin ja tämän testit |
 | 30.7. | 2 | Frontendin yksinkertaisen haun toiminnallisuuksien aloittaminen |
 | 31.7. | 2 | Frontendin edistyneen haun toiminnallisuuksien aloittaminen |
-| | 1,5 | Frontendin tietue-näkymän päivittäminen; marc21-parserin päivittäminen |
+| | 1,5 | Frontendin tietuenäkymän päivittäminen; marc21-parserin päivittäminen |
+| 1.8. | 1 | Frontendin tietunäkymän päivittäminen |
+| | 1,5 | tietokantaskeemain ja REST rajapintain aloittaminen |
 | | | |
-| yht. | 15,5 | |
+| yht. | 18 | |
