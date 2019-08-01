@@ -22,6 +22,13 @@ recordRouter.get("/:id", (req, res) => {
 
     Record
         .findById(id)
+        /* .populate({
+            path: "items",
+            populate: {
+                path: "location"
+            }
+        }) */
+        .populate("items", { state: 1, location: 1 })
         .then(result => {
             if (result) res.json(result);
             else res.status(404).end();

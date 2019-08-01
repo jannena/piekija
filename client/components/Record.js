@@ -104,7 +104,13 @@ const Record = ({ id, history: { goBack } }) => {
 
             <Tabs titles={["Items", "MARC"]}>
                 <Tab>
-                    <div>eka</div>
+                    <table>
+                        <tbody>
+                            {record.result.items.map(item =>
+                                <tr><td>{item.location}</td> <td>{item.state}</td></tr>
+                            )}
+                        </tbody>
+                    </table>
                 </Tab>
                 <Tab>
                     {/* TODO: Maybe search engine for MARC21 fields? */}

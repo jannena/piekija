@@ -7,8 +7,10 @@ itemRouter.get("/", (req, res) => {
         .find({})
         .populate("record", { title: 1, author: 1 })
         .populate("location", { name: 1 })
-        .populate("loanType")
-        .then(result => void res.json(result))
+        .populate("loantype")
+        .then(result => {
+            res.json(result);
+        })
         .catch(err => {
             res.status(500).json({ error: err.message });
             console.log(err);
