@@ -9,6 +9,7 @@ const app = express();
 
 const recordRouter = require("./controllers/records");
 const locationRouter = require("./controllers/locations");
+const itemRouter = require("./controllers/items");
 const searchRouter = require("./controllers/search");
 
 const validateQuery = require("./utils/queryValidator");
@@ -28,6 +29,7 @@ app.use(cors());
 
 app.use("/api/record", recordRouter);
 app.use("/api/location", locationRouter);
+app.use("/api/item", itemRouter);
 app.use("/api/search", searchRouter);
 
 app.get("/2", (req, res) => {
