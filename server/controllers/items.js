@@ -5,8 +5,8 @@ const Record = require("../models/Record");
 itemRouter.get("/", (req, res) => {
     Item
         .find({})
-        .populate("record")
-        .populate("location")
+        .populate("record", { title: 1, author: 1 })
+        .populate("location", { name: 1 })
         .populate("loanType")
         .then(result => void res.json(result))
         .catch(err => {
@@ -16,14 +16,14 @@ itemRouter.get("/", (req, res) => {
 });
 
 itemRouter.post("/", async (req, res) => {
-    const { record, location, loanType, state } = req.body;
-    if (!record || !location || !loanType || !state)
+    const { record, location, loantype, state } = req.body;
+    if (!record || !location || !loantype || !state)
         return res.status(400).json({ error: "record or location or loanType or state is missing" });
 
     const newItem = new Item({
         record,
         location,
-        loanType,
+        loantype,
         state,
         ratings: [],
         stateInfo: {}

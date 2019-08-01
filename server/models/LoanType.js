@@ -5,7 +5,7 @@ const loanTypeSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    canBePlaceAHold: {
+    canBePlacedAHold: {
         type: Boolean,
         required: true
     },
