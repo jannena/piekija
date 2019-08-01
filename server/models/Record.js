@@ -92,14 +92,14 @@ const RecordSchema = new mongoose.Schema({
     record: {
         type: String,
         required: true
-    }/* ,
+    },
 
     items: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Item"
         }
-    ] */
+    ]
 });
 
 module.exports = mongoose.model("Record", RecordSchema);

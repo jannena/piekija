@@ -6,7 +6,9 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
+
 const recordRouter = require("./controllers/records");
+const locationRouter = require("./controllers/locations");
 const searchRouter = require("./controllers/search");
 
 const validateQuery = require("./utils/queryValidator");
@@ -25,6 +27,7 @@ app.use("/", express.static("build"));
 app.use(cors());
 
 app.use("/api/record", recordRouter);
+app.use("/api/location", locationRouter);
 app.use("/api/search", searchRouter);
 
 app.get("/2", (req, res) => {
