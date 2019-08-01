@@ -2,18 +2,20 @@
 - name: String
 - username: String
 - passwordHash: String
-- card: String
+- barcode: String
 - loans: {
     item: Item
     dueDate: Date
 }[]
+- shelves: Shelf[]
 
 ## Shelf
+- name: String
 - author: User
 - sharedWith: User[]
 - public: Boolean
-- books: {
-    book: Book,
+- items: {
+    book: Item,
     note: String
 }[]
 
@@ -57,8 +59,8 @@
 
 ## LoanType
 - name: String
-- canPlaceAHold: Boolean
+- canBePlacedAHold: Boolean
 - canBeLoaned: Boolean
 - canBeRenewed: Boolean
 - renewTimes: Int
-- loanTime: Int
+- loanTime: Int (days)
