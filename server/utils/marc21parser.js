@@ -101,7 +101,6 @@ const stringify = marc => {
 const getSubfields = (parsedMARC, field, subfields) => {
     let ret = [];
     subfields.forEach(subfield => {
-        console.log(parsedMARC.FIELDS[field][0].subfields);
         try {
             ret = ret.concat(parsedMARC.FIELDS[field][0].subfields[subfield] || []);
         }
@@ -142,7 +141,8 @@ const getFieldsAndSubfields = (parsedMARC, fields, subfields) => {
             parsedMARC.FIELDS[field].forEach(f => {
                 const fieldData = {};
                 subfields.forEach(subfield => {
-                    if (f.subfields[subfield]) fieldData[subfield] = f.subfields[subfield]
+                    if (subfield === "indicators") fieldData.indicators = f.indicators;
+                    else if (f.subfields[subfield]) fieldData[subfield] = f.subfields[subfield];
                 });
                 ret.push(fieldData);
             });

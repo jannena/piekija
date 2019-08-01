@@ -26,9 +26,7 @@
 - ?ISBN: String
 - contentType: String
 - year: String
-- ?classification: String
-- locations: String[]
-- persons: String[]
+- ?classification: String[]
 - author: String ("headauthor")
 - authors: String[] (other authors)
 - genres: String[]
@@ -37,6 +35,7 @@
 - links: String[]
 - recordType: String (marc21 / custom)
 - record: String
+- items: Item[]
 
 ## Item
 - id: String
