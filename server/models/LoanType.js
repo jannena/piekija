@@ -27,4 +27,4 @@ const loanTypeSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("LoanType", loanTypeSchema);
+module.exports = mongoose.model("Loantype", loanTypeSchema);

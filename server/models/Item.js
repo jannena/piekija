@@ -10,9 +10,9 @@ const itemSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Location"
     },
-    loanType: {
+    loantype: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "LoanType"
+        ref: "Loantype"
     },
     ratings: [
         {

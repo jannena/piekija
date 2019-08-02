@@ -106,8 +106,8 @@ const Record = ({ id, history: { goBack } }) => {
                 <Tab>
                     <table>
                         <tbody>
-                            {record.result.items.map(item =>
-                                <tr><td>{item.location}</td> <td>{item.state}</td></tr>
+                            {record.result.items.map((item, i) =>
+                                <tr key={i}><td>{item.location.name}</td><td>{item.state}</td></tr>
                             )}
                         </tbody>
                     </table>
