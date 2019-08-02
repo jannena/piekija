@@ -1,6 +1,15 @@
 const userRouter = require("express").Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const authentication = require("../middleware/authentication");
+
+userRouter.use(authentication);
+
+userRouter.get("/me", (req, res) => {
+    if (!req.authenticated) return res.status(401).json({ error: "you must login first" });
+
+    res.send(req.authenticated);
+});
 
 userRouter.get("/", (req, res) => {
     User
@@ -56,10 +65,6 @@ userRouter.post("/", async (req, res) => {
             res.status(500).json({ error: err.message });
             console.log(err);
         });
-});
-
-userRouter.get("/me", (req, res) => {
-    // Coming soon
 });
 
 module.exports = userRouter;
