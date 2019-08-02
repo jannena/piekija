@@ -15,8 +15,7 @@ const shelfRouter = require("./controllers/shelves");
 const userRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
 const searchRouter = require("./controllers/search");
-
-const validateQuery = require("./utils/queryValidator");
+const errorHandler = require("./middleware/error");
 
 console.log(config.DATABASE_URI);
 
@@ -40,31 +39,7 @@ app.use("/api/user", userRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/search", searchRouter);
 
-app.get("/2", (req, res) => {
-    res.json(validateQuery([
-        "or", [
-            ["and", [
-                ["and", [
-                    ["and", [
-                        ["or", [
-                            ["and", [
-                                ["locations", "Suomi", "is"],
-                                ["persons", "Matti", "contains"]
-                            ]]
-                        ]]
-                    ]],
-                    ["authors", "Joku", "contains"],
-                    ["genres", "popmusiikki", "is"],
-                    ["languages", "eng", "is"],
-                    ["languages", "fin", "is"]
-                ]]
-            ]],
-            ["title", "hei", "contains"],
-            ["year", "2018", "is"],
-            ["record", "lumme", "contains"]
-        ]]
-    ))
-});
+app.use(errorHandler);
 
 app.listen({
     port: 3001
