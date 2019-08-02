@@ -20,7 +20,8 @@ shelfRouter.get("/:id", (req, res, next) => {
         .catch(next);
 });
 
-shelfRouter.post("/", (req, res, next) => {
+shelfRouter.post("/", async (req, res, next) => {
+    if (!req.authenticated) res.status(401).json({ error: "you must login first" });
     const { name, public } = req.body;
 
     if (!name || public === undefined) return res.status(400).json({ error: "name or public is missing" });
@@ -28,19 +29,20 @@ shelfRouter.post("/", (req, res, next) => {
     const newShelf = new Shelf({
         name,
         public,
-        author: "", // TODO: logged in user
+        author: req.authenticated._id, // TODO: logged in user
         records: [],
         sharedWith: []
     });
 
-    // TODO: Add shelf to user's document
+    // TODO: Error handling and fixing
 
-    newShelf
-        .save()
-        .then(result => {
-            res.status(201).json(result);
-        })
-        .catch(next);
+    const savedShelf = await newShelf.save();
+
+    const user = { ...req.authenticated };
+    user.shelves.push(savedShelf._id);
+    await user.save();
+
+    res.status(201).json(savedShelf);
 });
 
 module.exports = shelfRouter;

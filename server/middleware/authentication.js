@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../utils/config");
 const User = require("../models/User");
 
-const authentication = async (req, res, next) => {
+const authenticationMiddleware = async (req, res, next) => {
     try {
         const authorization = req.get("authorization");
         console.log("Authorization", authorization);
@@ -35,4 +35,8 @@ const authentication = async (req, res, next) => {
     next();
 };
 
-module.exports = authentication;
+module.exports = {
+    authenticationMiddleware,
+    /* UnauthorizedError,
+    ForbiddenError */
+};

@@ -15,7 +15,9 @@ const shelfRouter = require("./controllers/shelves");
 const userRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
 const searchRouter = require("./controllers/search");
+
 const errorHandler = require("./middleware/error");
+const { authenticationMiddleware } = require("./middleware/authentication");
 
 console.log(config.DATABASE_URI);
 
@@ -29,6 +31,8 @@ app.use(bodyParser.json());
 
 app.use("/", express.static("build"));
 app.use(cors());
+
+app.use(authenticationMiddleware);
 
 app.use("/api/record", recordRouter);
 app.use("/api/location", locationRouter);
