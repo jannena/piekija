@@ -29,7 +29,7 @@ shelfRouter.get("/:id", (req, res) => {
 shelfRouter.post("/", (req, res) => {
     const { name, public } = req.body;
 
-    if (!name || public === undefined) res.status(400).json({ error: "name or public is missing" });
+    if (!name || public === undefined) return res.status(400).json({ error: "name or public is missing" });
 
     const newShelf = new Shelf({
         name,
