@@ -13,6 +13,7 @@ const itemRouter = require("./controllers/items");
 const loantypeRouter = require("./controllers/loantypes");
 const shelfRouter = require("./controllers/shelves");
 const userRouter = require("./controllers/users");
+const loginRouter = require("./controllers/login");
 const searchRouter = require("./controllers/search");
 
 const validateQuery = require("./utils/queryValidator");
@@ -36,6 +37,7 @@ app.use("/api/item", itemRouter);
 app.use("/api/loantype", loantypeRouter);
 app.use("/api/shelf", shelfRouter);
 app.use("/api/user", userRouter);
+app.use("/api/login", loginRouter);
 app.use("/api/search", searchRouter);
 
 app.get("/2", (req, res) => {
