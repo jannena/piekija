@@ -2,7 +2,7 @@ const itemRouter = require("express").Router();
 const Item = require("../models/Item");
 const Record = require("../models/Record");
 
-itemRouter.get("/", (req, res) => {
+itemRouter.get("/", (req, res, next) => {
     Item
         .find({})
         .populate("record", { title: 1, author: 1 })
@@ -11,13 +11,10 @@ itemRouter.get("/", (req, res) => {
         .then(result => {
             res.json(result);
         })
-        .catch(err => {
-            res.status(500).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
-itemRouter.post("/", async (req, res) => {
+itemRouter.post("/", async (req, res, next) => {
     const { record, location, loantype, state } = req.body;
     if (!record || !location || !loantype || !state)
         return res.status(400).json({ error: "record or location or loanType or state is missing" });
@@ -46,8 +43,7 @@ itemRouter.post("/", async (req, res) => {
         res.status(201).json(savedItem);
     }
     catch (err) {
-        console.log(err);
-        return res.status(500).json({ error: err.message });
+        next(err);
     }
 });
 

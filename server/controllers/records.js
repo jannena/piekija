@@ -4,20 +4,17 @@ const Record = require("../models/Record");
 const MARC21 = require("../utils/marc21parser");
 
 // Get all records
-recordRouter.get("/", (req, res) => {
+recordRouter.get("/", (req, res, next) => {
     Record
         .find({})
         .then(result => {
             res.json(result);
         })
-        .catch(err => {
-            res.send({ error: "error" });
-            console.log(err);
-        });
+        .catch(next);
 });
 
 // Get one record
-recordRouter.get("/:id", (req, res) => {
+recordRouter.get("/:id", (req, res, next) => {
     const id = req.params.id;
 
     Record
@@ -33,15 +30,12 @@ recordRouter.get("/:id", (req, res) => {
             if (result) res.json(result);
             else res.status(404).end();
         })
-        .catch(err => {
-            res.status(500).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
 // Add new record to database
 // This endpoint needs marc21 data. That will be parsed to the database.
-recordRouter.post("/", (req, res) => {
+recordRouter.post("/", (req, res, next) => {
     const body = req.body;
 
     const type = body.type;
@@ -115,10 +109,7 @@ recordRouter.post("/", (req, res) => {
         .then(saved => {
             res.status(201).json(saved);
         })
-        .catch(err => {
-            res.status(400).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
 module.exports = recordRouter;

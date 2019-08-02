@@ -7,7 +7,7 @@ const validateQuery = require("../utils/queryValidator");
 // TODO: Search controller does not need to return this much data (ie. full document)
 
 // TODO: Also simple search needs a query validatot that can parse Boolean logic
-searchRouter.post("/simple", (req, res) => {
+searchRouter.post("/simple", (req, res, next) => {
     const query = req.body.query;
 
     if (!query) return res.status(401).json({ error: "query not given" });
@@ -35,13 +35,10 @@ searchRouter.post("/simple", (req, res) => {
             const secondTime = process.hrtime(firstTime);
             console.log(`simple search time ${(secondTime[0] * 1e9 + secondTime[1]) * 1e-6} ms`);
         })
-        .catch(err => {
-            res.status(500).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
-searchRouter.post("/advanced", (req, res) => {
+searchRouter.post("/advanced", (req, res, next) => {
     const query = req.body.query;
 
     // TODO: validation of variable 'query'
@@ -57,10 +54,7 @@ searchRouter.post("/advanced", (req, res) => {
             const secondTime = process.hrtime(firstTime);
             console.log(`advanced search time ${(secondTime[0] * 1e9 + secondTime[1]) * 1e-6} ms`);
         })
-        .catch(err => {
-            res.status(400).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
 module.exports = searchRouter;

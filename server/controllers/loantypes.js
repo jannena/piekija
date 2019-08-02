@@ -1,17 +1,14 @@
 const loantypeRouter = require("express").Router();
 const Loantype = require("../models/Loantype");
 
-loantypeRouter.get("/", (req, res) => {
+loantypeRouter.get("/", (req, res, next) => {
     Loantype
         .find({})
         .then(result => void res.send(result))
-        .catch(err => {
-            res.status(500).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
-loantypeRouter.post("/", (req, res) => {
+loantypeRouter.post("/", (req, res, next) => {
     const { name, canBePlacedAHold, canBeLoaned, canBeRenewed, renewTimes, loanTime } = req.body;
     if (!name || !canBePlacedAHold || !canBeLoaned || !canBeRenewed || !renewTimes || !loanTime)
         return res.status(400).json(
@@ -31,10 +28,7 @@ loantypeRouter.post("/", (req, res) => {
     newLoantype
         .save()
         .then(result => void res.status(201).json(result))
-        .catch(err => {
-            res.status(500).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
 module.exports = loantypeRouter;

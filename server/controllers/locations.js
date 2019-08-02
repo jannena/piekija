@@ -1,7 +1,7 @@
 const locationRouter = require("express").Router();
 const Location = require("../models/Location");
 
-locationRouter.get("/:id", (req, res) => {
+locationRouter.get("/:id", (req, res, next) => {
     const id = req.params.id;
 
     Location
@@ -10,23 +10,17 @@ locationRouter.get("/:id", (req, res) => {
             if (result) return res.json(result);
             else res.status(404).end();
         })
-        .catch(err => {
-            req.status(400).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
-locationRouter.get("/", (req, res) => {
+locationRouter.get("/", (req, res, next) => {
     Location
         .find({})
         .then(result => void res.json(result))
-        .catch(err => {
-            res.status(500).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
-locationRouter.post("/", (req, res) => {
+locationRouter.post("/", (req, res, next) => {
     const body = req.body;
     const locationName = body.name;
 
@@ -40,22 +34,16 @@ locationRouter.post("/", (req, res) => {
         .then(result => {
             res.status(201).json(result);
         })
-        .catch(err => {
-            res.status(400).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
-locationRouter.delete("/:id", (req, res) => {
+locationRouter.delete("/:id", (req, res, next) => {
     const id = req.params.id;
 
     Location
         .findByIdAndRemove(id)
         .then(() => void res.status(204).end())
-        .catch(err => {
-            res.status(500).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
 module.exports = locationRouter;

@@ -11,17 +11,14 @@ userRouter.get("/me", (req, res) => {
     res.send(req.authenticated);
 });
 
-userRouter.get("/", (req, res) => {
+userRouter.get("/", (req, res, next) => {
     User
         .find({})
         .then(result => void res.json(result))
-        .catch(err => {
-            res.status(500).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
-userRouter.get("/:id", (req, res) => {
+userRouter.get("/:id", (req, res, next) => {
     const id = req.params.id;
 
     User
@@ -30,22 +27,20 @@ userRouter.get("/:id", (req, res) => {
             if (!result) return res.status(404).end();
             else res.json(result);
         })
-        .catch(err => {
-            res.status(500).json({ error: err.json });
-            console.log(err);
-        });
+        .catch(next);
 });
 
 // TODO: ?User search?
 
-userRouter.post("/", async (req, res) => {
+userRouter.post("/", async (req, res, next) => {
     const { name, username, staff, password, barcode } = req.body;
 
     if (!name || !username || staff === undefined || !password || !barcode)
         return res.status(400).json({ error: "name or username or staff or password or barcode is missing" });
-    
+
     if (password.length < 10) return res.status(400).json({ error: "length of password must be at least 10 characters" });
 
+    // TODO: Error handling
     const passwordHash = await bcrypt.hash(password, 12);
 
     const newUser = new User({
@@ -61,10 +56,7 @@ userRouter.post("/", async (req, res) => {
     newUser
         .save()
         .then(result => void res.status(201).json(result))
-        .catch(err => {
-            res.status(500).json({ error: err.message });
-            console.log(err);
-        });
+        .catch(next);
 });
 
 module.exports = userRouter;
