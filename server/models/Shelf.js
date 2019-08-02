@@ -21,11 +21,11 @@ const shelfSchema = new mongoose.Schema({
         required: true,
         default: false
     },
-    items: [
+    records: [
         {
-            item: {
+            record: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Item"
+                ref: "Record"
             },
             note: String
         }

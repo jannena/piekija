@@ -1,6 +1,7 @@
 ## User
 - name: String
 - username: String
+- staff: Boolean
 - passwordHash: String
 - barcode: String
 - loans: {
@@ -14,8 +15,8 @@
 - author: User
 - sharedWith: User[]
 - public: Boolean
-- items: {
-    book: Item,
+- records: {
+    record: Record,
     note: String
 }[]
 
