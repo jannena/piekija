@@ -10,6 +10,7 @@
 | 31.7. | 2 | Frontendin edistyneen haun toiminnallisuuksien aloittaminen |
 | | 1,5 | Frontendin tietuenäkymän päivittäminen; marc21-parserin päivittäminen |
 | 1.8. | 1 | Frontendin tietunäkymän päivittäminen |
-| | 1,5 | tietokantaskeemain ja REST rajapintain aloittaminen |
+| | 1,5 | tietokantaskeemain ja REST-rajapintain aloittaminen |
+| 2.8. | 2 | REST-rajapinnan jatkaminen; kirjautuminen |
 | | | |
-| yht. | 18 | |
+| yht. | 20 | |      
