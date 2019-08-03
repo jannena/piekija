@@ -22,13 +22,13 @@ shelfRouter.get("/:id", (req, res, next) => {
 
 shelfRouter.post("/", async (req, res, next) => {
     if (!req.authenticated) res.status(401).json({ error: "you must login first" });
-    const { name, public } = req.body;
+    const { name, public: publicity } = req.body;
 
-    if (!name || public === undefined) return res.status(400).json({ error: "name or public is missing" });
+    if (!name || publicity === undefined) return res.status(400).json({ error: "name or public is missing" });
 
     const newShelf = new Shelf({
         name,
-        public,
+        public: publicity,
         author: req.authenticated._id, // TODO: logged in user
         records: [],
         sharedWith: []
