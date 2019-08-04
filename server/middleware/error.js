@@ -6,6 +6,7 @@ const errorHandler = (error, req, res, next) => {
     if (error.message === "FORBIDDEN") return res.status(403).json({ error: "you do not have permission to do that" });
     
     res.status(500).json({ error: `${error.name}: ${error.message}` });
+    console.log(error);
 
     next();
 };
