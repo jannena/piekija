@@ -8,7 +8,7 @@ recordRouter.get("/", (req, res, next) => {
     Record
         .find({})
         .then(result => {
-            res.json(result);
+            res.json(result.map(r => r.toJSON()));
         })
         .catch(next);
 });
@@ -27,13 +27,14 @@ recordRouter.get("/:id", (req, res, next) => {
         })
         // .populate("items", { state: 1, location: 1 })
         .then(result => {
-            if (result) res.json(result);
+            if (result) res.json(result.toJSON());
             else res.status(404).end();
         })
         .catch(next);
 });
 
 recordRouter.delete("/:id", (req, res, next) => {
+    console.log("????????????????????????????????????", req.authenticated);
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
     if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
@@ -56,16 +57,18 @@ recordRouter.post("/", (req, res, next) => {
     const { type, data } = req.body;
     if (!type || !data) return res.status(400).json({ error: "type or data is missing" });
 
+    console.log("received marc21 data", data);
+
     const parsedMARC = MARC21.tryParse(data);
     if (!parsedMARC) return res.status(400).json({ error: "invalid marc21 data" })
-    const record = MARC21.parseMARCToDatabse(parsedMARC);
+    const record = MARC21.parseMARCToDatabse(parsedMARC, data);
 
     const newRecord = new Record(record);
 
     newRecord
         .save()
         .then(saved => {
-            res.status(201).json(saved);
+            res.status(201).json(saved.toJSON());
         })
         .catch(next);
 });
@@ -86,7 +89,7 @@ recordRouter.put("/:id", (req, res, next) => {
     Record
         .findByIdAndUpdate(id, record, { new: true })
         .then(result => {
-            res.json(result);
+            res.json(result.toJSON());
         })
         .catch(next);
 });
