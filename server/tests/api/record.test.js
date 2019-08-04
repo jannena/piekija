@@ -1,30 +1,32 @@
 const mongoose = require("mongoose");
 const app = require("../../app");
 const supertest = require("supertest");
+const escapeJSON = require("../../utils/escape-json");
 
 const api = supertest(app);
 
-const { addUserToDb, clearDatabase, getTokenForUser, initMARC21Data, recordsInDb, addRecordToDb } = require("./testutils");
+const { addUserToDb, clearDatabase, getTokenForUser, initMARC21Data, escapedMARC21Data, recordsInDb, addRecordToDb }
+    = require("./testutils");
 
 let staffToken = "";
 let token = "";
 
 beforeAll(async () => {
     await clearDatabase();
-    staffToken = getTokenForUser(await addUserToDb("fullaccess", "m4ns1kk1", true));
-    token = getTokenForUser(await addUserToDb("basic", "m4ns1kk1", false));
+    staffToken = "Bearer " + getTokenForUser(await addUserToDb("fullaccess", "m4ns1kk1", true));
+    token = "Bearer " + getTokenForUser(await addUserToDb("basic", "m4ns1kk1", false));
 })
 
 describe("record tests", () => {
-    describe("when non-staff user is logged in", () => {
+    describe("when staff user is logged in", () => {
         test("record can be added in marc21 format and it will be read correctly", async () => {
             const recordsAtStart = await recordsInDb();
             const res = await api
                 .post("/api/record")
-                .set({ Authorization: `Bearer ${staffToken}` })
+                .set({ Authorization: staffToken })
                 .send({
                     type: "marc21",
-                    data: initMARC21Data[0]
+                    data: escapedMARC21Data[0]
                 })
                 .expect(201)
                 .expect("Content-type", /application\/json/);
@@ -36,17 +38,17 @@ describe("record tests", () => {
             expect(res.body.title).toBe("Liitu-ukko /");
             expect(res.body.author).toBe("Tudor, C. J.,");
             expect(res.body.subjects).toEqual([
-                "Eddie",
                 "salaisuudet",
                 "viestit",
                 "déjà vu -ilmiö",
                 "murha",
-                "aikatasot"
+                "aikatasot",
+                "Eddie"
             ]);
             // TODO: Remove last chars
             expect(res.body.authors).toEqual([
-                "Salminen, Raimo,",
-                "Tudor, C. J.,"
+                "Tudor, C. J.,",
+                "Salminen, Raimo,"
             ]);
             expect(res.body.languages).toEqual([
                 "fin",
@@ -58,8 +60,8 @@ describe("record tests", () => {
             expect(res.body.__v).not.toBeDefined();
         });
 
-        describe("and when there is records in the databse", () => {
-            const recordId = "";
+        describe("and when there is records in the database", () => {
+            let recordId = "";
 
             beforeEach(async () => {
                 recordId = await addRecordToDb();
@@ -69,11 +71,16 @@ describe("record tests", () => {
                 const recordsAtStart = await recordsInDb();
                 const res = await api
                     .put(`/api/record/${recordId}`)
-                    .send(initMARC21Data[1])
+                    .set({ Authorization: staffToken })
+                    .send(
+                        {
+                            type: "marc21",
+                            data: escapedMARC21Data[1]
+                        })
                     .expect(200)
                     .expect("Content-type", /application\/json/);
 
-                expect(await recordId()).toBe(recordsAtStart);
+                expect(await recordsInDb()).toBe(recordsAtStart);
                 expect(res.body.id).toBeDefined();
                 expect(res.body._id).not.toBeDefined();
                 expect(res.body.__v).not.toBeDefined();
@@ -86,7 +93,7 @@ describe("record tests", () => {
                 ]);
 
                 expect(res.body.subjects).toEqual([
-                    "heavy-rock",
+                    "heavy rock",
                     "rock",
                     "progressiivinen rock",
                     "kuorot",
@@ -99,6 +106,7 @@ describe("record tests", () => {
                 const recordsAtStart = await recordsInDb();
                 await api
                     .delete(`/api/record/${recordId}`)
+                    .set({ Authorization: staffToken })
                     .expect(204);
                 expect(await recordsInDb()).toBe(recordsAtStart - 1);
             });
@@ -113,6 +121,7 @@ describe("record tests", () => {
             const recordAtStart = await recordsInDb();
             await api
                 .post("/api/record")
+                .set({ Authorization: token })
                 .send(initMARC21Data[0])
                 .expect(403);
 
@@ -120,7 +129,7 @@ describe("record tests", () => {
         });
 
         describe("and when there is record in database", () => {
-            const recordId = "";
+            let recordId = "";
 
             beforeEach(async () => {
                 recordId = await addRecordToDb();
@@ -129,6 +138,7 @@ describe("record tests", () => {
             test("record can be received", async () => {
                 const res = await api
                     .get(`/api/record/${recordId}`)
+                    .set({ Authorization: token })
                     .expect(200)
                     .expect("Content-type", /application\/json/);
 
@@ -140,8 +150,10 @@ describe("record tests", () => {
 
             test("record cannot be removed", async () => {
                 const recordAtStart = await recordsInDb();
+                console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", recordId);
                 await api
                     .delete(`/api/record/${recordId}`)
+                    .set({ Authorization: token })
                     .expect(403);
 
                 expect(await recordsInDb()).toBe(recordAtStart);
@@ -150,6 +162,7 @@ describe("record tests", () => {
             test("record cannot be edited", async () => {
                 await api
                     .put(`/api/record/${recordId}`)
+                    .set({ Authorization: token })
                     .send(initMARC21Data[0])
                     .expect(403);
                 // TODO: Check whether there is actually no changes in the database!
@@ -167,7 +180,7 @@ describe("record tests", () => {
         });
 
         describe("and when there is record in database", () => {
-            const recordId = "";
+            let recordId = "";
 
             beforeEach(async () => {
                 recordId = await addRecordToDb();
