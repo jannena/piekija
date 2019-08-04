@@ -169,6 +169,17 @@ const contentTypes = {
     t: "Manuscript language material"
 };
 
+const tryParse = marc => {
+    try {
+        const parsedMARC = parse(marc);
+        return parsedMARC;
+    }
+    catch (e) {
+        console.log(e);
+        return null;
+    }
+};
+
 const parseMARCToDatabse = parsedMARC => {
     // TODO: ohitusindikaattorit
 
@@ -227,6 +238,7 @@ module.exports = {
     getField,
     getFields,
     getSubfields,
+    tryParse,
     getFieldsAndSubfields,
     contentTypes,
     parseMARCToDatabse
