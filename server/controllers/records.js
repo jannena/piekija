@@ -33,9 +33,26 @@ recordRouter.get("/:id", (req, res, next) => {
         .catch(next);
 });
 
+recordRouter.delete("/:id", (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
+    const id = req.params.id;
+
+    Record
+        .findByIdAndRemove(id)
+        .then(() => {
+            res.status("204").end();
+        })
+        .catch(next);
+});
+
 // Add new record to database
 // This endpoint needs marc21 data. That will be parsed to the database.
 recordRouter.post("/", (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const body = req.body;
 
     const type = body.type;
