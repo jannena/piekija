@@ -3,6 +3,8 @@ const app = require("../../app");
 const supertest = require("supertest");
 const escapeJSON = require("../../utils/escape-json");
 
+console.log(escapeJSON.toString());
+
 const api = supertest(app);
 
 const { addUserToDb, clearDatabase, getTokenForUser, initMARC21Data, escapedMARC21Data, recordsInDb, addRecordToDb }
@@ -16,6 +18,8 @@ beforeAll(async () => {
     staffToken = "Bearer " + getTokenForUser(await addUserToDb("fullaccess", "m4ns1kk1", true));
     token = "Bearer " + getTokenForUser(await addUserToDb("basic", "m4ns1kk1", false));
 })
+
+// TODO: Tests for error cases
 
 describe("record tests", () => {
     describe("when staff user is logged in", () => {
