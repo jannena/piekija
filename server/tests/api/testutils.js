@@ -1,6 +1,7 @@
 const { SECRET } = require("../../utils/config");
 const User = require("../../models/User");
 const Record = require("../../models/Record");
+const Location = require("../../models/Location");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -71,6 +72,19 @@ const addRecordToDb = async () => {
     }
 };
 
+const addLocationToDb = async name => {
+    const newLocation = new Location({
+        name
+    });
+    try {
+        const savedLocation = await newLocation.save();
+        return savedLocation._id;
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
 const getTokenForUser = user => {
     const tokenData = {
         id: user._id,
@@ -83,18 +97,25 @@ const getTokenForUser = user => {
 const clearDatabase = async () => {
     await Record.deleteMany({});
     await User.deleteMany({});
+    await Location.deleteMany({});
 };
 
 const usersInDb = async () => (await User.find({})).length;
 const recordsInDb = async () => (await Record.find({})).length;
+const locationsInDb = async () => (await Location.find({})).length;
 
 module.exports = {
     addUserToDb,
     addRecordToDb,
+    addLocationToDb,
     clearDatabase,
+
     getTokenForUser,
+
     initMARC21Data,
     escapedMARC21Data,
+
     usersInDb,
-    recordsInDb
+    recordsInDb,
+    locationsInDb
 };
