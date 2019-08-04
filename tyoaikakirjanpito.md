@@ -12,6 +12,6 @@
 | 1.8. | 1 | Frontendin tietunäkymän päivittäminen |
 | | 1,5 | tietokantaskeemain ja REST-rajapintain aloittaminen |
 | 2.8. | 2 | REST-rajapinnan jatkaminen; kirjautuminen |
-| 4.8. | 3,5 | REST-rajapinnan testien aloittaminen |
+| 4.8. | 4,5 | REST-rajapinnan testien aloittaminen |
 | | | |
-| yht. | 23,5 | |      
+| yht. | 24,5 | |      
