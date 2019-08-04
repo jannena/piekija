@@ -53,22 +53,11 @@ recordRouter.post("/", (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
     if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
-    const body = req.body;
+    const { type, data } = req.body;
+    if (!type || !data) return res.status(400).json({ error: "type or data is missing" });
 
-    const type = body.type;
-    const data = body.data;
-
-    if (!type) return res.status(400).json({ error: "type is missing" });
-    if (!data) return res.status(400).json({ error: "data is missing" });
-
-    let parsedMARC = {};
-    try {
-        parsedMARC = MARC21.parse(data);
-    }
-    catch (e) {
-        return res.status(400).json({ error: "invalid marc21 data" });
-    }
-
+    const parsedMARC = MARC21.tryParse(data);
+    if (!parsedMARC) return res.status(400).json({ error: "invalid marc21 data" })
     const record = MARC21.parseMARCToDatabse(parsedMARC);
 
     const newRecord = new Record(record);
@@ -81,11 +70,25 @@ recordRouter.post("/", (req, res, next) => {
         .catch(next);
 });
 
-recordRouter.put("/:id", (req, res) => {
+recordRouter.put("/:id", (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
     if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
+    const { id } = req.params;
 
+    const { type, data } = req.body;
+    if (!type || !data) return res.status(400).json({ error: "type or data is missing" });
+
+    const parsedMARC = MARC21.tryParse(data);
+    if (!parsedMARC) return res.status(400).json({ error: "invalid marc21 data" })
+    const record = MARC21.parseMARCToDatabse(parsedMARC);
+
+    Record
+        .findByIdAndUpdate(id, record, { new: true })
+        .then(result => {
+            res.json(result);
+        })
+        .catch(next);
 });
 
 module.exports = recordRouter;
