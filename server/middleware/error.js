@@ -1,10 +1,11 @@
 
 const errorHandler = (error, req, res, next) => {
-    switch (error.name) {
-        case "JsonWebTokenError": return res.status(401).json({ error: "invalid token" });
-        case "CastError": return res.status(400).json({ error: "malformatted id" })
-        default: res.status(500).json({ error: `${error.name}: ${error.message}` });
-    }
+    if (error.name === "JsonWebTokenError") return res.status(401).json({ error: "invalid token" });
+    if (error.name === "CastError") return res.status(400).json({ error: "malformatted id" });
+    if (error.message === "UNAUTHORIZED") return res.status(401).json({ error: "you must login first" });
+    if (error.message === "FORBIDDEN") return res.status(403).json({ error: "you do not have permission to do that" });
+    
+    res.status(500).json({ error: `${error.name}: ${error.message}` });
 
     next();
 };
