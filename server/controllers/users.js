@@ -8,6 +8,8 @@ userRouter.get("/me", (req, res, next) => {
     res.send(req.authenticated);
 });
 
+
+// TODO: Add old password
 userRouter.put("/me", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
 
@@ -19,7 +21,7 @@ userRouter.put("/me", async (req, res, next) => {
         const usertoBeSaved = {};
 
         if (password && password.length < 10) return res.status(400).json({ error: "password too short" });
-        usertoBeSaved.passwordHash = await bcrypt.hash(password, 13);
+        if (password) usertoBeSaved.passwordHash = await bcrypt.hash(password, 13);
 
         if (name) usertoBeSaved.name = name;
 
