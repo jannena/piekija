@@ -2,6 +2,7 @@ const { SECRET } = require("../../utils/config");
 const User = require("../../models/User");
 const Record = require("../../models/Record");
 const Location = require("../../models/Location");
+const Shelf = require("../../models/Shelf");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -85,6 +86,24 @@ const addLocationToDb = async name => {
     }
 };
 
+const addShelfToDb = async (name, public, authorId, sharedWith) => {
+    const newShelf = new Shelf({
+        name,
+        description: "This is a shelf.",
+        public,
+        author: authorId,
+        records: [],
+        sharedWith
+    });
+    try {
+        const savedShelf = await newShelf.save();
+        return savedShelf;
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
 const getTokenForUser = user => {
     const tokenData = {
         id: user._id,
@@ -103,11 +122,13 @@ const clearDatabase = async () => {
 const usersInDb = async () => (await User.find({})).length;
 const recordsInDb = async () => (await Record.find({})).length;
 const locationsInDb = async () => (await Location.find({})).length;
+const shelvesInDb = async () => (await Shelf.find({})).length;
 
 module.exports = {
     addUserToDb,
     addRecordToDb,
     addLocationToDb,
+    addShelfToDb,
     clearDatabase,
 
     getTokenForUser,
@@ -117,5 +138,6 @@ module.exports = {
 
     usersInDb,
     recordsInDb,
-    locationsInDb
+    locationsInDb,
+    shelvesInDb
 };

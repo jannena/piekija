@@ -5,9 +5,10 @@ const shelfSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    description: String,
     author: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Shelf",
+        ref: "User",
         required: true
     },
     sharedWith: [
