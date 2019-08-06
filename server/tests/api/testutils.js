@@ -86,11 +86,11 @@ const addLocationToDb = async name => {
     }
 };
 
-const addShelfToDb = async (name, public, authorId, sharedWith) => {
+const addShelfToDb = async (name, publicity, authorId, sharedWith) => {
     const newShelf = new Shelf({
         name,
         description: "This is a shelf.",
-        public,
+        public: publicity,
         author: authorId,
         records: [],
         sharedWith
