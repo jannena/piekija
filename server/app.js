@@ -25,7 +25,7 @@ mongoose
     .connect(config.DATABASE_URI, { useNewUrlParser: true })
     .then(() => console.log("Connected to database"))
     .catch(() => console.log("Could not connect to database"));
-mongoose.set("useFindAndModify", true);
+mongoose.set("useFindAndModify", false);
 
 app.use(bodyParser.json());
 
