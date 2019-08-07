@@ -2,8 +2,18 @@ const userRouter = require("express").Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
-userRouter.get("/me", (req, res, next) => {
+userRouter.get("/me", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+
+    try {
+        await User.populate(req.authenticated, {
+            path: "shelves.id",
+            select: "name"
+        });
+    }
+    catch (err) {
+        return next(err);
+    }
 
     res.send(req.authenticated);
 });
