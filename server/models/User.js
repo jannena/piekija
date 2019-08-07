@@ -33,8 +33,14 @@ const userSchema = new mongoose.Schema({
     ],
     shelves: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Shelf"
+            id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Shelf"
+            },
+            author: {
+                type: Boolean,
+                required: true
+            }
         }
     ]
 });
