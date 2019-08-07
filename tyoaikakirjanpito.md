@@ -14,5 +14,6 @@
 | 2.8. | 2 | REST-rajapinnan jatkaminen; kirjautuminen |
 | 4.8. | 4,5 | REST-rajapinnan testien aloittaminen |
 | 6.8. | 4,5 | REST-rajapinnan päivittäminen ja testien tekeminen |
+| 7.8. | 3,5 | REST-rajapinnan päivittäminen ja testien tekeminen |
 | | | |
-| yht. | 29 | |      
+| yht. | 32,5 | |
