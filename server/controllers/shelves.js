@@ -115,7 +115,7 @@ shelfRouter.delete("/:id/shelve", async (req, res, next) => {
     const { id } = req.params;
     const { record } = req.body;
 
-    if (!record) return res.status(400).json({ error: "record or note missing" });
+    if (!record) return res.status(400).json({ error: "record is missing" });
 
     try {
         const shelf = await Shelf.findById(id);
@@ -133,6 +133,36 @@ shelfRouter.delete("/:id/shelve", async (req, res, next) => {
             ]
         }, { $pull: { records: { record } } }, { multi: true });
         res.status(204).end();
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+shelfRouter.put("/:id/shelve", async (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+
+    const { id } = req.params;
+    const { record, note } = req.body;
+
+    if (!record || !note) return res.status(400).json({ error: "record or note is missing" });
+
+    try {
+        const shelf = await Shelf.findById(id);
+        if (!shelf) return res.status(404).end();
+        if (!(shelf.author.toString() === req.authenticated._id.toString()
+            || shelf.sharedWith.some(u => u.toString() === req.authenticated._id.toString())))
+            return next(new Error("FORBIDDEN"));
+
+        await Shelf.findOneAndUpdate({
+            _id: id,
+            "records.record": record,
+            $or: [
+                { author: req.authenticated._id },
+                { sharedWith: req.authenticated._id }
+            ]
+        }, { $set: { "records.$.note": note } });
+        res.status(200).end();
     }
     catch (err) {
         next(err);
