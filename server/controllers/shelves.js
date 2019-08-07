@@ -65,12 +65,12 @@ shelfRouter.post("/", async (req, res, next) => {
     try {
         const savedShelf = await newShelf.save();
 
-        const user = { ...req.authenticated };
-        user.shelves.push({
+        console.log(req.authenticated.staff, req.authenticated.shelves);
+        req.authenticated.shelves.push({
             id: savedShelf._id,
             author: true
         });
-        await user.save();
+        await req.authenticated.save();
 
         savedShelf.populate({
             path: "author",
@@ -78,6 +78,50 @@ shelfRouter.post("/", async (req, res, next) => {
         });
 
         res.status(201).json(savedShelf);
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+shelfRouter.put("/:id", (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+
+    const { id } = req.params;
+    const { name, description, public: publicity } = req.body;
+
+    const replacer = {};
+    if (name) replacer.name = name;
+    if (description) replacer.description = description;
+    if (publicity) replacer.public = publicity;
+
+    Shelf
+        .findOneAndUpdate({
+            _id: id,
+            author: req.authenticated._id
+        }, replacer, { new: true })
+        .then(result => {
+            if (!result) res.status(404).end();
+            else res.json(result.toJSON());
+        }).catch(err);
+});
+
+shelfRouter.delete("/:id", async (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+
+    const { id } = req.params;
+
+    try {
+        const shelf = await Shelf.findOneAndRemove({ _id: id, author: req.authenticated._id });
+
+        if (!shelf) return next(new Error("FORBIDDEN"));
+
+        const users = (shelf.sharedWith || []).concat(shelf.author || []);
+        await User.update(
+            { _id: { $in: users } },
+            { $pull: { shelves: { id } } });
+
+        res.status(204).end();
     }
     catch (err) {
         next(err);
