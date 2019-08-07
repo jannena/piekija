@@ -10,12 +10,12 @@ userRouter.get("/me", async (req, res, next) => {
             path: "shelves.id",
             select: "name"
         });
+
+        res.send(req.authenticated);
     }
     catch (err) {
         return next(err);
     }
-
-    res.send(req.authenticated);
 });
 
 
