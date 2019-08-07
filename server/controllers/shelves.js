@@ -24,14 +24,14 @@ shelfRouter.get("/:id", async (req, res, next) => {
             ]
         })
             .populate("records.record", { title: 1 })
-            .populate("author", { name: 1 });
+            .populate("author", { name: 1, username: 1 });
 
         if (!shelf) return res.status(404).end();
 
         if (shelf.author._id.toString() == (req.authenticated && req.authenticated._id)) {
             await Shelf.populate(shelf, {
                 path: "sharedWith",
-                select: { name: 1 }
+                select: { name: 1, username: 1 }
             });
             return res.json(shelf);
         }
@@ -72,9 +72,9 @@ shelfRouter.post("/", async (req, res, next) => {
         });
         await req.authenticated.save();
 
-        savedShelf.populate({
+        await savedShelf.populate({
             path: "author",
-            select: "name"
+            select: { name: 1, username: 1 }
         });
 
         res.status(201).json(savedShelf);
@@ -101,9 +101,18 @@ shelfRouter.put("/:id", (req, res, next) => {
             author: req.authenticated._id
         }, replacer, { new: true })
         .then(result => {
-            if (!result) res.status(404).end();
-            else res.json(result.toJSON());
-        }).catch(err);
+            if (!result) res.status(403).end();
+            else {
+                Shelf
+                    .populate(result, {
+                        path: "author",
+                        select: { username: 1, name: 1 }
+                    })
+                    .then(result2 => void res.json(result2.toJSON()))
+                    .catch(next);
+            }
+        })
+        .catch(next);
 });
 
 shelfRouter.delete("/:id", async (req, res, next) => {
@@ -117,7 +126,7 @@ shelfRouter.delete("/:id", async (req, res, next) => {
         if (!shelf) return next(new Error("FORBIDDEN"));
 
         const users = (shelf.sharedWith || []).concat(shelf.author || []);
-        await User.update(
+        await User.updateMany(
             { _id: { $in: users } },
             { $pull: { shelves: { id } } });
 
@@ -234,7 +243,7 @@ shelfRouter.post("/:id/share", async (req, res, next) => {
     try {
         const shelf = await Shelf.findOne({ _id: id, author: new ObjectId(req.authenticated._id) });
         console.log(new ObjectId(req.authenticated._id), id);
-        if (!shelf) return res.status(404).end();
+        if (!shelf) return next(new Error("FORBIDDEN"));
 
         const userToShareWith = await User.findOne({ username });
         if (!userToShareWith) return res.status(400).json({ error: "user does not exist" });

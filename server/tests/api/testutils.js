@@ -117,6 +117,7 @@ const clearDatabase = async () => {
     await Record.deleteMany({});
     await User.deleteMany({});
     await Location.deleteMany({});
+    await Shelf.deleteMany({});
 };
 
 const usersInDb = async () => (await User.find({})).length;
