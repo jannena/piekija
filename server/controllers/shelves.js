@@ -116,21 +116,30 @@ shelfRouter.post("/:id/share", async (req, res, next) => {
 
     if (!username) return res.status(400).json({ error: "username is missing" });
 
-    const shelf = await Shelf.findOne({ _id: id, author: new ObjectId(req.authenticated._id) });
-    console.log(new ObjectId(req.authenticated._id), id);
-    if (!shelf) return res.status(404).end();
+    try {
+        const shelf = await Shelf.findOne({ _id: id, author: new ObjectId(req.authenticated._id) });
+        console.log(new ObjectId(req.authenticated._id), id);
+        if (!shelf) return res.status(404).end();
 
-    const userToShare = await User.findOne({ username });
-    if (!userToShare) return res.status(400).json({ error: "user does not exist" });
+        const userToShare = await User.findOne({ username });
+        if (!userToShare) return res.status(400).json({ error: "user does not exist" });
 
-    shelf.sharedWith.push(userToShare._id);
-    userToShare.shelves.push({
-        id: shelf._id,
-        author: false
-    });
-    await shelf.save();
-    await userToShare.save();
-    res.status(201).end();;
+        if (shelf.sharedWith.some(s => s === userToShare._id))
+            return res.status(400).json("already shared with this user");
+
+        shelf.sharedWith.push(userToShare._id);
+        userToShare.shelves.push({
+            id: shelf._id,
+            author: false
+        });
+
+        await shelf.save();
+        await userToShare.save();
+        res.status(201).end();;
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 module.exports = shelfRouter;
