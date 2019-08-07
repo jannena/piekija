@@ -121,21 +121,55 @@ shelfRouter.post("/:id/share", async (req, res, next) => {
         console.log(new ObjectId(req.authenticated._id), id);
         if (!shelf) return res.status(404).end();
 
-        const userToShare = await User.findOne({ username });
-        if (!userToShare) return res.status(400).json({ error: "user does not exist" });
+        const userToShareWith = await User.findOne({ username });
+        if (!userToShareWith) return res.status(400).json({ error: "user does not exist" });
 
-        if (shelf.sharedWith.some(s => s === userToShare._id))
-            return res.status(400).json("already shared with this user");
+        console.log(shelf.sharedWith[0], typeof shelf.sharedWith[0], userToShareWith._id, typeof userToShareWith._id);
+        if (shelf.sharedWith.some(s => s.toString() === userToShareWith._id.toString()))
+            return res.status(400).json({ error: "already shared with this user" });
 
-        shelf.sharedWith.push(userToShare._id);
-        userToShare.shelves.push({
+        if (shelf.author.toString() === userToShareWith._id.toString())
+            return res.status(400).json({ error: "cannot share with the author" });
+
+        // Add user to shelf document and shelf to user document
+        shelf.sharedWith.push(userToShareWith._id);
+        userToShareWith.shelves.push({
             id: shelf._id,
             author: false
         });
 
         await shelf.save();
-        await userToShare.save();
+        await userToShareWith.save();
         res.status(201).end();;
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+shelfRouter.delete("/:id/share", async (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+
+    const { id } = req.params;
+    const { username } = req.body;
+
+    if (!username) return res.status(400).json({ error: "username is missing" });
+
+    try {
+        const shelf = await Shelf.findOne({ _id: id, author: new ObjectId(req.authenticated._id) });
+        if (!shelf) return res.status(404).end();
+
+        const userToUnshareWith = await User.findOne({ username });
+        if (!userToUnshareWith) return res.status(400).json({ error: "user not found" });
+
+        // Delete shelf from user document and delete user from shelf document
+        userToUnshareWith.shelves = userToUnshareWith.shelves.filter(s => s.id.toString() !== shelf._id.toString());
+        shelf.sharedWith = shelf.sharedWith.filter(u => u.toString() !== userToUnshareWith._id.toString());
+
+        await userToUnshareWith.save();
+        await shelf.save();
+
+        res.status(204).end();
     }
     catch (err) {
         next(err);
