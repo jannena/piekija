@@ -84,8 +84,7 @@ shelfRouter.post("/", async (req, res, next) => {
     }
 });
 
-// TODO: Fix bad http error codes
-shelfRouter.post("/:id/shelve", (req, res, next) => {
+shelfRouter.post("/:id/shelve", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
 
     const id = req.params.id;
@@ -93,20 +92,30 @@ shelfRouter.post("/:id/shelve", (req, res, next) => {
 
     if (!record) return res.status(400).json({ error: "record is missing" });
 
-    Shelf
-        .findOneAndUpdate({
+    try {
+        const shelf = await Shelf.findById(id);
+        if (!shelf) return res.status(404).end();
+        if (!(shelf.author.toString() === req.authenticated._id.toString()
+            || shelf.sharedWith.some(u => u.toString() === req.authenticated._id.toString())))
+            return next(new Error("FORBIDDEN"));
+        if (shelf.records.some(r => r.record.toString() === record))
+            return res.status(400).json({ error: "record is already added to this shelf" });
+
+        // TODO: What if record does not exist. Yet, it can be added to shelf!
+
+        await Shelf.findOneAndUpdate({
             _id: id,
             "records.record": { $ne: record },
             $or: [
                 { author: req.authenticated._id },
                 { sharedWith: req.authenticated._id }
             ]
-        }, { $push: { records: { record, note } } }, { new: true })
-        .then(result => {
-            if (!result) return next(new Error("FORBIDDEN"));
-            else res.status(201).json({ record, note });
-        })
-        .catch(next);
+        }, { $push: { records: { record, note } } }, { new: true });
+        res.status(201).json({ record, note });
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 shelfRouter.delete("/:id/shelve", async (req, res, next) => {
