@@ -84,6 +84,7 @@ shelfRouter.post("/", async (req, res, next) => {
     }
 });
 
+// TODO: Fix bad http error codes
 shelfRouter.post("/:id/shelve", (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
 
@@ -95,6 +96,7 @@ shelfRouter.post("/:id/shelve", (req, res, next) => {
     Shelf
         .findOneAndUpdate({
             _id: id,
+            "records.record": { $ne: record },
             $or: [
                 { author: req.authenticated._id },
                 { sharedWith: req.authenticated._id }
