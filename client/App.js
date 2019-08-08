@@ -50,7 +50,7 @@ const App = () => {
                 return <UserInfo user={user} />;
             }} />
             <Route exact path="/shelf/:id" render={({ match }) => {
-                return <Shelf shelfId={match.params.id} user={user} />;
+                return <Shelf shelfId={match.params.id} user={user} token={token} />;
             }} />
         </Router>
     );

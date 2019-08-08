@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import shelfService from "../services/shelfService";
 import { Link } from "react-router-dom";
+import ShelfRecord from "./ShelfRecord";
 
 const Shelf = ({ shelfId, token, user }) => {
     const [shelf, setShelf] = useState(null);
@@ -19,6 +20,8 @@ const Shelf = ({ shelfId, token, user }) => {
 
     if (!shelf || !user) return null;
 
+    const canEdit = () => shelf.author.id === user.id || (shelf.sharedWith || []).some(u => user.id);
+
     return (
         <div>
             <h2>{shelf.name}</h2>
@@ -34,10 +37,12 @@ const Shelf = ({ shelfId, token, user }) => {
             <table>
                 <tbody>
                     {shelf.records.map(record =>
-                        <tr key={record.record.id}>
-                            <td><Link to={`/record/${record.record.id}`}>{record.record.title}</Link></td>
-                            <td>{record.note}</td>
-                        </tr>)}
+                        <ShelfRecord
+                            key={record.record.id}
+                            record={record}
+                            canEdit={canEdit()}
+                            token={token}
+                            shelfId={shelf.id} />)}
                 </tbody>
             </table>
         </div>
