@@ -107,11 +107,27 @@ const AdvancedSearchGroup = ({ query, setQuery }) => {
         ]]
     ]
 */
+
+const isJSON = string => {
+    try {
+        const moi = JSON.parse(string);
+        console.log("moii", moi);
+    }
+    catch (err) {
+        return false;
+    }
+    return true;
+};
+
 const AdvancedSearch = ({ onSearch, query: q }) => {
     const [query, setQuery] = useState(["and", []]);
 
+    console.log("query here", query);
+    // console.log(query[0]);
+
     useEffect(() => {
-        if (q) setQuery(JSON.parse(q));
+        // console.log("parameter q here", q, JSON.parse(q));
+        if (q && isJSON(q)) setQuery(JSON.parse(q));
     }, [q]);
 
     // console.log(query);

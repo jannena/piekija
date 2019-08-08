@@ -15,7 +15,12 @@ const Search = ({ queryParams, history }) => {
     useEffect(() => {
         if (query) {
             if (type === "advanced") {
-                onAdvancedSearch(JSON.parse(query));
+                try {
+                    onAdvancedSearch(JSON.parse(query));
+                }
+                catch (err) {
+                    console.log(err);
+                }
                 // TODO: read query and set it to advanced search query thing
             }
             else onSearch(query);
