@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import loginService from "../services/loginService";
+import { Link } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ setToken }) => {
     const [use2fa, setUse2fa] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -16,6 +17,8 @@ const Login = () => {
                 setUsername("");
                 setPassword("");
                 setCode("");
+                setToken(result.token);
+                window.localStorage.setItem("piekija-token", result.token);
             })
             .catch(err => {
                 console.log(err.response.data);
@@ -28,6 +31,8 @@ const Login = () => {
 
     return (
         <div>
+            <Link to="/user">User info</Link>
+
             <form onSubmit={handleLogin}>
                 <label>Username</label>
                 <input value={username} onChange={e => setUsername(e.target.value)} />
