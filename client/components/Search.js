@@ -68,7 +68,7 @@ const Search = ({ queryParams, history }) => {
             <hr />
             {result.length === 0
                 ? (!query ? "^" : `No results for ${query}`)
-                : result.map(record => <p key={record._id}><Link to={`/record/${record._id}`}>{record.title}</Link></p>)}
+                : result.map(record => <p key={record.id}><Link to={`/record/${record.id}`}>{record.title}</Link></p>)}
         </div>
     );
 };
