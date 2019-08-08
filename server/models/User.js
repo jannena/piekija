@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    TFACode: String,
     username: {
         type: String,
         required: true,
