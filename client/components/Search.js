@@ -8,13 +8,16 @@ import AdvancedSearch from "./AdvancedSearch";
 const Search = ({ queryParams, history }) => {
     const [result, setResult] = useState([]);
 
-    const { type, q: query } = qs.parse(queryParams)
+    const { type, q: query } = qs.parse(queryParams);
 
     console.log("rendered search");
 
     useEffect(() => {
         if (query) {
-            if (type === "advanced") onAdvancedSearch(JSON.parse(query));
+            if (type === "advanced") {
+                onAdvancedSearch(JSON.parse(query));
+                // TODO: read query and set it to advanced search query thing
+            }
             else onSearch(query);
         }
     }, [query]);
@@ -56,7 +59,7 @@ const Search = ({ queryParams, history }) => {
     return (
         <div>
             <SearchField onSearch={onSearch} />
-            <AdvancedSearch onSearch={onAdvancedSearch} />
+            <AdvancedSearch onSearch={onAdvancedSearch} query={query} />
             <hr />
             {result.length === 0
                 ? (!query ? "^" : `No results for ${query}`)

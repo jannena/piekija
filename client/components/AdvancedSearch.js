@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "./Select";
 
 const QueryGroupStyle = {
@@ -107,8 +107,12 @@ const AdvancedSearchGroup = ({ query, setQuery }) => {
         ]]
     ]
 */
-const AdvancedSearch = ({ onSearch }) => {
+const AdvancedSearch = ({ onSearch, query: q }) => {
     const [query, setQuery] = useState(["and", []]);
+
+    useEffect(() => {
+        if (q) setQuery(JSON.parse(q));
+    }, [q]);
 
     // console.log(query);
 
