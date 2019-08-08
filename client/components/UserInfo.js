@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const UserInfo = ({ user }) => {
     if (!user) return <div></div>;
@@ -14,7 +15,7 @@ const UserInfo = ({ user }) => {
             </ul>
             <h3>Shelves</h3>
             <ul>
-                {user.shelves.map(shelf => shelf.id ? <li key={shelf.id.id}>{shelf.id.name}</li> : null)}
+                {user.shelves.map(shelf => shelf.id ? <li key={shelf.id.id}><Link to={`/shelf/${shelf.id.id}`}>{shelf.id.name}</Link></li> : null)}
             </ul>
 
             <h3>Change your information</h3>

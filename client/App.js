@@ -5,6 +5,7 @@ import Record from "./components/Record";
 import Login from "./components/Login";
 import UserInfo from "./components/UserInfo";
 import userService from "./services/userService";
+import Shelf from "./components/Shelf";
 
 // TODO: Learn how React router works or make better (clearer) router
 
@@ -46,7 +47,10 @@ const App = () => {
             }} />
             <Route exact path="/login" render={() => <Login setToken={setToken} />} />
             <Route exact path="/user" render={() => {
-                return user ? <UserInfo user={user} /> : <Redirect to="/login" />;
+                return <UserInfo user={user} />;
+            }} />
+            <Route exact path="/shelf/:id" render={({ match }) => {
+                return <Shelf shelfId={match.params.id} user={user} />;
             }} />
         </Router>
     );
