@@ -1,6 +1,7 @@
 const userRouter = require("express").Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const otp = require("speakeasy");
 
 userRouter.get("/me", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
@@ -23,9 +24,10 @@ userRouter.get("/me", async (req, res, next) => {
 userRouter.put("/me", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
 
-    const { name, password } = req.body;
+    const { name, password, tfa, oldPassword } = req.body;
 
-    if (!name && !password) return res.status(400).json({ error: "name and password are missing" });
+    if (!name && !password && tfa === undefined) return res.status(400).json({ error: "name and password and tfa are missing" });
+    if (!oldPassword) return res.status(400).json({ error: "oldPassword is missing" });
 
     try {
         const usertoBeSaved = {};
@@ -33,7 +35,16 @@ userRouter.put("/me", async (req, res, next) => {
         if (password && password.length < 10) return res.status(400).json({ error: "password too short" });
         if (password) usertoBeSaved.passwordHash = await bcrypt.hash(password, 13);
 
+        // Generate new secret for two-factor authentication
+        if (tfa === true) usertoBeSaved.TFACode = otp.generateSecret({ encoding: "base32" }).base32;
+        // Clear two-factor authentication
+        else if (tfa === false) usertoBeSaved.TFACode = "";
+        else return res.status(400).json({ error: "tfa must be true or false" });
+
         if (name) usertoBeSaved.name = name;
+
+        const passwordCorrect = await bcrypt.compare(oldPassword, req.authenticated.passwordHash);
+        if (!passwordCorrect) return res.status(403).json({ error: "wrong oldPassword" });
 
         const modifiedUser = await User.findByIdAndUpdate(req.authenticated.id, { $set: usertoBeSaved }, { new: true });
         res.json(modifiedUser.toJSON());

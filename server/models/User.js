@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    // two-factor authentication
     TFACode: String,
     username: {
         type: String,
@@ -52,7 +53,9 @@ userSchema.set("toJSON", {
         delete ret._id;
         delete ret.__v;
         delete ret.passwordHash;
+        ret.tfa = !!ret.TFACode;
+        delete ret.TFACode;
     }
 });
 
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model("User", userSchema);
