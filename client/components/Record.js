@@ -5,6 +5,7 @@ import { Tabs, Tab } from "./Tabs";
 import MARC21Screen from "./MARC21Screen";
 
 const MARC21 = require("../../server/utils/marc21parser");
+const { removeLastCharacters } = require("../../server/utils/stringUtils");
 
 const Record = ({ id, history: { goBack } }) => {
     const [record, setRecord] = useState(null);
@@ -34,28 +35,55 @@ const Record = ({ id, history: { goBack } }) => {
             <button onClick={goBack}>&lt; Back</button>
             <h2>{record.result.title}</h2>
             <div>
-                Content type: {(record.result.contentType && MARC21.contentTypes[record.result.contentType]) || "No contentType"}
+                Content type: {MARC21.contentTypes[record.record.LEADER.substring(6, 7)]}
             </div>
             <div>
                 {/* TODO: There is other classification fields, too!! */}
-                Classification: {MARC21.getSubfields(record.record, "084", ["a", "2"]).join(" ")}
+                Classification: {MARC21
+                    .getFieldsAndSubfields(record.record, ["084"], ["a", "2"])
+                    .map((c, i) => <div key={i}>
+                        {c["2"]} {c.a}
+                    </div>)}
+                {MARC21
+                    .getFieldsAndSubfields(record.record, ["080"], ["a"])
+                    .map((c, i) => <div key={i}>
+                        {"udk"} {c.a}
+                    </div>)}
             </div>
             <hr />
             <div>
                 <div>ISBN: {MARC21.getField(record.record, "020", "a")}</div>
                 <div>ISSN: {MARC21.getField(record.record, "022", "a")}</div>
-                <div>OTHER: {MARC21.getField(record.record, "024", "a")}</div>
+                <div> {MARC21
+                    .getFieldsAndSubfields(record.record, ["024"], ["a", "indicators"])
+                    .map(code => <div key={code.a}>
+                        {["ISRC", "UPC", "ISMN", "EAN", "SICI", "", "", "", "NO TYPE"][Number(code.indicators[0]) || 8]} {code.a[0]}
+                    </div>
+                    )}
+                </div>
             </div>
             <hr />
             <div>
                 {MARC21
                     .getFieldsAndSubfields(record.record, ["264"], ["indicators", "a", "b", "c"])
                     .map((field, i) =>
-                        <div>
+                        <div key={field.indicators[1]}>
                             {["Production", "Publication", "Distribution", "Manufacture", "Copyright notice date"][Number(field.indicators[1])]}: {field.a} {field.b} {field.c}
                         </div>
                     )}
+                {MARC21
+                    .getFieldsAndSubfields(record.record, ["260"], ["a", "b", "c", "e", "f"])
+                    .map(c => <div key={c.a}>
+                        {"Publisher / ..."} {c.a} {c.b} {c.c} {c.e} {c.f}
+                    </div>
+                    )}
             </div>
+            <hr />
+            {MARC21
+                .getFieldsAndSubfields(record.record, ["856"], ["indicators", "y", "u"])
+                .map(link => <div>
+                    <a href={link.u} target="_blank">{link.y}</a>
+                </div>)}
             <hr />
             <div>
                 Appearance: {MARC21.getSubfields(record.record, "300", ["a", "b", "c", "e", "f", "g"]).join(" ")}
@@ -83,16 +111,26 @@ const Record = ({ id, history: { goBack } }) => {
                 Authors:
                 <ul>
                     {MARC21
-                        .getFieldsAndSubfields(record.record, ["700"], ["a", "e"])
+                        .getFieldsAndSubfields(record.record, ["100", "110", "700", "710"], ["a", "d", "e"])
                         .map(author => <li key={author["a"][0]}>
-                            <Link to={`/search/?type=simple&q=${author["a"][0]}`}>{author["a"][0]}</Link> {author["e"].join(", ")}
+                            <Link to={`/search?type=simple&q=${encodeURIComponent(removeLastCharacters(author["a"][0]))}`}>{removeLastCharacters(author["a"][0]) + ","}</Link>
+                            {author["d"][0] && `, (${author["d"][0]})`} {author["e"].join(" ")}
                         </li>)}
                 </ul>
             </div>
             <div>
                 Subjects:
                 <ul>
-                    {record.result.subjects.map(s => <li key={s}><Link to={`/search?q=${encodeURI(s)}`}>{s}</Link></li>)}
+                    {MARC21
+                        .getFieldsAndSubfields(record.record, ["600", "650", "651", "653"], ["a", "v", "x", "y", "z"])
+                        .map(subject => <li key={subject["a"][0]}>
+                            <Link to={`/search?type=simple&q=${subject["a"].join("")}`}>{subject["a"].join("")}</Link>
+                            {!!subject["v"].length && " --> " + subject["v"].join(" --> ")}
+                            {!!subject["x"].length && " --> " + subject["x"].join(" --> ")}
+                            {!!subject["y"].length && " --> " + subject["y"].join(" --> ")}
+                            {!!subject["z"].length && " --> " + subject["z"].join(" --> ")}
+                        </li>)}
+                    {/* {record.result.subjects.map(s => <li key={s}><Link to={`/search?q=${encodeURI(s)}`}>{s}</Link></li>)} */}
                 </ul>
             </div>
             <div>
