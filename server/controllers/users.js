@@ -39,7 +39,7 @@ userRouter.put("/me", async (req, res, next) => {
         if (tfa === true) usertoBeSaved.TFACode = otp.generateSecret({ encoding: "base32" }).base32;
         // Clear two-factor authentication
         else if (tfa === false) usertoBeSaved.TFACode = "";
-        else return res.status(400).json({ error: "tfa must be true or false" });
+        else if (!name && !password) return res.status(400).json({ error: "tfa must be true or false" });
 
         if (name) usertoBeSaved.name = name;
 
