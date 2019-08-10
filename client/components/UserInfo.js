@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useField } from "../hooks";
 import userService from "../services/userService";
+import { Tabs, Tab } from "./Tabs";
 
 const UpdateUserInfoForm = ({ token, setUser }) => {
     const name = useField("text");
@@ -114,8 +115,11 @@ const TFA = ({ user, setUser, token }) => {
 const UserInfo = ({ user, setUser, token }) => {
     if (!user) return <div></div>;
 
-    const handleTFAEnablation = () => {
-
+    const printShelves = shelves => {
+        const mapped = shelves.map(shelf => shelf.id ? <li key={shelf.id.id}><Link to={`/shelf/${shelf.id.id}`}>{shelf.id.name}</Link></li> : null);
+        console.log(mapped, mapped.filter(shelf => shelf).length);
+        if (mapped.filter(shelf => shelf).length === 0) return <p>No shelves</p>;
+        return mapped
     };
 
     return (
@@ -128,9 +132,18 @@ const UserInfo = ({ user, setUser, token }) => {
                 {user.loans.map(loan => <li key={loan.title}>{JSON.stringify(loan)}</li>)}
             </ul>
             <h3>Shelves</h3>
-            <ul>
-                {user.shelves.map(shelf => shelf.id ? <li key={shelf.id.id}><Link to={`/shelf/${shelf.id.id}`}>{shelf.id.name}</Link></li> : null)}
-            </ul>
+            <Tabs titles={["my shelves ", " shared with me"]}>
+                <Tab>
+                    <ul>
+                        {printShelves(user.shelves.filter(shelf => shelf.author))}
+                    </ul>
+                </Tab>
+                <Tab>
+                    <ul>
+                        {printShelves(user.shelves.filter(shelf => !shelf.author))}
+                    </ul>
+                </Tab>
+            </Tabs>
 
             <h3>Change your information</h3>
             <UpdateUserInfoForm token={token} setUser={setUser} />
