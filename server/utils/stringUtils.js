@@ -36,8 +36,16 @@ const utf8_substr = (str, startInBytes, lengthInBytes) => {
     return resultStr;
 };
 
+const removeLastCharacters = string => {
+    while (["/", " ", ","].indexOf(string[string.length - 1]) !== -1) {
+        string = string.substr(0, string.length - 1);
+    }
+    return string;
+};
+
 module.exports = {
     pad,
     byteLength,
-    utf8_substr
+    utf8_substr,
+    removeLastCharacters
 };

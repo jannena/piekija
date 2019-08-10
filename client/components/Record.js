@@ -16,6 +16,7 @@ const Record = ({ id, history: { goBack } }) => {
         recordService
             .get(id)
             .then(result => {
+                console.log(result.record, MARC21.parse(result.record));
                 setRecord({
                     result,
                     record: MARC21.parse(result.record)

@@ -1,5 +1,5 @@
-
-const { pad, byteLength, utf8_substr } = require("./stringUtils");
+const fromentries = require("object.fromentries");
+const { pad, byteLength, utf8_substr, removeLastCharacters } = require("./stringUtils");
 
 const parse = marc => {
     // LEADER: first 24 characters
@@ -94,7 +94,14 @@ const stringify = marc => {
             FIELDS += (fieldData || field) + "\u001e";
         });
     });
-    return marc.LEADER + DIRECTORY + "\u001e" + FIELDS + "\u001d";
+
+    let fullrecord = marc.LEADER + DIRECTORY + "\u001e" + FIELDS + "\u001d";
+
+    // First 5 characters of LEADER is the length of the record
+    // Characters 12 - 16: length of LEADER and DIRECTORY and directory end character
+    fullrecord = pad(byteLength(fullrecord), 5) + fullrecord.substring(5, 12) + pad(DIRECTORY.length + 24 + 1, 5) + fullrecord.substring(17);
+
+    return fullrecord;
 };
 
 // Get all subfields of one field
@@ -169,6 +176,12 @@ const contentTypes = {
     t: "Manuscript language material"
 };
 
+const languages = {
+    fin: "Finnish",
+    eng: "English",
+    swe: "Swedish"
+};
+
 const tryParse = marc => {
     try {
         const parsedMARC = parse(marc);
@@ -187,7 +200,9 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     const year = Number(parsedMARC.FIELDS["008"][0].substring(7, 11));
     const contentType = parsedMARC.LEADER.substring(6, 7);
 
-    const title = getField(parsedMARC, "245", "a"); // parsedMARC.FIELDS["245"][0].subfields["a"][0];
+    let title = getField(parsedMARC, "245", "a"); // parsedMARC.FIELDS["245"][0].subfields["a"][0];
+    // Remove last non-letter characters
+    title = removeLastCharacters(title);
 
     const language = parsedMARC.FIELDS["008"][0].substring(35, 38);
     const languagesDuplicates = getSubfields(parsedMARC, "041", ["a", "b", "d", "e", "f", "g", "h", "j"]);  // MARC21.getFields(parsedMARC, ["041"], "j");
@@ -199,15 +214,24 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     const authorsDuplicates = getFields(parsedMARC, ["700", "710"], "a");
     authorsDuplicates.unshift(author);
     // Remove duplicates in authors
-    const authors = [...new Set(authorsDuplicates)];
+    let authors = [...new Set(authorsDuplicates)];
+    // Remove last non-letter characters
+    authors = authors.map(removeLastCharacters);
 
     const genres = getFields(parsedMARC, ["655"], "a"); // parsedMARC.FIELDS["655"].map(f => f.subfields["a"][0]);
-    const subjects = getFields(parsedMARC, ["650", "651", "600", "653"], "a"); // parsedMARC.FIELDS["650"].map(f => f.subfields["a"][0]);
+    const subjects = getFields(parsedMARC, ["600", "650", "651", "653", "610", "611", "630", "647", "648", "654", "656", "657", "658", "662"], "a"); // parsedMARC.FIELDS["650"].map(f => f.subfields["a"][0]);
 
     // TODO: Fix links (there are another ways to store links, too)
     const linkURLs = getFields(parsedMARC, ["856"], "u");
     const linkTexts = getFields(parsedMARC, ["856"], "y");
     const links = linkURLs.map((link, i) => [link, linkTexts[i] || ""]);
+
+    // Remove marc fields 9xx and 8xx expect 856
+    console.log(fromentries(Object.entries(parsedMARC.FIELDS)));
+    data = stringify({
+        LEADER: parsedMARC.LEADER,
+        FIELDS: fromentries(Object.entries(parsedMARC.FIELDS).filter(([field]) => (Number(field) < 800 || Number(field) === 856)))
+    });
 
     return {
         timeAdded: new Date(),
