@@ -47,7 +47,7 @@ const App = () => {
             }} />
             <Route exact path="/login" render={() => <Login setToken={setToken} />} />
             <Route exact path="/user" render={() => {
-                return <UserInfo user={user} />;
+                return <UserInfo user={user} setUser={setUser} token={token} />;
             }} />
             <Route exact path="/shelf/:id" render={({ match }) => {
                 return <Shelf shelfId={match.params.id} user={user} token={token} />;

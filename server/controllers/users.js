@@ -47,6 +47,10 @@ userRouter.put("/me", async (req, res, next) => {
         if (!passwordCorrect) return res.status(403).json({ error: "wrong oldPassword" });
 
         const modifiedUser = await User.findByIdAndUpdate(req.authenticated.id, { $set: usertoBeSaved }, { new: true });
+        await User.populate(modifiedUser, {
+            path: "shelves.id",
+            select: "name"
+        })
         res.json(modifiedUser.toJSON());
     }
     catch (err) {

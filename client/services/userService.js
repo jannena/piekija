@@ -7,7 +7,7 @@ const me = token => {
 };
 
 const updateMe = (data, token) => {
-    return axios.post(
+    return axios.put(
         `${baseUrl}/me`,
         data,
         { headers: { Authorization: `Bearer ${token}` } }
