@@ -28,7 +28,8 @@ shelfRouter.get("/:id", async (req, res, next) => {
 
         if (!shelf) return res.status(404).end();
 
-        if (shelf.author._id.toString() == (req.authenticated && req.authenticated._id)) {
+        if (shelf.author._id.toString() === (req.authenticated && req.authenticated._id.toString()) ||
+            shelf.sharedWith.some(u => u.toString() === (req.authenticated && req.authenticated._id.toString()))) {
             await Shelf.populate(shelf, {
                 path: "sharedWith",
                 select: { name: 1, username: 1 }
