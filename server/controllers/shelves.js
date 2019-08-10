@@ -265,7 +265,11 @@ shelfRouter.post("/:id/share", async (req, res, next) => {
 
         await shelf.save();
         await userToShareWith.save();
-        res.status(201).end();;
+        res.status(201).json({
+            id: userToShareWith._id,
+            username,
+            name: userToShareWith.name
+        });
     }
     catch (err) {
         next(err);
