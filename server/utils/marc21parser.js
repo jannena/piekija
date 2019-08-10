@@ -143,19 +143,22 @@ const getFields = (parsedMARC, fields, subfield) => {
 // Get all fields and all subfields
 const getFieldsAndSubfields = (parsedMARC, fields, subfields) => {
     let ret = [];
-    fields.forEach(field => {
+    fields.forEach((field, i) => {
         try {
+            if (parsedMARC.FIELDS[field] === undefined) return;
             parsedMARC.FIELDS[field].forEach(f => {
                 const fieldData = {};
                 subfields.forEach(subfield => {
                     if (subfield === "indicators") fieldData.indicators = f.indicators;
                     else if (f.subfields[subfield]) fieldData[subfield] = f.subfields[subfield];
+                    else fieldData[subfield] = [];
                 });
                 ret.push(fieldData);
             });
         }
         catch (e) { }
     });
+    console.log("getFieldsAndSubfields", ret);
     return ret;
 };
 
