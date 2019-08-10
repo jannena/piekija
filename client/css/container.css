@@ -1,0 +1,33 @@
+
+#container {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+}
+
+header {
+    height: 100px;
+}
+
+main {
+    padding: 20px;
+}
+
+footer {
+    text-align: center;
+}
+
+nav ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: block;
+}
+
+nav ul li a {
+    display: block;
+    margin: 0px 10px;
+}
