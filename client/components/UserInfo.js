@@ -17,17 +17,17 @@ const UpdateUserInfoForm = ({ token, setUser }) => {
                 password: newPassword.value,
                 oldPassword: oldPassword.value
             }, token)
-        .then(result => {
-            console.log(result);
-            setUser(result);
-            name.reset();
-            newPassword.reset();
-            newPasswordAgain.reset();
-            oldPassword.reset();
-        })
-        .catch(err => {
-            console.log(err, err.response.data.error);
-        });
+            .then(result => {
+                console.log(result);
+                setUser(result);
+                name.reset();
+                newPassword.reset();
+                newPasswordAgain.reset();
+                oldPassword.reset();
+            })
+            .catch(err => {
+                console.log(err, err.response.data.error);
+            });
     };
 
     return (<form onSubmit={handleUserUpdate}>
@@ -54,8 +54,69 @@ const UpdateUserInfoForm = ({ token, setUser }) => {
     </form>);
 };
 
+const TFA = ({ user, setUser, token }) => {
+    const oldPassword = useField("password");
+    const [QR, setQR] = useState(null);
+
+    const handleTFAEnable = () => {
+        userService
+            .updateMe({
+                tfa: true,
+                oldPassword: oldPassword.value
+            }, token)
+            .then(result => {
+                console.log(result);
+                setQR(result.TFAQR || null);
+                oldPassword.reset();
+                setUser({
+                    ...user,
+                    tfa: true
+                });
+            })
+            .catch(err => {
+                console.log(err, err.response.data.error);
+            });
+    };
+
+    const handleTFADisable = () => {
+        userService
+            .updateMe({
+                tfa: false,
+                oldPassword: oldPassword.value
+            }, token)
+            .then(result => {
+                console.log(result);
+                oldPassword.reset();
+                setUser({
+                    ...user,
+                    tfa: false
+                });
+            })
+            .catch(err => {
+                console.log(err, err.response.data.error)
+            });
+    };
+
+    return (<>
+        {QR && <div>
+            <p>Scan this QR code with Google Authenticator or other authenticator application.</p>
+            <img src={QR} />
+        </div>}
+        Current password <input {...oldPassword.props} />
+        {user.tfa
+            ? <p>Enabled <button onClick={handleTFADisable}>Disable</button></p>
+            : <p>Disabled <button onClick={handleTFAEnable}>Enable</button></p>
+        }
+    </>);
+
+};
+
 const UserInfo = ({ user, setUser, token }) => {
     if (!user) return <div></div>;
+
+    const handleTFAEnablation = () => {
+
+    };
 
     return (
         <div>
@@ -73,7 +134,9 @@ const UserInfo = ({ user, setUser, token }) => {
 
             <h3>Change your information</h3>
             <UpdateUserInfoForm token={token} setUser={setUser} />
-            
+
+            <h3>Two-factor authentication</h3>
+            <TFA user={user} setUser={setUser} token={token} />
         </div>
     );
 };
