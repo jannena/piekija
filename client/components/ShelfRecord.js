@@ -31,7 +31,7 @@ const ShelfRecord = ({ shelfId, record, canEdit, token }) => {
             });
     };
 
-    const cancelEdition = () => {
+    const cancelEditing = () => {
         setIsOpen(false);
         setNote(record.note || "");
     };
@@ -42,7 +42,7 @@ const ShelfRecord = ({ shelfId, record, canEdit, token }) => {
             ? <>
                 <input value={note} onChange={e => setNote(e.target.value)} />
                 <button onClick={handleEditNote}>save</button>
-                <button onClick={cancelEdition}>cancel</button>
+                <button onClick={cancelEditing}>cancel</button>
             </>
             : note}</td>
         <td>{canEdit && <>

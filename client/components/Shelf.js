@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import shelfService from "../services/shelfService";
 import { Link } from "react-router-dom";
 import ShelfRecord from "./ShelfRecord";
+import ShelfSharing from "./ShelfSharing";
 
 const Shelf = ({ shelfId, token, user }) => {
     const [shelf, setShelf] = useState(null);
@@ -20,19 +21,16 @@ const Shelf = ({ shelfId, token, user }) => {
 
     if (!shelf || !user) return null;
 
-    const canEdit = () => shelf.author.id === user.id || (shelf.sharedWith || []).some(u => user.id);
+    const isAuthor = () => shelf.author.id === user.id;
+
+    const canEdit = () => isAuthor() || (shelf.sharedWith || []).some(u => user.id);
 
     return (
         <div>
             <h2>{shelf.name}</h2>
             <div>DESCRIPTION: {shelf.description}</div>
-            <div>AUTHOR: {shelf.author.id === user.id ? "you" : shelf.author.name}</div>
-            {shelf.sharedWith && <>
-                <h3>Shared with</h3>
-                <ul>
-                    {shelf.sharedWith.map(user => <li key={user.id}>{user.name} ({user.username})</li>)}
-                </ul>
-            </>}
+            <div>AUTHOR: {isAuthor() ? "you" : shelf.author.name}</div>
+            {shelf.sharedWith && <ShelfSharing setShelf={setShelf} token={token} shelf={shelf} isAuthor={isAuthor()} />}
             <h3>Records:</h3>
             <table>
                 <tbody>

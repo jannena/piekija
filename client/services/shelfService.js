@@ -27,8 +27,28 @@ const removeRecord = (shelfId, recordId, token) => {
     ).then(response => response.data);
 };
 
+const share = (shelfId, username, token) => {
+    return axios.post(
+        `${baseUrl}/${shelfId}/share`,
+        { username },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
+const unshare = (shelfId, username, token) => {
+    return axios.delete(
+        `${baseUrl}/${shelfId}/share`,
+        {
+            headers: { Authorization: `Bearer ${token}` },
+            data: { username }
+        }
+    ).then(response => response.data);
+};
+
 export default {
     get,
     editRecord,
-    removeRecord
+    removeRecord,
+    share,
+    unshare
 };
