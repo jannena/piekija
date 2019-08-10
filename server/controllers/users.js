@@ -31,9 +31,12 @@ userRouter.put("/me", async (req, res, next) => {
     if (!oldPassword) return res.status(400).json({ error: "oldPassword is missing" });
 
     try {
+        const usertoBeSaved = {};
+
         const passwordCorrect = await bcrypt.compare(oldPassword, req.authenticated.passwordHash);
         if (!passwordCorrect) return res.status(403).json({ error: "wrong oldPassword" });
 
+        // Handle first two-factor authentication
         // Generate new secret for two-factor authentication
         if (tfa === true) {
             const secret = otp.generateSecret({ encoding: "base32" });
@@ -47,9 +50,7 @@ userRouter.put("/me", async (req, res, next) => {
         else if (tfa === false) usertoBeSaved.TFACode = "";
         else if (tfa !== undefined) return res.status(400).json({ error: "tfa must be true or false" });
 
-        // Everything else but two-factor authentication
-        const usertoBeSaved = {};
-
+        // Then, everything else but two-factor authentication
         if (password && password.length < 10) return res.status(400).json({ error: "password too short" });
         if (password) usertoBeSaved.passwordHash = await bcrypt.hash(password, 13);
 
