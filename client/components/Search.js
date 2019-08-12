@@ -35,7 +35,8 @@ const Search = ({ queryParams, history }) => {
         searchService
             .simpleSearch(query)
             .then(result => {
-                setResult(result);
+                console.log("haku", result.query);
+                setResult(result.result);
             })
             .catch(err => {
                 console.log("VIRHE hakutuloksia haettaessa", err, err.message);

@@ -43,4 +43,41 @@ const validateAdvancedQuery = ([operator, value, type]) => {
     return validatedQuery;
 };
 
-module.exports = validateAdvancedQuery;
+const getUntilMatchingBracket = string => {
+    const open = 1;
+    for (let i = 0; i < string.length; i++) {
+        if (string[i] === "(") open++;
+        if (string[i] === ")") open--;
+        if (open === 0) return [string.substring(0, i), string.substring(i, i + 6), string.substring(i + 6)];
+    }
+};
+
+const getFirstOpOutsideBrackets = string => {
+    const open = 0;
+    for (let i = 0; i < string.length; i++) {
+        if (string[i] === "(") open++;
+        if (string[i] === ")") open--;
+        if ([" AND ", " OR "].indexOf(string.substring(i, i + 6)) > -1 && open === 0)
+            return [string.substring(0, i), string.substring(i, i + 6), string.substring(i + 6)];
+    }
+    return null;
+};
+
+const validateSimpleQuery = query => {
+    if (query.split("(").length !== query.split(")").length) throw new Error("Eri määrä sulkuja!");
+    let pair = getFirstOpOutsideBrackets(query);
+    console.log(pair);
+    if (!pair) pair = getUntilMatchingBracket(query.substring(1));
+    return [
+        pair[1],
+        [
+            ...validateSimpleQuery(pair[0]),
+            ...validateSimpleQuery(pair[1])
+        ]
+    ];
+};
+
+module.exports = {
+    validateAdvancedQuery,
+    validateSimpleQuery
+};

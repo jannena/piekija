@@ -1,7 +1,7 @@
 const searchRouter = require("express").Router();
 const Record = require("../models/Record");
 
-const validateQuery = require("../utils/queryValidator");
+const { validateAdvancedQuery, validateSimpleQuery } = require("../utils/queryValidator");
 
 // TODO: pagination
 // TODO: Search controller does not need to return this much data (ie. full document)
@@ -30,7 +30,7 @@ searchRouter.post("/simple", (req, res, next) => {
         })
         .then(result => {
             if (!result) res.status(404).json({ error: "no results" });
-            else res.json(result);
+            else res.json({ result, query: validateSimpleQuery(query) });
 
             const secondTime = process.hrtime(firstTime);
             console.log(`simple search time ${(secondTime[0] * 1e9 + secondTime[1]) * 1e-6} ms`);
@@ -46,7 +46,7 @@ searchRouter.post("/advanced", (req, res, next) => {
     const firstTime = process.hrtime();
 
     Record
-        .find(validateQuery(query))
+        .find(validateAdvancedQuery(query))
         .then(result => {
             if (!result) res.status(404).json({ error: "no results" });
             else res.json(result);
