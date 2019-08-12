@@ -17,5 +17,6 @@
 | 7.8. | 3,5 | REST-rajapinnan päivittäminen ja testien tekeminen |
 | 8.8. | 3,5 | hyllyjen (shelf) frontend; kaksivaiheinen tunnistautuminen |
 | 10.8. | 3,5 | hyllynäkymän päivittäminen; tietuenäkymän päivittäminen; käyttäjän muokkaus ja kaksivaiheinen tunnistautuminen frontendiin |
+| 12.8. | 3,5 | tietuenäkymän päivittäminen; yksinkertaisen haun kyselykielen käännin-validoimen aloittaminen |
 | | | |
-| yht. | 39,5 | |
+| yht. | 43 | |
