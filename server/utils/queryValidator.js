@@ -44,38 +44,46 @@ const validateAdvancedQuery = ([operator, value, type]) => {
 };
 
 const getUntilMatchingBracket = string => {
-    const open = 1;
+    let open = 1;
     for (let i = 0; i < string.length; i++) {
         if (string[i] === "(") open++;
         if (string[i] === ")") open--;
-        if (open === 0) return [string.substring(0, i), string.substring(i, i + 6), string.substring(i + 6)];
+        if (open === 0) return string.substring(0, i);
     }
 };
 
 const getFirstOpOutsideBrackets = string => {
-    const open = 0;
+    let open = 0;
     for (let i = 0; i < string.length; i++) {
         if (string[i] === "(") open++;
         if (string[i] === ")") open--;
-        if ([" AND ", " OR "].indexOf(string.substring(i, i + 6)) > -1 && open === 0)
-            return [string.substring(0, i), string.substring(i, i + 6), string.substring(i + 6)];
+        const nextSix = string.substring(i, i + 5);
+        const nextFive = nextSix.substring(0, 4);
+        if (nextSix === " AND " && open === 0)
+            return [string.substring(0, i), string.substring(i + 1, i + 4), string.substring(i + 5)];
+        if (nextFive === " OR " && open === 0)
+            return [string.substring(0, i), string.substring(i + 1, i + 3), string.substring(i + 4)];
     }
     return null;
 };
+
+const queryContainsOps = query => [" AND ", " OR "].some(op => query.includes(op));
 
 const validateSimpleQuery = query => {
     if (query.split("(").length !== query.split(")").length) throw new Error("Eri määrä sulkuja!");
     let pair = getFirstOpOutsideBrackets(query);
     console.log(pair);
-    if (!pair) pair = getUntilMatchingBracket(query.substring(1));
+    if (!pair && query[0] === "(") pair = getFirstOpOutsideBrackets(getUntilMatchingBracket(query.substring(1)));
     return [
         pair[1],
         [
-            ...validateSimpleQuery(pair[0]),
-            ...validateSimpleQuery(pair[1])
+            (queryContainsOps(pair[0]) ? validateSimpleQuery(pair[0]) : [pair[0]]),
+            (queryContainsOps(pair[2]) ? validateSimpleQuery(pair[2]) : [pair[2]])
         ]
     ];
 };
+
+console.log(validateSimpleQuery("(moi AND hei AND terve AND moikku) OR (terkut OR heippa OR moiksu OR joojoo)"));
 
 module.exports = {
     validateAdvancedQuery,
