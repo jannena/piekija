@@ -84,20 +84,31 @@ const validateSimpleQueryRecursion = query => {
 };
 
 const simplifySimpleQuery = query => {
-    const ret = [ ...query ];
     if (Array.isArray(query[1])) {
+        const ret = [...query];
+        ret[1] = [];
         for (let i = 0; i < query[1].length; i++) {
-            if (!Array.isArray(query[1][i][1])) continue;
+            if (!Array.isArray(query[1][i][1])) {
+                ret[1].push(query[1][i]);
+                continue;
+            }
             if (query[1][i][0] === query[0]) {
-                query.splice(i, 1, ...simplifySimpleQuery(query[1][i][1]))
+                ret[1].push(...simplifySimpleQuery(query[1][i][1]));
+            }
+            else {
+                ret[1].push(query[1][i]);
             }
         }
+        /* for (let i = 0; i < query[1].length; i++) {
+            if (Array.isArray(query[0][i])) 
+        } */
+        return ret;
     }
-    return ret;
+    return query;
 };
 
 const validateSimpleQuery = query => {
-    return validateSimpleQueryRecursion(query);
+    return simplifySimpleQuery(validateSimpleQueryRecursion(query));
 };
 
 console.log(validateSimpleQuery("(moi AND hei AND terve AND moikku) OR (terkut OR heippa OR moiksu OR joojoo)"));
