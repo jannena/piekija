@@ -35,7 +35,7 @@ const Search = ({ queryParams, history }) => {
         searchService
             .simpleSearch(query)
             .then(result => {
-                console.log("haku", result.query);
+                console.log("haku", JSON.stringify(result.query));
                 setResult(result.result);
             })
             .catch(err => {

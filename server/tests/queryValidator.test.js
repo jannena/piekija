@@ -30,28 +30,17 @@ describe("simple query validator tests", () => {
         test("#2", () => {
             expect(validateSimpleQuery("(moi AND hei AND terve AND moikku) OR (terkut OR heippa OR moiksu OR joojoo)"))
                 .toEqual([
-                    "OR", [
-                        ["AND", [
-                            ["moi"],
-                            ["AND", [
-                                ["hei"],
-                                ["AND", [
-                                    ["terve"],
-                                    ["moikku"]
-                                ]]
-                            ]]
-                        ]],
-                        ["OR", [
-                            ["terkut"],
-                            ["OR", [
-                                ["heippa"],
-                                ["OR", [
-                                    ["moiksu"],
-                                    ["joojoo"]
-                                ]]
-                            ]]
-                        ]]
-                    ]
+                    "OR",
+                    ["AND", [
+                        ["moi"],
+                        ["hei"],
+                        ["terve"],
+                        ["moikku"]
+                    ]],
+                    ["terkut"],
+                    ["heippa"],
+                    ["moiksu"],
+                    ["joojoo"]
                 ]);
 
         });
