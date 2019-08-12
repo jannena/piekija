@@ -3,6 +3,8 @@ import recordService from "../services/recordService";
 import { Link } from "react-router-dom";
 import { Tabs, Tab } from "./Tabs";
 import MARC21Screen from "./MARC21Screen";
+import RecordLanguages from "./RecordLanguages";
+import RecordNotes from "./RecordNotes";
 
 const MARC21 = require("../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../server/utils/stringUtils");
@@ -28,6 +30,14 @@ const Record = ({ id, history: { goBack } }) => {
                 console.log(JSON.parse(JSON.stringify(err)), err.message);
             });
     }, [id]);
+
+    const subjects = subject => {
+        const everythingButA = subject["v"].concat(subject["x"], subject["y"], subject["z"]);
+        return (<>
+            <Link to={`/search?type=simple&q=${subject["a"].join("")}`}>{subject["a"].join("")}</Link>
+            {!!everythingButA.length && " --> " + everythingButA.join(" --> ")}
+        </>);
+    }
 
     return !record
         ? <p>Loading...</p>
@@ -85,27 +95,14 @@ const Record = ({ id, history: { goBack } }) => {
                     <a href={link.u} target="_blank">{link.y}</a>
                 </div>)}
             <hr />
+            <RecordLanguages record={record} />
+            <hr />
             <div>
                 Appearance: {MARC21.getSubfields(record.record, "300", ["a", "b", "c", "e", "f", "g"]).join(" ")}
             </div>
             <div>
                 Notes:
-                <ul>
-                    {/* TODO: Add note titles */}
-                    {MARC21
-                        .getFields(record.record, [
-                            "500", "501", "502", "504", "505", "506", "507", "508",
-                            "509", "510", "513", "514", "515", "516", "518", "520",
-                            "521", "522", "524", "525", "526", "530", "532", "533",
-                            "534", "535", "536", "538", "540", "541", "542", "544",
-                            "545", "546", "547", "550", "552", "555", "556", "561",
-                            "562", "563", "565", "567", "580", "581", "583", "584",
-                            "585", "586", "588"
-                        ], "a")
-                        .map((note, i) =>
-                            <li key={note}>{note}</li>
-                        )}
-                </ul>
+                <RecordNotes record={record} />
             </div>
             <div>
                 Authors:
@@ -124,11 +121,7 @@ const Record = ({ id, history: { goBack } }) => {
                     {MARC21
                         .getFieldsAndSubfields(record.record, ["600", "650", "651", "653"], ["a", "v", "x", "y", "z"])
                         .map(subject => <li key={subject["a"][0]}>
-                            <Link to={`/search?type=simple&q=${subject["a"].join("")}`}>{subject["a"].join("")}</Link>
-                            {!!subject["v"].length && " --> " + subject["v"].join(" --> ")}
-                            {!!subject["x"].length && " --> " + subject["x"].join(" --> ")}
-                            {!!subject["y"].length && " --> " + subject["y"].join(" --> ")}
-                            {!!subject["z"].length && " --> " + subject["z"].join(" --> ")}
+                            {subjects(subject)}
                         </li>)}
                     {/* {record.result.subjects.map(s => <li key={s}><Link to={`/search?q=${encodeURI(s)}`}>{s}</Link></li>)} */}
                 </ul>
@@ -136,7 +129,11 @@ const Record = ({ id, history: { goBack } }) => {
             <div>
                 Genres:
                 <ul>
-                    {record.result.genres.map(g => <li key={g}>{g}</li>)}
+                    {MARC21
+                        .getFieldsAndSubfields(record.record, ["655"], ["a", "v", "x", "y", "z"])
+                        .map(genre => <li key={genre["a"][0]}>
+                            {subjects(genre)}
+                        </li>)}
                 </ul>
             </div>
 
