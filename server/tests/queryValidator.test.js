@@ -1,28 +1,62 @@
 const { validateAdvancedQuery, validateSimpleQuery } = require("../utils/queryValidator");
 
 describe("simple query validator tests", () => {
-    describe("query validator can transform valid queries", () => {
+    test("simple query validator works without AND and OR", () => {
+        expect(validateSimpleQuery("kissa"))
+            .toEqual(["AND", [
+                ["record", "kissa", "contains"]
+            ]])
+    });
+
+    test("query validator can transform queries without simplification when it is not needed", () => {
+        expect(validateSimpleQuery("kissa AND koira OR kettu"))
+            .toEqual([
+                "AND", [
+                    ["record", "kissa", "contains"],
+                    ["OR", [
+                        ["record", "koira", "contains"],
+                        ["record", "kettu", "contains"]
+                    ]]
+                ]
+            ]);
+    });
+
+    test("query validator can transform queries containing many (extra)brackets", () => {
+        expect(validateSimpleQuery("((((((kissa AND koira)) OR kettu)) AND sipuli))"))
+            .toEqual([
+                "AND", [
+                    ["OR", [
+                        ["AND", [
+                            ["record", "kissa", "contains"],
+                            ["record", "koira", "contains"]
+                        ]],
+                        ["record", "kettu", "contains"]
+                    ]],
+                    ["record", "sipuli", "contains"]
+                ]
+            ]);
+    });
+
+    describe("query validator can simplify queries", () => {
         test("#1", () => {
             expect(validateSimpleQuery("((kissa OR koira) AND poni) OR ((hevonen AND (kani OR tamma)) OR ruuna)"))
                 .toEqual([
                     "OR", [
                         ["AND", [
                             ["OR", [
-                                ["kissa"],
-                                ["koira"]
+                                ["record", "kissa", "contains"],
+                                ["record", "koira", "contains"]
                             ]],
-                            ["poni"]
+                            ["record", "poni", "contains"]
                         ]],
-                        ["OR", [
-                            ["AND", [
-                                ["hevonen"],
-                                ["OR", [
-                                    ["kani"],
-                                    ["tamma"]
-                                ]]
-                            ]],
-                            ["ruuna"]
-                        ]]
+                        ["AND", [
+                            ["record", "hevonen", "contains"],
+                            ["OR", [
+                                ["record", "kani", "contains"],
+                                ["record", "tamma", "contains"]
+                            ]]
+                        ]],
+                        ["record", "ruuna", "contains"]
                     ]
                 ])
         });
@@ -30,18 +64,18 @@ describe("simple query validator tests", () => {
         test("#2", () => {
             expect(validateSimpleQuery("(moi AND hei AND terve AND moikku) OR (terkut OR heippa OR moiksu OR joojoo)"))
                 .toEqual([
-                    "OR",
-                    ["AND", [
-                        ["moi"],
-                        ["hei"],
-                        ["terve"],
-                        ["moikku"]
-                    ]],
-                    ["terkut"],
-                    ["heippa"],
-                    ["moiksu"],
-                    ["joojoo"]
-                ]);
+                    "OR", [
+                        ["AND", [
+                            ["record", "moi", "contains"],
+                            ["record", "hei", "contains"],
+                            ["record", "terve", "contains"],
+                            ["record", "moikku", "contains"]
+                        ]],
+                        ["record", "terkut", "contains"],
+                        ["record", "heippa", "contains"],
+                        ["record", "moiksu", "contains"],
+                        ["record", "joojoo", "contains"]
+                    ]]);
 
         });
     });
