@@ -8,7 +8,8 @@ import AdvancedSearch from "./AdvancedSearch";
 const Search = ({ queryParams, history }) => {
     const [result, setResult] = useState([]);
 
-    const { type, q: query } = qs.parse(queryParams);
+    const { type, q: query, page: p } = qs.parse(queryParams);
+    const page = !p ? 0 : Number(p);
 
     console.log("rendered search");
 
@@ -33,7 +34,7 @@ const Search = ({ queryParams, history }) => {
             search: `?type=simple&q=${encodeURIComponent(query)}`
         });
         searchService
-            .simpleSearch(query)
+            .simpleSearch(query, page)
             .then(result => {
                 console.log("haku", JSON.stringify(result.query));
                 setResult(result);
@@ -52,7 +53,7 @@ const Search = ({ queryParams, history }) => {
         console.log(encodeURI(JSON.stringify(query)));
         console.log(JSON.stringify(query));
         searchService
-            .advancedSearch(query)
+            .advancedSearch(query, page)
             .then(result => {
                 setResult(result)
             })
@@ -62,6 +63,9 @@ const Search = ({ queryParams, history }) => {
         console.log("requested advanced search results");
     };
 
+    const previousPageLink = () => `/search?type=${type}&q=${query}&page=${(page || 1) - 1}`;
+    const nextPageLink = () => `/search?type=${type}&q=${query}&page=${(page || 1) + 1}`;
+
     return (
         <div>
             <SearchField onSearch={onSearch} />
@@ -70,6 +74,10 @@ const Search = ({ queryParams, history }) => {
             {result.length === 0
                 ? (!query ? "^" : `No results for ${query}`)
                 : result.map(record => <p key={record.id}><Link to={`/record/${record.id}`}>{record.title}</Link></p>)}
+            <p>
+                <Link to={previousPageLink()}>&lt;&lt; Previous</Link>
+                | Page {page - 1 || 1} |
+                <Link to={nextPageLink()}>Next &gt;&gt;</Link></p>
         </div>
     );
 };
