@@ -1,118 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useField } from "../hooks";
-import userService from "../services/userService";
+import UpdateUserForm from "./UpdateUserForm";
+import TFAForm from "./TFAForm";
 import { Tabs, Tab } from "./Tabs";
+import { connect } from "react-redux";
 
-const UpdateUserInfoForm = ({ token, setUser }) => {
-    const name = useField("text");
-    const newPassword = useField("password");
-    const newPasswordAgain = useField("password");
-    const oldPassword = useField("password");
 
-    const handleUserUpdate = e => {
-        e.preventDefault();
-        userService
-            .updateMe({
-                name: name.value,
-                password: newPassword.value,
-                oldPassword: oldPassword.value
-            }, token)
-            .then(result => {
-                console.log(result);
-                setUser(result);
-                name.reset();
-                newPassword.reset();
-                newPasswordAgain.reset();
-                oldPassword.reset();
-            })
-            .catch(err => {
-                console.log(err, err.response.data.error);
-            });
-    };
-
-    return (<form onSubmit={handleUserUpdate}>
-        <div>
-            <label>name</label>
-            <input {...name.props} />
-        </div>
-        <div>
-            <label>new passsword</label>
-            <input {...newPassword.props} />
-            {(newPassword.value.length > 0 && newPassword.value.length < 10) && <p>Too short</p>}
-        </div>
-        <div>
-            <label>new password again</label>
-            <input {...newPasswordAgain.props} />
-            {(newPasswordAgain.value.length > 0 && newPassword.value !== newPasswordAgain.value) && <p>Passwords do not match</p>}
-        </div>
-        <div>
-            <label>old password</label>
-            <input {...oldPassword.props} />
-        </div>
-        <div>
-            <button>save</button></div>
-    </form>);
-};
-
-const TFA = ({ user, setUser, token }) => {
-    const oldPassword = useField("password");
-    const [QR, setQR] = useState(null);
-
-    const handleTFAEnable = () => {
-        userService
-            .updateMe({
-                tfa: true,
-                oldPassword: oldPassword.value
-            }, token)
-            .then(result => {
-                console.log(result);
-                setQR(result.TFAQR || null);
-                oldPassword.reset();
-                setUser({
-                    ...user,
-                    tfa: true
-                });
-            })
-            .catch(err => {
-                console.log(err, err.response.data.error);
-            });
-    };
-
-    const handleTFADisable = () => {
-        userService
-            .updateMe({
-                tfa: false,
-                oldPassword: oldPassword.value
-            }, token)
-            .then(result => {
-                console.log(result);
-                oldPassword.reset();
-                setUser({
-                    ...user,
-                    tfa: false
-                });
-            })
-            .catch(err => {
-                console.log(err, err.response.data.error)
-            });
-    };
-
-    return (<>
-        {QR && <div>
-            <p>Scan this QR code with Google Authenticator or other authenticator application.</p>
-            <img src={QR} />
-        </div>}
-        Current password <input {...oldPassword.props} />
-        {user.tfa
-            ? <p>Enabled <button onClick={handleTFADisable}>Disable</button></p>
-            : <p>Disabled <button onClick={handleTFAEnable}>Enable</button></p>
-        }
-    </>);
-
-};
-
-const UserInfo = ({ user, setUser, token }) => {
+const UserInfo = ({ user }) => {
     if (!user) return <div></div>;
 
     const printShelves = shelves => {
@@ -146,12 +40,16 @@ const UserInfo = ({ user, setUser, token }) => {
             </Tabs>
 
             <h3>Change your information</h3>
-            <UpdateUserInfoForm token={token} setUser={setUser} />
+            <UpdateUserForm />
 
             <h3>Two-factor authentication</h3>
-            <TFA user={user} setUser={setUser} token={token} />
+            <TFAForm />
         </div>
     );
 };
 
-export default UserInfo;
+export default connect(
+    state => ({
+        user: state.user
+    })
+)(UserInfo);

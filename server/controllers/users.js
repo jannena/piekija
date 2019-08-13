@@ -25,6 +25,8 @@ userRouter.get("/me", async (req, res, next) => {
 userRouter.put("/me", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
 
+    console.log("ruumis", req.body, req.authenticated);
+
     const { name, password, tfa, oldPassword } = req.body;
 
     if (!name && !password && tfa === undefined) return res.status(400).json({ error: "name and password and tfa are missing" });
