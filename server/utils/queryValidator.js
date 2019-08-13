@@ -77,8 +77,8 @@ const validateSimpleQueryRecursion = query => {
     return [
         pair[1],
         [
-            (queryContainsOps(pair[0]) ? validateSimpleQuery(pair[0]) : [pair[0]]),
-            (queryContainsOps(pair[2]) ? validateSimpleQuery(pair[2]) : [pair[2]])
+            (queryContainsOps(pair[0]) ? validateSimpleQuery(pair[0]) : ["record", pair[0], "contains"]),
+            (queryContainsOps(pair[2]) ? validateSimpleQuery(pair[2]) : ["record", pair[2], "contains"])
         ]
     ];
 };
@@ -107,8 +107,22 @@ const simplifySimpleQuery = query => {
     return query;
 };
 
+// TODO: fix parsing queries containing extra brackets
 const validateSimpleQuery = query => {
-    return simplifySimpleQuery(validateSimpleQueryRecursion(query));
+    try {
+        if (!queryContainsOps(query)) return [
+            "AND", [
+                ["record", query, "contains"]
+            ]
+        ];
+        return simplifySimpleQuery(validateSimpleQueryRecursion(query));
+    }
+    catch (err) {
+        console.log(err);
+        return ["AND", [
+            ["record", query, "contains"]
+        ]];
+    }
 };
 
 console.log(validateSimpleQuery("(moi AND hei AND terve AND moikku) OR (terkut OR heippa OR moiksu OR joojoo)"));
