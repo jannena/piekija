@@ -1,0 +1,4 @@
+- Pagination to search endpoint
+- less than and greater than verbs to advanced search
+- search result order
+- search result filtering
