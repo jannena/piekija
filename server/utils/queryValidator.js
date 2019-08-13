@@ -1,8 +1,8 @@
 
-const changeAndAndOrIfNeeded = operator => ["and", "or"].indexOf(operator) === -1 ? operator : `$${operator}`;
+const changeAndAndOrIfNeeded = operator => ["AND", "OR"].indexOf(operator) === -1 ? operator : `$${operator}`;
 const isValidOperator = operator =>
     [
-        "and", "or", /* "not", */
+        "AND", "OR", /* "not", */
         "title", "author", "authors", "language", "languages", "year", "contentType",
         "locations", "subjects", "persons", "genres",
         "description", "recordType", "record"
@@ -125,7 +125,7 @@ const validateSimpleQuery = query => {
     }
 };
 
-console.log(validateSimpleQuery("(moi AND hei AND terve AND moikku) OR (terkut OR heippa OR moiksu OR joojoo)"));
+// console.log(validateSimpleQuery("(moi AND hei AND terve AND moikku) OR (terkut OR heippa OR moiksu OR joojoo)"));
 
 module.exports = {
     validateAdvancedQuery,
