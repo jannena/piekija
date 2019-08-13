@@ -18,5 +18,7 @@
 | 8.8. | 3,5 | hyllyjen (shelf) frontend; kaksivaiheinen tunnistautuminen |
 | 10.8. | 3,5 | hyllynäkymän päivittäminen; tietuenäkymän päivittäminen; käyttäjän muokkaus ja kaksivaiheinen tunnistautuminen frontendiin |
 | 12.8. | 3,5 | tietuenäkymän päivittäminen; yksinkertaisen haun kyselykielen käännin-validoimen aloittaminen |
+| 13.8. | 1 | yksinkertaisen haun kyselykielen käännin-validoin loppuun; hakutulosten sivutuksen aloittaminen |
+| | 2 | Reduxin käyttöönotto |
 | | | |
-| yht. | 43 | |
+| yht. | 46 | |
