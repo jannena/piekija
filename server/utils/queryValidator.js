@@ -1,5 +1,5 @@
 
-const changeAndAndOrIfNeeded = operator => ["AND", "OR"].indexOf(operator) === -1 ? operator : `$${operator}`;
+const changeAndAndOrIfNeeded = operator => ["AND", "OR"].indexOf(operator) === -1 ? operator : `$${operator.toLowerCase()}`;
 const isValidOperator = operator =>
     [
         "AND", "OR", /* "not", */
@@ -34,7 +34,7 @@ const validateAdvancedQuery = ([operator, value, type]) => {
         }
     }
 
-    if (operator === "and") {
+    if (operator === "AND") {
         let combined = {};
         validatedQuery[newOperator].forEach(o => combined = { ...combined, ...o });
         validatedQuery = combined;

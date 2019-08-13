@@ -46,7 +46,7 @@ const AdvancedSearchGroup = ({ query, setQuery }) => {
         setQuery(updatedQuery);
     };
     const addNewField = () => addToThisLevel(["record", "", "contains"]);
-    const addNewGroup = () => addToThisLevel(["and", []]);
+    const addNewGroup = () => addToThisLevel(["AND", []]);
 
     // console.log(setQuery.toString());
 
@@ -55,7 +55,7 @@ const AdvancedSearchGroup = ({ query, setQuery }) => {
             <button onClick={addNewField}>Add new FIELD to this group</button>
             <button onClick={addNewGroup}>Add new GROUP to this group</button>
             <Select
-                options={[["with all these (and)", "and"], ["with any of these (or)", "or"]]}
+                options={[["with all these (and)", "AND"], ["with any of these (or)", "OR"]]}
                 selected={query[0]}
                 onChange={e => {
                     query[0] = e.target.value;
@@ -120,7 +120,7 @@ const isJSON = string => {
 };
 
 const AdvancedSearch = ({ onSearch, query: q }) => {
-    const [query, setQuery] = useState(["and", []]);
+    const [query, setQuery] = useState(["AND", []]);
 
     console.log("query here", query);
     // console.log(query[0]);
