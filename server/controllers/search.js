@@ -8,11 +8,11 @@ const { validateAdvancedQuery, validateSimpleQuery } = require("../utils/queryVa
 
 // TODO: Also simple search needs a query validatot that can parse Boolean logic
 searchRouter.post("/simple", (req, res, next) => {
-    const query = req.body.query;
-
-    if (!query) return res.status(401).json({ error: "query not given" });
+    const { query } = req.body;
+    if (!query) return res.status(401).json({ error: "query is missing" });
 
     const firstTime = process.hrtime();
+
 
     console.log({
         record: {
@@ -22,15 +22,10 @@ searchRouter.post("/simple", (req, res, next) => {
     });
 
     Record
-        .find({
-            record: {
-                $regex: query,
-                $options: "i"
-            }
-        })
+        .find(validateAdvancedQuery(validateSimpleQuery(query)))
         .then(result => {
             if (!result) res.status(404).json({ error: "no results" });
-            else res.json({ result, query: validateSimpleQuery(query) });
+            else res.json(result);
 
             const secondTime = process.hrtime(firstTime);
             console.log(`simple search time ${(secondTime[0] * 1e9 + secondTime[1]) * 1e-6} ms`);
@@ -39,9 +34,8 @@ searchRouter.post("/simple", (req, res, next) => {
 });
 
 searchRouter.post("/advanced", (req, res, next) => {
-    const query = req.body.query;
-
-    // TODO: validation of variable 'query'
+    const { query } = req.body;
+    if (!query) return res.status(401).json({ error: "query is missing" });
 
     const firstTime = process.hrtime();
 

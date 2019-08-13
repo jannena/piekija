@@ -36,7 +36,7 @@ const Search = ({ queryParams, history }) => {
             .simpleSearch(query)
             .then(result => {
                 console.log("haku", JSON.stringify(result.query));
-                setResult(result.result);
+                setResult(result);
             })
             .catch(err => {
                 console.log("VIRHE hakutuloksia haettaessa", err, err.message);
