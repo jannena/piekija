@@ -70,9 +70,12 @@ const getFirstOpOutsideBrackets = string => {
 const queryContainsOps = query => [" AND ", " OR "].some(op => query.includes(op));
 
 const validateSimpleQueryRecursion = query => {
+    const start = 5;
     if (query.split("(").length !== query.split(")").length) throw new Error("Eri määrä sulkuja!");
     let pair = getFirstOpOutsideBrackets(query);
     console.log(pair);
+    while (query.substring(0, 2) === "((" && query.substring(query.length - 2) === "))")
+        query = query.substring(1, query.length - 1);
     if (!pair && query[0] === "(") pair = getFirstOpOutsideBrackets(getUntilMatchingBracket(query.substring(1)));
     return [
         pair[1],
