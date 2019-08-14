@@ -20,6 +20,6 @@
 | 12.8. | 3,5 | tietuenäkymän päivittäminen; yksinkertaisen haun kyselykielen käännin-validoimen aloittaminen |
 | 13.8. | 1 | yksinkertaisen haun kyselykielen käännin-validoin loppuun; hakutulosten sivutuksen aloittaminen |
 | | 2 | Reduxin käyttöönotto |
-| | 1,5 | sivutus; ilmoitukset |
+| 14.8. | 1,5 | sivutus; ilmoitukset |
 | | | |
 | yht. | 47,5 | |
