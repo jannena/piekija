@@ -1,6 +1,7 @@
 import React from "react";
 import "../css/container.css";
 import { Link } from "react-router-dom";
+import Notifications from "./Notifications";
 
 const Container = ({ children }) => {
     return (
@@ -17,6 +18,7 @@ const Container = ({ children }) => {
             </nav>
             <main>
                 {children}
+                <Notifications />
             </main>
             <footer>This is the footer.</footer>
         </div>

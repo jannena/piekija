@@ -1,4 +1,5 @@
 import loginService from "../services/loginService";
+import { notify } from "./notificationReducer";
 
 const INIT = {
     token: null,
@@ -37,6 +38,8 @@ export const tryLogin = (username, password, code) => async dispatch => {
 
         // TODO: Is this best place to do this?
         window.localStorage.setItem("piekija-token", token);
+
+        dispatch(notify("success", "logged in succesfully"));
     }
     catch (err) {
         console.log(err);
@@ -44,6 +47,9 @@ export const tryLogin = (username, password, code) => async dispatch => {
             dispatch({
                 type: "CODE_NEEDED"
             });
+        }
+        else {
+            dispatch(notify("error", err.response.data.error));
         }
     }
 };

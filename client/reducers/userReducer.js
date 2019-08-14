@@ -1,4 +1,5 @@
 import userService from "../services/userService";
+import { notify } from "./notificationReducer";
 
 const userReducer = (state = null, action) => {
     switch (action.type) {
@@ -24,9 +25,11 @@ export const getUser = () => async (dispatch, getState) => {
             type: "SET_USER",
             user
         });
+        dispatch(notify("success", "User infomation received succesfully!"));
     }
     catch (err) {
         console.log(err);
+        if (!getState().token.token) dispatch(notify("error", err.response.data.error))
     }
 };
 
@@ -41,9 +44,11 @@ export const updateUser = (oldPassword, name, password) => async (dispatch, getS
             type: "SET_USER",
             user: newMe
         });
+        dispatch(notify("success", "User infomation updated!"));
     }
     catch (err) {
         console.log(err);
+        dispatch(notify("error", err.response.data.error));
     }
 };
 
@@ -58,8 +63,10 @@ export const setTFA = (oldPassword, tfa) => async (dispatch, getState) => {
             tfa: !!TFAQR,
             tfaqr: TFAQR || null
         });
+        dispatch(notify("success", `Two-factor authentication ${!!TFAQR ? "enabled" : "disabled"}!`));
     }
     catch (err) {
         console.log(err);
+        dispatch(notify("error", err.response.data.error));
     }
 };
