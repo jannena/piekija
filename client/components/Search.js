@@ -54,7 +54,7 @@ const Search = ({ queryParams, history }) => {
         searchService
             .advancedSearch(query, page)
             .then(result => {
-                setResult(result.result);
+                setResult(result);
             })
             .catch(err => {
                 console.log("VIRHE hakutuloksia haettaessa", err, err.message);
