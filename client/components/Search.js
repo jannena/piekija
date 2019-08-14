@@ -9,7 +9,7 @@ const Search = ({ queryParams, history }) => {
     const [result, setResult] = useState([]);
 
     const { type, q: query, page: p } = qs.parse(queryParams);
-    const page = !p ? 0 : Number(p);
+    const page = !p ? 1 : Number(p);
 
     console.log("rendered search");
 
@@ -22,16 +22,15 @@ const Search = ({ queryParams, history }) => {
                 catch (err) {
                     console.log(err);
                 }
-                // TODO: read query and set it to advanced search query thing
             }
             else onSearch(query);
         }
-    }, [query]);
+    }, [query, page]);
 
     const onSearch = query => {
         history.push({
             pathname: "/search",
-            search: `?type=simple&q=${encodeURIComponent(query)}`
+            search: `?type=simple&q=${encodeURIComponent(query)}&page=${page}`
         });
         searchService
             .simpleSearch(query, page)
@@ -48,14 +47,14 @@ const Search = ({ queryParams, history }) => {
     const onAdvancedSearch = query => {
         history.push({
             pathname: "/search",
-            search: `?type=advanced&q=${encodeURIComponent(JSON.stringify(query))}`
+            search: `?type=advanced&q=${encodeURIComponent(JSON.stringify(query))}&page=${page}`
         });
         console.log(encodeURI(JSON.stringify(query)));
         console.log(JSON.stringify(query));
         searchService
             .advancedSearch(query, page)
             .then(result => {
-                setResult(result)
+                setResult(result.result);
             })
             .catch(err => {
                 console.log("VIRHE hakutuloksia haettaessa", err, err.message);
@@ -63,21 +62,26 @@ const Search = ({ queryParams, history }) => {
         console.log("requested advanced search results");
     };
 
-    const previousPageLink = () => `/search?type=${type}&q=${query}&page=${(page || 1) - 1}`;
-    const nextPageLink = () => `/search?type=${type}&q=${query}&page=${(page || 1) + 1}`;
+    console.log("sivulla", page, !page || page === 1);
+    console.log("doNotShowNextPageLink?", result.found / 3 <= page);
+
+    const previousPageLink = () => !page || page === 1 ? null : <Link to={`/search?type=${type}&q=${query}&page=${page - 1}`}>&lt;&lt; Previous</Link>;
+    const nextPageLink = () => result.found / 3 <= page ? null : <Link to={`/search?type=${type}&q=${query}&page=${page + 1}`}>Next &gt;&gt;</Link>
 
     return (
         <div>
             <SearchField onSearch={onSearch} />
             <AdvancedSearch onSearch={onAdvancedSearch} query={query} />
             <hr />
+            <p>Found {result.found} records in {(result.time || NaN).toFixed(0)} milliseconds</p>
             {result.length === 0
                 ? (!query ? "^" : `No results for ${query}`)
-                : result.map(record => <p key={record.id}><Link to={`/record/${record.id}`}>{record.title}</Link></p>)}
+                : result.result.map(record => <p key={record.id}><Link to={`/record/${record.id}`}>{record.title}</Link></p>)}
             <p>
-                <Link to={previousPageLink()}>&lt;&lt; Previous</Link>
-                | Page {page - 1 || 1} |
-                <Link to={nextPageLink()}>Next &gt;&gt;</Link></p>
+                {previousPageLink()}
+                | Page {page} |
+                {nextPageLink()}
+            </p>
         </div>
     );
 };
