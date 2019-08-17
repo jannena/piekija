@@ -101,6 +101,9 @@ const Record = ({ id, history: { goBack } }) => {
                 Appearance: {MARC21.getSubfields(record.record, "300", ["a", "b", "c", "e", "f", "g"]).join(" ")}
             </div>
             <div>
+                Series: {MARC21.getFieldsAndSubfields(record.record, ["490"], ["a"]).map(s => <span key={s.a}>{s.a}</span>)}
+            </div>
+            <div>
                 Notes:
                 <RecordNotes record={record} />
             </div>
