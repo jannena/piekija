@@ -5,6 +5,7 @@ import { Tabs, Tab } from "../Tabs";
 import MARC21Screen from "./MARC21Screen";
 import RecordLanguages from "./RecordLanguages";
 import RecordNotes from "./RecordNotes";
+import RecordClassification from "./RecordClassification";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
@@ -32,7 +33,7 @@ const Record = ({ id, history: { goBack } }) => {
     }, [id]);
 
     const subjects = subject => {
-        const everythingButA = subject["v"].concat(subject["x"], subject["y"], subject["z"]);
+        const everythingButA = subject["v"].concat(subject["x"], subject["y"], subject["z"], subject["t"], subject["n"], subject["r"]);
         return (<>
             <Link to={`/search?type=simple&q=${subject["a"].join("")}`}>{subject["a"].join("")}</Link>
             {!!everythingButA.length && " --> " + everythingButA.join(" --> ")}
@@ -48,17 +49,7 @@ const Record = ({ id, history: { goBack } }) => {
                 Content type: {MARC21.contentTypes[record.record.LEADER.substring(6, 7)]}
             </div>
             <div>
-                {/* TODO: There is other classification fields, too!! */}
-                Classification: {MARC21
-                    .getFieldsAndSubfields(record.record, ["084"], ["a", "2"])
-                    .map((c, i) => <div key={i}>
-                        {c["2"]} {c.a}
-                    </div>)}
-                {MARC21
-                    .getFieldsAndSubfields(record.record, ["080"], ["a"])
-                    .map((c, i) => <div key={i}>
-                        {"udk"} {c.a}
-                    </div>)}
+                <RecordClassification record={record} />
             </div>
             <hr />
             <div>
@@ -122,7 +113,7 @@ const Record = ({ id, history: { goBack } }) => {
                 Subjects:
                 <ul>
                     {MARC21
-                        .getFieldsAndSubfields(record.record, ["600", "650", "651", "653"], ["a", "v", "x", "y", "z"])
+                        .getFieldsAndSubfields(record.record, ["600", "650", "651", "653"], ["a", "v", "x", "y", "z", "t", "n", "r"])
                         .map(subject => <li key={subject["a"][0]}>
                             {subjects(subject)}
                         </li>)}
