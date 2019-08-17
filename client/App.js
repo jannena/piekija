@@ -9,6 +9,7 @@ import Container from "./components/Container"
 import { connect } from "react-redux";
 import { getUser } from "./reducers/userReducer";
 import { setToken } from "./reducers/tokenReducer";
+import "./css/global.css";
 
 // TODO: Learn how React router works or make better (clearer) router
 
