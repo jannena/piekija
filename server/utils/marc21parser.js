@@ -214,7 +214,8 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     // Remove duplicates in languages
     const languages = [...new Set(languagesDuplicates)];
 
-    const author = getField(parsedMARC, "100", "a") || getField(parsedMARC, "110", "a"); // parsedMARC.FIELDS["100"][0].subfield["a"][0];
+    const authorWithLastCharacters = getField(parsedMARC, "100", "a") || getField(parsedMARC, "110", "a"); // parsedMARC.FIELDS["100"][0].subfield["a"][0];
+    const author = removeLastCharacters(authorWithLastCharacters);
     const authorsDuplicates = getFields(parsedMARC, ["700", "710"], "a");
     authorsDuplicates.unshift(author);
     // Remove duplicates in authors
@@ -223,7 +224,8 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     authors = authors.map(removeLastCharacters);
 
     const genres = getFields(parsedMARC, ["655"], "a"); // parsedMARC.FIELDS["655"].map(f => f.subfields["a"][0]);
-    const subjects = getFields(parsedMARC, ["600", "650", "651", "653", "610", "611", "630", "647", "648", "654", "656", "657", "658", "662"], "a"); // parsedMARC.FIELDS["650"].map(f => f.subfields["a"][0]);
+    const subjectsWithLastCharacters = getFields(parsedMARC, ["600", "650", "651", "653", "610", "611", "630", "647", "648", "654", "656", "657", "658", "662"], "a"); // parsedMARC.FIELDS["650"].map(f => f.subfields["a"][0]);
+    const subjects = subjectsWithLastCharacters.map(removeLastCharacters);
 
     // TODO: Fix links (there are another ways to store links, too)
     const linkURLs = getFields(parsedMARC, ["856"], "u");
