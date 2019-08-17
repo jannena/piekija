@@ -37,7 +37,8 @@ const utf8_substr = (str, startInBytes, lengthInBytes) => {
 };
 
 const removeLastCharacters = string => {
-    while (["/", " ", ","].indexOf(string[string.length - 1]) !== -1) {
+    // TODO: Also remove . if it is not after capital letter
+    while (["/", " ", ",", ":", "."].indexOf(string[string.length - 1]) !== -1) {
         string = string.substr(0, string.length - 1);
     }
     return string;
