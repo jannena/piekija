@@ -43,7 +43,7 @@ const Record = ({ id, history: { goBack } }) => {
         ? <p>Loading...</p>
         : <div>
             <button onClick={goBack}>&lt; Back</button>
-            <h2>{record.result.title}</h2>
+            {MARC21.getFieldsAndSubfields(record.record, ["245"], ["a", "b", "c"]).slice(0,1).map(title => <h2>{`${title.a[0] || ""} ${title.b[0] || ""} ${title.c[0] || ""}`}</h2>)}
             <div>
                 Content type: {MARC21.contentTypes[record.record.LEADER.substring(6, 7)]}
             </div>
