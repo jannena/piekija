@@ -4,8 +4,8 @@ const isValidOperator = operator =>
     [
         "AND", "OR", /* "not", */
         "title", "author", "authors", "language", "languages", "year", "contentType",
-        "locations", "subjects", "persons", "genres",
-        "description", "recordType", "record"
+        "subjects", "genres",
+        "record"
     ].indexOf(operator) !== -1;
 
 // TODO: 
@@ -22,10 +22,20 @@ const validateAdvancedQuery = ([operator, value, type]) => {
         if (!type) throw new Error(`Operator ${operator} needs a type.`);
         switch (type) {
             case "contains":
-                validatedQuery[newOperator] = {
-                    $regex: value,
-                    $options: "i"
+                validatedQuery["$text"] = {
+                    $search: value,
+                    $caseSensitive: false
                 }
+                break;
+            case "lt":
+                validatedQuery[newOperator] = {
+                    $lte: Number(value)
+                };
+                break;
+            case "gt":
+                validatedQuery[newOperator] = {
+                    $gte: Number(value)
+                };
                 break;
             case "is":
             default:
