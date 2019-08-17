@@ -6,6 +6,7 @@ import MARC21Screen from "./MARC21Screen";
 import RecordLanguages from "./RecordLanguages";
 import RecordNotes from "./RecordNotes";
 import RecordClassification from "./RecordClassification";
+import RecordStandardCodes from "./RecordStandardCodes";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
@@ -44,25 +45,13 @@ const Record = ({ id, history: { goBack } }) => {
         ? <p>Loading...</p>
         : <div>
             <button onClick={goBack}>&lt; Back</button>
-            {MARC21.getFieldsAndSubfields(record.record, ["245"], ["a", "b", "c"]).slice(0,1).map(title => <h2>{`${title.a[0] || ""} ${title.b[0] || ""} ${title.c[0] || ""}`}</h2>)}
+            {MARC21.getFieldsAndSubfields(record.record, ["245"], ["a", "b", "c"]).slice(0, 1).map(title => <h2>{`${title.a[0] || ""} ${title.b[0] || ""} ${title.c[0] || ""}`}</h2>)}
             <div>
                 Content type: {MARC21.contentTypes[record.record.LEADER.substring(6, 7)]}
             </div>
-            <div>
-                <RecordClassification record={record} />
-            </div>
+            <RecordClassification record={record} />
             <hr />
-            <div>
-                <div>ISBN: {MARC21.getField(record.record, "020", "a")}</div>
-                <div>ISSN: {MARC21.getField(record.record, "022", "a")}</div>
-                <div> {MARC21
-                    .getFieldsAndSubfields(record.record, ["024"], ["a", "indicators"])
-                    .map(code => <div key={code.a}>
-                        {["ISRC", "UPC", "ISMN", "EAN", "SICI", "", "", "", "NO TYPE"][Number(code.indicators[0]) || 8]} {code.a[0]}
-                    </div>
-                    )}
-                </div>
-            </div>
+            <RecordStandardCodes record={record} />
             <hr />
             <div>
                 {MARC21
@@ -124,7 +113,7 @@ const Record = ({ id, history: { goBack } }) => {
                 Genres:
                 <ul>
                     {MARC21
-                        .getFieldsAndSubfields(record.record, ["655"], ["a", "v", "x", "y", "z"])
+                        .getFieldsAndSubfields(record.record, ["655"], ["a", "v", "x", "y", "z", "t", "n", "r"])
                         .map(genre => <li key={genre["a"][0]}>
                             {subjects(genre)}
                         </li>)}
