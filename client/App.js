@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import Search from "./components/Search";
-import Record from "./components/Record";
+import Record from "./components/record/Record";
 import Login from "./components/Login";
 import UserInfo from "./components/UserInfo";
-import userService from "./services/userService";
 import Shelf from "./components/Shelf";
 import Container from "./components/Container"
 import { connect } from "react-redux";

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import recordService from "../services/recordService";
+import recordService from "../../services/recordService";
 import { Link } from "react-router-dom";
-import { Tabs, Tab } from "./Tabs";
+import { Tabs, Tab } from "../Tabs";
 import MARC21Screen from "./MARC21Screen";
 import RecordLanguages from "./RecordLanguages";
 import RecordNotes from "./RecordNotes";
 
-const MARC21 = require("../../server/utils/marc21parser");
-const { removeLastCharacters } = require("../../server/utils/stringUtils");
+const MARC21 = require("../../../server/utils/marc21parser");
+const { removeLastCharacters } = require("../../../server/utils/stringUtils");
 
 const Record = ({ id, history: { goBack } }) => {
     const [record, setRecord] = useState(null);

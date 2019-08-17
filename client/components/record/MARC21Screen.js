@@ -1,6 +1,6 @@
 import React from "react";
 
-const MARC21 = require("../../server/utils/marc21parser");
+const MARC21 = require("../../../server/utils/marc21parser");
 
 const MARC21Screen = ({ parsedMARC }) => {
     const simpleField = data => <>

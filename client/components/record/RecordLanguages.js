@@ -1,6 +1,6 @@
 import React from "react";
 
-const MARC21 = require("../../server/utils/marc21parser");
+const MARC21 = require("../../../server/utils/marc21parser");
 
 const RecordLanguages = ({ record }) => {
     const langs = MARC21.getFieldsAndSubfields(record.record, ["041"], ["a", "b", "d", "f", "g", "h", "j", "k"]);
