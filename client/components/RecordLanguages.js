@@ -4,16 +4,26 @@ const MARC21 = require("../../server/utils/marc21parser");
 
 const RecordLanguages = ({ record }) => {
     const langs = MARC21.getFieldsAndSubfields(record.record, ["041"], ["a", "b", "d", "f", "g", "h", "j", "k"]);
+    const countries = MARC21.getFieldsAndSubfields(record.record, ["044"], ["a"]);
     const mainLanguage = (() => {
         try {
             return record.record.FIELDS["008"][0].substring(35, 38);
         }
         catch (err) {
-            return false;
+            return null;
+        }
+    })();
+    const countryOfOrigin = (() => {
+        try {
+            return record.record.FIELDS["008"][0].substring(15, 18);
+        }
+        catch (err) {
+            return null;
         }
     })();
 
     return (<>
+        {countryOfOrigin && <div>countries: {[countryOfOrigin].concat(...countries.map(c => c.a)).join(", ")}</div>}
         {mainLanguage && <div>Main language: {mainLanguage}</div>}
         {langs.map(lang => <>
             <div>{!!lang["a"].length && "Text: " + lang["a"].join(", ")}</div>
