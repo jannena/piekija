@@ -1,4 +1,5 @@
 const fromentries = require("object.fromentries");
+const logger = require("./logger");
 const { pad, byteLength, utf8_substr, removeLastCharacters } = require("./stringUtils");
 
 const parse = marc => {
@@ -13,7 +14,7 @@ const parse = marc => {
     // Start byte of data is saved in the LEADER in characters 12-16
     const startOfData = Number(LEADER.substring(12, 17));
 
-    // console.log(fieldData, DIRECTORY.length);
+    // logger.log(fieldData, DIRECTORY.length);
 
     let FIELDS = {};
 
@@ -68,7 +69,7 @@ const stringify = marc => {
     // Convert Object to array, sort array by field numbers, convert array back to object
     marc.FIELDS = Object.entries(marc.FIELDS)
         .sort((a, b) => {
-            // console.log("vertailu", Number(a[0]), Number(b[0]));
+            // logger.log("vertailu", Number(a[0]), Number(b[0]));
             return Number(a[0]) - Number(b[0])
         });
 
@@ -89,7 +90,7 @@ const stringify = marc => {
                     fieldData += mappedSubfields.join("");
                 });
             }
-            // console.log("field number", fieldNumber);
+            // logger.log("field number", fieldNumber);
             DIRECTORY += pad(fieldNumber, 3) + pad((fieldData ? byteLength(fieldData) : byteLength(field)) + 1, 4) + pad(byteLength(FIELDS), 5);
             FIELDS += (fieldData || field) + "\u001e";
         });
@@ -120,7 +121,7 @@ const getSubfields = (parsedMARC, field, subfields) => {
 // Get one subfield of one field
 const getField = (parsedMARC, field, subfield) => {
     try {
-        console.log("joo", parsedMARC.FIELDS[field][0].subfields);
+        logger.log("joo", parsedMARC.FIELDS[field][0].subfields);
         return parsedMARC.FIELDS[field][0].subfields[subfield][0];
     }
     catch (e) {
@@ -133,7 +134,7 @@ const getFields = (parsedMARC, fields, subfield) => {
     fields.forEach(field => {
         try {
             const fieldData = parsedMARC.FIELDS[field].map(f => f.subfields[subfield][0])
-            console.log(fieldData);
+            logger.log(fieldData);
             ret = ret.concat(fieldData);
         }
         catch (e) { }
@@ -158,7 +159,7 @@ const getFieldsAndSubfields = (parsedMARC, fields, subfields) => {
         }
         catch (e) { }
     });
-    console.log("getFieldsAndSubfields", ret);
+    logger.log("getFieldsAndSubfields", ret);
     return ret;
 };
 
@@ -191,7 +192,7 @@ const tryParse = marc => {
         return parsedMARC;
     }
     catch (e) {
-        console.log(e);
+        logger.log(e);
         return null;
     }
 };
@@ -200,7 +201,7 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     // TODO: ohitusindikaattorit
 
     // TODO: There are catalouging rules.
-    const year = Number(parsedMARC.FIELDS["008"][0].substring(7, 11));
+    const year = Number(parsedMARC.FIELDS["008"][0].substring(7, 11)) || -10000;
     const contentType = parsedMARC.LEADER.substring(6, 7);
 
     let title = getField(parsedMARC, "245", "a"); // parsedMARC.FIELDS["245"][0].subfields["a"][0];
@@ -230,11 +231,11 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     const links = linkURLs.map((link, i) => [link, linkTexts[i] || ""]);
 
     // Remove marc fields 9xx and 8xx expect 856
-    console.log(fromentries(Object.entries(parsedMARC.FIELDS)));
-    data = stringify({
-        LEADER: parsedMARC.LEADER,
-        FIELDS: fromentries(Object.entries(parsedMARC.FIELDS).filter(([field]) => (Number(field) < 800 || Number(field) === 856)))
-    });
+    // logger.log(fromentries(Object.entries(parsedMARC.FIELDS)));
+    // data = stringify({
+    //     LEADER: parsedMARC.LEADER,
+    //     FIELDS: fromentries(Object.entries(parsedMARC.FIELDS).filter(([field]) => (Number(field) < 800 || Number(field) === 856)))
+    // });
 
     return {
         timeAdded: new Date(),

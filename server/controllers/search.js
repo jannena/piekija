@@ -6,7 +6,7 @@ const { validateAdvancedQuery, validateSimpleQuery } = require("../utils/queryVa
 // TODO: pagination
 // TODO: Search controller does not need to return this much data (ie. full document)
 
-const searchResultsPerPage = 3;
+const searchResultsPerPage = 20;
 
 // TODO: Combine these two things.
 
