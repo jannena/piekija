@@ -4,6 +4,7 @@ import SearchField from "./SearchField";
 import qs from "query-string";
 import { Link } from "react-router-dom";
 import AdvancedSearch from "./AdvancedSearch";
+import Select from "./Select";
 
 const Search = ({ queryParams, history }) => {
     const [result, setResult] = useState([]);
@@ -73,6 +74,7 @@ const Search = ({ queryParams, history }) => {
             <SearchField onSearch={onSearch} />
             <AdvancedSearch onSearch={onAdvancedSearch} query={query} />
             <hr />
+            {/* Order by {<Select options={[["default", "default"], ["time added", "timeAdded"], ["year", "year"], ["alphapetical", "a"]]} />} */}
             <p>Found {result.found} records in {(result.time || NaN).toFixed(0)} milliseconds</p>
             {result.length === 0
                 ? (!query ? "^" : `No results for ${query}`)
