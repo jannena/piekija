@@ -8,8 +8,6 @@ const { validateAdvancedQuery, validateSimpleQuery } = require("../utils/queryVa
 
 const searchResultsPerPage = 20;
 
-// TODO: Combine these two things.
-
 const search = async (req, res, next, simple) => {
     const { query, page: p, sort } = req.body;
     if (!query) return res.status(401).json({ error: "query is missing" });
@@ -22,14 +20,14 @@ const search = async (req, res, next, simple) => {
         const readyQuery = simple ? validateAdvancedQuery(validateSimpleQuery(query)) : validateAdvancedQuery(query);
         console.log(readyQuery);
         const result = await Record
-            .find(readyQuery)
+            .find(readyQuery, { title: 1, author: 1 })
             .skip(searchResultsPerPage * page)
             .limit(searchResultsPerPage);
 
         if (!result) res.status(404).json({ error: "no results" });
         else {
-            // TODO: I've heard there is better solutions.
-            const found = await Record.countDocuments(readyQuery).then(number => number);
+            // TODO: Return how many documents match the query
+            const found = 10; // await Record.countDocuments(readyQuery).then(number => number);
             console.log("found", found, result);
 
             const secondTime = process.hrtime(firstTime);
