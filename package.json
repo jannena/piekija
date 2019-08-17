@@ -6,7 +6,8 @@
   "scripts": {
     "start:fe": "webpack-dev-server --mode=development",
     "start:be": "nodemon ./server/index.js",
-    "test": "jest"
+    "test": "jest",
+    "marctodb":"cross-env LOG=false node --max-old-space-size=4096 ./server/utils/marcToDb.js"
   },
   "repository": {
     "type": "git",
