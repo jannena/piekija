@@ -21,5 +21,6 @@
 | 13.8. | 1 | yksinkertaisen haun kyselykielen käännin-validoin loppuun; hakutulosten sivutuksen aloittaminen |
 | | 2 | Reduxin käyttöönotto |
 | 14.8. | 1,5 | sivutus; ilmoitukset |
+| 17.8. | 1,5 | "stressitestausta" |
 | | | |
-| yht. | 47,5 | |
+| yht. | 49 | |
