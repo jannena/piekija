@@ -102,6 +102,10 @@ const RecordSchema = new mongoose.Schema({
     ]
 });
 
+RecordSchema.index({ record: "text" });
+RecordSchema.index({ authors: 1, subjects: 1, languages: 1, year: -1 });
+RecordSchema.index({ language: -1 });
+
 RecordSchema.set("toJSON", {
     transform: (doc, ret) => {
         ret.id = ret._id;
