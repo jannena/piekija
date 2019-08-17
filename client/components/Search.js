@@ -5,6 +5,7 @@ import qs from "query-string";
 import { Link } from "react-router-dom";
 import AdvancedSearch from "./AdvancedSearch";
 import Select from "./Select";
+import RecordPreview from "./RecordPreview";
 
 const Search = ({ queryParams, history }) => {
     const [result, setResult] = useState([]);
@@ -78,7 +79,7 @@ const Search = ({ queryParams, history }) => {
             <p>Found {result.found} records in {(result.time || NaN).toFixed(0)} milliseconds</p>
             {result.length === 0
                 ? (!query ? "^" : `No results for ${query}`)
-                : result.result.map(record => <p key={record.id}><Link to={`/record/${record.id}`}>{record.title}</Link></p>)}
+                : result.result.map(record => <RecordPreview key={record.id} record={record} />)}
             <p>
                 {previousPageLink()}
                 | Page {page} |
