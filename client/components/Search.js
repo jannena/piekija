@@ -63,7 +63,7 @@ const Search = ({ queryParams, history, result, advancedSearch }) => {
     return (
         <div>
             <SearchField />
-            <AdvancedSearch query={query} />
+            <AdvancedSearch />
             <hr />
             {/* Order by {<Select options={[["default", "default"], ["time added", "timeAdded"], ["year", "year"], ["alphapetical", "a"]]} />} */}
             <p>Found {result.found} records in {(result.time || NaN).toFixed(0)} milliseconds</p>

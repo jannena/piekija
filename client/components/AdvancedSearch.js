@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from "./Select";
 import { connect } from "react-redux";
-import { advancedSearch } from "../reducers/searchReducer";
+import { setQuery } from "../reducers/queryReducer";
 
 const QueryGroupStyle = {
     border: "1px solid black",
@@ -150,34 +150,42 @@ const isJSON = string => {
     return true;
 };
 
-const AdvancedSearch = ({ advancedSearch, query: q }) => {
+const AdvancedSearch = ({ q, setQuery: setQ }) => {
     const [query, setQuery] = useState(["AND", []]);
 
     console.log("query here", query);
     // console.log(query[0]);
 
     useEffect(() => {
-        // console.log("parameter q here", q, JSON.parse(q));
-        if (q && isJSON(q)) setQuery(JSON.parse(q));
+        if(q) setQuery(q);
     }, [q]);
 
     // console.log(query);
 
+    const search = e => {
+        e.preventDefault();
+        setQ("advanced", query);
+    };
+
     return (
         <div>
-            <AdvancedSearchGroup
-                query={query}
-                setQuery={newQuery => {
-                    console.log("updatedQuery", newQuery, JSON.stringify(newQuery));
-                    setQuery(newQuery);
-                }}
-            />
-            <button onClick={() => advancedSearch(query)}>Search</button>
+            <form onSubmit={search}>
+                <AdvancedSearchGroup
+                    query={query}
+                    setQuery={newQuery => {
+                        console.log("updatedQuery", newQuery, JSON.stringify(newQuery));
+                        setQuery(newQuery);
+                    }}
+                />
+                <button onClick={search}>Search</button>
+            </form>
         </div>
     );
 };
 
 export default connect(
-    null,
-    { advancedSearch }
+    state => ({
+        q: state.query.type === "advanced" ? state.query.query : null
+    }),
+    { setQuery }
 )(AdvancedSearch);

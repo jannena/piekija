@@ -4,13 +4,15 @@ import tokenReducer from "./reducers/tokenReducer";
 import userReducer from "./reducers/userReducer";
 import notificationReducer from "./reducers/notificationReducer";
 import searchReducer from "./reducers/searchReducer";
+import queryReducer from "./reducers/queryReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 const reducer = combineReducers({
     token: tokenReducer,
     user: userReducer,
     notifications: notificationReducer,
-    search: searchReducer
+    search: searchReducer,
+    query: queryReducer
 });
 
 const store = createStore(reducer, composeWithDevTools(

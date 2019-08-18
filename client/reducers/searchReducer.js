@@ -27,7 +27,7 @@ export default recordReducer;
 const isCached = (state, key) => state.search.searches[JSON.stringify(key)] !== undefined;
 const getCached = (state, key) => state.search.searches[JSON.stringify(key)];
 
-const search = (query, page, sort, advanced) => (dispatch, getState) => {
+export const search = (query, page, sort, advanced) => (dispatch, getState) => {
     const key = { query, page, sort };
     if (isCached(getState(), key)) return dispatch({
         type: "SET_RESULT",
@@ -41,11 +41,11 @@ const search = (query, page, sort, advanced) => (dispatch, getState) => {
                 key,
                 result
             });
-            notify("success", "searched");
+            dispatch(notify("success", "searched"));
         })
         .catch(err => {
             console.log(err);
-            notify("error", err.response.data.error);
+            dispatch(notify("error", err.response.data.error));
         });
 };
 
