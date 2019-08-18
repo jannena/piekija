@@ -139,7 +139,7 @@ const AdvancedSearchGroup = ({ query, setQuery, removeGroup }) => {
     ]
 */
 
-const AdvancedSearch = ({ q, setQuery: setQ }) => {
+const AdvancedSearch = ({ query: q, setQuery: setQ }) => {
     const [query, setQuery] = useState(["AND", []]);
 
     console.log("query here", query);
@@ -171,7 +171,7 @@ const AdvancedSearch = ({ q, setQuery: setQ }) => {
 
 export default connect(
     state => ({
-        q: state.query.type === "advanced" ? state.query.query : null
+        query: state.query.type === "advanced" ? state.query.query : null
     }),
     { setQuery }
 )(AdvancedSearch);
