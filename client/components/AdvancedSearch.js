@@ -51,7 +51,7 @@ const AdvancedSearchField = ({ query, setQuery, removeField }) => {
                 onChange={onChange(2)}
             />
             {optionsByField(query[0], query[1], onChange)}
-            <button onClick={removeField}>Remove field</button>
+            <button type="button" onClick={removeField}>Remove field</button>
         </div>
     );
 };
@@ -72,8 +72,8 @@ const AdvancedSearchGroup = ({ query, setQuery, removeGroup }) => {
 
     return (
         <div style={QueryGroupStyle}>
-            <button onClick={addNewField}>Add new FIELD to this group</button>
-            <button onClick={addNewGroup}>Add new GROUP to this group</button>
+            <button type="button" onClick={addNewField}>Add new FIELD to this group</button>
+            <button type="button" onClick={addNewGroup}>Add new GROUP to this group</button>
             {removeGroup && <button onClick={removeGroup}>Remove this group</button>}
             <Select
                 options={[["with all these (and)", "AND"], ["with any of these (or)", "OR"]]}
@@ -139,28 +139,14 @@ const AdvancedSearchGroup = ({ query, setQuery, removeGroup }) => {
     ]
 */
 
-const isJSON = string => {
-    try {
-        const moi = JSON.parse(string);
-        console.log("moii", moi);
-    }
-    catch (err) {
-        return false;
-    }
-    return true;
-};
-
 const AdvancedSearch = ({ q, setQuery: setQ }) => {
     const [query, setQuery] = useState(["AND", []]);
 
     console.log("query here", query);
-    // console.log(query[0]);
 
     useEffect(() => {
         if(q) setQuery(q);
     }, [q]);
-
-    // console.log(query);
 
     const search = e => {
         e.preventDefault();
@@ -177,7 +163,7 @@ const AdvancedSearch = ({ q, setQuery: setQ }) => {
                         setQuery(newQuery);
                     }}
                 />
-                <button onClick={search}>Search</button>
+                <button type="submit" onClick={search}>Search</button>
             </form>
         </div>
     );
