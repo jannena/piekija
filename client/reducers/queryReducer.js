@@ -44,7 +44,7 @@ export const nextPage = () => (dispatch, getState) => {
     });
     dispatch(search(
         getState().query.query,
-        getState().query.page + 1,
+        getState().query.page,
         undefined,
         getState().query.type === "advanced"
     ));
@@ -56,7 +56,7 @@ export const previousPage = () => (dispatch, getState) => {
     });
     dispatch(search(
         getState().query.query,
-        getState().query.page - 1,
+        getState().query.page,
         undefined,
         getState().query.type === "advanced"
     ));

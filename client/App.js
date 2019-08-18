@@ -34,7 +34,7 @@ const App = ({ token, getUser, setToken }) => {
                     <Link to="/login">Kirjaudu sisään</Link>
                 </>} />
                 <Route exact path="/search" render={({ location, history }) =>
-                    <Search queryParams={location.search} history={history} />
+                    <Search />
                 } />
                 <Route exact path="/record/:id" render={({ match, history }) => {
                     console.log(match, match.params, match.params.id);

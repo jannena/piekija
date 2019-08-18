@@ -6,6 +6,8 @@ import RecordPreview from "./RecordPreview";
 import { connect } from "react-redux";
 import { nextPage, previousPage } from "../reducers/queryReducer";
 
+const resultsPerPage = 20;
+
 const Search = ({ result, page, nextPage, previousPage }) => {
 
     console.log("rendered search");
@@ -27,7 +29,7 @@ const Search = ({ result, page, nextPage, previousPage }) => {
                     <p>
                         {page >= 2 && <button onClick={previousPage}>&lt;&lt; previous</button>}
                         | Page {page} |
-                        {<button onClick={nextPage}>next &gt;&gt;</button>}
+                        {(result.found > page * resultsPerPage) && <button onClick={nextPage}>next &gt;&gt;</button>}
                     </p>
                 </>}
         </div>

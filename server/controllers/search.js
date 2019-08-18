@@ -4,7 +4,6 @@ const Record = require("../models/Record");
 const { validateAdvancedQuery, validateSimpleQuery } = require("../utils/queryValidator");
 
 // TODO: pagination
-// TODO: Search controller does not need to return this much data (ie. full document)
 
 const searchResultsPerPage = 20;
 
@@ -26,8 +25,7 @@ const search = async (req, res, next, simple) => {
 
         if (!result) res.status(404).json({ error: "no results" });
         else {
-            // TODO: Return how many documents match the query
-            const found = 10; // await Record.countDocuments(readyQuery).then(number => number);
+            const found = await Record.countDocuments(readyQuery).then(number => number);
             console.log("found", found, result);
 
             const secondTime = process.hrtime(firstTime);
