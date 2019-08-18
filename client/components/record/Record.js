@@ -5,6 +5,7 @@ import { Tabs, Tab } from "../Tabs";
 import MARC21Screen from "./MARC21Screen";
 import RecordLanguages from "./RecordLanguages";
 import RecordNotes from "./RecordNotes";
+import RecordTime from "./RecordTime";
 import RecordClassification from "./RecordClassification";
 import RecordStandardCodes from "./RecordStandardCodes";
 
@@ -49,6 +50,7 @@ const Record = ({ id, history: { goBack } }) => {
             <div>
                 Content type: {MARC21.contentTypes[record.record.LEADER.substring(6, 7)]}
             </div>
+            <RecordTime record={record} />
             <RecordClassification record={record} />
             <hr />
             <RecordStandardCodes record={record} />
