@@ -23,5 +23,6 @@
 | 14.8. | 1,5 | sivutus, ilmoitukset |
 | 17.8. | 2 | "stressitestausta" |
 | | 3 | Edistyneen haun päivittäminen, tietokannan optimointi tietuenäkymän päivittäminen |
+| 18.8. | 3,5 | Reduxin käyttöönoton jatkaminen |
 | | | |
-| yht. | 52,5 | |
+| yht. | 56 | |
