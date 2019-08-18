@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import shelfService from "../services/shelfService";
-import { Link } from "react-router-dom";
 import ShelfRecord from "./ShelfRecord";
 import ShelfSharing from "./ShelfSharing";
+import { connect } from "react-redux";
 
 const Shelf = ({ shelfId, token, user }) => {
     const [shelf, setShelf] = useState(null);
@@ -47,4 +47,9 @@ const Shelf = ({ shelfId, token, user }) => {
     );
 };
 
-export default Shelf;
+export default connect(
+    state => ({
+        token: state.token.token,
+        user: state.user
+    })
+)(Shelf);

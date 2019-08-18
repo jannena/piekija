@@ -9,6 +9,7 @@ import RecordTime from "./RecordTime";
 import RecordClassification from "./RecordClassification";
 import RecordStandardCodes from "./RecordStandardCodes";
 import ReocrdSubjects from "./RecordSubjects";
+import RecordTools from "./RecordTools";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
@@ -41,6 +42,7 @@ const Record = ({ id, history: { goBack } }) => {
         ? <p>Loading...</p>
         : <div>
             <button onClick={goBack}>&lt; Back</button>
+            <RecordTools record={record} />
             {MARC21.getFieldsAndSubfields(record.record, ["245"], ["a", "b", "c"]).slice(0, 1).map(title => <h2 key={title.a[0]}>{`${title.a[0] || ""} ${title.b[0] || ""} ${title.c[0] || ""}`}</h2>)}
             <div>
                 Content type: {MARC21.contentTypes[record.record.LEADER.substring(6, 7)]}

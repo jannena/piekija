@@ -10,9 +10,9 @@ import React from "react";
  *     ]
  * 
 */
-const Select = ({ options, selected, onChange }) => {
+const Select = ({ options, selected, onChange, name }) => {
     return (
-        <select onChange={onChange} value={selected}>
+        <select name={name} onChange={onChange} value={selected}>
             {options.map(o => <option key={o[1]} value={o[1]}>{o[0]}</option>)}
         </select>
     );

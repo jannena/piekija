@@ -5,6 +5,7 @@ import userReducer from "./reducers/userReducer";
 import notificationReducer from "./reducers/notificationReducer";
 import searchReducer from "./reducers/searchReducer";
 import queryReducer from "./reducers/queryReducer";
+import shelfReducer from "./reducers/shelfReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 const reducer = combineReducers({
@@ -12,7 +13,8 @@ const reducer = combineReducers({
     user: userReducer,
     notifications: notificationReducer,
     search: searchReducer,
-    query: queryReducer
+    query: queryReducer,
+    shelf: shelfReducer
 });
 
 const store = createStore(reducer, composeWithDevTools(

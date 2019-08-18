@@ -11,6 +11,10 @@ const userReducer = (state = null, action) => {
                 tfa: action.tfa,
                 tfaqr: action.tfaqr
             }
+        case "CREATE_SHELF":
+            const stateToUpdate = { ...state };
+            stateToUpdate.shelves = [...stateToUpdate.shelves, { note: "", id: action.shelf, author: true }];
+            return stateToUpdate;
     }
     return state;
 };

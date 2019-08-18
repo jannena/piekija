@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import UpdateUserForm from "./UpdateUserForm";
 import TFAForm from "./TFAForm";
 import { Tabs, Tab } from "./Tabs";
 import { connect } from "react-redux";
+import { createShelf } from "../reducers/shelfReducer";
 
 
-const UserInfo = ({ user }) => {
+const UserInfo = ({ user, createShelf }) => {
     if (!user) return <div></div>;
 
     const printShelves = shelves => {
@@ -14,6 +15,11 @@ const UserInfo = ({ user }) => {
         console.log(mapped, mapped.filter(shelf => shelf).length);
         if (mapped.filter(shelf => shelf).length === 0) return <p>No shelves</p>;
         return mapped
+    };
+
+    const createNewShelf = e => {
+        e.preventDefault();
+        createShelf(e.target.newShelfName.value, false);
     };
 
     return (
@@ -28,6 +34,10 @@ const UserInfo = ({ user }) => {
             <h3>Shelves</h3>
             <Tabs titles={["my shelves ", " shared with me"]}>
                 <Tab>
+                    <form onSubmit={createNewShelf}>
+                        <input name="newShelfName" />
+                        <button>Create shelf</button>
+                    </form>
                     <ul>
                         {printShelves(user.shelves.filter(shelf => shelf.author))}
                     </ul>
@@ -51,5 +61,6 @@ const UserInfo = ({ user }) => {
 export default connect(
     state => ({
         user: state.user
-    })
+    }),
+    { createShelf }
 )(UserInfo);

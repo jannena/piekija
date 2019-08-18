@@ -9,6 +9,25 @@ const get = (shelfId, token) => {
     ).then(response => response.data);
 };
 
+const create = (name, description, publicity, token) => {
+    return axios.post(
+        baseUrl,
+        {
+            name,
+            public: false
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
+const addRecord = (shelfId, recordId, token) => {
+    return axios.post(
+        `${baseUrl}/${shelfId}/shelve`,
+        { record: recordId },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
 const editRecord = (shelfId, recordId, note, token) => {
     return axios.put(
         `${baseUrl}/${shelfId}/shelve`,
@@ -47,6 +66,8 @@ const unshare = (shelfId, username, token) => {
 
 export default {
     get,
+    create,
+    addRecord,
     editRecord,
     removeRecord,
     share,
