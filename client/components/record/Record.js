@@ -8,6 +8,7 @@ import RecordNotes from "./RecordNotes";
 import RecordTime from "./RecordTime";
 import RecordClassification from "./RecordClassification";
 import RecordStandardCodes from "./RecordStandardCodes";
+import ReocrdSubjects from "./RecordSubjects";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
@@ -34,19 +35,13 @@ const Record = ({ id, history: { goBack } }) => {
             });
     }, [id]);
 
-    const subjects = subject => {
-        const everythingButA = subject["v"].concat(subject["x"], subject["y"], subject["z"], subject["t"], subject["n"], subject["r"]);
-        return (<>
-            <Link to={`/search?type=simple&q=${subject["a"].join("")}`}>{subject["a"].join("")}</Link>
-            {!!everythingButA.length && " --> " + everythingButA.join(" --> ")}
-        </>);
-    }
+    
 
     return !record
         ? <p>Loading...</p>
         : <div>
             <button onClick={goBack}>&lt; Back</button>
-            {MARC21.getFieldsAndSubfields(record.record, ["245"], ["a", "b", "c"]).slice(0, 1).map(title => <h2>{`${title.a[0] || ""} ${title.b[0] || ""} ${title.c[0] || ""}`}</h2>)}
+            {MARC21.getFieldsAndSubfields(record.record, ["245"], ["a", "b", "c"]).slice(0, 1).map(title => <h2 key={title.a[0]}>{`${title.a[0] || ""} ${title.b[0] || ""} ${title.c[0] || ""}`}</h2>)}
             <div>
                 Content type: {MARC21.contentTypes[record.record.LEADER.substring(6, 7)]}
             </div>
@@ -100,27 +95,7 @@ const Record = ({ id, history: { goBack } }) => {
                         </li>)}
                 </ul>
             </div>
-            <div>
-                Subjects:
-                <ul>
-                    {MARC21
-                        .getFieldsAndSubfields(record.record, ["600", "650", "651", "653"], ["a", "v", "x", "y", "z", "t", "n", "r"])
-                        .map(subject => <li key={subject["a"][0]}>
-                            {subjects(subject)}
-                        </li>)}
-                    {/* {record.result.subjects.map(s => <li key={s}><Link to={`/search?q=${encodeURI(s)}`}>{s}</Link></li>)} */}
-                </ul>
-            </div>
-            <div>
-                Genres:
-                <ul>
-                    {MARC21
-                        .getFieldsAndSubfields(record.record, ["655"], ["a", "v", "x", "y", "z", "t", "n", "r"])
-                        .map(genre => <li key={genre["a"][0]}>
-                            {subjects(genre)}
-                        </li>)}
-                </ul>
-            </div>
+            <ReocrdSubjects record={record} />
 
 
             <Tabs titles={["Items", "MARC"]}>
