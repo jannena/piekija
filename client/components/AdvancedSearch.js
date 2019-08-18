@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from "./Select";
+import { connect } from "react-redux";
+import { advancedSearch } from "../reducers/searchReducer";
 
 const QueryGroupStyle = {
     border: "1px solid black",
@@ -148,7 +150,7 @@ const isJSON = string => {
     return true;
 };
 
-const AdvancedSearch = ({ onSearch, query: q }) => {
+const AdvancedSearch = ({ advancedSearch, query: q }) => {
     const [query, setQuery] = useState(["AND", []]);
 
     console.log("query here", query);
@@ -170,9 +172,12 @@ const AdvancedSearch = ({ onSearch, query: q }) => {
                     setQuery(newQuery);
                 }}
             />
-            <button onClick={() => onSearch(query)}>Search</button>
+            <button onClick={() => advancedSearch(query)}>Search</button>
         </div>
     );
 };
 
-export default AdvancedSearch;
+export default connect(
+    null,
+    { advancedSearch }
+)(AdvancedSearch);

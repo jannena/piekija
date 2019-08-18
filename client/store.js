@@ -3,14 +3,19 @@ import thunk from "redux-thunk";
 import tokenReducer from "./reducers/tokenReducer";
 import userReducer from "./reducers/userReducer";
 import notificationReducer from "./reducers/notificationReducer";
+import searchReducer from "./reducers/searchReducer";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 const reducer = combineReducers({
     token: tokenReducer,
     user: userReducer,
-    notifications: notificationReducer
+    notifications: notificationReducer,
+    search: searchReducer
 });
 
-const store = createStore(reducer, applyMiddleware(thunk));
+const store = createStore(reducer, composeWithDevTools(
+    applyMiddleware(thunk)
+));
 
 window.debug = store;
 

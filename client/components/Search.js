@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 import AdvancedSearch from "./AdvancedSearch";
 import Select from "./Select";
 import RecordPreview from "./RecordPreview";
+import { connect } from "react-redux";
+import { advancedSearch } from "../reducers/searchReducer";
 
-const Search = ({ queryParams, history }) => {
-    const [result, setResult] = useState([]);
-
+const Search = ({ queryParams, history, result, advancedSearch }) => {
     const { type, q: query, page: p } = qs.parse(queryParams);
     const page = !p ? 1 : Number(p);
 
@@ -47,21 +47,11 @@ const Search = ({ queryParams, history }) => {
     };
 
     const onAdvancedSearch = query => {
+        // TODO: This mus be done in somewhere
         history.push({
             pathname: "/search",
             search: `?type=advanced&q=${encodeURIComponent(JSON.stringify(query))}&page=${page}`
         });
-        console.log(encodeURI(JSON.stringify(query)));
-        console.log(JSON.stringify(query));
-        searchService
-            .advancedSearch(query, page)
-            .then(result => {
-                setResult(result);
-            })
-            .catch(err => {
-                console.log("VIRHE hakutuloksia haettaessa", err, err.message);
-            });
-        console.log("requested advanced search results");
     };
 
     console.log("sivulla", page, !page || page === 1);
@@ -72,12 +62,12 @@ const Search = ({ queryParams, history }) => {
 
     return (
         <div>
-            <SearchField onSearch={onSearch} />
-            <AdvancedSearch onSearch={onAdvancedSearch} query={query} />
+            <SearchField />
+            <AdvancedSearch query={query} />
             <hr />
             {/* Order by {<Select options={[["default", "default"], ["time added", "timeAdded"], ["year", "year"], ["alphapetical", "a"]]} />} */}
             <p>Found {result.found} records in {(result.time || NaN).toFixed(0)} milliseconds</p>
-            {result.length === 0
+            {result.result.length === 0
                 ? (!query ? "^" : `No results for ${query}`)
                 : result.result.map(record => <RecordPreview key={record.id} record={record} />)}
             <p>
@@ -89,4 +79,9 @@ const Search = ({ queryParams, history }) => {
     );
 };
 
-export default Search;
+export default connect(
+    state => ({
+        result: state.search.result
+    }),
+    { advancedSearch }
+)(Search);
