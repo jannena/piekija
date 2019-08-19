@@ -24,5 +24,6 @@
 | 17.8. | 2 | "stressitestausta" |
 | | 3 | Edistyneen haun päivittäminen, tietokannan optimointi tietuenäkymän päivittäminen |
 | 18.8. | 3,5 | Reduxin käyttöönoton jatkaminen |
+| 19.8. | 1 | Reduxin käyttöönottoa |
 | | | |
-| yht. | 56 | |
+| yht. | 57 | |
