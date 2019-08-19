@@ -1,40 +1,29 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import shelfService from "../services/shelfService";
+import { connect } from "react-redux";
+import { deleteRecordFromShelf, updateRecordInShelf } from "../reducers/shelfReducer";
 
-const ShelfRecord = ({ shelfId, record, canEdit, token }) => {
+const ShelfRecord = ({ record, canEdit, updateRecordInShelf, deleteRecordFromShelf }) => {
+    console.log("I'm in this shelf", record);
+
     const [isOpen, setIsOpen] = useState(false);
     const [note, setNote] = useState(record.note || "");
 
     const handleEditNote = () => {
-        console.log(token);
-        shelfService
-            .editRecord(shelfId, record.record.id, note, token)
-            .then(result => {
-                console.log("edited record (in shelf)", result);
-                setIsOpen(false);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        updateRecordInShelf(record.record.id, note);
+        setIsOpen(false);
     }
 
     const handleRemoveFromShelf = () => {
-        shelfService
-            .removeRecord(shelfId, record.record.id, token)
-            .then(result => {
-                // TODO: Remove deleted record from screen
-                console.log("removed record from shelf", result);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        deleteRecordFromShelf(record.record.id);
     };
 
     const cancelEditing = () => {
         setIsOpen(false);
         setNote(record.note || "");
     };
+
+    // TODO: note update after note update does not work
 
     return <tr>
         <td><Link to={`/record/${record.record.id}`}>{record.record.title}</Link></td>
@@ -44,7 +33,7 @@ const ShelfRecord = ({ shelfId, record, canEdit, token }) => {
                 <button onClick={handleEditNote}>save</button>
                 <button onClick={cancelEditing}>cancel</button>
             </>
-            : note}</td>
+            : record.note}</td>
         <td>{canEdit && <>
             <button onClick={() => setIsOpen(true)}>edit note</button>
             <button onClick={handleRemoveFromShelf}>delete from shelf</button>
@@ -52,4 +41,7 @@ const ShelfRecord = ({ shelfId, record, canEdit, token }) => {
     </tr>;
 };
 
-export default ShelfRecord;
+export default connect(
+    null,
+    { updateRecordInShelf, deleteRecordFromShelf }
+)(ShelfRecord);

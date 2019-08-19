@@ -1,28 +1,18 @@
 import React, { useState, useEffect } from "react";
-import shelfService from "../services/shelfService";
 import ShelfRecord from "./ShelfRecord";
 import ShelfSharing from "./ShelfSharing";
 import { connect } from "react-redux";
+import { getShelf } from "../reducers/shelfReducer";
 
-const Shelf = ({ shelfId, token, user }) => {
-    const [shelf, setShelf] = useState(null);
+const Shelf = ({ shelfId, shelf, token, user, getShelf }) => {
 
     useEffect(() => {
-        shelfService
-            .get(shelfId, token)
-            .then(res => {
-                console.log(res);
-                setShelf(res);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        if (shelfId !== (shelf || { id: null }).id) getShelf(shelfId);
     }, [shelfId, token]);
 
-    if (!shelf || !user) return null;
+    if (!shelf) return null;
 
     const isAuthor = () => shelf.author.id === user.id;
-
     const canEdit = () => isAuthor() || (shelf.sharedWith || []).some(u => user.id);
 
     return (
@@ -30,7 +20,7 @@ const Shelf = ({ shelfId, token, user }) => {
             <h2>{shelf.name}</h2>
             <div>DESCRIPTION: {shelf.description}</div>
             <div>AUTHOR: {isAuthor() ? "you" : shelf.author.name}</div>
-            {shelf.sharedWith && <ShelfSharing setShelf={setShelf} token={token} shelf={shelf} isAuthor={isAuthor()} />}
+            {shelf.sharedWith && <ShelfSharing setShelf={() => { }} token={token} shelf={shelf} isAuthor={isAuthor()} />}
             <h3>Records:</h3>
             <table>
                 <tbody>
@@ -39,8 +29,7 @@ const Shelf = ({ shelfId, token, user }) => {
                             key={record.record.id}
                             record={record}
                             canEdit={canEdit()}
-                            token={token}
-                            shelfId={shelf.id} />)}
+                        />)}
                 </tbody>
             </table>
         </div>
@@ -50,6 +39,8 @@ const Shelf = ({ shelfId, token, user }) => {
 export default connect(
     state => ({
         token: state.token.token,
-        user: state.user
-    })
+        user: state.user,
+        shelf: state.shelf.shelf
+    }),
+    { getShelf }
 )(Shelf);

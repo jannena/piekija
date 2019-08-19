@@ -13,7 +13,7 @@ const userReducer = (state = null, action) => {
             }
         case "CREATE_SHELF":
             const stateToUpdate = { ...state };
-            stateToUpdate.shelves = [...stateToUpdate.shelves, { note: "", id: action.shelf, author: true }];
+            stateToUpdate.shelves = [...stateToUpdate.shelves, { note: "", id: { id: action.shelf.if, name: action.shelf.name }, author: true }];
             return stateToUpdate;
     }
     return state;

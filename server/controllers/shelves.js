@@ -2,6 +2,7 @@ const { ObjectId } = require("mongoose").Types;
 const shelfRouter = require("express").Router();
 const Shelf = require("../models/Shelf");
 const User = require("../models/User");
+const Record = require("../models/Record");
 
 shelfRouter.get("/", (req, res, next) => {
     Shelf
@@ -156,6 +157,8 @@ shelfRouter.post("/:id/shelve", async (req, res, next) => {
             return res.status(400).json({ error: "record is already added to this shelf" });
 
         // TODO: What if record does not exist. Yet, it can be added to shelf!
+        const recordToBeAdded = await Record.findById(record);
+        if (!recordToBeAdded) return res.status(400).json({ error: "record does not exist" });
 
         await Shelf.findOneAndUpdate({
             _id: id,
@@ -165,7 +168,12 @@ shelfRouter.post("/:id/shelve", async (req, res, next) => {
                 { sharedWith: req.authenticated._id }
             ]
         }, { $push: { records: { record, note } } }, { new: true });
-        res.status(201).json({ record, note });
+        res.status(201).json({
+            record: {
+                id: recordToBeAdded.id,
+                title: recordToBeAdded.title
+            }, note
+        });
     }
     catch (err) {
         next(err);
