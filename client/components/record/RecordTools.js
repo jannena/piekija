@@ -10,7 +10,7 @@ const RecordTools = ({ record, user, addRecordToShelf }) => {
     const handleAddToShelf = e => {
         e.preventDefault();
         console.log(record);
-        addRecordToShelf(e.target.shelf.value, record.result.id);
+        addRecordToShelf(record.result.id, e.target.shelf.value);
     };
 
     return (

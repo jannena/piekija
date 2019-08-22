@@ -158,6 +158,7 @@ shelfRouter.post("/:id/shelve", async (req, res, next) => {
 
         // TODO: What if record does not exist. Yet, it can be added to shelf!
         const recordToBeAdded = await Record.findById(record);
+        console.log(recordToBeAdded, record);
         if (!recordToBeAdded) return res.status(400).json({ error: "record does not exist" });
 
         await Shelf.findOneAndUpdate({

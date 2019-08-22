@@ -1,5 +1,6 @@
 import shelfService from "../services/shelfService";
 import { notify } from "./notificationReducer";
+import { DH_NOT_SUITABLE_GENERATOR } from "constants";
 
 const init = {
     cache: {},
@@ -22,6 +23,7 @@ const shelfReducer = (state = init, action) => {
         case "SHARE":
         case "UNSHARE":
         case "ADD_RECORD":
+            if (state.shelf.id !== action.shelfId) return state;
             return {
                 ...state,
                 shelf: {
@@ -46,7 +48,7 @@ const shelfReducer = (state = init, action) => {
                 ...state,
                 shelf: {
                     ...state.shelf,
-                    records: state.shelf.records.filter(record => record.id !== action.recordId)
+                    records: state.shelf.records.filter(record => record.record.id !== action.recordId)
                 }
             };
     }
@@ -86,13 +88,15 @@ export const createShelf = (name, publicity) => (dispatch, getState) => {
         .catch(err => { });
 };
 
-export const addRecordToShelf = record => (dispatch, getState) => {
+export const addRecordToShelf = (recordId, shelfId) => (dispatch, getState) => {
+    const shelf = shelfId === undefined ? getState().shelf.shelf.id : shelfId;
     shelfService
-        .addRecord(getState().shelf.shelf.id, record, getState().token.token)
+        .addRecord(shelf, recordId, getState().token.token)
         .then(addedRecord => {
             dispatch({
                 type: "ADD_RECORD",
-                record: addedRecord
+                record: addedRecord,
+                shelfId: shelf
             });
         })
         .catch(err => { });

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { deleteRecordFromShelf, updateRecordInShelf } from "../reducers/shelfReducer";
 
-const ShelfRecord = ({ state, record, canEdit, updateRecordInShelf, deleteRecordFromShelf }) => {
+const ShelfRecord = ({ record, canEdit, updateRecordInShelf, deleteRecordFromShelf }) => {
     // console.log("I'm in this shelf", record);
 
     const [isOpen, setIsOpen] = useState(false);
@@ -44,6 +44,6 @@ const ShelfRecord = ({ state, record, canEdit, updateRecordInShelf, deleteRecord
 };
 
 export default connect(
-    state => ({ state }),
+    null,
     { updateRecordInShelf, deleteRecordFromShelf }
 )(ShelfRecord);
