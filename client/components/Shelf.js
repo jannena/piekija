@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Loader from "./Loader";
 import ShelfRecord from "./ShelfRecord";
 import ShelfSharing from "./ShelfSharing";
 import { connect } from "react-redux";
@@ -10,7 +11,7 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf }) => {
         if (shelfId !== (shelf || { id: null }).id) getShelf(shelfId);
     }, [shelfId, token]);
 
-    if (state.state === 1) return <p>Loading...</p>;
+    if (state.state === 1) return <Loader />;
     if (state.state === 3) return <p>Error: {state.error}</p>
     if (!shelf) return null;
 
