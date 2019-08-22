@@ -1,6 +1,6 @@
 import shelfService from "../services/shelfService";
 import { notify } from "./notificationReducer";
-import { DH_NOT_SUITABLE_GENERATOR } from "constants";
+import { onError } from "./errorHandingHelper";
 
 const init = {
     cache: {},
@@ -12,15 +12,16 @@ const init = {
 const shelfReducer = (state = init, action) => {
     const stateToUpdate = { ...state };
     switch (action.type) {
-        case "FETCH_SHELF":
+        case "SUCCESS_SHELF_FETCH":
         // stateToUpdate.cache[action.shelf.id] = action.shelf;
         case "SET_SHELF":
             return {
                 ...stateToUpdate,
                 shelf: action.shelf
             };
-        case "UPDATE_SHELF":
-        case "SHARE":
+        case "SUCCES_SHELF_UPDATE":
+            break;
+        case "SUCCESS_SHELF_SHARE":
             return {
                 ...state,
                 shelf: {
@@ -28,7 +29,7 @@ const shelfReducer = (state = init, action) => {
                     sharedWith: state.shelf.sharedWith.concat(action.sharedWith)
                 }
             };
-        case "UNSHARE":
+        case "SUCCESS_SHELF_UNSHARE":
             return {
                 ...state,
                 shelf: {
@@ -36,7 +37,7 @@ const shelfReducer = (state = init, action) => {
                     sharedWith: state.shelf.sharedWith.filter(user => user.username !== action.username)
                 }
             };
-        case "ADD_RECORD":
+        case "SUCCESS_SHELF_ADD_RECORD":
             if (state.shelf.id !== action.shelfId) return state;
             return {
                 ...state,
@@ -45,7 +46,7 @@ const shelfReducer = (state = init, action) => {
                     records: state.shelf.records.concat(action.record)
                 }
             };
-        case "UPDATE_RECORD":
+        case "SUCCESS_SHELF_UPDATE_RECORD":
             // console.log(stateToUpdate.shelf.records[3].record.id, action.recordId);
             // stateToUpdate.shelf.records = stateToUpdate.shelf.records.map(record => record.record.id === action.recordId ? { ...record, note: action.note } : record);
             // console.log("stateToUpdate", stateToUpdate, "is same?", JSON.stringify(state) === JSON.stringify(stateToUpdate));
@@ -57,7 +58,7 @@ const shelfReducer = (state = init, action) => {
                     records: state.shelf.records.map(record => record.record.id === action.recordId ? { ...record, note: action.note } : record)
                 }
             };
-        case "REMOVE_RECORD":
+        case "SUCCESS_SHELF_REMOVE_RECORD":
             return {
                 ...state,
                 shelf: {
@@ -71,9 +72,8 @@ const shelfReducer = (state = init, action) => {
 
 export default shelfReducer;
 
-// TODO: Add error handling
-
 export const getShelf = id => (dispatch, getState) => {
+    dispatch({ type: "REQUEST_SHELF_FETCH" });
     /* const cachedShelf = getState().shelf.cache[id];
     if (cachedShelf) return dispatch({
         type: "SET_SHELF",
@@ -83,92 +83,94 @@ export const getShelf = id => (dispatch, getState) => {
         .get(id, getState().token.token)
         .then(shelf => {
             dispatch({
-                type: "FETCH_SHELF",
+                type: "SUCCESS_SHELF_FETCH",
                 shelf
             });
         })
-        .catch(err => {
-            console.log(err);
-        });
+        .catch(onError(dispatch, "FAILURE_SHELF_FETCH"));
 };
 
 export const createShelf = (name, publicity) => (dispatch, getState) => {
+    dispatch({ type: "REQUEST_SHELF_CREATE" });
     shelfService
         .create(name, "", publicity, getState().token.token)
         .then(response => {
             dispatch({
-                type: "CREATE_SHELF",
+                type: "SUCCESS_SHELF_CREATE",
                 shelf: response
             });
         })
-        .catch(err => { });
+        .catch(onError(dispatch, "FAILURE_SHELF_CREATE"));
 };
 
 export const addRecordToShelf = (recordId, shelfId) => (dispatch, getState) => {
+    dispatch({ type: "REQUEST_SHELF_ADD_RECORD" });
     const shelf = shelfId === undefined ? getState().shelf.shelf.id : shelfId;
     shelfService
         .addRecord(shelf, recordId, getState().token.token)
         .then(addedRecord => {
             dispatch({
-                type: "ADD_RECORD",
+                type: "SUCCESS_SHELF_ADD_RECORD",
                 record: addedRecord,
                 shelfId: shelf
             });
         })
-        .catch(err => { });
+        .catch(onError(dispatch, "FAILURE_SHELF_ADD_RECORD"));
 };
 
 export const updateRecordInShelf = (record, note) => (dispatch, getState) => {
+    dispatch({ type: "REQUEST_SHELF_UPDATE_RECORD" });
     shelfService
         .editRecord(getState().shelf.shelf.id, record, note, getState().token.token)
         .then(response => {
             dispatch({
-                type: "UPDATE_RECORD",
+                type: "SUCCESS_SHELF_UPDATE_RECORD",
                 recordId: record,
                 note
             });
             dispatch(notify("success", "record changed"));
             console.log("Changed state!!");
         })
-        .catch(err => {
-            console.log(err);
-        });
+        .catch(onError(dispatch, "FAILURE_SHELF_UPDATE_RECORD"));
 };
 
 export const deleteRecordFromShelf = record => (dispatch, getState) => {
+    dispatch({ type: "REQUEST_SHELF_REMOVE_RECORD" });
     shelfService
         .removeRecord(getState().shelf.shelf.id, record, getState().token.token)
-        .then(response => {
+        .then(() => {
             dispatch({
-                type: "REMOVE_RECORD",
+                type: "SUCCESS_SHELF_REMOVE_RECORD",
                 recordId: record
             });
         })
-        .catch(err => { });
+        .catch(onError(dispatch, "FAILURE_SHELF_REMOVE_ERROR"));
 };
 
 export const shareShelf = username => (dispatch, getState) => {
+    dispatch({ type: "REQUEST_SHELF_SHARE" });
     shelfService
         .share(getState().shelf.shelf.id, username, getState().token.token)
         .then(response => {
             dispatch({
-                type: "SHARE",
+                type: "SUCCESS_SHELF_SHARE",
                 sharedWith: response
             });
             dispatch(notify("success", `shared with ${response.username} (${response.name})`));
         })
-        .catch(err => { });
+        .catch(onError(dispatch, "FAILURE_SHELF_SHARE"));
 };
 
 export const unshareShelf = username => (dispatch, getState) => {
+    dispatch({ type: "REQUEST_SHELF_UNSHARE" });
     shelfService
         .unshare(getState().shelf.shelf.id, username, getState().token.token)
-        .then(response => {
+        .then(() => {
             dispatch({
-                type: "UNSHARE",
+                type: "SUCCESS_SHELF_UNSHARE",
                 username
             });
             dispatch(notify("success", `unshared with ${username}`));
         })
-        .catch(err => { });
+        .catch(onError(dispatch, "FAILURE_SHELF_UNSHARE"));
 };
