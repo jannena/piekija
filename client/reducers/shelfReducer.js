@@ -21,7 +21,21 @@ const shelfReducer = (state = init, action) => {
             };
         case "UPDATE_SHELF":
         case "SHARE":
+            return {
+                ...state,
+                shelf: {
+                    ...state.shelf,
+                    sharedWith: state.shelf.sharedWith.concat(action.sharedWith)
+                }
+            };
         case "UNSHARE":
+            return {
+                ...state,
+                shelf: {
+                    ...state.shelf,
+                    sharedWith: state.shelf.sharedWith.filter(user => user.username !== action.username)
+                }
+            };
         case "ADD_RECORD":
             if (state.shelf.id !== action.shelfId) return state;
             return {
@@ -56,6 +70,8 @@ const shelfReducer = (state = init, action) => {
 };
 
 export default shelfReducer;
+
+// TODO: Add error handling
 
 export const getShelf = id => (dispatch, getState) => {
     /* const cachedShelf = getState().shelf.cache[id];
@@ -127,6 +143,32 @@ export const deleteRecordFromShelf = record => (dispatch, getState) => {
                 type: "REMOVE_RECORD",
                 recordId: record
             });
+        })
+        .catch(err => { });
+};
+
+export const shareShelf = username => (dispatch, getState) => {
+    shelfService
+        .share(getState().shelf.shelf.id, username, getState().token.token)
+        .then(response => {
+            dispatch({
+                type: "SHARE",
+                sharedWith: response
+            });
+            dispatch(notify("success", `shared with ${response.username} (${response.name})`));
+        })
+        .catch(err => { });
+};
+
+export const unshareShelf = username => (dispatch, getState) => {
+    shelfService
+        .unshare(getState().shelf.shelf.id, username, getState().token.token)
+        .then(response => {
+            dispatch({
+                type: "UNSHARE",
+                username
+            });
+            dispatch(notify("success", `unshared with ${username}`));
         })
         .catch(err => { });
 };

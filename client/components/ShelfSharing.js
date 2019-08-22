@@ -1,39 +1,20 @@
 import React, { useState } from "react";
 import shelfService from "../services/shelfService";
+import { connect } from "react-redux";
+import { shareShelf, unshareShelf } from "../reducers/shelfReducer";
+import { useField } from "../hooks";
 
-const ShelfSharing = ({ shelf, setShelf, token, isAuthor }) => {
-    const [shareWith, setShareWith] = useState("");
+const ShelfSharing = ({ shelf, isAuthor, shareShelf, unshareShelf }) => {
+    const { reset: resetShareWith, ...shareWith } = useField("text");
 
     const handleShelfSharing = e => {
         e.preventDefault();
-        shelfService
-            .share(shelf.id, shareWith, token)
-            .then(result => {
-                console.log(result);
-                setShareWith("");
-                setShelf({
-                    ...shelf,
-                    sharedWith: [ ...shelf.sharedWith, result ]
-                });
-            })
-            .catch(err => {
-                console.log(err, err.response.data.error);
-            });
+        shareShelf(shareWith.value);
+        resetShareWith();
     };
 
     const handleShelfUnsharing = username => () => {
-        shelfService
-            .unshare(shelf.id, username, token)
-            .then(result => {
-                console.log(result);
-                setShelf({
-                    ...shelf,
-                    sharedWith: shelf.sharedWith.filter(u => u.username !== username)
-                });
-            })
-            .catch(err => {
-                console.log(err, err.response.data.error);
-            });
+        unshareShelf(username);
     };
 
     return (<>
@@ -45,10 +26,13 @@ const ShelfSharing = ({ shelf, setShelf, token, isAuthor }) => {
             </li>)}
         </ul>
         {isAuthor && <form onSubmit={handleShelfSharing}>
-            <input placeholder="Share with..." value={shareWith} onChange={e => setShareWith(e.target.value)} />
+            <input placeholder="Share with..." {...shareWith} />
             <button>Share</button>
         </form>}
     </>);
 };
 
-export default ShelfSharing;
+export default connect(
+    null,
+    { shareShelf, unshareShelf }
+)(ShelfSharing);
