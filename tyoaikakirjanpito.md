@@ -25,5 +25,6 @@
 | | 3 | Edistyneen haun päivittäminen, tietokannan optimointi tietuenäkymän päivittäminen |
 | 18.8. | 3,5 | Reduxin käyttöönoton jatkaminen |
 | 19.8. | 1 | Reduxin käyttöönottoa |
+| 22.8. | 2 | Aloitettu: latausruudut ja virheilmoitukset, kun käytössä on Redux |
 | | | |
-| yht. | 57 | |
+| yht. | 59 | |
