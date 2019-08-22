@@ -30,18 +30,16 @@ const init = {
 
 const loadingReducer = (state = init, action) => {
     const { type } = action;
-    let [stateType, reducer, ...rest] = type.split("_");
-    // const splittedType = /(REQUEST|SUCCESS|FAILURE)_(.*)/.exec(type);
-    // if (splittedType) console.log(splittedType);
+    let [stateType = "", reducer = ""] = type.split("_");
 
-    switch (action.type) {
-        case "REQUEST_SHARE":
-        case "REQUEST_UNSHARE":
-        case "REQUEST_GET_SHELF":
-        case "REQUEST_ADD_RECORD":
-        case "REQUEST_UPDATE_RECORD":
-        case "REQUEST_REMOVE_RECORD":
-            return { ...state, shelf: 1 }
+    const updateToState = ["", "REQUEST", "SUCCESS", "FAILURE"].indexOf(stateType) || 3;
+
+    switch (reducer) {
+        case "SHELF":
+            return {
+                ...state,
+                shelf: { state: updateToState, error: action.error || null }
+            };
     }
     return state;
 };

@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import ShelfRecord from "./ShelfRecord";
 import ShelfSharing from "./ShelfSharing";
 import { connect } from "react-redux";
 import { getShelf } from "../reducers/shelfReducer";
 
-const Shelf = ({ shelfId, shelf, token, user, getShelf }) => {
+const Shelf = ({ state, shelfId, shelf, token, user, getShelf }) => {
 
     useEffect(() => {
         if (shelfId !== (shelf || { id: null }).id) getShelf(shelfId);
     }, [shelfId, token]);
 
+    if (state.state === 1) return <p>Loading...</p>;
+    if (state.state === 3) return <p>Error: {state.error}</p>
     if (!shelf) return null;
 
     const isAuthor = () => shelf.author.id === user.id;
@@ -40,7 +42,8 @@ export default connect(
     state => ({
         token: state.token.token,
         user: state.user,
-        shelf: state.shelf.shelf
+        shelf: state.shelf.shelf,
+        state: state.loading.shelf
     }),
     { getShelf }
 )(Shelf);
