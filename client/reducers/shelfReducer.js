@@ -30,17 +30,17 @@ const shelfReducer = (state = init, action) => {
                 }
             };
         case "UPDATE_RECORD":
-            console.log(stateToUpdate.shelf.records[3].record.id, action.recordId);
-            stateToUpdate.shelf.records = stateToUpdate.shelf.records.map(record => record.record.id === action.recordId ? { ...record, note: action.note }: record);
-            console.log(stateToUpdate);
-            return stateToUpdate;
-            /* return {
+            // console.log(stateToUpdate.shelf.records[3].record.id, action.recordId);
+            // stateToUpdate.shelf.records = stateToUpdate.shelf.records.map(record => record.record.id === action.recordId ? { ...record, note: action.note } : record);
+            // console.log("stateToUpdate", stateToUpdate, "is same?", JSON.stringify(state) === JSON.stringify(stateToUpdate));
+            // return stateToUpdate;
+            return {
                 ...state,
                 shelf: {
                     ...state.shelf,
-                    records: state.shelf.records.map(record => record.id === action.recordId ? { ...record, note: action.note } : record)
+                    records: state.shelf.records.map(record => record.record.id === action.recordId ? { ...record, note: action.note } : record)
                 }
-            }; */
+            };
         case "REMOVE_RECORD":
             return {
                 ...state,
@@ -108,6 +108,7 @@ export const updateRecordInShelf = (record, note) => (dispatch, getState) => {
                 note
             });
             dispatch(notify("success", "record changed"));
+            console.log("Changed state!!");
         })
         .catch(err => {
             console.log(err);
