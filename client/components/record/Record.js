@@ -8,38 +8,30 @@ import RecordNotes from "./RecordNotes";
 import RecordTime from "./RecordTime";
 import RecordClassification from "./RecordClassification";
 import RecordStandardCodes from "./RecordStandardCodes";
-import ReocrdSubjects from "./RecordSubjects";
+import ReocordSubjects from "./RecordSubjects";
 import RecordTools from "./RecordTools";
+import { connect } from "react-redux";
+import { getRecord } from "../../reducers/recordReducer";
+import Loader from "../Loader";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
 
-const Record = ({ id, history: { goBack } }) => {
-    const [record, setRecord] = useState(null);
-
+const Record = ({ state, record, getRecord, id, history: { goBack } }) => {
     console.log(id);
     console.log("record", record);
 
     useEffect(() => {
-        recordService
-            .get(id)
-            .then(result => {
-                console.log(result.record, MARC21.parse(result.record));
-                setRecord({
-                    result,
-                    record: MARC21.parse(result.record)
-                });
-                console.log("received record", result, record);
-            })
-            .catch(err => {
-                console.log(JSON.parse(JSON.stringify(err)), err.message);
-            });
+        console.log(id);
+        getRecord(id);
     }, [id]);
 
-    
+    if (state.state === 0) return null;
+    if (state.state === 1) return <Loader />
+    if (state.state === 3) return <p>Error: {state.error}</p>;
 
-    return !record
-        ? <p>Loading...</p>
+    return !record || record.result.id !== id
+        ? null
         : <div>
             <button onClick={goBack}>&lt; Back</button>
             <RecordTools record={record} />
@@ -97,7 +89,7 @@ const Record = ({ id, history: { goBack } }) => {
                         </li>)}
                 </ul>
             </div>
-            <ReocrdSubjects record={record} />
+            <ReocordSubjects record={record} />
 
 
             <Tabs titles={["Items", "MARC"]}>
@@ -118,4 +110,10 @@ const Record = ({ id, history: { goBack } }) => {
         </div>
 };
 
-export default Record;
+export default connect(
+    state => ({
+        record: state.record.record,
+        state: state.loading.record
+    }),
+    { getRecord }
+)(Record);

@@ -45,6 +45,11 @@ const loadingReducer = (state = init, action) => {
                 ...state,
                 search: { state: updateToState, error: action.error || null }
             };
+        case "RECORD":
+            return {
+                ...state,
+                record: { state: updateToState, error: action.error || null }
+            };
     }
     return state;
 };

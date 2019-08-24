@@ -6,6 +6,7 @@ import notificationReducer from "./reducers/notificationReducer";
 import searchReducer from "./reducers/searchReducer";
 import queryReducer from "./reducers/queryReducer";
 import shelfReducer from "./reducers/shelfReducer";
+import recordReducer from "./reducers/recordReducer";
 import loadingReducer from "./reducers/loadingReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 
@@ -16,6 +17,7 @@ const reducer = combineReducers({
     search: searchReducer,
     query: queryReducer,
     shelf: shelfReducer,
+    record: recordReducer,
     loading: loadingReducer
 });
 
