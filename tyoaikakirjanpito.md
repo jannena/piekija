@@ -26,5 +26,6 @@
 | 18.8. | 3,5 | Reduxin käyttöönoton jatkaminen |
 | 19.8. | 1 | Reduxin käyttöönottoa |
 | 22.8. | 2 | Aloitettu: latausruudut ja virheilmoitukset, kun käytössä on Redux |
+| 24.8. | 2 | Latausruutujen ja virheilmoitusten jatkamista, tietuemuokkaimen aloittaminen |
 | | | |
-| yht. | 59 | |
+| yht. | 61 | |
