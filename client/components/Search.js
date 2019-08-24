@@ -5,6 +5,7 @@ import Select from "./Select";
 import RecordPreview from "./RecordPreview";
 import { connect } from "react-redux";
 import { nextPage, previousPage } from "../reducers/queryReducer";
+import Loader from "./Loader";
 
 const resultsPerPage = 20;
 
@@ -15,7 +16,7 @@ const Search = ({ state, result, page, nextPage, previousPage }) => {
     console.log("doNotShowNextPageLink?", result.found / 3 <= page);
 
     if (state.state === 0) return <p>Give the search query</p>;
-    if (state.state === 1) return <p>Searching...</p>;
+    if (state.state === 1) return <Loader />;
     if (state.state === 3) return <p>Error: {state.error}</p>;
 
     return (
