@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import recordService from "../../services/recordService";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
 import { Tabs, Tab } from "../Tabs";
 import MARC21Screen from "./MARC21Screen";
 import RecordLanguages from "./RecordLanguages";
@@ -8,11 +6,13 @@ import RecordNotes from "./RecordNotes";
 import RecordTime from "./RecordTime";
 import RecordClassification from "./RecordClassification";
 import RecordStandardCodes from "./RecordStandardCodes";
-import ReocordSubjects from "./RecordSubjects";
+import RecordSubjects from "./RecordSubjects";
 import RecordTools from "./RecordTools";
 import { connect } from "react-redux";
 import { getRecord } from "../../reducers/recordReducer";
 import Loader from "../Loader";
+import RecordPublisherInfo from "./RecordPublisherInfo";
+import RecordAuthors from "./RecordAuthors";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
@@ -44,21 +44,7 @@ const Record = ({ state, record, getRecord, id, history: { goBack } }) => {
             <hr />
             <RecordStandardCodes record={record} />
             <hr />
-            <div>
-                {MARC21
-                    .getFieldsAndSubfields(record.record, ["264"], ["indicators", "a", "b", "c"])
-                    .map((field, i) =>
-                        <div key={field.indicators[1]}>
-                            {["Production", "Publication", "Distribution", "Manufacture", "Copyright notice date"][Number(field.indicators[1])]}: {field.a} {field.b} {field.c}
-                        </div>
-                    )}
-                {MARC21
-                    .getFieldsAndSubfields(record.record, ["260"], ["a", "b", "c", "e", "f"])
-                    .map(c => <div key={c.a}>
-                        {"Publisher / ..."} {c.a} {c.b} {c.c} {c.e} {c.f}
-                    </div>
-                    )}
-            </div>
+            <RecordPublisherInfo record={record} />
             <hr />
             {MARC21
                 .getFieldsAndSubfields(record.record, ["856"], ["indicators", "y", "u"])
@@ -74,22 +60,9 @@ const Record = ({ state, record, getRecord, id, history: { goBack } }) => {
             <div>
                 Series: {MARC21.getFieldsAndSubfields(record.record, ["490"], ["a"]).map(s => <span key={s.a}>{s.a}</span>)}
             </div>
-            <div>
-                Notes:
-                <RecordNotes record={record} />
-            </div>
-            <div>
-                Authors:
-                <ul>
-                    {MARC21
-                        .getFieldsAndSubfields(record.record, ["100", "110", "700", "710"], ["a", "d", "e"])
-                        .map(author => <li key={author["a"][0]}>
-                            <Link to={`/search?type=simple&q=${encodeURIComponent(removeLastCharacters(author["a"][0]))}`}>{removeLastCharacters(author["a"][0]) + ","}</Link>
-                            {author["d"][0] && `, (${author["d"][0]})`} {author["e"].join(" ")}
-                        </li>)}
-                </ul>
-            </div>
-            <ReocordSubjects record={record} />
+            <RecordNotes record={record} />
+            <RecordAuthors record={record} />
+            <RecordSubjects record={record} />
 
 
             <Tabs titles={["Items", "MARC"]}>
