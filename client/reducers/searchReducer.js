@@ -1,5 +1,6 @@
 import searchService from "../services/searchService";
 import { notify } from "./notificationReducer";
+import { onError } from "./errorHandingHelper";
 
 const init = {
     searches: {},
@@ -13,7 +14,7 @@ const init = {
 const recordReducer = (state = init, action) => {
     const stateToUpdate = { ...state };
     switch (action.type) {
-        case "SEARCH":
+        case "SUCCESS_SEARCH":
             stateToUpdate.searches[JSON.stringify(action.key)] = action.result;
         case "SET_RESULT":
             return { ...stateToUpdate, result: action.result };
@@ -33,20 +34,18 @@ export const search = (query, page, sort, advanced) => (dispatch, getState) => {
         type: "SET_RESULT",
         result: getCached(getState(), key)
     });
+    dispatch({ type: "REQUEST_SEARCH" });
     searchService
         .search(query, page, sort, advanced)
         .then(result => {
             dispatch({
-                type: "SEARCH",
+                type: "SUCCESS_SEARCH",
                 key,
                 result
             });
             dispatch(notify("success", "searched"));
         })
-        .catch(err => {
-            console.log(err);
-            dispatch(notify("error", err.response.data.error));
-        });
+        .catch(onError(dispatch, "FAILURE_SEARCH"));
 };
 
 export const advancedSearch = (query, page, sort) => search(query, page, sort, true);

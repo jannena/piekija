@@ -40,6 +40,11 @@ const loadingReducer = (state = init, action) => {
                 ...state,
                 shelf: { state: updateToState, error: action.error || null }
             };
+        case "SEARCH":
+            return {
+                ...state,
+                search: { state: updateToState, error: action.error || null }
+            };
     }
     return state;
 };

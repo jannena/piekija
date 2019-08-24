@@ -10,6 +10,8 @@ import { connect } from "react-redux";
 import { getUser } from "./reducers/userReducer";
 import { setToken } from "./reducers/tokenReducer";
 import "./css/global.css";
+import AdvancedSearch from "./components/AdvancedSearch";
+import SearchField from "./components/SearchField";
 
 // TODO: Learn how React router works or make better (clearer) router
 
@@ -34,7 +36,12 @@ const App = ({ token, getUser, setToken }) => {
                     <Link to="/login">Kirjaudu sisään</Link>
                 </>} />
                 <Route exact path="/search" render={({ location, history }) =>
-                    <Search />
+                    <>
+                        <SearchField />
+                        <AdvancedSearch />
+                        <hr />
+                        <Search />
+                    </>
                 } />
                 <Route exact path="/record/:id" render={({ match, history }) => {
                     console.log(match, match.params, match.params.id);
@@ -42,7 +49,7 @@ const App = ({ token, getUser, setToken }) => {
                 }} />
                 <Route exact path="/login" render={() => <Login setToken={setToken} />} />
                 <Route exact path="/user" render={() => {
-                    return <UserInfo  />;
+                    return <UserInfo />;
                 }} />
                 <Route exact path="/shelf/:id" render={({ match }) => {
                     return <Shelf shelfId={match.params.id} />;
