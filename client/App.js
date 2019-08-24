@@ -12,6 +12,8 @@ import { setToken } from "./reducers/tokenReducer";
 import "./css/global.css";
 import AdvancedSearch from "./components/AdvancedSearch";
 import SearchField from "./components/SearchField";
+import Staff from "./components/staff/Staff";
+import RecordEditor from "./components/staff/RecordEditor";
 
 // TODO: Learn how React router works or make better (clearer) router
 
@@ -30,6 +32,7 @@ const App = ({ token, getUser, setToken }) => {
     return (
         <Router>
             <Container>
+                {/* Screens open for everyone */}
                 <Route exact path="/" render={() => <>
                     Etusivu
                     <Link to="/search">Hae</Link>
@@ -47,6 +50,9 @@ const App = ({ token, getUser, setToken }) => {
                     console.log(match, match.params, match.params.id);
                     return <Record id={match.params.id} history={history} />
                 }} />
+
+
+                {/* Screens for logged in users */}
                 <Route exact path="/login" render={() => <Login setToken={setToken} />} />
                 <Route exact path="/user" render={() => {
                     return <UserInfo />;
@@ -54,6 +60,11 @@ const App = ({ token, getUser, setToken }) => {
                 <Route exact path="/shelf/:id" render={({ match }) => {
                     return <Shelf shelfId={match.params.id} />;
                 }} />
+
+
+                {/* Staff screens */}
+                <Route exact path="/staff" render={() => <Staff />} />
+                <Route exact path="/staff/record/:id" render = {({ match }) => <RecordEditor id={match.params.id} />} />
             </Container>
         </Router>
     );

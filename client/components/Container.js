@@ -13,6 +13,7 @@ const Container = ({ children }) => {
                     <li><Link to="/search">Search</Link></li>
                     <li><Link to="/user">You</Link></li>
                     <li><Link to="/login">Login</Link></li>
+                    <li><Link to="/staff">Staff</Link></li>
                     <li><a href="javascript:(() => { window.localStorage.clear(); location.reload(); })();">Logout</a></li>
                 </ul>
             </nav>

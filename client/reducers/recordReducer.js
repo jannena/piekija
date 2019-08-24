@@ -47,3 +47,7 @@ export const getRecord = recordId => (dispatch, getState) => {
         })
         .catch(onError(dispatch, "FAILURE_RECORD_GET"));
 };
+
+export const updateRecord = () => (dispatch, getState) => {};
+export const removeRecord = () => (dispatch, getState) => {};
+export const addRecord = () => (dispatch, getState) => {};
