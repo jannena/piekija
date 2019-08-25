@@ -91,7 +91,12 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
             ])
         });
     };
-    const onRemoveSubfield = () => { };
+    const onRemoveSubfield = (field, i, subfield, n) => () => {
+        const copy = { ...editedRecord };
+        copy.FIELDS[field][1][i].subfields[subfield].splice(n, 1);
+        if (copy.FIELDS[field][1][i].subfields[subfield].length === 0) delete copy.FIELDS[field][1][i].subfields[subfield];
+        setEditedRecord(copy);
+    };
     const onSave = e => {
         // e.preventDefault();
         const joo = MARC21.stringify({
@@ -146,6 +151,7 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
                                     <td></td>
                                     <td>
                                         <input value={value} onChange={onSubfieldChange(field, i, subfieldCode, n)} />
+                                        <button onClick={onRemoveSubfield(field, i, subfieldCode, n)}>Remove subfield</button>
                                     </td>
                                 </tr>)}
                             </React.Fragment>)}
