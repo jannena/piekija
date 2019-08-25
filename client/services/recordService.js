@@ -6,6 +6,18 @@ const get = id => {
     return axios.get(`${baseUrl}/${id}`).then(response => response.data);
 };
 
-export default  {
-    get
+const updateMARC = (id, newMARC, token) => {
+    return axios.put(
+        `${baseUrl}/${id}`,
+        {
+            type: "marc21",
+            data: newMARC
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response)
+};
+
+export default {
+    get,
+    updateMARC
 };

@@ -48,6 +48,21 @@ export const getRecord = recordId => (dispatch, getState) => {
         .catch(onError(dispatch, "FAILURE_RECORD_GET"));
 };
 
-export const updateRecord = () => (dispatch, getState) => {};
-export const removeRecord = () => (dispatch, getState) => {};
-export const addRecord = () => (dispatch, getState) => {};
+export const updateRecord = (recordId, recordMARC) => (dispatch, getState) => {
+    dispatch({ type: "REQUEST_RECORD_UPDATE" });
+    recordService
+        .updateMARC(recordId, recordMARC, getState().token.token)
+        .then(record => {
+            console.log(record);
+            dispatch({
+                type: "SUCCESS_RECORD_GET",
+                record: {
+                    result: record,
+                    record: MARC21.tryParse(record.record)
+                }
+            })
+        })
+        .catch(onError(dispatch, "FAILURE_RECORD_UPDATE"));
+};
+export const removeRecord = () => (dispatch, getState) => { };
+export const addRecord = () => (dispatch, getState) => { };
