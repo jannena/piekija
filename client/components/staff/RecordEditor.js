@@ -14,17 +14,46 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
         getRecord(id);
     }, [id]);
 
+    const fieldSortFunction = ([a], [b]) => Number(a) - Number(b);
+
     useEffect(() => {
         if (record && record.record && record.record.FIELDS) setEditedRecord({
             ...record.record,
-            FIELDS: Object.entries(record.record.FIELDS).sort(([a], [b]) => Number(a) - Number(b))
+            FIELDS: Object.entries(record.record.FIELDS).sort(fieldSortFunction)
         });
     }, [record]);
 
     if (!record.record || !editedRecord) return null;
 
-    const onAddField = () => { };
-    const onAddSubfield = () => { };
+    const fieldSeparatorStyle = {
+        borderTop: "2px solid black"
+    };
+
+
+    const onAddField = e => {
+        e.preventDefault();
+        const field = e.target.field.value;
+        console.log("addign field", field, Number(field), field.length);
+        if (field.length !== 3 || isNaN(Number(field))) return console.log("malformatted field code");
+
+        if (editedRecord.FIELDS.some(([code]) => code === field)) setEditedRecord({
+            ...editedRecord,
+            FIELDS: editedRecord.FIELDS.map(([code, data]) =>
+                [code, data.concat(field === code ? { subfields: {}, indicators: [" ", " "] } : [])]
+            )
+        });
+        else setEditedRecord({
+            ...editedRecord,
+            FIELDS: editedRecord.FIELDS.concat([[field, [{ subfields: {}, indicators: [" ", " "] }]]]).sort(fieldSortFunction)
+        });
+
+        console.log("tried to add field", editedRecord);
+    };
+
+    const onAddSubfield = (field, i, subfield) => {
+
+    };
+
     const onSubfieldChange = (field, i, subfield, n) => e => {
         // const edited = {
         //     ...editedRecord,
@@ -51,11 +80,19 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
 
     // TODO: ADD KEYS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     return (
-        <table>
+        <table style={{ width: "100%" }}>
             <tbody>
+                <tr>
+                    <td>Add field</td>
+                    <td><form onSubmit={onAddField}>
+                        <input name="field" maxLength="3" minLength="3" />
+                        <button>Add field</button>
+                    </form></td>
+                </tr>
                 {editedRecord.FIELDS.map(([code = "000", fieldsData = {}], field) => <React.Fragment key={code}>
                     {fieldsData.map((fieldData, i) => <React.Fragment key={i}>
                         {console.log(fieldData, fieldData.subfields)}
+                        <tr><td colSpan="3" style={fieldSeparatorStyle}></td></tr>
                         <tr>
                             <td>{code}</td>
                             <td>
