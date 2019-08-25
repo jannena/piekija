@@ -80,7 +80,14 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
         copy.FIELDS[field][1][i].subfields[subfield][n] = e.target.value;
         setEditedRecord(copy);
     };
-    const onIndicatorChange = (field, i, indicator, n) => { };
+    const onIndicatorChange = (field, i, n) => e => {
+        const newIndicator = e.target.value.length === 2 ? e.target.value[1] : e.target.value;
+        if (!newIndicator || newIndicator.length !== 1) return console.log("malformatted indicator");
+
+        const copy = { ...editedRecord };
+        copy.FIELDS[field][1][i].indicators[n] = newIndicator;
+        setEditedRecord(copy);
+    };
     const onRemoveField = (field, i) => () => {
         setEditedRecord({
             ...editedRecord,
@@ -136,8 +143,8 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
                             <td></td>
                             <td>
                                 {fieldData.indicators ? <>
-                                    <input value={fieldData.indicators[0]} />
-                                    <input value={fieldData.indicators[1]} />
+                                    <input value={fieldData.indicators[0]} onChange={onIndicatorChange(field, i, 0)} />
+                                    <input value={fieldData.indicators[1]} onChange={onIndicatorChange(field, i, 1)} />
                                 </>
                                     : <input value={fieldData} />}
                             </td>
