@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { Tab, Tabs } from "../Tabs";
 import { createRecord } from "../../reducers/recordReducer";
+import Scanner from "./Scanner";
 
 const Staff = ({ isStaffUser, createRecord }) => {
+    const [showScanner, setShowScanner] = useState(false);
+
     if (!isStaffUser) return <p>Forbidden!</p>;
 
     const createEmptyRecordFromTemplate = () => {
@@ -17,7 +20,8 @@ const Staff = ({ isStaffUser, createRecord }) => {
         </Tab>
         <Tab>
             <button onClick={createEmptyRecordFromTemplate}>Create empty record from template</button>
-            <button onClick={}>Add record by scanning EAN code</button>
+            <button onClick={() => setShowScanner(!showScanner)}>Add record by scanning EAN code</button>
+            {showScanner && <Scanner />}
         </Tab>
     </Tabs>
 };
