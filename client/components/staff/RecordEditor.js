@@ -81,6 +81,16 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
         setEditedRecord(copy);
     };
     const onIndicatorChange = (field, i, indicator, n) => { };
+    const onRemoveField = (field, i) => () => {
+        setEditedRecord({
+            ...editedRecord,
+            FIELDS: editedRecord.FIELDS.map(([code, data]) => [code,
+                code === field
+                    ? data.filter((d, index) => index !== i)
+                    : data
+            ])
+        });
+    };
     const onRemoveSubfield = () => { };
     const onSave = e => {
         // e.preventDefault();
@@ -109,10 +119,13 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
                         <tr><td colSpan="3" style={fieldSeparatorStyle}></td></tr>
                         <tr>
                             <td>{code}</td>
-                            <td><form onSubmit={onAddSubfield(code, field, i)}>
-                                <input name="subfield" minLength="1" maxLength="1" />
-                                <button>Add subfield</button>
-                            </form></td>
+                            <td>
+                                <form onSubmit={onAddSubfield(code, field, i)}>
+                                    <input name="subfield" minLength="1" maxLength="1" />
+                                    <button>Add subfield</button>
+                                </form>
+                                <button onClick={onRemoveField(code, i)}>Remove field</button>
+                            </td>
                         </tr>
                         <tr>
                             <td></td>
