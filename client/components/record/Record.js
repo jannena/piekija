@@ -17,7 +17,7 @@ import RecordAuthors from "./RecordAuthors";
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
 
-const Record = ({ state, record, getRecord, id, history: { goBack } }) => {
+const Record = ({ state, record, getRecord, id, history }) => {
     console.log(id);
     console.log("record", record);
 
@@ -33,8 +33,8 @@ const Record = ({ state, record, getRecord, id, history: { goBack } }) => {
     return !record || record.result.id !== id
         ? null
         : <div>
-            <button onClick={goBack}>&lt; Back</button>
-            <RecordTools record={record} />
+            <button onClick={history.goBack}>&lt; Back</button>
+            <RecordTools record={record} history={history} />
             {MARC21.getFieldsAndSubfields(record.record, ["245"], ["a", "b", "c"]).slice(0, 1).map(title => <h2 key={title.a[0]}>{`${title.a[0] || ""} ${title.b[0] || ""} ${title.c[0] || ""}`}</h2>)}
             <div>
                 Content type: {MARC21.contentTypes[record.record.LEADER.substring(6, 7)]}
