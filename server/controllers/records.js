@@ -84,7 +84,8 @@ recordRouter.put("/:id", (req, res, next) => {
 
     const parsedMARC = MARC21.tryParse(data);
     if (!parsedMARC) return res.status(400).json({ error: "invalid marc21 data" })
-    const record = MARC21.parseMARCToDatabse(parsedMARC);
+    const { timeAdded, ...record } = MARC21.parseMARCToDatabse(parsedMARC, data);
+    console.log(record);
 
     Record
         .findByIdAndUpdate(id, record, { new: true })
