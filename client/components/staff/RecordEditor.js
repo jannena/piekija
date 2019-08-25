@@ -104,6 +104,16 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
         if (copy.FIELDS[field][1][i].subfields[subfield].length === 0) delete copy.FIELDS[field][1][i].subfields[subfield];
         setEditedRecord(copy);
     };
+    const onFieldChange = field => e => {
+        const { value } = e.target;
+        console.log("trying to change to", value);
+        setEditedRecord({
+            ...editedRecord,
+            FIELDS: editedRecord.FIELDS.map(([code, data]) => [code,
+                code === field ? [value] : data
+            ])
+        });
+    };
     const onSave = e => {
         // e.preventDefault();
         const joo = MARC21.stringify({
@@ -132,10 +142,10 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
                         <tr>
                             <td>{code}</td>
                             <td>
-                                <form onSubmit={onAddSubfield(code, field, i)}>
+                                {fieldData.subfields && <form onSubmit={onAddSubfield(code, field, i)}>
                                     <input name="subfield" minLength="1" maxLength="1" />
                                     <button>Add subfield</button>
-                                </form>
+                                </form>}
                                 <button onClick={onRemoveField(code, i)}>Remove field</button>
                             </td>
                         </tr>
@@ -146,7 +156,7 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
                                     <input value={fieldData.indicators[0]} onChange={onIndicatorChange(field, i, 0)} />
                                     <input value={fieldData.indicators[1]} onChange={onIndicatorChange(field, i, 1)} />
                                 </>
-                                    : <input value={fieldData} />}
+                                    : <input value={fieldData} onChange={onFieldChange(code)} />}
                             </td>
                         </tr>
                         {fieldData.subfields && Object.entries(fieldData.subfields).map(([subfieldCode, subfieldData]) =>
