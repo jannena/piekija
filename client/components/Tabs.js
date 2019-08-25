@@ -11,7 +11,7 @@ const Tabs = ({ titles, children }) => {
     return (
         <div>
             {titles.map((title, i) => <span key={i} onClick={() => setSelectedTab(i)}>{title}</span>)}
-            {children[selectedTab]}
+            <div>{children[selectedTab]}</div>
         </div>
     );
 };
