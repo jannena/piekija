@@ -32,6 +32,8 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
 
     const onAddField = e => {
         e.preventDefault();
+        // TODO: Fields 001-009!!!!!!!!
+
         const field = e.target.field.value;
         console.log("addign field", field, Number(field), field.length);
         if (field.length !== 3 || isNaN(Number(field))) return console.log("malformatted field code");
@@ -50,8 +52,20 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
         console.log("tried to add field", editedRecord);
     };
 
-    const onAddSubfield = (field, i, subfield) => {
+    const onAddSubfield = (fieldNumber, field, i) => e => {
+        e.preventDefault();
 
+        console.log("adding subfield", field, i);
+        if (isNaN(fieldNumber) || Number(fieldNumber) < 10) return console.log("this field cannot have subfields");
+
+        const subfield = e.target.subfield.value;
+        if (!subfield || subfield.length !== 1) return console.log("malformatted subfield code");
+        const copy = { ...editedRecord };
+
+        if (copy.FIELDS[field][1][i].subfields[subfield] === undefined) copy.FIELDS[field][1][i].subfields[subfield] = [""];
+        else copy.FIELDS[field][1][i].subfields[subfield].push("");
+
+        setEditedRecord(copy);
     };
 
     const onSubfieldChange = (field, i, subfield, n) => e => {
@@ -95,6 +109,13 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
                         <tr><td colSpan="3" style={fieldSeparatorStyle}></td></tr>
                         <tr>
                             <td>{code}</td>
+                            <td><form onSubmit={onAddSubfield(code, field, i)}>
+                                <input name="subfield" minLength="1" maxLength="1" />
+                                <button>Add subfield</button>
+                            </form></td>
+                        </tr>
+                        <tr>
+                            <td></td>
                             <td>
                                 {fieldData.indicators ? <>
                                     <input value={fieldData.indicators[0]} />
