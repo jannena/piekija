@@ -27,5 +27,6 @@
 | 19.8. | 1 | Reduxin käyttöönottoa |
 | 22.8. | 2 | Aloitettu: latausruudut ja virheilmoitukset, kun käytössä on Redux |
 | 24.8. | 2 | Latausruutujen ja virheilmoitusten jatkamista, tietuemuokkaimen aloittaminen |
+| 25.8. | 3,5 | Tietuemuokkain, EAN-skannerin aloittaminen |
 | | | |
-| yht. | 61 | |
+| yht. | 64,5 | |
