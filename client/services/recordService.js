@@ -14,7 +14,7 @@ const updateMARC = (id, newMARC, token) => {
             data: newMARC
         },
         { headers: { Authorization: `Bearer ${token}` } }
-    ).then(response)
+    ).then(response => response.data)
 };
 
 export default {
