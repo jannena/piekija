@@ -4,6 +4,8 @@ import { getRecord, updateRecord } from "../../reducers/recordReducer";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
+// TODO: Success and error messages
+
 const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
     console.log("editing", record);
 
@@ -38,7 +40,15 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
         console.log("addign field", field, Number(field), field.length);
         if (field.length !== 3 || isNaN(Number(field))) return console.log("malformatted field code");
 
-        if (editedRecord.FIELDS.some(([code]) => code === field)) setEditedRecord({
+        if (Number(field) < 10) {
+            if (editedRecord.FIELDS.some(([code]) => field === code)) return console.log("this field already exists");
+            else setEditedRecord({
+                ...editedRecord,
+                FIELDS: editedRecord.FIELDS.concat([[field, [""]]]).sort(fieldSortFunction)
+            });
+        }
+
+        else if (editedRecord.FIELDS.some(([code]) => code === field)) setEditedRecord({
             ...editedRecord,
             FIELDS: editedRecord.FIELDS.map(([code, data]) =>
                 [code, data.concat(field === code ? { subfields: {}, indicators: [" ", " "] } : [])]
