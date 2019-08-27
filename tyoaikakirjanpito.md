@@ -28,5 +28,6 @@
 | 22.8. | 2 | Aloitettu: latausruudut ja virheilmoitukset, kun käytössä on Redux |
 | 24.8. | 2 | Latausruutujen ja virheilmoitusten jatkamista, tietuemuokkaimen aloittaminen |
 | 25.8. | 3,5 | Tietuemuokkain, EAN-skannerin aloittaminen |
+| 27.8. | 2 | Tietueiden hakeminen tietokantaan Finnasta |
 | | | |
-| yht. | 64,5 | |
+| yht. | 66,5 | |
