@@ -100,3 +100,16 @@ export const copyRecord = () => (dispatch, getState) => {
         })
         .catch(onError(dispatch, "FAILURE_RECORD_COPY"));
 };
+
+export const setRecord = record => dispatch => {
+    dispatch({
+        type: "SET_RECORD",
+        record: {
+            result: {
+                id: "preview",
+                items: []
+            },
+            record: MARC21.tryParse(record)
+        }
+    })
+};

@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { Tab, Tabs } from "../Tabs";
-import { createRecord } from "../../reducers/recordReducer";
+import { createRecord, setRecord } from "../../reducers/recordReducer";
 import Scanner from "./Scanner";
 import axios from "axios";
 
-const Staff = ({ isStaffUser, createRecord }) => {
+const MARC21 = require("../../../server/utils/marc21parser");
+
+const Staff = ({ isStaffUser, createRecord, setRecord, history }) => {
     const [showScanner, setShowScanner] = useState(false);
     const [searchResult, setSearchResult] = useState({});
 
@@ -28,11 +30,25 @@ const Staff = ({ isStaffUser, createRecord }) => {
             .then(response => {
                 setSearchResult(response.data);
                 console.log("got", response);
+                const marc = MARC21.MARCXMLToMARC(response.data.records[0].fullRecord)
+                console.log(marc);
+                console.log(MARC21.stringify(marc));
             })
             .catch(err => {
                 console.log(err);
             });
     };
+
+    const handlePreview = fullRecord => () => {
+        const parsedMARC = MARC21.MARCXMLToMARC(fullRecord);
+        console.log(parsedMARC);
+        if (!parsedMARC) return console.log("no parsedMARC");
+        setRecord(MARC21.stringify(parsedMARC));
+        history.push("/record/preview");
+    };
+
+    const handlePreviewInEditor = () => {};
+    const handleSaveToDatabase = () => {};
 
     return <Tabs titles={["Welocme ", "Records ", "Items ", "Loantypes ", "Users "]}>
         <Tab>
@@ -45,10 +61,15 @@ const Staff = ({ isStaffUser, createRecord }) => {
 
             <form onSubmit={handleSearchSubmit}>
                 <input name="code" placeholder="ISBN or EAN" />
-                <button>Search databases for this record</button>
+                <button>Search external databases for this record</button>
             </form>
 
-            {searchResult.resultCount && searchResult.records.map(r => <div>{r.title} - {r.id}</div>)}
+            {searchResult.resultCount && searchResult.records.map(r => <div>{r.title} - {r.id}
+                <a href={`//finna.fi/Record/${r.id}`} target="_blank">View in Finna</a>
+                <button onClick={handleSaveToDatabase}>Save to database</button>
+                <button onClick={handlePreview(r.fullRecord)}>Preview</button>
+                <button onClick={handlePreviewInEditor}>Preview in marc editor</button>
+            </div>)}
         </Tab>
     </Tabs>
 };
@@ -57,5 +78,5 @@ export default connect(
     state => ({
         isStaffUser: state.user ? state.user.staff : false
     }),
-    { createRecord }
+    { createRecord, setRecord }
 )(Staff);

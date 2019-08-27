@@ -63,7 +63,7 @@ const App = ({ token, getUser, setToken }) => {
 
 
                 {/* Staff screens */}
-                <Route exact path="/staff" render={() => <Staff />} />
+                <Route exact path="/staff" render={({ history }) => <Staff history={history} />} />
                 <Route exact path="/staff/record/:id" render = {({ match }) => <RecordEditor id={match.params.id} />} />
             </Container>
         </Router>

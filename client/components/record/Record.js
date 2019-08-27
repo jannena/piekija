@@ -23,7 +23,7 @@ const Record = ({ state, record, getRecord, id, history }) => {
 
     useEffect(() => {
         console.log(id);
-        getRecord(id);
+        if (id !== "preview") getRecord(id);
     }, [id]);
 
     if (state.state === 0) return null;
