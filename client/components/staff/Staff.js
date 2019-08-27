@@ -47,8 +47,14 @@ const Staff = ({ isStaffUser, createRecord, setRecord, history }) => {
         history.push("/record/preview");
     };
 
+    const handleSaveToDatabase = fullRecord => () => {
+        const parsedMARC = MARC21.MARCXMLToMARC(fullRecord);
+        if (!parsedMARC) return console.log("no parsedMARC");
+        createRecord(MARC21.stringify(parsedMARC));
+    };
+
     const handlePreviewInEditor = () => {};
-    const handleSaveToDatabase = () => {};
+    
 
     return <Tabs titles={["Welocme ", "Records ", "Items ", "Loantypes ", "Users "]}>
         <Tab>
@@ -66,7 +72,7 @@ const Staff = ({ isStaffUser, createRecord, setRecord, history }) => {
 
             {searchResult.resultCount && searchResult.records.map(r => <div>{r.title} - {r.id}
                 <a href={`//finna.fi/Record/${r.id}`} target="_blank">View in Finna</a>
-                <button onClick={handleSaveToDatabase}>Save to database</button>
+                <button onClick={handleSaveToDatabase(r.fullRecord)}>Save to database</button>
                 <button onClick={handlePreview(r.fullRecord)}>Preview</button>
                 <button onClick={handlePreviewInEditor}>Preview in marc editor</button>
             </div>)}
