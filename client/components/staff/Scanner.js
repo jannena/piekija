@@ -10,7 +10,7 @@ const Scanner = () => {
                 target: document.querySelector('#scanner')    // Or '#yourElement' (optional)
             },
             decoder: {
-                readers: ["code_128_reader"]
+                readers: ["ean"]
             }
         }, err => {
             if (err) {
