@@ -1,6 +1,7 @@
 import axios from "axios";
+import { baseUrl as b } from "../globals";
 
-const baseUrl = "https://localhost:3001/api/shelf";
+const baseUrl = `${b}/shelf`;
 
 const get = (shelfId, token) => {
     return axios.get(

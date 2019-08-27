@@ -1,6 +1,7 @@
 import axios from "axios";
+import { baseUrl as b } from "../globals";
 
-const baseUrl = "https://localhost:3001/api/user";
+const baseUrl = `${b}/user`;
 
 const me = token => {
     return axios.get(`${baseUrl}/me`, { headers: { Authorization: `Bearer ${token}` } }).then(response => response.data);

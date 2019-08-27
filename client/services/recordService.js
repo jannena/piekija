@@ -1,6 +1,7 @@
 import axios from "axios";
+import { baseUrl as b } from "../globals";
 
-const baseUrl = "https://localhost:3001/api/record";
+const baseUrl = `${b}/record`;
 
 const get = id => {
     return axios.get(`${baseUrl}/${id}`).then(response => response.data);
