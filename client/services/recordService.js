@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:3001/api/record";
+const baseUrl = "https://localhost:3001/api/record";
 
 const get = id => {
     return axios.get(`${baseUrl}/${id}`).then(response => response.data);

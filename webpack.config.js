@@ -16,7 +16,8 @@ const config = (env, argv) => {
             contentBase: path.resolve(__dirname, "server/build"),
             compress: true,
             port: 3000,
-            historyApiFallback: true
+            historyApiFallback: true,
+            https: true
         },
         devtool: "source-map",
         module: {
@@ -33,7 +34,12 @@ const config = (env, argv) => {
                     loader: ["style-loader", "css-loader"]
                 }
             ]
-        }
+        },
+        plugins: [
+            new webpack.DefinePlugin({
+                "BACKEND_URL": JSON.stringify("https://localhost:3001")
+            })
+        ]
     };
 };
 

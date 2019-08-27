@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:3001/api/login";
+const baseUrl = "https://localhost:3001/api/login";
 
 // Code is used with 2-factor authentication as 2-factor authentication code
 const login = (username, password, code) => {
