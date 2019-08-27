@@ -2,6 +2,7 @@ const fromentries = require("object.fromentries");
 const logger = require("./logger");
 const { pad, byteLength, utf8_substr, removeLastCharacters } = require("./stringUtils");
 
+
 const parse = marc => {
     // LEADER: first 24 characters
     const LEADER = marc.substring(0, 24);
@@ -103,6 +104,46 @@ const stringify = marc => {
     fullrecord = pad(byteLength(fullrecord), 5) + fullrecord.substring(5, 12) + pad(DIRECTORY.length + 24 + 1, 5) + fullrecord.substring(17);
 
     return fullrecord;
+};
+
+const MARCXMLToMARC = marcxml => {
+    const parser = new DOMParser();
+    const parsed = parser.parseFromString(marcxml, "application/xml");
+    console.log("parsed marcxml", parsed);
+
+    const ready = {
+        LEADER: "",
+        FIELDS: {}
+    };
+
+    Array.prototype.slice.call(parsed.documentElement.children[0].children).forEach(el => {
+        if (el.nodeName === "leader") {
+            ready.LEADER = el.textContent;
+        }
+        else if (el.nodeName === "controlfield") {
+            ready.FIELDS[el.getAttribute("tag")] = [el.textContent];
+        }
+        else if (el.nodeName === "datafield") {
+            const data = {
+                indicators: [el.getAttribute("ind1"), el.getAttribute("ind2")],
+                subfields: {}
+            };
+            // Go through subfields of the field
+            Array.prototype.slice.call(el.children).forEach(subfield => {
+                console.log();
+                const code = subfield.getAttribute("code");
+                const content = subfield.textContent;
+                // If subfield with same code is not yet in this field, then ...
+                if (data.subfields[code] === undefined) data.subfields[code] = [content];
+                else data.subfields[code].push(content);
+            });
+            if (ready.FIELDS[el.getAttribute("tag")] === undefined) ready.FIELDS[el.getAttribute("tag")] = [data];
+            else ready.FIELDS[el.getAttribute("tag")].push(data);
+        }
+        // console.log(el, el.getAttribute("tag"), el.nodeName);
+    });
+    console.log("parsed marc xml", ready);
+    return ready;
 };
 
 // Get all subfields of one field
@@ -271,5 +312,6 @@ module.exports = {
     tryParse,
     getFieldsAndSubfields,
     contentTypes,
-    parseMARCToDatabse
+    parseMARCToDatabse,
+    MARCXMLToMARC // This can be used only in frontend
 };
