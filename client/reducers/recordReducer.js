@@ -101,7 +101,7 @@ export const copyRecord = () => (dispatch, getState) => {
         .catch(onError(dispatch, "FAILURE_RECORD_COPY"));
 };
 
-export const setRecord = record => dispatch => {
+export const createTemporaryRecord = record => dispatch => {
     dispatch({
         type: "SET_RECORD",
         record: {

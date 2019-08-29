@@ -6,15 +6,10 @@ const MARC21 = require("../../../server/utils/marc21parser");
 
 // TODO: Success and error messages
 
-const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
+const RecordEditor = ({ record, updateRecord }) => {
     console.log("editing", record);
 
     const [editedRecord, setEditedRecord] = useState(null);
-
-    useEffect(() => {
-        console.log(id);
-        getRecord(id);
-    }, [id]);
 
     const fieldSortFunction = ([a], [b]) => Number(a) - Number(b);
 
@@ -23,7 +18,7 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
             ...record.record,
             FIELDS: Object.entries(record.record.FIELDS).sort(fieldSortFunction)
         });
-    }, [record]);
+    }, []);
 
     if (!record.record || !editedRecord) return null;
 
@@ -147,7 +142,7 @@ const RecordEditor = ({ id, record, getRecord, updateRecord }) => {
                 </tr>
                 {editedRecord.FIELDS.map(([code = "000", fieldsData = {}], field) => <React.Fragment key={code}>
                     {fieldsData.map((fieldData, i) => <React.Fragment key={i}>
-                        {console.log(fieldData, fieldData.subfields)}
+                        {/* console.log(fieldData, fieldData.subfields) */}
                         <tr><td colSpan="3" style={fieldSeparatorStyle}></td></tr>
                         <tr>
                             <td>{code}</td>

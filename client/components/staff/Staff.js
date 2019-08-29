@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { Tab, Tabs } from "../Tabs";
-import { createRecord, setRecord } from "../../reducers/recordReducer";
+import { createRecord, createTemporaryRecord } from "../../reducers/recordReducer";
 import Scanner from "./Scanner";
 import axios from "axios";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
-const Staff = ({ isStaffUser, createRecord, setRecord, history }) => {
+const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history }) => {
     const [showScanner, setShowScanner] = useState(false);
     const [searchResult, setSearchResult] = useState({});
 
@@ -43,17 +43,9 @@ const Staff = ({ isStaffUser, createRecord, setRecord, history }) => {
         const parsedMARC = MARC21.MARCXMLToMARC(fullRecord);
         console.log(parsedMARC);
         if (!parsedMARC) return console.log("no parsedMARC");
-        setRecord(MARC21.stringify(parsedMARC));
-        history.push("/record/preview");
+        createTemporaryRecord(MARC21.stringify(parsedMARC));
+        history.push("/staff/record/preview");
     };
-
-    const handleSaveToDatabase = fullRecord => () => {
-        const parsedMARC = MARC21.MARCXMLToMARC(fullRecord);
-        if (!parsedMARC) return console.log("no parsedMARC");
-        createRecord(MARC21.stringify(parsedMARC));
-    };
-
-    const handlePreviewInEditor = () => {};
     
 
     return <Tabs titles={["Welocme ", "Records ", "Items ", "Loantypes ", "Users "]}>
@@ -72,9 +64,7 @@ const Staff = ({ isStaffUser, createRecord, setRecord, history }) => {
 
             {searchResult.resultCount && searchResult.records.map(r => <div>{r.title} - {r.id}
                 <a href={`//finna.fi/Record/${r.id}`} target="_blank">View in Finna</a>
-                <button onClick={handleSaveToDatabase(r.fullRecord)}>Save to database</button>
                 <button onClick={handlePreview(r.fullRecord)}>Preview</button>
-                <button onClick={handlePreviewInEditor}>Preview in marc editor</button>
             </div>)}
         </Tab>
     </Tabs>
@@ -84,5 +74,5 @@ export default connect(
     state => ({
         isStaffUser: state.user ? state.user.staff : false
     }),
-    { createRecord, setRecord }
+    { createRecord, createTemporaryRecord }
 )(Staff);

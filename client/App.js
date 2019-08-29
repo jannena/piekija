@@ -13,7 +13,7 @@ import "./css/global.css";
 import AdvancedSearch from "./components/AdvancedSearch";
 import SearchField from "./components/SearchField";
 import Staff from "./components/staff/Staff";
-import RecordEditor from "./components/staff/RecordEditor";
+import StaffEditRecord from "./components/staff/StaffEditRecord";
 
 // TODO: Learn how React router works or make better (clearer) router
 
@@ -64,7 +64,7 @@ const App = ({ token, getUser, setToken }) => {
 
                 {/* Staff screens */}
                 <Route exact path="/staff" render={({ history }) => <Staff history={history} />} />
-                <Route exact path="/staff/record/:id" render = {({ match }) => <RecordEditor id={match.params.id} />} />
+                <Route exact path="/staff/record/:id" render = {({ match }) => <StaffEditRecord id={match.params.id} />} />
             </Container>
         </Router>
     );
