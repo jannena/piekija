@@ -1,4 +1,6 @@
-- Pagination to search endpoint
 - less than and greater than verbs to advanced search
 - search result order
 - search result filtering
+
+- items (backend)
+. finish backend tests (shelves, items, ...)
