@@ -15,7 +15,7 @@ itemRouter.get("/", (req, res, next) => {
 });
 
 itemRouter.post("/", async (req, res, next) => {
-    const { record, location, loantype, state } = req.body;
+    const { record, location, loantype, state, note } = req.body;
     if (!record || !location || !loantype || !state)
         return res.status(400).json({ error: "record or location or loanType or state is missing" });
 
@@ -23,6 +23,7 @@ itemRouter.post("/", async (req, res, next) => {
         record,
         location,
         loantype,
+        note: note ? note : "",
         state,
         ratings: [],
         stateInfo: {}
