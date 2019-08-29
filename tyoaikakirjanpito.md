@@ -29,5 +29,6 @@
 | 24.8. | 2 | Latausruutujen ja virheilmoitusten jatkamista, tietuemuokkaimen aloittaminen |
 | 25.8. | 3,5 | Tietuemuokkain, EAN-skannerin aloittaminen |
 | 27.8. | 2 | Tietueiden hakeminen tietokantaan Finnasta |
+| 29.8. | 1 | henkilökuntanäyttötietuenäkymän päivittäminen |
 | | | |
-| yht. | 66,5 | |
+| yht. | 67,5 | |
