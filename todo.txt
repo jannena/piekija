@@ -2,5 +2,11 @@
 - search result order
 - search result filtering
 
+- Remove loader from shelf editor (full load / partial load for loading reducer)
+
+- Spelling index for records
+
 - items (backend)
-. finish backend tests (shelves, items, ...)
+    - search items (by state)
+- loantype (backend)
+- finish backend tests (shelves, items, ...)
