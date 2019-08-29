@@ -5,6 +5,7 @@ import { getRecord } from "../../reducers/recordReducer";
 import MARCEditor from "./MARCEditor";
 import Record from "../record/Record";
 import Loader from "../Loader";
+import RecordItems from "./RecordItems";
 
 const StaffEditRecord = ({ state, id, record, getRecord }) => {
 
@@ -24,7 +25,7 @@ const StaffEditRecord = ({ state, id, record, getRecord }) => {
                 <Record id={id} isPreview={true} />
             </Tab>
             <Tab>
-                <p>Item info...</p>
+                <RecordItems />
             </Tab>
             <Tab>
                 <MARCEditor />

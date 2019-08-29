@@ -10,7 +10,7 @@ loantypeRouter.get("/", (req, res, next) => {
 
 loantypeRouter.post("/", (req, res, next) => {
     const { name, canBePlacedAHold, canBeLoaned, canBeRenewed, renewTimes, loanTime } = req.body;
-    if (!name || !canBePlacedAHold || !canBeLoaned || !canBeRenewed || !renewTimes || !loanTime)
+    if (!name || canBePlacedAHold === undefined || canBeLoaned === undefined || canBeRenewed === undefined || renewTimes === undefined || loanTime === undefined)
         return res.status(400).json(
             {
                 error: "name or canBePlacedAHold or canBeLoaned or canBeRenewed or renewTimes or loanTime is missing"

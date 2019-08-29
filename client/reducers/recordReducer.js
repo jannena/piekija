@@ -1,4 +1,5 @@
 import recordService from "../services/recordService";
+import itemService from "../services/itemService";
 import { onError } from "./errorHandingHelper";
 
 const MARC21 = require("../../server/utils/marc21parser");
@@ -20,7 +21,15 @@ const recordReducer = (state = init, action) => {
             return {
                 ...state,
                 record: action.record
-            }
+            };
+        case "SUCCESS_RECORD_ADD_ITEM":
+            return {
+                ...state,
+                record: {
+                    ...state.record,
+                    items: (state.record ? state.record.items : []).concat(action.item)
+                }
+            };
     }
     return state;
 };
@@ -112,4 +121,17 @@ export const createTemporaryRecord = record => dispatch => {
             record: MARC21.tryParse(record)
         }
     })
+};
+
+export const addItem = () => (dispatch, getState) => {
+    dispatch({ type: "REQUEST_RECORD_ADD_ITEM" });
+    itemService
+        .addItem(getState().record.result.id, "", "", "free", "", getState().token.token)
+        .then(result => {
+            dispatch({
+                type: "SUCCESS_RECORD_ADD_ITEM",
+                item: result
+            });
+        })
+        .catch(onError(dispatch, "FAILUTE_RECORD_ADD_ITEM"));
 };
