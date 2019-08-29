@@ -23,6 +23,7 @@ const itemSchema = new mongoose.Schema({
             }
         }
     ],
+    note: String,
     state: String,
     stateInfo: {
         type: {
