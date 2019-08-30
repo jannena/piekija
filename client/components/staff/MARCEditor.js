@@ -135,7 +135,7 @@ const RecordEditor = ({ record, updateRecord }) => {
             FIELDS: Object.fromEntries(editedRecord.FIELDS)
         });
         console.log(joo);
-        createTemporaryRecord(record);
+        createTemporaryRecord(joo);
     };
 
     // TODO: ADD KEYS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
