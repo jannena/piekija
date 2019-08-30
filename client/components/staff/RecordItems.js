@@ -1,18 +1,42 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Select from "../Select";
 import { connect } from "react-redux";
+import { addItem } from "../../reducers/recordReducer";
+import { getLocations } from "../../reducers/locationReducer";
+import { getLoantypes } from "../../reducers/loantypeReducer";
 
-const RecordItems = ({ items }) => {
-    if (!items) return <p>No items...</p>
+const RecordItems = ({ items, locations, loantypes, addItem, getLocations, getLoantypes }) => {
+    useEffect(() => {
+        if (items && locations.length === 0) getLocations();
+        if (items && loantypes.length === 0) getLoantypes();
+    }, [locations, loantypes, items]);
+
+    if (!items) return <p>Items are not available in preview</p>
 
     console.log("record items", items);
 
+    const handleCreateItem = e => {
+        e.preventDefault();
+        const { loantype, location, state, note } = e.target;
+        addItem(loantype.value, location.value, state.value, note.value);
+    };
+
     return (
         <>
+            <div>
+                <form onSubmit={handleCreateItem}>
+                    <Select name="loantype" options={loantypes.map(loantype => [loantype.name, loantype._id])} />
+                    <Select name="location" options={locations.map(location => [location.name, location.id])} />
+                    <input placeholder="state" name="state" />
+                    <input placeholder="note" name="note" />
+                    <button>Create item</button>
+                </form>
+            </div>
             <button>Add item</button>
             <table style={{ width: "100%" }}>
                 <tbody>
                     {items.map(item =>
-                        <tr>
+                        <tr key={item._id}>
                             <td>{item._id}</td>
                             <td>{item.location.name}</td>
                             <td>{item.state}</td>
@@ -27,6 +51,9 @@ const RecordItems = ({ items }) => {
 
 export default connect(
     state => ({
-        items: state.record.record.result ? state.record.record.result.items : null
-    })
+        items: state.record.record.result ? state.record.record.result.items : null,
+        locations: state.location,
+        loantypes: state.loantype
+    }),
+    { addItem, getLoantypes, getLocations }
 )(RecordItems);

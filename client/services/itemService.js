@@ -4,7 +4,7 @@ import { baseUrl as b } from "../globals"
 const baseUrl = `${b}/item`;
 
 const addItem = (record, loantype, location, state, note, token) => {
-    axios.post(
+    return axios.post(
         baseUrl,
         {
             record,
@@ -14,7 +14,7 @@ const addItem = (record, loantype, location, state, note, token) => {
             note
         },
         { headers: { Authorization: `Bearer ${token}` } }
-    )
+    ).then(response => response.data);
 };
 
 export default {

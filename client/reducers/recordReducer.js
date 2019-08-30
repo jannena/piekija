@@ -27,7 +27,10 @@ const recordReducer = (state = init, action) => {
                 ...state,
                 record: {
                     ...state.record,
-                    items: (state.record ? state.record.items : []).concat(action.item)
+                    result: {
+                        ...state.record.result,
+                        items: (state.record ? state.record.result.items : []).concat(action.item)
+                    }
                 }
             };
     }
@@ -123,15 +126,15 @@ export const createTemporaryRecord = record => dispatch => {
     })
 };
 
-export const addItem = () => (dispatch, getState) => {
+export const addItem = (loantype, location, state, note, barcode) => (dispatch, getState) => {
     dispatch({ type: "REQUEST_RECORD_ADD_ITEM" });
     itemService
-        .addItem(getState().record.result.id, "", "", "free", "", getState().token.token)
+        .addItem(getState().record.record.result.id, loantype, location, state, note, getState().token.token)
         .then(result => {
             dispatch({
                 type: "SUCCESS_RECORD_ADD_ITEM",
                 item: result
             });
         })
-        .catch(onError(dispatch, "FAILUTE_RECORD_ADD_ITEM"));
+        .catch(onError(dispatch, "FAILURE_RECORD_ADD_ITEM"));
 };
