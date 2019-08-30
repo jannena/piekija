@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { getRecord, updateRecord } from "../../reducers/recordReducer";
+import { getRecord, updateRecord, createTemporaryRecord } from "../../reducers/recordReducer";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
@@ -128,6 +128,15 @@ const RecordEditor = ({ record, updateRecord }) => {
         console.log(joo);
         updateRecord(record.result.id, joo);
     };
+    const onPreviewSave = e => {
+        // e.preventDefault();
+        const joo = MARC21.stringify({
+            ...editedRecord,
+            FIELDS: Object.fromEntries(editedRecord.FIELDS)
+        });
+        console.log(joo);
+        createTemporaryRecord(record);
+    };
 
     // TODO: ADD KEYS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     return (
@@ -180,6 +189,7 @@ const RecordEditor = ({ record, updateRecord }) => {
                     </React.Fragment>)}
                 </React.Fragment>)}
                 <tr><td colSpan={3}><button onClick={onSave}>Save</button></td></tr>
+                <tr><td colSpan={3}><button onClick={onPreviewSave}>Save for Preview</button></td></tr>
             </tbody>
         </table>
     );
