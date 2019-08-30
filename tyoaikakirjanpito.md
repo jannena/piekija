@@ -30,5 +30,6 @@
 | 25.8. | 3,5 | Tietuemuokkain, EAN-skannerin aloittaminen |
 | 27.8. | 2 | Tietueiden hakeminen tietokantaan Finnasta |
 | 29.8. | 1 | henkilökuntanäyttötietuenäkymän päivittäminen |
+| 20.8. | 1,5 | itemiä, locationia ja loantypea frontendiin |
 | | | |
-| yht. | 67,5 | |
+| yht. | 69 | |
