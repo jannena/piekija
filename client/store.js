@@ -8,6 +8,7 @@ import queryReducer from "./reducers/queryReducer";
 import shelfReducer from "./reducers/shelfReducer";
 import recordReducer from "./reducers/recordReducer";
 import locationReducer from "./reducers/locationReducer";
+import loantypeReducer from "./reducers/loantypeReducer";
 import loadingReducer from "./reducers/loadingReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 
@@ -20,6 +21,7 @@ const reducer = combineReducers({
     shelf: shelfReducer,
     record: recordReducer,
     location: locationReducer,
+    loantype: loantypeReducer,
     loading: loadingReducer
 });
 
