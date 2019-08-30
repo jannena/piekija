@@ -5,6 +5,7 @@ import { Tab, Tabs } from "../Tabs";
 import { createRecord, createTemporaryRecord } from "../../reducers/recordReducer";
 import Scanner from "./Scanner";
 import axios from "axios";
+import StaffLocations from "./StaffLocations";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
@@ -48,7 +49,7 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history }) =>
     };
     
 
-    return <Tabs titles={["Welocme ", "Records ", "Items ", "Loantypes ", "Users "]}>
+    return <Tabs titles={["Welocme ", "Records ", "Locations ", "Loantypes ", "Users "]}>
         <Tab>
             <p>Welocme!</p>
         </Tab>
@@ -66,6 +67,9 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history }) =>
                 <a href={`//finna.fi/Record/${r.id}`} target="_blank">View in Finna</a>
                 <button onClick={handlePreview(r.fullRecord)}>Preview</button>
             </div>)}
+        </Tab>
+        <Tab>
+            <StaffLocations />
         </Tab>
     </Tabs>
 };
