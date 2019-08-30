@@ -6,6 +6,7 @@ import { createRecord, createTemporaryRecord } from "../../reducers/recordReduce
 import Scanner from "./Scanner";
 import axios from "axios";
 import StaffLocations from "./StaffLocations";
+import StaffLoantypes from "./StaffLoantypes";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
@@ -70,6 +71,12 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history }) =>
         </Tab>
         <Tab>
             <StaffLocations />
+        </Tab>
+        <Tab>
+            <StaffLoantypes />
+        </Tab>
+        <Tab>
+            <p>Users coming soon...</p>
         </Tab>
     </Tabs>
 };
