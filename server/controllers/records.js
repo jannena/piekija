@@ -89,7 +89,14 @@ recordRouter.put("/:id", (req, res, next) => {
 
     Record
         .findByIdAndUpdate(id, record, { new: true })
+        .populate({
+            path: "items",
+            populate: {
+                path: "location"
+            }
+        })
         .then(result => {
+            // const populatedResult = await Record.populate(result, { location: 1 });
             res.json(result.toJSON());
         })
         .catch(next);
