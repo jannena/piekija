@@ -2,11 +2,14 @@ import React from "react";
 import "../css/container.css";
 import { Link } from "react-router-dom";
 import Notifications from "./Notifications";
+import { connect } from "react-redux";
 
-const Container = ({ children }) => {
+const Container = ({ loading, children }) => {
     return (
         <div id="container">
-            <header></header>
+            <header>
+                <p>Currently loading {loading} things</p>
+            </header>
             <nav>
                 <ul>
                     <li><Link to="/">Frontpage</Link></li>
@@ -26,4 +29,8 @@ const Container = ({ children }) => {
     );
 };
 
-export default Container;
+export default connect(
+    state => ({
+        loading: state.loading.loading
+    })
+)(Container);

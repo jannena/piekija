@@ -67,20 +67,20 @@ export const getRecord = recordId => (dispatch, getState) => {
 };
 
 export const updateRecord = (recordId, recordMARC) => (dispatch, getState) => {
-    dispatch({ type: "REQUEST_RECORD_UPDATE" });
+    dispatch({ type: "PREQUEST_RECORD_UPDATE" });
     recordService
         .updateMARC(recordId, recordMARC, getState().token.token)
         .then(record => {
             console.log(record);
             dispatch({
-                type: "SUCCESS_RECORD_GET",
+                type: "PSUCCESS_RECORD_GET",
                 record: {
                     result: record,
                     record: MARC21.tryParse(record.record)
                 }
             })
         })
-        .catch(onError(dispatch, "FAILURE_RECORD_UPDATE"));
+        .catch(onError(dispatch, "PFAILURE_RECORD_UPDATE"));
 };
 
 export const removeRecord = () => (dispatch, getState) => {
@@ -144,14 +144,14 @@ export const createTemporaryRecord = record => dispatch => {
 };
 
 export const addItem = (loantype, location, state, note, barcode) => (dispatch, getState) => {
-    dispatch({ type: "REQUEST_RECORD_ADD_ITEM" });
+    dispatch({ type: "PREQUEST_RECORD_ADD_ITEM" });
     itemService
         .addItem(getState().record.record.result.id, loantype, location, state, note, getState().token.token)
         .then(result => {
             dispatch({
-                type: "SUCCESS_RECORD_ADD_ITEM",
+                type: "PSUCCESS_RECORD_ADD_ITEM",
                 item: result
             });
         })
-        .catch(onError(dispatch, "FAILURE_RECORD_ADD_ITEM"));
+        .catch(onError(dispatch, "PFAILURE_RECORD_ADD_ITEM"));
 };
