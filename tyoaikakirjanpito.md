@@ -31,5 +31,6 @@
 | 27.8. | 2 | Tietueiden hakeminen tietokantaan Finnasta |
 | 29.8. | 1 | henkilökuntanäyttötietuenäkymän päivittäminen |
 | 20.8. | 1,5 | itemiä, locationia ja loantypea frontendiin |
+| 1.9. | 1 | tietueiden poistaminen frontendiin, osittaislataajan aloittaminen |
 | | | |
-| yht. | 69 | |
+| yht. | 70 | |
