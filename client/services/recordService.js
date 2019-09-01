@@ -31,8 +31,13 @@ const updateMARC = (id, newMARC, token) => {
     ).then(response => response.data)
 };
 
+const remove = (id, token) => {
+    return axios.delete(`${baseUrl}/${id}`, { headers: { Authorization: `Bearer ${token}` } }).then(response => response.data);
+};
+
 export default {
     get,
+    remove,
     createWithMARC,
     updateMARC
 };

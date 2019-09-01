@@ -33,6 +33,12 @@ const recordReducer = (state = init, action) => {
                     }
                 }
             };
+        case "SUCCESS_RECORD_REMOVE":
+            // TODO: How about search result cache????
+            return {
+                cache: state.cache.filter(record => record.result.id !== action.record),
+                record: {}
+            };
     }
     return state;
 };
@@ -77,7 +83,18 @@ export const updateRecord = (recordId, recordMARC) => (dispatch, getState) => {
         .catch(onError(dispatch, "FAILURE_RECORD_UPDATE"));
 };
 
-export const removeRecord = () => (dispatch, getState) => { };
+export const removeRecord = () => (dispatch, getState) => {
+    dispatch({ type: "REQUEST_RECORD_REMOVE" });
+    recordService
+        .remove(getState().record.record.id, getState().token.token)
+        .then(() => {
+            dispatch({
+                type: "SUCCESS_RECORD_REMOVE",
+                record: getState().record.record.id
+            });
+        })
+        .catch(onError(dispatch, "FAILURE_RECORD_REMOVE"));
+};
 
 export const createRecord = recordMARC => (dispatch, getState) => {
     dispatch({ type: "REQUEST_RECORD_CREATE" });

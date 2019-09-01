@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { Tabs, Tab } from "../Tabs";
 import { connect } from "react-redux";
-import { getRecord } from "../../reducers/recordReducer";
+import { getRecord, removeRecord } from "../../reducers/recordReducer";
 import MARCEditor from "./MARCEditor";
 import Record from "../record/Record";
 import Loader from "../Loader";
 import RecordItems from "./RecordItems";
 
-const StaffEditRecord = ({ state, id, record, getRecord }) => {
+const StaffEditRecord = ({ state, id, record, getRecord, removeRecord }) => {
 
     useEffect(() => {
         console.log(id);
@@ -18,9 +18,16 @@ const StaffEditRecord = ({ state, id, record, getRecord }) => {
     if (state.state === 1) return <Loader />
     if (state.state === 3) return <p>Error: {state.error}</p>;
 
+    const hasItems = record.result && record.result.items && record.result.items.length !== 0
+    const isPreview = record && record.result && record.result.id === "preview";
+
+    const onRemoveRecord = () => {
+        removeRecord();
+    };
+
     return <>
         {(record && record.result && record.result.id && record.result.id === "preview") && <button>Save to database</button>}
-        <Tabs titles={["Preview ", "Items ", "MARC ", "Simple editor "]}>
+        <Tabs titles={["Preview |", "Items |", "MARC |", "Simple editor |", "Remove "]}>
             <Tab>
                 <Record id={id} isPreview={true} />
             </Tab>
@@ -29,6 +36,14 @@ const StaffEditRecord = ({ state, id, record, getRecord }) => {
             </Tab>
             <Tab>
                 <MARCEditor />
+            </Tab>
+            <Tab>
+                <p>Maybe coming soon!</p>
+            </Tab>
+            <Tab>
+                {isPreview && <p>You are watching record in preview mode. Record has not yet been saved to the database.</p>}
+                {hasItems && <p>All items attached to this record must be removed before removing the record.</p>}
+                <button onClick={onRemoveRecord} disabled={isPreview || hasItems}>Remove this record</button>
             </Tab>
         </Tabs>
     </>
@@ -39,5 +54,5 @@ export default connect(
         state: state.loading.record,
         record: state.record.record
     }),
-    { getRecord }
+    { getRecord, removeRecord }
 )(StaffEditRecord);
