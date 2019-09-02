@@ -238,6 +238,120 @@ const tryParse = marc => {
     }
 };
 
+const getFieldSpelling = (parsedMARC, fields, subfields) => {
+    const marc = getFieldsAndSubfields(parsedMARC, fields, subfields);
+    const ret = [];
+    marc.forEach(field => {
+        subfields.forEach(subfield => {
+            console.log(field, subfield);
+            ret.push(...field[subfield].map(term => term.split(" ")).flat().map(removeLastCharacters));
+        });
+    });
+    return ret;
+};
+
+const getSpelling = parsedMARC => {
+    /* const title = getFieldsAndSubfields(parsedMARC, ["245", "246"], ["a", "b", "c"]);
+    const subjects = getFieldsAndSubfields(
+        parsedMARC,
+        ["600", "610", "611", "630", "647", "648", "650", "651", "653", "654", "655", "656", "657", "658", "662"],
+        ["a", "b", "c", "d", "x", "y", "z"]
+    );
+    const authors = getFieldsAndSubfields(
+        parsedMARC,
+        ["100", "110", "700", "710"],
+        ["a", "b", "c"]
+    );
+    const publishersEtc = getFieldsAndSubfields(
+        parsedMARC,
+        ["260"],
+        ["a", "b", "c", "e", "f", "g"]
+    );
+    const contents = getFieldsAndSubfields(
+        parsedMARC,
+        ["505"],
+        ["a", "g"]
+    );
+    const abstractEtc = getFieldsAndSubfields(
+        parsedMARC,
+        ["520"],
+        ["a", "b"]
+    );
+    const series = getFieldsAndSubfields(
+        parsedMARC,
+        ["490", "830"],
+        ["a"]
+    );
+    const standardCodes = getFieldsAndSubfields(
+        parsedMARC,
+        ["020", "022", "024"],
+        ["a"]
+    );
+    const classification = getFieldsAndSubfields(
+        parsedMARC,
+        ["050", "080", "082", "084"],
+        ["a"]
+    ); */
+
+    const spelling = [...new Set([].concat(
+        // title
+        getFieldSpelling(
+            parsedMARC,
+            ["600", "610", "611", "630", "647", "648", "650", "651", "653", "654", "655", "656", "657", "658", "662"],
+            ["a", "b", "c", "d", "x", "y", "z"]
+        ),
+        // subjects
+        getFieldSpelling(
+            parsedMARC,
+            ["600", "610", "611", "630", "647", "648", "650", "651", "653", "654", "655", "656", "657", "658", "662"],
+            ["a", "b", "c", "d", "x", "y", "z"]
+        ),
+        // authors
+        getFieldSpelling(
+            parsedMARC,
+            ["100", "110", "700", "710"],
+            ["a", "b", "c"]
+        ),
+        // publishersEtc
+        getFieldSpelling(
+            parsedMARC,
+            ["260"],
+            ["a", "b", "c", "e", "f", "g"]
+        ),
+        // contents
+        getFieldSpelling(
+            parsedMARC,
+            ["505"],
+            ["a", "g"]
+        ),
+        // abstractEtc
+        getFieldSpelling(
+            parsedMARC,
+            ["520"],
+            ["a", "b"]
+        ),
+        // series
+        getFieldSpelling(
+            parsedMARC,
+            ["490", "830"],
+            ["a"]
+        ),
+        // standardCodes
+        getFieldSpelling(
+            parsedMARC,
+            ["020", "022", "024"],
+            ["a"]
+        ),
+        // classification
+        getFieldSpelling(
+            parsedMARC,
+            ["050", "080", "082", "084"],
+            ["a"]
+        ),
+    ))];
+    return spelling;
+};
+
 const parseMARCToDatabse = (parsedMARC, data) => {
     // TODO: ohitusindikaattorit
 
@@ -313,5 +427,6 @@ module.exports = {
     getFieldsAndSubfields,
     contentTypes,
     parseMARCToDatabse,
+    getSpelling,
     MARCXMLToMARC // This can be used only in frontend
 };

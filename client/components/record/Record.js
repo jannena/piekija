@@ -67,7 +67,7 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
             <RecordSubjects record={record} />
 
 
-            {!isPreview && <Tabs titles={["Items", "MARC"]}>
+            {!isPreview && <Tabs titles={["Items |", " MARC |", " spelling"]}>
                 <Tab>
                     <table>
                         <tbody>
@@ -80,6 +80,9 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
                 <Tab>
                     {/* TODO: Maybe search engine for MARC21 fields? */}
                     <MARC21Screen parsedMARC={record.record} />
+                </Tab>
+                <Tab>
+                    {MARC21.getSpelling(record.record).map(spell => <div key={spell}>{spell}</div>)}
                 </Tab>
             </Tabs>}
         </div>
