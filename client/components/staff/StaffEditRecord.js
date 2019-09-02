@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { Tabs, Tab } from "../Tabs";
 import { connect } from "react-redux";
-import { getRecord, removeRecord } from "../../reducers/recordReducer";
+import { getRecord, removeRecord, createRecord } from "../../reducers/recordReducer";
 import MARCEditor from "./MARCEditor";
 import Record from "../record/Record";
 import Loader from "../Loader";
 import RecordItems from "./RecordItems";
 
-const StaffEditRecord = ({ state, id, record, getRecord, removeRecord }) => {
+const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRecord }) => {
 
     useEffect(() => {
         console.log(id);
@@ -21,12 +21,16 @@ const StaffEditRecord = ({ state, id, record, getRecord, removeRecord }) => {
     const hasItems = record.result && record.result.items && record.result.items.length !== 0
     const isPreview = record && record.result && record.result.id === "preview";
 
+    const onSaveToDatabase = () => {
+        createRecord(record.result.record);
+    };
+
     const onRemoveRecord = () => {
         removeRecord();
     };
 
     return <>
-        {(record && record.result && record.result.id && record.result.id === "preview") && <button>Save to database</button>}
+        {(record && record.result && record.result.id && record.result.id === "preview") && <button onClick={onSaveToDatabase}>Save to database</button>}
         <Tabs titles={["Preview |", "Items |", "MARC |", "Simple editor |", "Remove "]}>
             <Tab>
                 <Record id={id} isPreview={true} />
@@ -54,5 +58,5 @@ export default connect(
         state: state.loading.record,
         record: state.record.record
     }),
-    { getRecord, removeRecord }
+    { getRecord, removeRecord, createRecord }
 )(StaffEditRecord);

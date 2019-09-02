@@ -15,13 +15,9 @@ const RecordSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    description: {
-        type: String
-    },
     image: {
         type: String
     },
-    // TODO: which MARC21 field?
     contentType: {
         type: String,
         required: true
@@ -33,12 +29,12 @@ const RecordSchema = new mongoose.Schema({
         required: true
     },
 
-    // MARC21: 100
+    // MARC21: 100, 110
     author: {
         type: String
     },
 
-    // MARC21: 700, ?710
+    // MARC21: 700, 710
     authors: {
         type: [
             { type: String }
@@ -74,16 +70,6 @@ const RecordSchema = new mongoose.Schema({
     },
     // TODO: How about other 600-662 fields?
 
-    links: {
-        type: [
-            {
-                link: { type: String },
-                title: { type: String }
-            }
-        ],
-        required: true
-    },
-
     recordType: {
         type: String,
         required: true,
@@ -93,6 +79,10 @@ const RecordSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+
+    spelling: [
+        { type: String }
+    ],
 
     items: [
         {

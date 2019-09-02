@@ -136,7 +136,8 @@ export const createTemporaryRecord = record => dispatch => {
         record: {
             result: {
                 id: "preview",
-                items: []
+                items: [],
+                record
             },
             record: MARC21.tryParse(record)
         }

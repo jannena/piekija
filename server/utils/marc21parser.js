@@ -244,11 +244,19 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
     marc.forEach(field => {
         subfields.forEach(subfield => {
             console.log(field, subfield);
-            ret.push(...field[subfield]
-                .map(term => term.split(" "))
-                .flat()
-                .map(removeLastCharacters)
-                .map(removeFirstCharacters));
+            console.log(field[subfield].map(term => term.split(" ")));
+            console.log("jyyyy", field[subfield]);
+            try {
+                ret.push(...field[subfield]
+                    .map(term => term.split(" "))
+                    .flat()
+                    .map(removeLastCharacters)
+                    .map(removeFirstCharacters)
+                    .map(s => s.toLowerCase()));
+            }
+            catch (err) {
+                console.log("error while making spelling", err);
+            }
         });
     });
     return ret;
@@ -386,11 +394,6 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     const subjectsWithLastCharacters = getFields(parsedMARC, ["600", "650", "651", "653", "610", "611", "630", "647", "648", "654", "656", "657", "658", "662"], "a"); // parsedMARC.FIELDS["650"].map(f => f.subfields["a"][0]);
     const subjects = subjectsWithLastCharacters.map(removeLastCharacters);
 
-    // TODO: Fix links (there are another ways to store links, too)
-    const linkURLs = getFields(parsedMARC, ["856"], "u");
-    const linkTexts = getFields(parsedMARC, ["856"], "y");
-    const links = linkURLs.map((link, i) => [link, linkTexts[i] || ""]);
-
     // Remove marc fields 9xx and 8xx expect 856
     // logger.log(fromentries(Object.entries(parsedMARC.FIELDS)));
     // data = stringify({
@@ -413,10 +416,10 @@ const parseMARCToDatabse = (parsedMARC, data) => {
         year,
         genres,
         subjects,
-        links,
 
         recordType: "marc21",
-        record: data
+        record: data,
+        spelling: getSpelling(parsedMARC)
     };
 };
 

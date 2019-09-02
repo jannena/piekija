@@ -5,7 +5,7 @@ const isValidOperator = operator =>
         "AND", "OR", /* "not", */
         "title", "author", "authors", "language", "languages", "year", "contentType",
         "subjects", "genres",
-        "record"
+        "spelling"
     ].indexOf(operator) !== -1;
 
 // TODO: 
@@ -90,8 +90,8 @@ const validateSimpleQueryRecursion = query => {
     return [
         pair[1],
         [
-            (queryContainsOps(pair[0]) ? validateSimpleQuery(pair[0]) : ["record", pair[0], "contains"]),
-            (queryContainsOps(pair[2]) ? validateSimpleQuery(pair[2]) : ["record", pair[2], "contains"])
+            (queryContainsOps(pair[0]) ? validateSimpleQuery(pair[0]) : ["spelling", pair[0], "is"]),
+            (queryContainsOps(pair[2]) ? validateSimpleQuery(pair[2]) : ["spelling", pair[2], "is"])
         ]
     ];
 };
@@ -125,7 +125,7 @@ const validateSimpleQuery = query => {
     try {
         if (!queryContainsOps(query)) return [
             "AND", [
-                ["record", query, "contains"]
+                ["spelling", query, "is"]
             ]
         ];
         return simplifySimpleQuery(validateSimpleQueryRecursion(query));
@@ -133,7 +133,7 @@ const validateSimpleQuery = query => {
     catch (err) {
         console.log(err);
         return ["AND", [
-            ["record", query, "contains"]
+            ["spelling", query, "is"]
         ]];
     }
 };

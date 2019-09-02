@@ -24,7 +24,7 @@ const Search = ({ state, result, page, nextPage, previousPage }) => {
             {/* Order by {<Select options={[["default", "default"], ["time added", "timeAdded"], ["year", "year"], ["alphapetical", "a"]]} />} */}
 
             {result.result.length === 0
-                ? "No results"
+                ? `No results in${result.time && ` ${result.time} ms`}`
                 : <>
                     <p>Found {result.found} records in {(result.time || NaN).toFixed(0)} milliseconds</p>
                     {result.result.map(record => <RecordPreview key={record.id} record={record} />)}
