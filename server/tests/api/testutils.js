@@ -3,7 +3,7 @@ const User = require("../../models/User");
 const Record = require("../../models/Record");
 const Location = require("../../models/Location");
 const Shelf = require("../../models/Shelf");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const initMARC21Data = [

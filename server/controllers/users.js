@@ -1,5 +1,5 @@
 const userRouter = require("express").Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const otp = require("speakeasy");
 const QRCode = require("qrcode");

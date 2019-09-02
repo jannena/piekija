@@ -1,6 +1,6 @@
 const loginRouter = require("express").Router();
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("../utils/config");
 const otp = require("speakeasy");
