@@ -32,5 +32,6 @@
 | 29.8. | 1 | henkilökuntanäyttötietuenäkymän päivittäminen |
 | 20.8. | 1,5 | itemiä, locationia ja loantypea frontendiin |
 | 1.9. | 1 | tietueiden poistaminen frontendiin, osittaislataajan aloittaminen |
+| 2.9. | 1 | spelling-kenttä |
 | | | |
-| yht. | 70 | |
+| yht. | 71 | |
