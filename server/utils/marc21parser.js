@@ -1,6 +1,6 @@
 const fromentries = require("object.fromentries");
 const logger = require("./logger");
-const { pad, byteLength, utf8_substr, removeLastCharacters } = require("./stringUtils");
+const { pad, byteLength, utf8_substr, removeLastCharacters, removeFirstCharacters } = require("./stringUtils");
 
 
 const parse = marc => {
@@ -244,7 +244,11 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
     marc.forEach(field => {
         subfields.forEach(subfield => {
             console.log(field, subfield);
-            ret.push(...field[subfield].map(term => term.split(" ")).flat().map(removeLastCharacters));
+            ret.push(...field[subfield]
+                .map(term => term.split(" "))
+                .flat()
+                .map(removeLastCharacters)
+                .map(removeFirstCharacters));
         });
     });
     return ret;
@@ -315,7 +319,7 @@ const getSpelling = parsedMARC => {
         // publishersEtc
         getFieldSpelling(
             parsedMARC,
-            ["260"],
+            ["260", "264"],
             ["a", "b", "c", "e", "f", "g"]
         ),
         // contents
@@ -348,7 +352,7 @@ const getSpelling = parsedMARC => {
             ["050", "080", "082", "084"],
             ["a"]
         ),
-    ))];
+    ))].filter(value => value.length > 3)
     return spelling;
 };
 
