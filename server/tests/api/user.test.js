@@ -66,6 +66,8 @@ describe("when there is users in database (user tests)", () => {
             expect(res.body.loans).toBeDefined();
             expect(res.body.name).toBeDefined();
             expect(res.body.shelves).toBeDefined();
+            expect(res.body.TFACode).not.toBeDefined();
+            // expect(res.body.tfa).not.toBeDefined();
         });
 
         test("user cannot be added with invalid data", async () => {
@@ -198,6 +200,8 @@ describe("when there is users in database (user tests)", () => {
             expect(res.body.loans).toEqual([]);
             expect(res.body.name).toBeDefined();
             expect(res.body.shelves).toEqual([]);
+            expect(res.body.tfa).toBeDefined();
+            expect(res.body.TFACode).not.toBeDefined();
         });
 
         test("user cannot be added", async () => {
@@ -222,7 +226,8 @@ describe("when there is users in database (user tests)", () => {
                 .set({ Authorization: userToken })
                 .send({
                     name: "My new name",
-                    password: "MyNewPassword(MNP)"
+                    password: "MyNewPassword(MNP)",
+                    oldPassword: "password"
                 })
                 .expect(200)
                 .expect("Content-type", /application\/json/)
@@ -250,12 +255,79 @@ describe("when there is users in database (user tests)", () => {
             expect(login.body.token).toBeDefined();
         });
 
+        test("password cannot be changed with wrong oldPassword", async () => {
+            const res = await api
+                .put("/api/user/me")
+                .set({ Authorization: userToken })
+                .send({
+                    password: "kissanviikset",
+                    oldPassword: "password123123"
+                })
+                .expect(403)
+                .expect("Content-type", /application\/json/);
+
+            expect(res.body.error).toBe("wrong oldPassword");
+        });
+
+        test("password cannot be changed without oldPassword", async () => {
+            const res = await api
+                .put("/api/user/me")
+                .set({ Authorization: userToken })
+                .send({
+                    password: "kissanviikset"
+                })
+                .expect(400)
+                .expect("Content-type", /application\/json/);
+
+            expect(res.body.error).toBe("oldPassword is missing");
+        });
+
+        test("two-factor authenticaion can be enabled", async () => {
+            const res = await api
+                .put("/api/user/me")
+                .set({ Authorization: userToken })
+                .send({
+                    tfa: true,
+                    oldPassword: "password"
+                })
+                .expect(200)
+                .expect("Content-type", /application\/json/);
+
+            expect(res.body.TFAQR).toBeDefined();
+            expect(res.body.TFAQR.length).toBeGreaterThan(30);
+        });
+
+        test("two-factor authentication can be disabled after enablation", async () => {
+            await api
+                .put("/api/user/me")
+                .set({ Authorization: userToken })
+                .send({
+                    tfa: true,
+                    oldPassword: "password"
+                })
+                .expect(200)
+                .expect("Content-type", /application\/json/);
+
+            const res = await api
+                .put("/api/user/me")
+                .set({ Authorization: userToken })
+                .send({
+                    tfa: false,
+                    oldPassword: "password"
+                })
+                .expect(200)
+                .expect("Content-type", /application\/json/);
+
+            expect(res.body.tfa).toBe(false);
+        });
+
         test("me password must be over 10 characters", async () => {
             const res = await api
                 .put("/api/user/me")
                 .set({ Authorization: userToken })
                 .send({
-                    password: "short"
+                    password: "short",
+                    oldPassword: "password"
                 })
                 .expect(400)
                 .expect("Content-type", /application\/json/);
@@ -269,9 +341,11 @@ describe("when there is users in database (user tests)", () => {
                 .set({ Authorization: userToken })
                 .send({
                     name: "Joo",
-                    password: "adasdasdasdasdasdasd",
+                    oldPassword: "password",
                     staff: true
-                });
+                })
+                .expect(200)
+                .expect("Content-type", /application\/json/);
 
             expect(res.body.staff).toBe(false);
         });
