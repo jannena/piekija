@@ -86,13 +86,13 @@ const addLocationToDb = async name => {
     }
 };
 
-const addShelfToDb = async (name, publicity, authorId, sharedWith) => {
+const addShelfToDb = async (name, publicity, authorId, sharedWith, records = []) => {
     const newShelf = new Shelf({
         name,
         description: "This is a shelf.",
         public: publicity,
         author: authorId,
-        records: [],
+        records: records,
         sharedWith
     });
     try {
@@ -104,6 +104,35 @@ const addShelfToDb = async (name, publicity, authorId, sharedWith) => {
     }
 };
 
+const addRecordToShelf = async (shelf, record, note) => {
+    return (await Shelf.findByIdAndUpdate(
+        shelf,
+        {
+            $push: { records: { record, note } }
+        },
+        { new: true }
+    )).toObject();
+};
+
+const shareShelfWith = async (shelfId, userId) => {
+    const shelf = await Shelf.findByIdAndUpdate(
+        shelfId,
+        { $push: { sharedWith: userId } },
+        { new: true }
+    );
+
+    const user = await Shelf.findByIdAndUpdate(
+        userId,
+        { $push: { sharedWith: shelfId._id } },
+        { new: true }
+    );
+
+    return {
+        user,
+        shelf
+    };
+};
+
 const getTokenForUser = user => {
     const tokenData = {
         id: user._id,
@@ -112,6 +141,9 @@ const getTokenForUser = user => {
     };
     return jwt.sign(tokenData, SECRET);
 };
+
+const getUser = async id => (await User.findById(id)).toObject();
+const getShelf = async id => (await Shelf.findById(id)).toObject();
 
 const clearDatabase = async () => {
     await Record.deleteMany({});
@@ -132,10 +164,16 @@ module.exports = {
     addShelfToDb,
     clearDatabase,
 
+    addRecordToShelf,
+    shareShelfWith,
+
     getTokenForUser,
 
     initMARC21Data,
     escapedMARC21Data,
+
+    getUser,
+    getShelf,
 
     usersInDb,
     recordsInDb,
