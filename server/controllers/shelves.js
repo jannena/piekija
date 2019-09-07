@@ -154,9 +154,8 @@ shelfRouter.post("/:id/shelve", async (req, res, next) => {
             || shelf.sharedWith.some(u => u.toString() === req.authenticated._id.toString())))
             return next(new Error("FORBIDDEN"));
         if (shelf.records.some(r => r.record.toString() === record))
-            return res.status(400).json({ error: "record is already added to this shelf" });
+            return res.status(400).json({ error: "record has already been added to this shelf" });
 
-        // TODO: What if record does not exist. Yet, it can be added to shelf!
         const recordToBeAdded = await Record.findById(record);
         console.log(recordToBeAdded, record);
         if (!recordToBeAdded) return res.status(400).json({ error: "record does not exist" });
@@ -294,6 +293,7 @@ shelfRouter.delete("/:id/share", async (req, res, next) => {
     if (!username) return res.status(400).json({ error: "username is missing" });
 
     try {
+        // TODO: Fix error codes
         const shelf = await Shelf.findOne({ _id: id, author: new ObjectId(req.authenticated._id) });
         if (!shelf) return res.status(404).end();
 
