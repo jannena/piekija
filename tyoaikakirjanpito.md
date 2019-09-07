@@ -33,5 +33,6 @@
 | 20.8. | 1,5 | itemiä, locationia ja loantypea frontendiin |
 | 1.9. | 1 | tietueiden poistaminen frontendiin, osittaislataajan aloittaminen |
 | 2.9. | 1 | spelling-kenttä |
+| 7.9. | 3 | backendin testien korjaus ja lisäily |
 | | | |
-| yht. | 71 | |
+| yht. | 74 | |
