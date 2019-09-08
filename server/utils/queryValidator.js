@@ -2,7 +2,7 @@
 const changeAndAndOrIfNeeded = operator => ["AND", "OR"].indexOf(operator) === -1 ? operator : `$${operator.toLowerCase()}`;
 const isValidOperator = operator =>
     [
-        "AND", "OR", /* "not", */
+        "AND", "OR", "NOT",
         "title", "author", "authors", "language", "languages", "year", "contentType",
         "series", "classification", "standardCodes", "country",
         "subjects", "genres",
@@ -22,20 +22,17 @@ const validateAdvancedQuery = ([operator, value, type]) => {
     else {
         if (!type) throw new Error(`Operator ${operator} needs a type.`);
         switch (type) {
-            case "contains":
-                validatedQuery["$text"] = {
-                    $search: value,
-                    $caseSensitive: false
-                }
+            case "not":
+                validatedQuery[newOperator] = { $ne: value };
                 break;
             case "lt":
                 validatedQuery[newOperator] = {
-                    $lte: Number(value)
+                    $lt: Number(value)
                 };
                 break;
             case "gt":
                 validatedQuery[newOperator] = {
-                    $gte: Number(value)
+                    $gt: Number(value)
                 };
                 break;
             case "is":
