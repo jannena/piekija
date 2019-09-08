@@ -117,11 +117,12 @@ const simplifySimpleQuery = query => {
 };
 
 // TODO: fix parsing queries containing extra brackets
-const validateSimpleQuery = query => {
+const validateSimpleQuery = q => {
+    const query = q.toLowerCase();
     console.log("what is query?", query);
     try {
         if (!queryContainsOps(query)) return [
-            "OR", query.split(" ").map(q => (["spelling", q, "is"]))
+            "AND", query.split(" ").map(q => (["spelling", q, "is"]))
         ];
         return simplifySimpleQuery(validateSimpleQueryRecursion(query));
     }
