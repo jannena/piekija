@@ -4,6 +4,7 @@ const isValidOperator = operator =>
     [
         "AND", "OR", /* "not", */
         "title", "author", "authors", "language", "languages", "year", "contentType",
+        "series", "classification", "standardCodes", "country",
         "subjects", "genres",
         "spelling"
     ].indexOf(operator) !== -1;

@@ -29,6 +29,8 @@ const RecordSchema = new mongoose.Schema({
         required: true
     },
 
+    country: String,
+
     // MARC21: 100, 110
     author: {
         type: String
@@ -70,6 +72,25 @@ const RecordSchema = new mongoose.Schema({
     },
     // TODO: How about other 600-662 fields?
 
+    series: {
+        type: [
+            { type: String }
+        ],
+        required: true
+    },
+    classification: {
+        type: [
+            { type: String }
+        ],
+        required: true
+    },
+    standardCodes: {
+        type: [
+            { type: String }
+        ],
+        required: true
+    },
+
     recordType: {
         type: String,
         required: true,
@@ -80,9 +101,12 @@ const RecordSchema = new mongoose.Schema({
         required: true
     },
 
-    spelling: [
-        { type: String }
-    ],
+    spelling: {
+        type: [
+            { type: String }
+        ],
+        required: true
+    },
 
     items: [
         {

@@ -263,53 +263,11 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
 };
 
 const getSpelling = parsedMARC => {
-    /* const title = getFieldsAndSubfields(parsedMARC, ["245", "246"], ["a", "b", "c"]);
-    const subjects = getFieldsAndSubfields(
-        parsedMARC,
-        ["600", "610", "611", "630", "647", "648", "650", "651", "653", "654", "655", "656", "657", "658", "662"],
-        ["a", "b", "c", "d", "x", "y", "z"]
-    );
-    const authors = getFieldsAndSubfields(
-        parsedMARC,
-        ["100", "110", "700", "710"],
-        ["a", "b", "c"]
-    );
-    const publishersEtc = getFieldsAndSubfields(
-        parsedMARC,
-        ["260"],
-        ["a", "b", "c", "e", "f", "g"]
-    );
-    const contents = getFieldsAndSubfields(
-        parsedMARC,
-        ["505"],
-        ["a", "g"]
-    );
-    const abstractEtc = getFieldsAndSubfields(
-        parsedMARC,
-        ["520"],
-        ["a", "b"]
-    );
-    const series = getFieldsAndSubfields(
-        parsedMARC,
-        ["490", "830"],
-        ["a"]
-    );
-    const standardCodes = getFieldsAndSubfields(
-        parsedMARC,
-        ["020", "022", "024"],
-        ["a"]
-    );
-    const classification = getFieldsAndSubfields(
-        parsedMARC,
-        ["050", "080", "082", "084"],
-        ["a"]
-    ); */
-
     const spelling = [...new Set([].concat(
         // title
         getFieldSpelling(
             parsedMARC,
-            ["600", "610", "611", "630", "647", "648", "650", "651", "653", "654", "655", "656", "657", "658", "662"],
+            ["245", "246"],
             ["a", "b", "c", "d", "x", "y", "z"]
         ),
         // subjects
@@ -360,7 +318,27 @@ const getSpelling = parsedMARC => {
             ["050", "080", "082", "084"],
             ["a"]
         ),
-    ))].filter(value => value.length > 3)
+        // notes
+        getFieldSpelling(
+            parsedMARC,
+            [
+                "500", "501", "502", "504", "506", "507", "508",
+                "509", "510", "513", "514", "515", "516", "518",
+                "521", "522", "524", "525", "526", "530", "532", "533",
+                "534", "535", "536", "538", "540", "541", "542", "544",
+                "545", "546", "547", "550", "552", "555", "556", "561",
+                "562", "563", "565", "567", "580", "581", "583", "584",
+                "585", "586", "588"
+            ],
+            ["a"]
+        ),
+        // appearance
+        getFieldSpelling(
+            parsedMARC,
+            ["300"],
+            ["a", "b", "c"]
+        )
+    ))].filter(value => value.length > 2)
     return spelling;
 };
 
@@ -380,6 +358,27 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     languagesDuplicates.unshift(language);
     // Remove duplicates in languages
     const languages = [...new Set(languagesDuplicates)];
+
+    const series = [...new Set(getFieldSpelling(
+        parsedMARC,
+        ["490", "830"],
+        ["a"]
+    ))].map(removeLastCharacters);
+    const country = parsedMARC.FIELDS["008"][0].substring(15, 18) || "";
+    const standardCodes = [...new Set(getFieldSpelling(
+        parsedMARC,
+        ["020", "022", "024"],
+        ["a"]
+    ))];
+
+    // TODO: udk 894.541-3(024.7)
+    const classification = [...new Set(getFieldSpelling(
+        parsedMARC,
+        ["050", "080", "082", "084"],
+        ["a"]
+    ))];
+
+    // ?? const appearance = ;??
 
     const authorWithLastCharacters = getField(parsedMARC, "100", "a") || getField(parsedMARC, "110", "a"); // parsedMARC.FIELDS["100"][0].subfield["a"][0];
     const author = removeLastCharacters(authorWithLastCharacters);
@@ -409,6 +408,7 @@ const parseMARCToDatabse = (parsedMARC, data) => {
         contentType,
 
         title,
+        country,
         language,
         languages,
         author,
@@ -416,6 +416,11 @@ const parseMARCToDatabse = (parsedMARC, data) => {
         year,
         genres,
         subjects,
+
+        classification,
+        standardCodes,
+        series,
+        // appearance, ?
 
         recordType: "marc21",
         record: data,
