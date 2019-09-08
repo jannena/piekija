@@ -9,8 +9,6 @@ const isValidOperator = operator =>
         "spelling"
     ].indexOf(operator) !== -1;
 
-// TODO: 
-
 const validateAdvancedQuery = ([operator, value, type]) => {
     if (!isValidOperator(operator)) throw new Error(`Operator ${operator} is invalid.`);
 
@@ -120,11 +118,10 @@ const simplifySimpleQuery = query => {
 
 // TODO: fix parsing queries containing extra brackets
 const validateSimpleQuery = query => {
+    console.log("what is query?", query);
     try {
         if (!queryContainsOps(query)) return [
-            "AND", [
-                ["spelling", query, "is"]
-            ]
+            "OR", query.split(" ").map(q => (["spelling", q, "is"]))
         ];
         return simplifySimpleQuery(validateSimpleQueryRecursion(query));
     }
