@@ -243,9 +243,9 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
     const ret = [];
     marc.forEach(field => {
         subfields.forEach(subfield => {
-            console.log(field, subfield);
-            console.log(field[subfield].map(term => term.split(" ")));
-            console.log("jyyyy", field[subfield]);
+            // console.log(field, subfield);
+            // console.log(field[subfield].map(term => term.split(" ")));
+            // console.log("jyyyy", field[subfield]);
             try {
                 ret.push(...field[subfield]
                     .map(term => term.split(" "))
@@ -255,7 +255,7 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
                     .map(s => s.toLowerCase()));
             }
             catch (err) {
-                console.log("error while making spelling", err);
+                // console.log("error while making spelling", err);
             }
         });
     });
@@ -346,7 +346,14 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     // TODO: ohitusindikaattorit
 
     // TODO: There are catalouging rules.
-    const year = Number(parsedMARC.FIELDS["008"][0].substring(7, 11)) || -10000;
+    const year = (() => {
+        try {
+            return Number(parsedMARC.FIELDS["008"][0].substring(7, 11));
+        }
+        catch (err) {
+            return -10000;
+        }
+    })();
     const contentType = parsedMARC.LEADER.substring(6, 7);
 
     let title = getField(parsedMARC, "245", "a"); // parsedMARC.FIELDS["245"][0].subfields["a"][0];
@@ -359,6 +366,7 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     // Remove duplicates in languages
     const languages = [...new Set(languagesDuplicates)];
 
+    // TODO: Currently this splits the series to words...
     const series = [...new Set(getFieldSpelling(
         parsedMARC,
         ["490", "830"],
