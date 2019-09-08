@@ -22,10 +22,10 @@ const AdvancedSearchField = ({ query, setQuery, removeField }) => {
     };
     const operatorsByField = field => {
         return {
-            year: [["is exactly", "is"], ["is less than", "lt"], ["is greater than", "gt"]]
+            year: [["is exactly", "is"], ["is not", "not"], ["is less than", "lt"], ["is greater than", "gt"]]
         }[field] || [
                 ["is exactly", "is"],
-                ["is piece of", "contains"]
+                ["is not", "not"]
             ];
     };
     const optionsByField = (field, value, onChange) => {
@@ -41,7 +41,21 @@ const AdvancedSearchField = ({ query, setQuery, removeField }) => {
     return (
         <div>
             <Select
-                options={[["everything", "record"], ["content type", "contentType"], ["title", "title"], ["subject", "subjects"], ["genre", "genres"], ["author", "authors"], ["year", "year"], ["language", "languages"], ["main language", "language"]]}
+                options={[
+                    ["everything", "spelling"],
+                    ["content type", "contentType"],
+                    ["title", "title"],
+                    ["subject", "subjects"],
+                    ["genre", "genres"],
+                    ["author", "authors"],
+                    ["year", "year"],
+                    ["country", "country"],
+                    ["standard code (ISBN/ISSN/...)", "standardCodes"],
+                    ["series", "series"],
+                    ["classification", "classification"],
+                    ["main language", "language"],
+                    ["language", "languages"]
+                ]}
                 selected={query[0]}
                 onChange={onChange(0)}
             />
@@ -145,7 +159,7 @@ const AdvancedSearch = ({ query: q, setQuery: setQ }) => {
     console.log("query here", query);
 
     useEffect(() => {
-        if(q) setQuery(q);
+        if (q) setQuery(q);
     }, [q]);
 
     const search = e => {
