@@ -11,14 +11,15 @@ const RecordNotes = ({ record }) => {
             .map(n => <li key={n}>{n}</li>)}
     </>
 
+    // TODO: What if subfields s, t and r are used?
     const g505 = () => <>
         <div><strong>Contents</strong></div>
         {MARC21
             .getFieldsAndSubfields(record.record, ["505"], ["indicators", "a"])
-            .map(n => <li key={n["a"][0]}>
-                {["Contents", "Incomplete contents", "Partial contents", "", "", "", "", "", ""][n.indicators[0]] + ": "}
-                {n["a"].join("")}
-            </li>)}
+            .map(n => <div key={n["a"][0]}>
+                <strong>{["Contents", "Incomplete contents", "Partial contents", "", "", "", "", "", ""][n.indicators[0]] + ": "}</strong>
+                {n["a"].join("").split("--").map(part => <div key={part}>{part}</div>)}
+            </div>)}
     </>;
 
     const g520 = () => <>
