@@ -30,9 +30,10 @@
 | 25.8. | 3,5 | Tietuemuokkain, EAN-skannerin aloittaminen |
 | 27.8. | 2 | Tietueiden hakeminen tietokantaan Finnasta |
 | 29.8. | 1 | henkilökuntanäyttötietuenäkymän päivittäminen |
-| 20.8. | 1,5 | itemiä, locationia ja loantypea frontendiin |
+| 30.8. | 1,5 | itemiä, locationia ja loantypea frontendiin |
 | 1.9. | 1 | tietueiden poistaminen frontendiin, osittaislataajan aloittaminen |
 | 2.9. | 1 | spelling-kenttä |
 | 7.9. | 3 | backendin testien korjaus ja lisäily |
+| 8.9. | 1 | haun päivittäminen |
 | | | |
-| yht. | 74 | |
+| yht. | 75 | |
