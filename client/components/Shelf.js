@@ -17,7 +17,7 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf }) =>
     if (state.state === 3) return <p>Error: {state.error}</p>;
     if (!shelf) return null;
 
-    const isAuthor = () => shelf.author.id === user.id;
+    const isAuthor = () => user && shelf.author.id === user.id;
     const canEdit = () => isAuthor() || (shelf.sharedWith || []).some(u => user.id === u.id);
 
     const saveShelf = e => {
