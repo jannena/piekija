@@ -20,8 +20,26 @@ const shelfReducer = (state = init, action) => {
                 ...stateToUpdate,
                 shelf: action.shelf
             };
-        case "PSUCCES_SHELF_UPDATE":
-            break;
+        case "PSUCCESS_SHELF_UPDATE":
+            console.log("PSUCCESS_SHELF_UPDATE", action, {
+                ...state,
+                shelf: {
+                    name: action.shelf.name,
+                    description: action.shelf.description,
+                    public: action.shelf.public,
+                    ...state.shelf
+                }
+            });
+            console.log(action.shelf.name, action.shelf.description, action.shelf.public);
+            return {
+                ...state,
+                shelf: {
+                    ...state.shelf,
+                    name: action.shelf.name,
+                    description: action.shelf.description,
+                    public: action.shelf.public
+                }
+            };
         case "PSUCCESS_SHELF_SHARE":
             return {
                 ...state,
@@ -102,6 +120,19 @@ export const createShelf = (name, publicity) => (dispatch, getState) => {
             });
         })
         .catch(onError(dispatch, "FAILURE_SHELF_CREATE"));
+};
+
+export const updateShelf = (name, description, publicity) => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_SHELF_UPDATE" });
+    shelfService
+        .update(getState().shelf.shelf.id, name, description, publicity, getState().token.token)
+        .then(response => {
+            dispatch({
+                type: "PSUCCESS_SHELF_UPDATE",
+                shelf: response
+            });
+        })
+        .catch(onError(dispatch, "PFAILURE_SHELF_UPDATE"));
 };
 
 export const addRecordToShelf = (recordId, shelfId) => (dispatch, getState) => {

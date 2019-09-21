@@ -95,13 +95,13 @@ shelfRouter.put("/:id", (req, res, next) => {
     const replacer = {};
     if (name) replacer.name = name;
     if (description) replacer.description = description;
-    if (publicity) replacer.public = publicity;
+    if (publicity === true || publicity === false) replacer.public = publicity;
 
     Shelf
         .findOneAndUpdate({
             _id: id,
             author: req.authenticated._id
-        }, replacer, { new: true })
+        }, { $set: replacer }, { new: true })
         .then(result => {
             if (!result) res.status(403).end();
             else {

@@ -21,6 +21,19 @@ const create = (name, description, publicity, token) => {
     ).then(response => response.data);
 };
 
+const update = (id, name, description, publicity, token) => {
+    console.log("Updating shelf!!!!!", name, description, publicity)
+    return axios.put(
+        `${baseUrl}/${id}`,
+        {
+            name,
+            description,
+            public: publicity
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
 const addRecord = (shelfId, recordId, token) => {
     return axios.post(
         `${baseUrl}/${shelfId}/shelve`,
@@ -68,6 +81,7 @@ const unshare = (shelfId, username, token) => {
 export default {
     get,
     create,
+    update,
     addRecord,
     editRecord,
     removeRecord,
