@@ -4,6 +4,8 @@ const Shelf = require("../models/Shelf");
 const User = require("../models/User");
 const Record = require("../models/Record");
 
+const io = require("../socket");
+
 shelfRouter.get("/", (req, res, next) => {
     Shelf
         .find({})
@@ -110,7 +112,7 @@ shelfRouter.put("/:id", (req, res, next) => {
                         path: "author",
                         select: { username: 1, name: 1 }
                     })
-                    .then(result2 => void res.json(result2.toJSON()))
+                    .then(result2 => void res.json(result2.toJSON())) // TODO: Send to other editors
                     .catch(next);
             }
         })
@@ -132,7 +134,7 @@ shelfRouter.delete("/:id", async (req, res, next) => {
             { _id: { $in: users } },
             { $pull: { shelves: { id } } });
 
-        res.status(204).end();
+        res.status(204).end();  // TODO: Send to other editors
     }
     catch (err) {
         next(err);
@@ -168,6 +170,14 @@ shelfRouter.post("/:id/shelve", async (req, res, next) => {
                 { sharedWith: req.authenticated._id }
             ]
         }, { $push: { records: { record, note } } }, { new: true });
+        io.socket.to(`shelf-${id}`).emit("add record", {
+            inCharge: req.authenticated.name,
+            record: {
+                id: recordToBeAdded.id,
+                title: recordToBeAdded.title
+            },
+            note
+        });
         res.status(201).json({
             record: {
                 id: recordToBeAdded.id,
@@ -203,7 +213,7 @@ shelfRouter.delete("/:id/shelve", async (req, res, next) => {
                 { sharedWith: req.authenticated._id }
             ]
         }, { $pull: { records: { _id: record } } }, { multi: true });
-        res.status(204).end();
+        res.status(204).end();  // TODO: Send to other editors
     }
     catch (err) {
         next(err);
@@ -233,7 +243,7 @@ shelfRouter.put("/:id/shelve", async (req, res, next) => {
                 { sharedWith: req.authenticated._id }
             ]
         }, { $set: { "records.$.note": note } });
-        res.status(200).end();
+        res.status(200).end(); // TODO: Send to other editors
     }
     catch (err) {
         next(err);
@@ -277,7 +287,7 @@ shelfRouter.post("/:id/share", async (req, res, next) => {
             id: userToShareWith._id,
             username,
             name: userToShareWith.name
-        });
+        }); // TODO: Send to other editors
     }
     catch (err) {
         next(err);
@@ -307,7 +317,7 @@ shelfRouter.delete("/:id/share", async (req, res, next) => {
         await userToUnshareWith.save();
         await shelf.save();
 
-        res.status(204).end();
+        res.status(204).end(); // TODO: Send to other editors
     }
     catch (err) {
         next(err);

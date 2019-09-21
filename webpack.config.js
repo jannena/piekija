@@ -17,7 +17,7 @@ const config = (env, argv) => {
             compress: true,
             port: 3000,
             historyApiFallback: true,
-            https: true
+            https: false
         },
         devtool: "source-map",
         module: {

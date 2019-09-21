@@ -14,11 +14,11 @@ import AdvancedSearch from "./components/AdvancedSearch";
 import SearchField from "./components/SearchField";
 import Staff from "./components/staff/Staff";
 import StaffEditRecord from "./components/staff/StaffEditRecord";
+import io from "./socket";
 
 // TODO: Learn how React router works or make better (clearer) router
 
 const App = ({ token, getUser, setToken }) => {
-
     useEffect(() => {
         if (!token) return;
         getUser(); // TODO: What if token is invalid?

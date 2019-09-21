@@ -4,8 +4,12 @@ import ShelfRecord from "./ShelfRecord";
 import ShelfSharing from "./ShelfSharing";
 import { connect } from "react-redux";
 import { getShelf, updateShelf } from "../reducers/shelfReducer";
+import io from "../socket";
 
 const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf }) => {
+    useEffect(() => {
+        if (shelfId) io.emit("change shelf", shelfId);
+    }, [shelfId]);
 
     useEffect(() => {
         if (shelfId !== (shelf || { id: null }).id) getShelf(shelfId);
