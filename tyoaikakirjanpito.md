@@ -35,5 +35,6 @@
 | 2.9. | 1 | spelling-kenttä |
 | 7.9. | 3 | backendin testien korjaus ja lisäily |
 | 8.9. | 1 | haun päivittäminen |
+| 21.9. | 3,5 | hyllyjen muokkaus frontendiin, kahden käyttäjän reaaliaikaisen hyllyjen muokkaamisen aloittaminen |
 | | | |
-| yht. | 75 | |
+| yht. | 78,5 | |
