@@ -14,11 +14,22 @@ import AdvancedSearch from "./components/AdvancedSearch";
 import SearchField from "./components/SearchField";
 import Staff from "./components/staff/Staff";
 import StaffEditRecord from "./components/staff/StaffEditRecord";
-import io from "./socket";
+
+import { addRecord, removeRecord, updateRecord } from "./reducers/shelfReducer";
+import { setSocketIOEventListeners } from "./socket";
 
 // TODO: Learn how React router works or make better (clearer) router
 
-const App = ({ token, getUser, setToken }) => {
+const App = ({ token, getUser, setToken, shelf, addRecord, removeRecord, updateRecord }) => {
+    useEffect(() => {
+        setSocketIOEventListeners(
+            data => addRecord(data),
+            data => removeRecord(data),
+            data => updateRecord(data),
+            shelf => console.log("changed to shelf", shelf)
+        );
+    }, []);
+
     useEffect(() => {
         if (!token) return;
         getUser(); // TODO: What if token is invalid?
@@ -64,7 +75,7 @@ const App = ({ token, getUser, setToken }) => {
 
                 {/* Staff screens */}
                 <Route exact path="/staff" render={({ history }) => <Staff history={history} />} />
-                <Route exact path="/staff/record/:id" render = {({ match }) => <StaffEditRecord id={match.params.id} />} />
+                <Route exact path="/staff/record/:id" render={({ match }) => <StaffEditRecord id={match.params.id} />} />
             </Container>
         </Router>
     );
@@ -74,5 +85,5 @@ export default connect(
     state => ({
         token: state.token
     }),
-    { setToken, getUser }
+    { setToken, getUser, addRecord, removeRecord, updateRecord }
 )(App);

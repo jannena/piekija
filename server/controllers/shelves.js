@@ -213,7 +213,11 @@ shelfRouter.delete("/:id/shelve", async (req, res, next) => {
                 { sharedWith: req.authenticated._id }
             ]
         }, { $pull: { records: { _id: record } } }, { multi: true });
-        res.status(204).end();  // TODO: Send to other editors
+        io.socket.to(`shelf-${id}`).emit("remove record", {
+            inCharge: req.authenticated.name,
+            record
+        });
+        res.status(204).end();
     }
     catch (err) {
         next(err);
@@ -243,7 +247,12 @@ shelfRouter.put("/:id/shelve", async (req, res, next) => {
                 { sharedWith: req.authenticated._id }
             ]
         }, { $set: { "records.$.note": note } });
-        res.status(200).end(); // TODO: Send to other editors
+        io.socket.to(`shelf-${id}`).emit("update record", {
+            inCharge: req.authenticated.name,
+            record,
+            note
+        });
+        res.status(200).end();
     }
     catch (err) {
         next(err);

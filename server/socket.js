@@ -10,6 +10,7 @@ module.exports = {
         socket.on("connection", conn => {
             console.log("[SIO]: Wow! A connection!");
             conn.on("change shelf", shelfId => {
+                // TODO: Add authentication
                 conn.leave(conn.rooms[0]);
                 conn.join(`shelf-${shelfId}`);
                 conn.emit("change shelf", shelfId);

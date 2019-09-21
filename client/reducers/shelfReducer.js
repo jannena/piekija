@@ -1,7 +1,6 @@
 import shelfService from "../services/shelfService";
 import { notify } from "./notificationReducer";
 import { onError } from "./errorHandingHelper";
-import { ECONNREFUSED } from "constants";
 
 const init = {
     cache: {},
@@ -19,6 +18,32 @@ const shelfReducer = (state = init, action) => {
             return {
                 ...stateToUpdate,
                 shelf: action.shelf
+            };
+        case "ADD_RECORD":
+            return {
+                ...state,
+                shelf: {
+                    ...state.shelf,
+                    records: state.shelf.records.concat(action.record)
+                }
+            };
+        case "REMOVE_RECORD":
+            console.log("trying to remove from local shelf", action, state.shelf);
+            return {
+                ...state,
+                shelf: {
+                    ...state.shelf,
+                    records: state.shelf.records.filter(r => { console.log(r._id, action.record.record); return r._id !== action.record.record; })
+                }
+            };
+        case "UPDATE_RECORD":
+            console.log("trying to update in local shelf", action);
+            return {
+                ...state,
+                shelf: {
+                    ...state.shelf,
+                    records: state.shelf.records.map(r => r.record.id === action.record.record ? { ...r, note: action.record.note } : r)
+                }
             };
         case "PSUCCESS_SHELF_UPDATE":
             console.log("PSUCCESS_SHELF_UPDATE", action, {
@@ -205,4 +230,23 @@ export const unshareShelf = username => (dispatch, getState) => {
             dispatch(notify("success", `unshared with ${username}`));
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_UNSHARE"));
+};
+
+export const addRecord = data => dispatch => {
+    dispatch({
+        type: "ADD_RECORD",
+        record: data
+    });
+};
+export const removeRecord = data => dispatch => {
+    dispatch({
+        type: "REMOVE_RECORD",
+        record: data
+    });
+};
+export const updateRecord = data => dispatch => {
+    dispatch({
+        type: "UPDATE_RECORD",
+        record: data
+    });
 };

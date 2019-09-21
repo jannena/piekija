@@ -30,7 +30,7 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
     if (state.state === 1) return <Loader />
     if (state.state === 3) return <p>Error: {state.error}</p>;
 
-    return !record || record.result.id !== id
+    return !record || !record.result || record.result.id !== id
         ? null
         : <div>
             {!isPreview && <>
