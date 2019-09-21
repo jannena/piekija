@@ -15,7 +15,7 @@ const ShelfRecord = ({ record, canEdit, updateRecordInShelf, deleteRecordFromShe
     }
 
     const handleRemoveFromShelf = () => {
-        deleteRecordFromShelf(record.record.id);
+        deleteRecordFromShelf(record._id);
     };
 
     const cancelEditing = () => {
@@ -27,8 +27,10 @@ const ShelfRecord = ({ record, canEdit, updateRecordInShelf, deleteRecordFromShe
 
     // console.log("difference", !!state.shelf.shelf.records && state.shelf.shelf.records[3].note, record.note);
 
+    const recordDeleted = record.record.id === undefined;
+
     return <tr>
-        <td><Link to={`/record/${record.record.id}`}>{record.record.title}</Link></td>
+        <td>{recordDeleted ? <p><strong>[Record does not exist]</strong></p> : <Link to={`/record/${record.record.id}`}>{record.record.title}</Link>}</td>
         <td>{isOpen
             ? <>
                 <input value={note} onChange={e => setNote(e.target.value)} />
@@ -37,7 +39,7 @@ const ShelfRecord = ({ record, canEdit, updateRecordInShelf, deleteRecordFromShe
             </>
             : record.note}</td>
         <td>{canEdit && <>
-            <button onClick={() => setIsOpen(true)}>edit note</button>
+            {recordDeleted ? <p></p> : <button onClick={() => setIsOpen(true)}>edit note</button>}
             <button onClick={handleRemoveFromShelf}>delete from shelf</button>
         </>}</td>
     </tr>;

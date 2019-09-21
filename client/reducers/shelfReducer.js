@@ -1,6 +1,7 @@
 import shelfService from "../services/shelfService";
 import { notify } from "./notificationReducer";
 import { onError } from "./errorHandingHelper";
+import { ECONNREFUSED } from "constants";
 
 const init = {
     cache: {},
@@ -63,7 +64,7 @@ const shelfReducer = (state = init, action) => {
                 ...state,
                 shelf: {
                     ...state.shelf,
-                    records: state.shelf.records.filter(record => record.record.id !== action.recordId)
+                    records: state.shelf.records.filter(record => record._id !== action.recordId)
                 }
             };
     }

@@ -202,7 +202,7 @@ shelfRouter.delete("/:id/shelve", async (req, res, next) => {
                 { author: req.authenticated._id },
                 { sharedWith: req.authenticated._id }
             ]
-        }, { $pull: { records: { record } } }, { multi: true });
+        }, { $pull: { records: { _id: record } } }, { multi: true });
         res.status(204).end();
     }
     catch (err) {
