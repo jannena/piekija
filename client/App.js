@@ -16,19 +16,22 @@ import Staff from "./components/staff/Staff";
 import StaffEditRecord from "./components/staff/StaffEditRecord";
 
 import { addRecord, removeRecord, updateRecord } from "./reducers/shelfReducer";
-import { setSocketIOEventListeners } from "./socket";
+import { setSocketIOEventListeners, startWS } from "./socket";
 
 // TODO: Learn how React router works or make better (clearer) router
 
-const App = ({ token, getUser, setToken, shelf, addRecord, removeRecord, updateRecord }) => {
+const App = ({ token, user, getUser, setToken, shelf, addRecord, removeRecord, updateRecord }) => {
     useEffect(() => {
-        setSocketIOEventListeners(
-            data => addRecord(data),
-            data => removeRecord(data),
-            data => updateRecord(data),
-            shelf => console.log("changed to shelf", shelf)
-        );
-    }, []);
+        if (token && user) {
+            startWS();
+            setSocketIOEventListeners(
+                data => addRecord(data),
+                data => removeRecord(data),
+                data => updateRecord(data),
+                shelf => console.log("changed to shelf", shelf)
+            );
+        }
+    }, [token, user]);
 
     useEffect(() => {
         if (!token) return;
@@ -83,7 +86,8 @@ const App = ({ token, getUser, setToken, shelf, addRecord, removeRecord, updateR
 
 export default connect(
     state => ({
-        token: state.token
+        token: state.token.token,
+        user: state.user
     }),
     { setToken, getUser, addRecord, removeRecord, updateRecord }
 )(App);

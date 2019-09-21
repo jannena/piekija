@@ -9,8 +9,8 @@ import io from "../socket";
 
 const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf }) => {
     useEffect(() => {
-        if (shelfId) io.emit("change shelf", shelfId);
-    }, [shelfId]);
+        if (shelfId && token && user && io) io.emit("change shelf", shelfId, token);
+    }, [shelfId, token, user, io]);
 
     useEffect(() => {
         if (shelfId !== (shelf || { id: null }).id) getShelf(shelfId);
