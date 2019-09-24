@@ -36,5 +36,6 @@
 | 7.9. | 3 | backendin testien korjaus ja lisäily |
 | 8.9. | 1 | haun päivittäminen |
 | 21.9. | 3,5 | hyllyjen muokkaus frontendiin, kahden käyttäjän reaaliaikaisen hyllyjen muokkaamisen aloittaminen |
+| 34.9. | 1 | hyllyjen reaaliaikaisen muokkauksen jatkaminen, yksinkertaisen muokkaimen aloittaminen |
 | | | |
-| yht. | 78,5 | |
+| yht. | 79,5 | |
