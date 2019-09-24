@@ -6,6 +6,7 @@ import MARCEditor from "./MARCEditor";
 import Record from "../record/Record";
 import Loader from "../Loader";
 import RecordItems from "./RecordItems";
+import SimpleRecordEditor from "./SimpleRecordEditor";
 
 const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRecord }) => {
 
@@ -42,7 +43,7 @@ const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRec
                 <MARCEditor />
             </Tab>
             <Tab>
-                <p>Maybe coming soon!</p>
+                <SimpleRecordEditor />
             </Tab>
             <Tab>
                 {isPreview && <p>You are watching record in preview mode. Record has not yet been saved to the database.</p>}
