@@ -6,6 +6,8 @@ const Record = require("../models/Record");
 
 const io = require("../socket");
 
+// TODO: Erro handlening of socket things!!!!!!!!!!!!
+
 shelfRouter.get("/", (req, res, next) => {
     Shelf
         .find({})
@@ -112,7 +114,17 @@ shelfRouter.put("/:id", (req, res, next) => {
                         path: "author",
                         select: { username: 1, name: 1 }
                     })
-                    .then(result2 => void res.json(result2.toJSON())) // TODO: Send to other editors
+                    .then(result2 => {
+                        io.socket.to(`shelf-${id}`).emit("update", {
+                            inCharge: {
+                                username: req.authenticated.username,
+                                name: req.authenticated.name,
+                                id: req.authenticated._id
+                            },
+                            info: result2.toJSON()
+                        });
+                        res.json(result2.toJSON())
+                    })
                     .catch(next);
             }
         })
@@ -171,7 +183,11 @@ shelfRouter.post("/:id/shelve", async (req, res, next) => {
             ]
         }, { $push: { records: { record, note } } }, { new: true });
         io.socket.to(`shelf-${id}`).emit("add record", {
-            inCharge: req.authenticated.name,
+            inCharge: {
+                username: req.authenticated.username,
+                name: req.authenticated.name,
+                id: req.authenticated._id
+            },
             record: {
                 id: recordToBeAdded.id,
                 title: recordToBeAdded.title
@@ -214,7 +230,11 @@ shelfRouter.delete("/:id/shelve", async (req, res, next) => {
             ]
         }, { $pull: { records: { _id: record } } }, { multi: true });
         io.socket.to(`shelf-${id}`).emit("remove record", {
-            inCharge: req.authenticated.name,
+            inCharge: {
+                username: req.authenticated.username,
+                name: req.authenticated.name,
+                id: req.authenticated._id
+            },
             record
         });
         res.status(204).end();
@@ -248,7 +268,11 @@ shelfRouter.put("/:id/shelve", async (req, res, next) => {
             ]
         }, { $set: { "records.$.note": note } });
         io.socket.to(`shelf-${id}`).emit("update record", {
-            inCharge: req.authenticated.name,
+            inCharge: {
+                username: req.authenticated.username,
+                name: req.authenticated.name,
+                id: req.authenticated._id
+            },
             record,
             note
         });
@@ -292,11 +316,22 @@ shelfRouter.post("/:id/share", async (req, res, next) => {
 
         await shelf.save();
         await userToShareWith.save();
+        io.socket.to(`shelf-${id}`).emit("share", {
+            inCharge: {
+                username: req.authenticated.username,
+                name: req.authenticated.name,
+                id: req.authenticated._id
+            },
+            user: {
+                username: userToShareWith.username,
+                name: userToShareWith.name
+            }
+        });
         res.status(201).json({
             id: userToShareWith._id,
             username,
             name: userToShareWith.name
-        }); // TODO: Send to other editors
+        });
     }
     catch (err) {
         next(err);
@@ -326,7 +361,19 @@ shelfRouter.delete("/:id/share", async (req, res, next) => {
         await userToUnshareWith.save();
         await shelf.save();
 
-        res.status(204).end(); // TODO: Send to other editors
+        io.socket.to(`shelf-${id}`).emit("unshare", {
+            inCharge: {
+                username: req.authenticated.username,
+                name: req.authenticated.name,
+                id: req.authenticated._id
+            },
+            user: {
+                username: userToUnshareWith.username,
+                name: userToUnshareWith.name
+            }
+        });
+
+        res.status(204).end();
     }
     catch (err) {
         next(err);

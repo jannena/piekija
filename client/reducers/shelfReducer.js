@@ -45,6 +45,32 @@ const shelfReducer = (state = init, action) => {
                     records: state.shelf.records.map(r => r.record.id === action.record.record ? { ...r, note: action.record.note } : r)
                 }
             };
+        case "LOCAL_SHARE":
+            return {
+                ...state,
+                shelf: {
+                    ...state.shelf,
+                    sharedWith: state.shelf.sharedWith.concat(action.user)
+                }
+            };
+        case "LOCAL_UNSHARE":
+            return {
+                ...state,
+                shelf: {
+                    ...state.shelf,
+                    sharedWith: state.shelf.sharedWith.filter(u => u.username !== action.user.username)
+                }
+            };
+        case "LOCAL_UPDATE":
+            return {
+                ...state,
+                shelf: {
+                    ...state.shelf,
+                    name: action.info.name,
+                    description: action.info.description,
+                    public: action.info.public
+                }
+            };
         case "PSUCCESS_SHELF_UPDATE":
             console.log("PSUCCESS_SHELF_UPDATE", action, {
                 ...state,
@@ -232,21 +258,47 @@ export const unshareShelf = username => (dispatch, getState) => {
         .catch(onError(dispatch, "PFAILURE_SHELF_UNSHARE"));
 };
 
+
+// Local mutations used only (?) cooperative shelf editing
+export const localUpdateShelf = data => dispatch => {
+    dispatch({
+        type: "LOCAL_UPDATE",
+        info: data.info
+    });
+    dispatch(notify("warning", `${data.inCharge.name} updated publicity, description or title`));
+};
 export const addRecord = data => dispatch => {
     dispatch({
         type: "ADD_RECORD",
         record: data
     });
+    dispatch(notify("warning", `${data.inCharge.name} added '${data.record.title}'`));
 };
 export const removeRecord = data => dispatch => {
     dispatch({
         type: "REMOVE_RECORD",
         record: data
     });
+    dispatch(notify("warning", `${data.inCharge.name} removed '${data.record.title}'`));
 };
 export const updateRecord = data => dispatch => {
     dispatch({
         type: "UPDATE_RECORD",
         record: data
     });
+    dispatch(notify("warning", `${data.inCharge.name} updated the note to '${data.note}'`));
+};
+export const localShare = data => dispatch => {
+    dispatch({
+        type: "LOCAL_SHARE",
+        user: data.user
+    });
+    dispatch(notify("warning", `${data.inCharge.name} shared shelf with ${data.user.name}`));
+};
+export const localUnhare = data => dispatch => {
+    dispatch({
+        type: "LOCAL_UNSHARE",
+        user: data.user
+    });
+    dispatch(notify("warning", `${data.inCharge.name} unshared shelf with ${data.user.name}`));
 };

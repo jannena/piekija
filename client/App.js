@@ -15,20 +15,31 @@ import SearchField from "./components/SearchField";
 import Staff from "./components/staff/Staff";
 import StaffEditRecord from "./components/staff/StaffEditRecord";
 
-import { addRecord, removeRecord, updateRecord } from "./reducers/shelfReducer";
+import { addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf } from "./reducers/shelfReducer";
 import { setSocketIOEventListeners, startWS } from "./socket";
 
 // TODO: Learn how React router works or make better (clearer) router
 
-const App = ({ token, user, getUser, setToken, shelf, addRecord, removeRecord, updateRecord }) => {
+const App = ({ token, user, getUser, setToken, shelf, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf }) => {
     useEffect(() => {
         if (token && user) {
             startWS();
+            
+            const runIfNotMe = (data, func) => {
+                try { console.log("runIfNotMe", data, user, data.inCharge.id, "===", user.id, "-->", data.inCharge.id === user.id); } catch (e) {}
+                if (!data.inCharge) return () => {};
+                if (!data.inCharge.id) return () => {};
+                if (data.inCharge.id !== user.id) return func(data);
+                else return () => {};
+            };
             setSocketIOEventListeners(
-                data => addRecord(data),
-                data => removeRecord(data),
-                data => updateRecord(data),
-                shelf => console.log("changed to shelf", shelf)
+                data => runIfNotMe(data, addRecord),
+                data => runIfNotMe(data, removeRecord),
+                data => runIfNotMe(data, updateRecord),
+                shelf => console.log("changed to shelf", shelf),
+                user => runIfNotMe(user, localShare),
+                user => runIfNotMe(user, localUnhare),
+                data => runIfNotMe(data, localUpdateShelf)
             );
         }
     }, [token, user]);
@@ -89,5 +100,5 @@ export default connect(
         token: state.token.token,
         user: state.user
     }),
-    { setToken, getUser, addRecord, removeRecord, updateRecord }
+    { setToken, getUser, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf }
 )(App);
