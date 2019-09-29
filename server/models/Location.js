@@ -14,6 +14,6 @@ locationSchema.set("toJSON", {
         delete ret._id;
         delete ret.__v;
     }
-})
+});
 
 module.exports = mongoose.model("Location", locationSchema);
