@@ -162,15 +162,34 @@ userRouter.put("/:id", async (req, res, next) => {
 });
 
 userRouter.delete("/:id", (req, res, next) => {
-    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
-    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
     const id = req.params.id;
+
+    // TODO: Loans? Shelves?
 
     User
         .findByIdAndRemove(id)
         .then(() => void res.status(204).end())
         .catch(next);
+});
+
+userRouter.post("/search", async (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
+    const { barcode, name } = req.body;
+
+    if (!barcode && !name) return res.status(400).json({ error: "barcode and name missing" });
+
+    const query = barcode ? { barcode } : { name };
+
+    try {
+        const result = await User.find(query, { shelves: 0 });
+        res.json(result);
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 module.exports = userRouter;
