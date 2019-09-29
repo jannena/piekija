@@ -3,22 +3,29 @@ const mongoose = require("mongoose");
 const itemSchema = new mongoose.Schema({
     barcode: {
         type: String,
+        required: true,
         unique: true
     },
     record: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Record"
+        ref: "Record",
+        required: true
     },
     location: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Location"
+        ref: "Location",
+        required: true
     },
     loantype: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Loantype"
+        ref: "Loantype",
+        required: true
     },
     note: String,
-    state: String,
+    state: {
+        type: String,
+        required: true
+    },
     stateInfo: {
         type: {
             personInCharge: {
