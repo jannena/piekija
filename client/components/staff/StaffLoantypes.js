@@ -9,7 +9,7 @@ const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes }) => {
 
     const handleCreateLoantype = e => {
         e.preventDefault();
-        const { name, canBePlacedAHold, canBeLoaned, canBeRenewed, renewTimes, loanTime } = e.target;
+        const { name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime } = e.target;
         createLoantype(name.value, canBePlacedAHold.checked, canBeLoaned.checked, Number(renewTimes.value), Number(loanTime.value));
     };
 

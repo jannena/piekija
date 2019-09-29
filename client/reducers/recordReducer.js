@@ -41,7 +41,7 @@ const recordReducer = (state = init, action) => {
                     ...state.record,
                     result: {
                         ...state.record.result,
-                        items: state.record.result.items.map(item => item._id !== action.item._id ? item : action.item)
+                        items: state.record.result.items.map(item => item.id !== action.item.id ? item : action.item)
                     }
                 }
             };
@@ -53,7 +53,7 @@ const recordReducer = (state = init, action) => {
                     ...state.record,
                     result: {
                         ...state.record.result,
-                        items: state.record.result.items.filter(item => item._id !== action.itemId)
+                        items: state.record.result.items.filter(item => item.id !== action.itemId)
                     }
                 }
             }

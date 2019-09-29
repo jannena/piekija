@@ -28,7 +28,7 @@ const RecordItems = ({ items, locations, loantypes, addItem, getLocations, getLo
             <div>
                 <form onSubmit={handleCreateItem}>
                     <input name="barcode" placeholder="barcode" />
-                    <Select name="loantype" options={loantypes.map(loantype => [loantype.name, loantype._id])} />
+                    <Select name="loantype" options={loantypes.map(loantype => [loantype.name, loantype.id])} />
                     <Select name="location" options={locations.map(location => [location.name, location.id])} />
                     <input placeholder="state" name="state" />
                     <input placeholder="note" name="note" />
@@ -49,7 +49,7 @@ const RecordItems = ({ items, locations, loantypes, addItem, getLocations, getLo
                 </thead>
                 <tbody>
                     {items.map(item =>
-                        <RecordItem key={item._id} item={item} />
+                        <RecordItem key={item.id} item={item} />
                     )}
                 </tbody>
             </table>

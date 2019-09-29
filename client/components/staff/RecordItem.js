@@ -7,7 +7,7 @@ const RecordItem = ({ item, loantypes, locations, updateItem, removeItem }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const [location, setLocation] = useState(item.location.id);
-    const [loantype, setLoantype] = useState(item.loantype._id);
+    const [loantype, setLoantype] = useState(item.loantype.id);
     const [state, setState] = useState(item.state);
     const [note, setNote] = useState(item.note);
 
@@ -15,16 +15,16 @@ const RecordItem = ({ item, loantypes, locations, updateItem, removeItem }) => {
     const saveItem = e => {
         e.preventDefault();
         setIsOpen(false);
-        updateItem(item._id, loantype, location, state, note);
+        updateItem(item.id, loantype, location, state, note);
     };
 
     const deleteItem = () => {
-        removeItem(item._id);
+        removeItem(item.id);
     };
 
     if (isOpen) return <tr>
         <td>{item.barcode}</td>
-        <td><Select selected={item.loantype._id} onChange={e => setLoantype(e.target.value)} options={loantypes.map(loantype => [loantype.name, loantype._id])} /></td>
+        <td><Select selected={item.loantype.id} onChange={e => setLoantype(e.target.value)} options={loantypes.map(loantype => [loantype.name, loantype.id])} /></td>
         <td><Select selected={item.location.id} onChange={e => setLocation(e.target.value)} options={locations.map(location => [location.name, location.id])} /></td>
         <td><input value={state} onChange={e => setState(e.target.value)} /></td>
         <td><textarea value={note} onChange={e => setNote(e.target.value)} /></td>
