@@ -23,7 +23,8 @@ const userSchema = new mongoose.Schema({
     },
     barcode: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     loans: [
         {
