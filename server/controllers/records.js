@@ -4,6 +4,7 @@ const Record = require("../models/Record");
 const MARC21 = require("../utils/marc21parser");
 
 // Get all records
+// TODO: Remove this
 recordRouter.get("/", (req, res, next) => {
     Record
         .find({})
@@ -23,6 +24,12 @@ recordRouter.get("/:id", (req, res, next) => {
             path: "items",
             populate: {
                 path: "location"
+            }
+        })
+        .populate({
+            path: "items",
+            populate: {
+                path: "loantype"
             }
         })
         // .populate("items", { state: 1, location: 1 })
