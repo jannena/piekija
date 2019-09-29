@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { searchForUser, searchForItem, clearUser, clearItem } from "../../reducers/circulationReducer";
+import { searchForUser, searchForItem, clearUser, clearItem, loanItem, returnItem } from "../../reducers/circulationReducer";
 
-const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clearItem }) => {
+const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clearItem, loanItem, returnItem }) => {
     const searchUser = e => {
         e.preventDefault();
         searchForUser(e.target.user.value);
@@ -54,9 +54,11 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
         {(user && item) && <>
             <div>
                 {/* TODO: If user has not already loaned this item */}
-                <button>Loan item to {user.name}</button>
+                <button onClick={loanItem}>Loan item to {user.name}</button>
                 {/* TODO: If item has already loaned this item */}
                 <button>Renew</button>
+
+                <button onClick={returnItem}>Return</button>
             </div>
         </>}
     </>);
@@ -67,5 +69,5 @@ export default connect(
         user: state.circulation.user,
         item: state.circulation.item
     }),
-    { searchForItem, searchForUser, clearItem, clearUser }
+    { searchForItem, searchForUser, clearItem, clearUser, loanItem, returnItem }
 )(Circulation);

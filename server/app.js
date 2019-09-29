@@ -15,6 +15,7 @@ const shelfRouter = require("./controllers/shelves");
 const userRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
 const searchRouter = require("./controllers/search");
+const circulationRouter = require("./controllers/circulation");
 
 const errorHandler = require("./middleware/error");
 const { authenticationMiddleware } = require("./middleware/authentication");
@@ -42,6 +43,7 @@ app.use("/api/shelf", shelfRouter);
 app.use("/api/user", userRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/search", searchRouter);
+app.use("/api/circulation", circulationRouter);
 
 app.use(errorHandler);
 

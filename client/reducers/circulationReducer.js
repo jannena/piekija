@@ -1,5 +1,6 @@
 import userService from "../services/userService";
 import itemService from "../services/itemService";
+import circulationService from "../services/circulationService";
 import { onError } from "./errorHandingHelper";
 
 const init = {
@@ -18,6 +19,30 @@ const circulationReducer = (state = init, action) => {
             return {
                 ...state,
                 item: action.item
+            };
+        case "PSUCCESS_CIRCULATION_LOAN":
+            return {
+                ...state,
+                item: {
+                    ...state.item,
+                    stateInfo: action.result.item.stateInfo
+                },
+                user: {
+                    ...state.user,
+                    loans: state.user.loans.concat(state.item.id)
+                }
+            };
+        case "PSUCCESS_CIRCULATION_RETURN":
+            return {
+                ...state,
+                item: {
+                    ...state.item,
+                    stateInfo: { personInCharge: null, dueDate: null }
+                },
+                user: {
+                    ...state.user,
+                    loans: state.user.loans.filter(l => l._id !== state.item.id)
+                }
             };
         case "CLEAR_ITEM":
             return {
@@ -63,3 +88,28 @@ export const searchForItem = barcode => (dispatch, getState) => {
 
 export const clearItem = () => dispatch => dispatch({ type: "CLEAR_ITEM" });
 export const clearUser = () => dispatch => dispatch({ type: "CLEAR_USER" });
+
+export const loanItem = () => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_CIRCULATION_LOAN" });
+    circulationService
+        .loan(getState().circulation.item.id, getState().circulation.user.id, getState().token.token)
+        .then(result => {
+            dispatch({
+                type: "PSUCCESS_CIRCULATION_LOAN",
+                result
+            });
+        })
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_LOAN"));
+};
+
+export const returnItem = () => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_CIRCULATION_RETURN" });
+    circulationService
+        .returnItem(getState().circulation.item.id, getState().token.token)
+        .then(() => {
+            dispatch({
+                type: "PSUCCESS_CIRCULATION_RETURN"
+            })
+        })
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_RETURN"))
+};
