@@ -28,7 +28,6 @@ itemRouter.post("/", async (req, res, next) => {
         loantype,
         note: note ? note : "",
         state,
-        ratings: [],
         stateInfo: {}
     });
 
@@ -68,6 +67,8 @@ itemRouter.put("/:id", (req, res, next) => {
 
     Item
         .findByIdAndUpdate(id, { $set: updatedItem }, { new: true })
+        .populate("location")
+        .populate("loantype")
         .then(result => {
             res.json(result);
         })
