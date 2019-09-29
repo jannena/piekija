@@ -10,6 +10,7 @@ import recordReducer from "./reducers/recordReducer";
 import locationReducer from "./reducers/locationReducer";
 import loantypeReducer from "./reducers/loantypeReducer";
 import loadingReducer from "./reducers/loadingReducer";
+import circulationReducer from "./reducers/circulationReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 const reducer = combineReducers({
@@ -22,7 +23,8 @@ const reducer = combineReducers({
     record: recordReducer,
     location: locationReducer,
     loantype: loantypeReducer,
-    loading: loadingReducer
+    loading: loadingReducer,
+    circulation: circulationReducer
 });
 
 const store = createStore(reducer, composeWithDevTools(

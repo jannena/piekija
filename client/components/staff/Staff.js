@@ -7,6 +7,7 @@ import Scanner from "./Scanner";
 import axios from "axios";
 import StaffLocations from "./StaffLocations";
 import StaffLoantypes from "./StaffLoantypes";
+import Circulation from "./Circulation";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
@@ -50,7 +51,7 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history }) =>
     };
     
 
-    return <Tabs titles={["Welocme ", "Records ", "Locations ", "Loantypes ", "Users "]}>
+    return <Tabs titles={["Welocme ", "Records ", "Locations ", "Loantypes ", "Users ", "Circulation "]}>
         <Tab>
             <p>Welocme!</p>
         </Tab>
@@ -77,6 +78,9 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history }) =>
         </Tab>
         <Tab>
             <p>Users coming soon...</p>
+        </Tab>
+        <Tab>
+            <Circulation />
         </Tab>
     </Tabs>
 };

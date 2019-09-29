@@ -15,7 +15,16 @@ const updateMe = (data, token) => {
     ).then(response => response.data);
 };
 
+const search = (barcode, token) => {
+    return axios.post(
+        `${baseUrl}/search`,
+        { barcode },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
 export default {
     me,
-    updateMe
+    updateMe,
+    search
 };
