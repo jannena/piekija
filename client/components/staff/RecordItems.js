@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { addItem } from "../../reducers/recordReducer";
 import { getLocations } from "../../reducers/locationReducer";
 import { getLoantypes } from "../../reducers/loantypeReducer";
+import RecordItem from "./RecordItem";
 
 const RecordItems = ({ items, locations, loantypes, addItem, getLocations, getLoantypes }) => {
     useEffect(() => {
@@ -21,6 +22,7 @@ const RecordItems = ({ items, locations, loantypes, addItem, getLocations, getLo
         addItem(loantype.value, location.value, state.value, note.value, barcode.value);
     };
 
+    // TODO: Replace table with styled divs for better item editing
     return (
         <>
             <div>
@@ -38,19 +40,16 @@ const RecordItems = ({ items, locations, loantypes, addItem, getLocations, getLo
                 <thead>
                     <tr>
                         <th>barcode</th>
+                        <th>loantype</th>
                         <th>location</th>
                         <th>state</th>
                         <th>note</th>
+                        <th>tools</th>
                     </tr>
                 </thead>
                 <tbody>
                     {items.map(item =>
-                        <tr key={item._id}>
-                            <td>{item.barcode}</td>
-                            <td>{item.location.name}</td>
-                            <td>{item.state}</td>
-                            <td>{item.note}</td>
-                        </tr>
+                        <RecordItem key={item._id} item={item} />
                     )}
                 </tbody>
             </table>

@@ -22,7 +22,7 @@ const recordReducer = (state = init, action) => {
                 ...state,
                 record: action.record
             };
-        case "SUCCESS_RECORD_ADD_ITEM":
+        case "PSUCCESS_RECORD_ADD_ITEM":
             return {
                 ...state,
                 record: {
@@ -30,6 +30,18 @@ const recordReducer = (state = init, action) => {
                     result: {
                         ...state.record.result,
                         items: (state.record ? state.record.result.items : []).concat(action.item)
+                    }
+                }
+            };
+        case "PSUCCESS_RECORD_UPDATE_ITEM":
+            if (!state.record) return state;
+            return {
+                ...state,
+                record: {
+                    ...state.record,
+                    result: {
+                        ...state.record.result,
+                        items: state.record.result.items.map(item => item._id !== action.item._id ? item : action.item)
                     }
                 }
             };
@@ -147,7 +159,7 @@ export const createTemporaryRecord = record => dispatch => {
 export const addItem = (loantype, location, state, note, barcode) => (dispatch, getState) => {
     dispatch({ type: "PREQUEST_RECORD_ADD_ITEM" });
     itemService
-        .addItem(getState().record.record.result.id, loantype, location, state, note, getState().token.token)
+        .addItem(barcode, getState().record.record.result.id, loantype, location, state, note, getState().token.token)
         .then(result => {
             dispatch({
                 type: "PSUCCESS_RECORD_ADD_ITEM",
@@ -155,4 +167,17 @@ export const addItem = (loantype, location, state, note, barcode) => (dispatch, 
             });
         })
         .catch(onError(dispatch, "PFAILURE_RECORD_ADD_ITEM"));
+};
+
+export const updateItem = (itemId, loantype, location, state, note) => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_RECORD_UPDATE_ITEM" });
+    itemService
+        .updateItem(itemId, loantype, location, state, note, getState().token.token)
+        .then(result => {
+            dispatch({
+                type: "PSUCCESS_RECORD_UPDATE_ITEM",
+                item: result
+            });
+        })
+        .catch(onError(dispatch, "PFAILURE_RECORD_UPDATE_ITEM"));
 };

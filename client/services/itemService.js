@@ -3,10 +3,11 @@ import { baseUrl as b } from "../globals"
 
 const baseUrl = `${b}/item`;
 
-const addItem = (record, loantype, location, state, note, token) => {
+const addItem = (barcode, record, loantype, location, state, note, token) => {
     return axios.post(
         baseUrl,
         {
+            barcode,
             record,
             loantype,
             location,
@@ -17,6 +18,28 @@ const addItem = (record, loantype, location, state, note, token) => {
     ).then(response => response.data);
 };
 
+const updateItem = (itemId, loantype, location, state, note, token) => {
+    return axios.put(
+        `${baseUrl}/${itemId}`,
+        {
+            loantype,
+            location,
+            state,
+            note
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
+const removeItem = id => {
+    return axios.delete(
+        `${baseUrl}/${itemId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    );
+};
+
 export default {
-    addItem
+    addItem,
+    updateItem,
+    removeItem
 };
