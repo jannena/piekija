@@ -38,12 +38,14 @@ itemRouter.post("/", async (req, res, next) => {
         // TODO: ?loanType check and location check?
 
         const savedItem = await newItem.save();
+        const populated1 = await Item.populate(savedItem, { path: "location" });
+        const populatedItem = await Item.populate(populated1, { path: "loantype" });
 
         // Add id of the added item to the record
         recordOfItem.items.push(savedItem._id);
         await recordOfItem.save();
 
-        res.status(201).json(savedItem);
+        res.status(201).json(populatedItem);
     }
     catch (err) {
         next(err);
