@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 
 const itemSchema = new mongoose.Schema({
-    barcode: String,
+    barcode: {
+        type: String,
+        unique: true
+    },
     record: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Record"

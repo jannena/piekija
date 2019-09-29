@@ -2,8 +2,8 @@ const itemRouter = require("express").Router();
 const Item = require("../models/Item");
 const Record = require("../models/Record");
 
+// TODO: Remove this
 itemRouter.get("/", (req, res, next) => {
-    // TODO: authorization
     Item
         .find({})
         .populate("record", { title: 1, author: 1 })
@@ -17,11 +17,12 @@ itemRouter.get("/", (req, res, next) => {
 
 itemRouter.post("/", async (req, res, next) => {
     // TODO: authorization
-    const { record, location, loantype, state, note } = req.body;
-    if (!record || !location || !loantype || !state)
-        return res.status(400).json({ error: "record or location or loantype or state is missing" });
+    const { barcode, record, location, loantype, state, note } = req.body;
+    if (!barcode || !record || !location || !loantype || !state)
+        return res.status(400).json({ error: "barcode or record or location or loantype or state is missing" });
 
     const newItem = new Item({
+        barcode,
         record,
         location,
         loantype,
@@ -66,7 +67,7 @@ itemRouter.put("/:id", (req, res, next) => {
     };
 
     Item
-        .findByIdAndUpdate(id, updatedItem, { new: true })
+        .findByIdAndUpdate(id, { $set: updatedItem }, { new: true })
         .then(result => {
             res.json(result);
         })
@@ -86,5 +87,7 @@ itemRouter.delete("/:id", async (req, res, next) => {
         next(err);
     }
 });
+
+// TODO: barcode search
 
 module.exports = itemRouter;
