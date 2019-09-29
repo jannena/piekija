@@ -91,6 +91,20 @@ itemRouter.delete("/:id", async (req, res, next) => {
     }
 });
 
-// TODO: barcode search
+
+itemRouter.post("/search", (req, res, next) => {
+    // TODO: authorization
+    const { barcode } = req.body;
+
+    if (!barcode) return res.status(400).json({ error: "barcode is missing" });
+
+    Item
+        .findOne({ barcode })
+        .populate("loantype")
+        .populate("record", { title: 1, author: 1 })
+        .populate("location")
+        .then(result => res.send(result))
+        .catch(next);
+});
 
 module.exports = itemRouter;
