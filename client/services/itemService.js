@@ -31,7 +31,7 @@ const updateItem = (itemId, loantype, location, state, note, token) => {
     ).then(response => response.data);
 };
 
-const removeItem = id => {
+const removeItem = (itemId, token) => {
     return axios.delete(
         `${baseUrl}/${itemId}`,
         { headers: { Authorization: `Bearer ${token}` } }

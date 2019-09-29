@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import Select from "../Select";
-import { updateItem } from "../../reducers/recordReducer";
+import { updateItem, removeItem } from "../../reducers/recordReducer";
 
-const RecordItem = ({ item, loantypes, locations, updateItem }) => {
+const RecordItem = ({ item, loantypes, locations, updateItem, removeItem }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const [location, setLocation] = useState(item.location.id);
@@ -18,6 +18,10 @@ const RecordItem = ({ item, loantypes, locations, updateItem }) => {
         updateItem(item._id, loantype, location, state, note);
     };
 
+    const deleteItem = () => {
+        removeItem(item._id);
+    };
+
     if (isOpen) return <tr>
         <td>{item.barcode}</td>
         <td><Select selected={item.loantype._id} onChange={e => setLoantype(e.target.value)} options={loantypes.map(loantype => [loantype.name, loantype._id])} /></td>
@@ -26,7 +30,7 @@ const RecordItem = ({ item, loantypes, locations, updateItem }) => {
         <td><textarea value={note} onChange={e => setNote(e.target.value)} /></td>
         <td>
             <button onClick={saveItem}>Save</button>
-            <button>Remove</button>
+            <button onClick={deleteItem}>Remove</button>
             <button onClick={() => setIsOpen(false)}>Cancel</button>
         </td>
     </tr>;
@@ -46,5 +50,5 @@ export default connect(
         loantypes: state.loantype,
         locations: state.location
     }),
-    { updateItem }
+    { updateItem, removeItem }
 )(RecordItem);

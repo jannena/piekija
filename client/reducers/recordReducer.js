@@ -45,6 +45,18 @@ const recordReducer = (state = init, action) => {
                     }
                 }
             };
+        case "PSUCCESS_RECORD_REMOVE_ITEM":
+            if (!state.record) return state;
+            return {
+                ...state,
+                record: {
+                    ...state.record,
+                    result: {
+                        ...state.record.result,
+                        items: state.record.result.items.filter(item => item._id !== action.itemId)
+                    }
+                }
+            }
         case "SUCCESS_RECORD_REMOVE":
             // TODO: How about search result cache????
             return {
@@ -180,4 +192,17 @@ export const updateItem = (itemId, loantype, location, state, note) => (dispatch
             });
         })
         .catch(onError(dispatch, "PFAILURE_RECORD_UPDATE_ITEM"));
+};
+
+export const removeItem = itemId => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_RECORD_REMOVE_ITEM" });
+    itemService
+        .removeItem(itemId, getState().token.token)
+        .then(result => {
+            dispatch({
+                type: "PSUCCESS_RECORD_REMOVE_ITEM",
+                itemId
+            });
+        })
+        .catch(onError(dispatch, "PSUCCESS_RECORD_REMOVE_ITEM"));
 };
