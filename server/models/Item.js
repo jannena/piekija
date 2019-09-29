@@ -14,15 +14,6 @@ const itemSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Loantype"
     },
-    ratings: [
-        {
-            comment: String,
-            author: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "User"
-            }
-        }
-    ],
     note: String,
     state: String,
     stateInfo: {
