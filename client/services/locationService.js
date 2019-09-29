@@ -15,7 +15,24 @@ const create = (name, token) => {
     ).then(response => response.data)
 };
 
+const update = (locationId, newName, token) => {
+    return axios.put(
+        `${baseUrl}/${locationId}`,
+        { name: newName },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
+const remove = (locationId, token) => {
+    return axios.delete(
+        `${baseUrl}/${locationId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
 export default {
     getAll,
-    create
+    create,
+    update,
+    remove
 };

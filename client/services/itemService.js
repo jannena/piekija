@@ -35,7 +35,7 @@ const removeItem = (itemId, token) => {
     return axios.delete(
         `${baseUrl}/${itemId}`,
         { headers: { Authorization: `Bearer ${token}` } }
-    );
+    ).then(response => response.data);
 };
 
 export default {

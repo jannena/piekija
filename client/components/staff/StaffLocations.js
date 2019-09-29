@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getLocations, createLocation } from "../../reducers/locationReducer";
+import StaffLocation from "./StaffLocation";
 
 const StaffLocations = ({ locations, getLocations, createLocation }) => {
     useEffect(() => {
@@ -25,10 +26,7 @@ const StaffLocations = ({ locations, getLocations, createLocation }) => {
             {!!locations.length ? <table>
                 <tbody>
                     {locations.map(location =>
-                        <tr>
-                            <td>{location.name}</td>
-                            <td><button>Edit</button></td>
-                        </tr>
+                        <StaffLocation key={location.id} location={location} />
                     )}
                 </tbody>
             </table> : <p>No locations</p>}
