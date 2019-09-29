@@ -13,10 +13,6 @@ const loanTypeSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
-    canBeRenewed: {
-        type: Boolean,
-        required: true
-    },
     renewTimes: {
         type: Number,
         required: true

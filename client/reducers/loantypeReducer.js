@@ -16,10 +16,10 @@ const loantypeReducer = (state = [], action) => {
 
 export default loantypeReducer;
 
-export const createLoantype = (name, canBePlacedAHold, canBeLoaned, canBeRenewed, renewTimes, loanTime) => (dispatch, getState) => {
+export const createLoantype = (name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime) => (dispatch, getState) => {
     dispatch({ type: "REQUEST_LOANTYPE_CREATE" });
     loantypeService
-        .create(name, canBePlacedAHold, canBeLoaned, canBeRenewed, renewTimes, loanTime, getState().token.token)
+        .create(name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime, getState().token.token)
         .then(loantype => {
             dispatch({
                 type: "SUCCESS_LOANTYPE_CREATE",

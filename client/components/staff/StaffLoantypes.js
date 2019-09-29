@@ -10,7 +10,7 @@ const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes }) => {
     const handleCreateLoantype = e => {
         e.preventDefault();
         const { name, canBePlacedAHold, canBeLoaned, canBeRenewed, renewTimes, loanTime } = e.target;
-        createLoantype(name.value, canBePlacedAHold.checked, canBeLoaned.checked, canBeRenewed.checked, Number(renewTimes.value), Number(loanTime.value));
+        createLoantype(name.value, canBePlacedAHold.checked, canBeLoaned.checked, Number(renewTimes.value), Number(loanTime.value));
     };
 
     return (
@@ -20,7 +20,6 @@ const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes }) => {
                     <input placeholder="Loantype name" name="name" />
                     <input type="checkbox" name="canBePlacedAHold" />
                     <input type="checkbox" name="canBeLoaned" />
-                    <input type="checkbox" name="canBeRenewed" />
                     <input type="number" name="renewTimes" />
                     <input type="number" name="loanTime" />
                     <button>Create loantype</button>
@@ -34,7 +33,6 @@ const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes }) => {
                             <td>
                                 <div>{String(loantype.canBePlacedAHold)}</div>
                                 <div>{String(loantype.canBeLoaned)}</div>
-                                <div>{String(loantype.canBeRenewed)}</div>
                                 <div>{loantype.renewTimes}</div>
                                 <div>{loantype.loanTime}</div>
                             </td>

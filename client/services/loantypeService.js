@@ -7,10 +7,10 @@ const getAll = token => {
     return axios.get(baseUrl, { headers: { Authorization: `Bearer ${token}` } }).then(response => response.data);
 };
 
-const create = (name, canBePlacedAHold, canBeLoaned, canBeRenewed, renewTimes, loanTime, token) => {
+const create = (name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime, token) => {
     return axios.post(
         baseUrl,
-        { name, canBePlacedAHold, canBeLoaned, canBeRenewed, renewTimes, loanTime },
+        { name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime },
         { headers: { Authorization: `Bearer ${token}` } }
     ).then(response => response.data)
 };
