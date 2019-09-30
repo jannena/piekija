@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { searchForUser, searchForItem, clearUser, clearItem, loanItem, returnItem } from "../../reducers/circulationReducer";
+import { searchForUser, searchForItem, clearUser, clearItem, loanItem, returnItem, history } from "../../reducers/circulationReducer";
 
-const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clearItem, loanItem, returnItem }) => {
+const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clearItem, loanItem, returnItem, history }) => {
     const searchUser = e => {
         e.preventDefault();
         searchForUser(e.target.user.value);
@@ -46,7 +46,7 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
                 <div>State: <strong>{item.state}</strong> {item.state === "loaned" && `for ${item.statePersonInCharge.name}`}</div>
                 {/* TODO: If loaned, show return button */}
                 {item.state === "loaned" && <button onClick={returnItem}>Return</button>}
-                <button>Show record</button>
+                <button onClick={() => history.push(`/staff/record/${item.record.id}`)}>Show record</button>
             </div>}
         </div>
 

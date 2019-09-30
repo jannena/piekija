@@ -80,7 +80,7 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history }) =>
             <p>Users coming soon...</p>
         </Tab>
         <Tab>
-            <Circulation />
+            <Circulation history={history} />
         </Tab>
     </Tabs>
 };
