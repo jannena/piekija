@@ -8,6 +8,7 @@ import axios from "axios";
 import StaffLocations from "./StaffLocations";
 import StaffLoantypes from "./StaffLoantypes";
 import Circulation from "./Circulation";
+import StaffUser from "./StaffUser";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
@@ -77,7 +78,7 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history }) =>
             <StaffLoantypes />
         </Tab>
         <Tab>
-            <p>Users coming soon...</p>
+            <StaffUser />
         </Tab>
         <Tab>
             <Circulation history={history} />

@@ -22,7 +22,7 @@ circulationRouter.post("/loan", async (req, res, next) => {
         // TODO: Check whether item is already loaned!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (item.state === "loaned" && item.statePersonInCharge !== null) return res.status(400).json({ error: "item has already been loaned" });
 
-        user.loans.push(item._id);
+        user.loans.push({ item: item._id });
         item.statePersonInCharge = user._id;
         item.stateDueDate = new Date();
         item.state = "loaned";
@@ -53,7 +53,7 @@ circulationRouter.post("/return", async (req, res, next) => {
         if (!user) return res.status(400).json({ error: "item has not been loaned" });
 
         // console.log(typeof user.loans[0]._id.toString(), typeof itemId, user.loans[0]._id.toString() === itemId);
-        user.loans = user.loans.filter(l => l._id.toString() !== itemId);
+        user.loans = user.loans.filter(l => l.item._id.toString() !== itemId);
         item.statePersonInCharge = null;
         item.stateDueDate = null;
         item.state = "not loaned";

@@ -31,7 +31,7 @@ const circulationReducer = (state = init, action) => {
                 },
                 user: !state.user ? state.user : {
                     ...state.user,
-                    loans: state.user.loans.concat(state.item.id)
+                    loans: state.user.loans.concat({ item: state.item })
                 }
             };
         case "PSUCCESS_CIRCULATION_RETURN":
@@ -45,7 +45,7 @@ const circulationReducer = (state = init, action) => {
                 },
                 user: !state.user ? state.user : {
                     ...state.user,
-                    loans: state.user.loans.filter(l => l._id !== state.item.id)
+                    loans: state.user.loans.filter(l => l.item.id !== state.item.id)
                 }
             };
         case "CLEAR_ITEM":
@@ -75,6 +75,10 @@ export const searchForUser = query => (dispatch, getState) => {
             });
         })
         .catch(onError(dispatch, "PFIALURE_CIRCULATION_USER"));
+};
+
+export const updateUser = () => (dispatch, getState) => {
+
 };
 
 export const searchForItem = barcode => (dispatch, getState) => {

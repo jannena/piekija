@@ -184,7 +184,15 @@ userRouter.post("/search", async (req, res, next) => {
     const query = barcode ? { barcode } : { name };
 
     try {
-        const result = await User.find(query, { shelves: 0 });
+        const result = await User
+            .find(query, { shelves: 0 })
+            .populate({
+                path: "loans.item",
+                populate: {
+                    path: "record location loantype",
+                    select: "title name"
+                }
+            });
         res.json(result);
     }
     catch (err) {
