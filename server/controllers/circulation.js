@@ -20,13 +20,14 @@ circulationRouter.post("/loan", async (req, res, next) => {
 
 
         // TODO: Check whether item is already loaned!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // return res.status(400).json({ error: "item has already been loaned" });
+        if (item.state === "loaned" && item.statePersonInCharge !== null) return res.status(400).json({ error: "item has already been loaned" });
 
         user.loans.push(item._id);
-        item.stateInfo = {
-            personInCharge: user._id,
-            dueDate: new Date()
-        };
+        item.statePersonInCharge = user._id;
+        item.stateDueDate = new Date();
+        item.state = "loaned";
+
+        // TODO: Populate 
 
         await user.save();
         await item.save();
@@ -36,8 +37,6 @@ circulationRouter.post("/loan", async (req, res, next) => {
     catch (err) {
         next(err);
     }
-
-
 });
 
 circulationRouter.post("/return", async (req, res, next) => {
@@ -50,12 +49,14 @@ circulationRouter.post("/return", async (req, res, next) => {
         const item = await Item.findById(itemId);
         if (!item) return res.status(400).json({ error: "item does not exist" });
 
-        const user = await User.findById(item.stateInfo.personInCharge);
+        const user = await User.findById(item.statePersonInCharge);
         if (!user) return res.status(400).json({ error: "item has not been loaned" });
 
         // console.log(typeof user.loans[0]._id.toString(), typeof itemId, user.loans[0]._id.toString() === itemId);
         user.loans = user.loans.filter(l => l._id.toString() !== itemId);
-        item.stateInfo = { personInCharge: null, dueDate: null };
+        item.statePersonInCharge = null;
+        item.stateDueDate = null;
+        item.state = "not loaned";
 
         await user.save();
         await item.save();

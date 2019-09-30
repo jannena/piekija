@@ -28,7 +28,8 @@ itemRouter.post("/", async (req, res, next) => {
         loantype,
         note: note ? note : "",
         state,
-        stateInfo: {}
+        statePersonInCharge: null,
+        stateDueDate: null
     });
 
     try {
@@ -100,9 +101,16 @@ itemRouter.post("/search", (req, res, next) => {
 
     Item
         .findOne({ barcode })
+        .populate("statePersonInCharge", { name: true, username: true, barcode: true })
         .populate("loantype")
         .populate("record", { title: 1, author: 1 })
         .populate("location")
+        /* .populate({
+            path: "stateInfo.personInCharge",
+            populate: {
+                path: "personInCharge"
+            }
+        }) */
         .then(result => res.send(result))
         .catch(next);
 });

@@ -24,16 +24,15 @@ const itemSchema = new mongoose.Schema({
     note: String,
     state: {
         type: String,
-        required: true
+        required: true,
+        enum: ["loaned", "not loaned", "broken", "placed a hold", "other"]
     },
-    stateInfo: {
-        type: {
-            personInCharge: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "User"
-            },
-            dueDate: Date
-        }
+    statePersonInCharge: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
+    stateDueDate: {
+        type: Date
     }
 });
 

@@ -25,9 +25,11 @@ const circulationReducer = (state = init, action) => {
                 ...state,
                 item: {
                     ...state.item,
-                    stateInfo: action.result.item.stateInfo
+                    state: "loaned",
+                    statePersonInCharge: action.result.item.statePersonInCharge,
+                    stateDueDate: action.result.item.stateDueDate
                 },
-                user: {
+                user: !user ? user : {
                     ...state.user,
                     loans: state.user.loans.concat(state.item.id)
                 }
@@ -37,9 +39,11 @@ const circulationReducer = (state = init, action) => {
                 ...state,
                 item: {
                     ...state.item,
-                    stateInfo: { personInCharge: null, dueDate: null }
+                    state: "not loaned",
+                    statePersonInCharge: null,
+                    stateDueDate: null
                 },
-                user: {
+                user: !user ? user : {
                     ...state.user,
                     loans: state.user.loans.filter(l => l._id !== state.item.id)
                 }
