@@ -5,7 +5,7 @@ import { searchForUser, searchForItem, clearUser, clearItem, loanItem, returnIte
 const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clearItem, loanItem, returnItem, history }) => {
     const searchUser = e => {
         e.preventDefault();
-        searchForUser(e.target.user.value);
+        searchForUser({ barcode: e.target.user.value });
     };
 
     const searchItem = e => {

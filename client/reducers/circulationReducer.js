@@ -64,10 +64,10 @@ const circulationReducer = (state = init, action) => {
 
 export default circulationReducer;
 
-export const searchForUser = barcode => (dispatch, getState) => {
+export const searchForUser = query => (dispatch, getState) => {
     dispatch({ type: "PREQUEST_CIRCULATION_USER" });
     userService
-        .search(barcode, getState().token.token)
+        .search(query, getState().token.token)
         .then(user => {
             dispatch({
                 type: "PSUCCESS_CIRCULATION_USER",
