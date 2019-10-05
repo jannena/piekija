@@ -37,9 +37,18 @@ const create = token => {
     ).then(response => response.data);
 };
 
+const update = (userId, name, username, barcode, password, address = null, email = null, phone = null, token) => {
+    return axios.put(
+        `${baseUrl}/${userId}`,
+        { name, username, barcode, password },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
 export default {
     me,
     updateMe,
     search,
-    create
+    create,
+    update
 };

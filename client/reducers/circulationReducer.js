@@ -83,7 +83,10 @@ const circulationReducer = (state = init, action) => {
                 user: action.user
             };
         case "PSUCCESS_CIRCULATION_UPDATE_USER":
-            break;
+            return {
+                ...state,
+                user: action.user
+            };
     }
     return state;
 };
@@ -117,8 +120,17 @@ export const createUser = () => (dispatch, getState) => {
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_CREATE_USER"));
 }
 
-export const updateUser = () => (dispatch, getState) => {
-
+export const updateUser = (name, username, barcode, password/* , address, email, phone */) => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_CIRCULATION_UPDATE_USER" });
+    userService
+        .update(getState().circulation.user.id, name, username, barcode, password, null, null, null, getState().token.token)
+        .then(result => {
+            dispatch({
+                type: "PSUCCESS_CIRCULATION_UPDATE_USER",
+                user: result
+            });
+        })
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_UPDATE_USER"));
 };
 
 export const searchForItem = barcode => (dispatch, getState) => {
