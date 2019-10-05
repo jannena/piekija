@@ -24,13 +24,13 @@ const App = ({ token, user, getUser, setToken, shelf, addRecord, removeRecord, u
     useEffect(() => {
         if (token && user) {
             startWS();
-            
+
             const runIfNotMe = (data, func) => {
-                try { console.log("runIfNotMe", data, user, data.inCharge.id, "===", user.id, "-->", data.inCharge.id === user.id); } catch (e) {}
-                if (!data.inCharge) return () => {};
-                if (!data.inCharge.id) return () => {};
+                try { console.log("runIfNotMe", data, user, data.inCharge.id, "===", user.id, "-->", data.inCharge.id === user.id); } catch (e) { }
+                if (!data.inCharge) return () => { };
+                if (!data.inCharge.id) return () => { };
                 if (data.inCharge.id !== user.id) return func(data);
-                else return () => {};
+                else return () => { };
             };
             setSocketIOEventListeners(
                 data => runIfNotMe(data, addRecord),
@@ -88,8 +88,8 @@ const App = ({ token, user, getUser, setToken, shelf, addRecord, removeRecord, u
 
 
                 {/* Staff screens */}
-                <Route exact path="/staff" render={({ history }) => <Staff history={history} />} />
-                <Route exact path="/staff/record/:id" render={({ match }) => <StaffEditRecord id={match.params.id} />} />
+                <Route path="/staff" render={({ history }) => <Staff history={history} />} />
+                <Route path="/staff/record/:id" render={({ match }) => <StaffEditRecord id={match.params.id} />} />
             </Container>
         </Router>
     );

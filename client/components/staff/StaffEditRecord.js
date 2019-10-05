@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Tabs, Tab } from "../Tabs";
+import { Tabs, Tab, AddressedTabs } from "../Tabs";
 import { connect } from "react-redux";
 import { getRecord, removeRecord, createRecord } from "../../reducers/recordReducer";
 import MARCEditor from "./MARCEditor";
@@ -32,7 +32,9 @@ const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRec
 
     return <>
         {(record && record.result && record.result.id && record.result.id === "preview") && <button onClick={onSaveToDatabase}>Save to database</button>}
-        <Tabs titles={["Preview |", "Items |", "MARC |", "Simple editor |", "Remove "]}>
+        <AddressedTabs titles={["Preview |", "Items |", "MARC |", "Simple editor |", "Remove "]}
+            addresses={["", "items", "marc", "simple", "remove"]}
+            root={`staff/record/${id}`}>
             <Tab>
                 <Record id={id} isPreview={true} />
             </Tab>
@@ -50,7 +52,7 @@ const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRec
                 {hasItems && <p>All items attached to this record must be removed before removing the record.</p>}
                 <button onClick={onRemoveRecord} disabled={isPreview || hasItems}>Remove this record</button>
             </Tab>
-        </Tabs>
+        </AddressedTabs>
     </>
 };
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { Tab, Tabs } from "../Tabs";
+import { Tab, Tabs, AddressedTabs } from "../Tabs";
 import { createRecord, createTemporaryRecord } from "../../reducers/recordReducer";
 import Scanner from "./Scanner";
 import axios from "axios";
@@ -50,9 +50,11 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history }) =>
         createTemporaryRecord(MARC21.stringify(parsedMARC));
         history.push("/staff/record/preview");
     };
-    
 
-    return <Tabs titles={["Welocme ", "Records ", "Locations ", "Loantypes ", "Users ", "Circulation "]}>
+    return <AddressedTabs
+        titles={["Welocme ", "Records ", "Locations ", "Loantypes ", "Users ", "Circulation "]}
+        addresses={["", "records", "locations", "loantypes", "users", "circulation"]}
+        root="staff">
         <Tab>
             <p>Welocme!</p>
         </Tab>
@@ -83,7 +85,7 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history }) =>
         <Tab>
             <Circulation history={history} />
         </Tab>
-    </Tabs>
+    </AddressedTabs>
 };
 
 export default connect(
