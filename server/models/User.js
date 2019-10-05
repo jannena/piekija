@@ -28,10 +28,8 @@ const userSchema = new mongoose.Schema({
     },
     loans: [
         {
-            item: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Item"
-            }
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Item"
         }
     ],
     shelves: [

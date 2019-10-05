@@ -32,7 +32,7 @@ const circulationReducer = (state = init, action) => {
                 item: newItem,
                 user: !state.user ? state.user : {
                     ...state.user,
-                    loans: state.user.loans.concat({ item: newItem })
+                    loans: state.user.loans.concat(newItem)
                 }
             };
         case "PSUCCESS_CIRCULATION_RETURN":
@@ -47,7 +47,7 @@ const circulationReducer = (state = init, action) => {
                 } : state.item,
                 user: !state.user ? state.user : {
                     ...state.user,
-                    loans: state.user.loans.filter(l => l.item.id !== action.returned)
+                    loans: state.user.loans.filter(l => l.id !== action.returned)
                 }
             };
         case "CLEAR_ITEM":

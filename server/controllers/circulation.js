@@ -19,13 +19,13 @@ circulationRouter.post("/loan", async (req, res, next) => {
         if (!user) return res.status(400).json({ error: "user does not exist" });
         if (!item) return res.status(400).json({ error: "record does not exist" });
         console.log(user.loans[0], typeof user.loans[0], item._id, typeof item._id);
-        if (user.loans && user.loans.some(l => l._id.toString() === item._id.toString())) return res.status(400).json({ error: "user has already loaned this item" });
+        if (user.loans && user.loans.some(l => l.toString() === item._id.toString())) return res.status(400).json({ error: "user has already loaned this item" });
 
 
         // TODO: Check whether item is already loaned!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (item.state === "loaned" && item.statePersonInCharge !== null) return res.status(400).json({ error: "item has already been loaned" });
 
-        user.loans.push({ item: item._id });
+        user.loans.push(item._id);
         item.statePersonInCharge = user._id;
         item.stateTimesRenewed = 0;
         item.state = "loaned";
@@ -61,7 +61,7 @@ circulationRouter.post("/return", async (req, res, next) => {
         if (!user) return res.status(400).json({ error: "item has not been loaned" });
 
         // console.log(typeof user.loans[0]._id.toString(), typeof itemId, user.loans[0]._id.toString() === itemId);
-        user.loans = user.loans.filter(l => l.item._id.toString() !== itemId);
+        user.loans = user.loans.filter(l => l.toString() !== itemId);
         item.statePersonInCharge = null;
         item.stateDueDate = null;
         item.stateTimesRenewed = null;
