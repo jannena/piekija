@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { searchForUser } from "../../reducers/circulationReducer";
+import Loan from "./Loan";
 
 const StaffUser = ({ users, user, searchForUser }) => {
     const handleUserSearch = e => {
@@ -26,12 +27,7 @@ const StaffUser = ({ users, user, searchForUser }) => {
                 {user && <>
                     <div>Name: {user.name}</div>
                     <div>Barcode: {user.barcode}</div>
-                    <div>Loans: {user.loans.map(loan => <div>
-                        <hr />
-                        <div>{loan.item.record.title} ({loan.item.barcode})</div>
-                        <div>Due date: {loan.item.stateDueDate}</div>
-                        <div>Location: {loan.item.location.name}</div>
-                    </div>)}</div>
+                    <div>Loans: {user.loans.map(loan => <Loan key={loan.item.id} loan={loan} staff={true} />)}</div>
                 </>}
             </div>
         </>

@@ -11,7 +11,10 @@ circulationRouter.post("/loan", async (req, res, next) => {
 
     try {
         const user = await User.findById(userId);
-        const item = await Item.findById(itemId);
+        const item = await Item.findById(itemId).populate("loantype");
+
+        // TODO: Check error code
+        if (item.loantype.canBeLoaned === false) return res.status(400).json({ error: "item cannot be loaned because of loantype" });
 
         if (!user) return res.status(400).json({ error: "user does not exist" });
         if (!item) return res.status(400).json({ error: "record does not exist" });
@@ -24,8 +27,12 @@ circulationRouter.post("/loan", async (req, res, next) => {
 
         user.loans.push({ item: item._id });
         item.statePersonInCharge = user._id;
-        item.stateDueDate = new Date();
+        item.stateTimesRenewed = 0;
         item.state = "loaned";
+
+        const dueDate = new Date();
+        dueDate.setUTCDate(dueDate.getUTCDate() + (item.loantype.loanTime || 1));
+        item.stateDueDate = dueDate;
 
         // TODO: Populate 
 
@@ -49,6 +56,7 @@ circulationRouter.post("/return", async (req, res, next) => {
         const item = await Item.findById(itemId);
         if (!item) return res.status(400).json({ error: "item does not exist" });
 
+        // if (!item.statePersonInCharge) return res.status(400).json({ error: "item has not been loaned" });
         const user = await User.findById(item.statePersonInCharge);
         if (!user) return res.status(400).json({ error: "item has not been loaned" });
 
@@ -56,6 +64,7 @@ circulationRouter.post("/return", async (req, res, next) => {
         user.loans = user.loans.filter(l => l.item._id.toString() !== itemId);
         item.statePersonInCharge = null;
         item.stateDueDate = null;
+        item.stateTimesRenewed = null;
         item.state = "not loaned";
 
         await user.save();
@@ -68,7 +77,29 @@ circulationRouter.post("/return", async (req, res, next) => {
     }
 });
 
-// TODO: renew: circulationRouter.post("/renew", (req, res, next) => {});
+circulationRouter.post("/renew", async (req, res, next) => {
+    // TODO: Authorization
+    const { item: itemId } = req.body;
+
+    try {
+        const item = await Item.findById(itemId).populate("loantype");
+        if (item.statePersonInCharge === req.authenticated._id.toString() || req.authenticated.staff) console.log("You can renew this item");
+
+        const { loanTime, renewTimes } = item.loantype;
+        // TODO: Fix error code
+        if (item.stateTimesRenewed >= renewTimes) return res.status(400).json({ error: "renewTimes exeeded" });
+
+        const dueDate = new Date();
+        dueDate.setUTCDate(dueDate.getUTCDate() + (loanTime || 1));
+        item.stateDueDate = dueDate;
+        item.stateTimesRenewed = item.stateTimesRenewed || 1;
+
+        res.json({ id: itemId, dueDate });
+    }
+    catch (err) {
+        next(err);
+    }
+});
 
 // TODO: place a hold: circulationRouter.post("/?", (req, res, next) => {});
 

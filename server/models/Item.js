@@ -33,6 +33,9 @@ const itemSchema = new mongoose.Schema({
     },
     stateDueDate: {
         type: Date
+    },
+    stateTimesRenewed : {
+        type: Number
     }
 });
 

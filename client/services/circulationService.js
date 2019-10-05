@@ -19,7 +19,16 @@ const returnItem = (itemId, token) => {
     ).then(response => response.data);
 };
 
+const renew = (itemId, token) => {
+    return axios.post(
+        `${baseUrl}/renew`,
+        { item: itemId },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
 export default {
     loan,
-    returnItem
+    returnItem,
+    renew
 };

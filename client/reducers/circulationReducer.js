@@ -21,31 +21,33 @@ const circulationReducer = (state = init, action) => {
                 item: action.item
             };
         case "PSUCCESS_CIRCULATION_LOAN":
+            const newItem = {
+                ...state.item,
+                state: "loaned",
+                statePersonInCharge: action.result.item.statePersonInCharge,
+                stateDueDate: action.result.item.stateDueDate
+            };
             return {
                 ...state,
-                item: {
-                    ...state.item,
-                    state: "loaned",
-                    statePersonInCharge: action.result.item.statePersonInCharge,
-                    stateDueDate: action.result.item.stateDueDate
-                },
+                item: newItem,
                 user: !state.user ? state.user : {
                     ...state.user,
-                    loans: state.user.loans.concat({ item: state.item })
+                    loans: state.user.loans.concat({ item: newItem })
                 }
             };
         case "PSUCCESS_CIRCULATION_RETURN":
             return {
                 ...state,
-                item: {
+                item: state.item && state.item.id === action.returned ? {
                     ...state.item,
                     state: "not loaned",
                     statePersonInCharge: null,
-                    stateDueDate: null
-                },
+                    stateDueDate: null,
+                    stateTimesRenewed: null
+                } : state.item,
                 user: !state.user ? state.user : {
                     ...state.user,
-                    loans: state.user.loans.filter(l => l.item.id !== state.item.id)
+                    loans: state.user.loans.filter(l => l.item.id !== action.returned)
                 }
             };
         case "CLEAR_ITEM":
@@ -110,14 +112,33 @@ export const loanItem = () => (dispatch, getState) => {
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_LOAN"));
 };
 
-export const returnItem = () => (dispatch, getState) => {
+export const returnItemWithId = id => (dispatch, getState) => {
     dispatch({ type: "PREQUEST_CIRCULATION_RETURN" });
     circulationService
-        .returnItem(getState().circulation.item.id, getState().token.token)
+        .returnItem(id, getState().token.token)
         .then(() => {
             dispatch({
-                type: "PSUCCESS_CIRCULATION_RETURN"
+                type: "PSUCCESS_CIRCULATION_RETURN",
+                returned: id
             })
         })
-        .catch(onError(dispatch, "PFAILURE_CIRCULATION_RETURN"))
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_RETURN"));
 };
+
+export const returnItem = () => (dispatch, getState) => dispatch(returnItemWithId(getState().circulation.item.id));
+
+export const renewItemWithId = id => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_CIRCULATION_RENEW" });
+    circulationService
+        .renew(id, getState().token.token)
+        .then(result => {
+            dispatch({
+                type: "PSUCCESS_CIRCULATION_RENEW",
+                result
+            });
+            console.log("renewed item", result);
+        })
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_RENEW"));
+};
+
+export const renewItem = () => (dispatch, getState) => dispatch(renewItemWithId(getState().circulation.item.id));

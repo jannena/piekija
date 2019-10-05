@@ -29,7 +29,8 @@ itemRouter.post("/", async (req, res, next) => {
         note: note ? note : "",
         state,
         statePersonInCharge: null,
-        stateDueDate: null
+        stateDueDate: null,
+        stateTimesRenewed: null
     });
 
     try {
