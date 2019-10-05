@@ -39,5 +39,6 @@
 | 24.9. | 1 | hyllyjen reaaliaikaisen muokkauksen jatkaminen, yksinkertaisen muokkaimen aloittaminen |
 | 29.9. | 4 | locationin, loantypejen ja itemien backendiä ja frontendiä; lainaustoiminnallisuuksien aloittaminen |
 | 30.9. | 1 | lainaustoiminnallisuuksien jatkaminen, käyttäjähenkilökuntanäytön aloittaminen |
+| 5.10. | 2,5 | lainaustoiminallisuuksien jatkaminen, käyttäjähenkilökuntanäytön jatkaminen, osoitteelliset välilehdet |
 | | | |
-| yht. | 84,5 | |
+| yht. | 87 | |
