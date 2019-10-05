@@ -77,6 +77,13 @@ const circulationReducer = (state = init, action) => {
                 ...state,
                 user: null
             };
+        case "PSUCCESS_CIRCULATION_CREATE_USER":
+            return {
+                ...state,
+                user: action.user
+            };
+        case "PSUCCESS_CIRCULATION_UPDATE_USER":
+            break;
     }
     return state;
 };
@@ -95,6 +102,20 @@ export const searchForUser = query => (dispatch, getState) => {
         })
         .catch(onError(dispatch, "PFIALURE_CIRCULATION_USER"));
 };
+
+export const createUser = () => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_CIRCULATION_CREATE_USER" });
+    userService
+        .create(getState().token.token)
+        .then(result => {
+            console.log(result);
+            dispatch({
+                type: "PSUCCESS_CIRCULATION_CREATE_USER",
+                user: result
+            });
+        })
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_CREATE_USER"));
+}
 
 export const updateUser = () => (dispatch, getState) => {
 

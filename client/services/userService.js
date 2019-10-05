@@ -23,8 +23,23 @@ const search = (query, token) => {
     ).then(response => response.data);
 };
 
+const create = token => {
+    return axios.post(
+        baseUrl,
+        {
+            name: "New patreon",
+            username: new Date().toUTCString(),
+            password: "1234567890",
+            staff: false,
+            barcode: new Date().toUTCString()
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
 export default {
     me,
     updateMe,
-    search
+    search,
+    create
 };
