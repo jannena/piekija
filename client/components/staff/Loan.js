@@ -5,16 +5,18 @@ import { returnItemWithId, renewItemWithId } from "../../reducers/circulationRed
 
 const Loan = ({ loan, staff = false, returnItemWithId, renewItemWithId }) => {
     const date = new Date(loan.stateDueDate);
-    const dateString = `${date.getUTCDay()}.${date.getUTCMonth()}.${date.getUTCFullYear()}`;
+    const dateString = `${date.getUTCDate()}.${date.getUTCMonth() + 1}.${date.getUTCFullYear()}`;
+
+    const renewTimes = loan.loantype.renewTimes - loan.stateTimesRenewed;
 
     return (<div>
         <hr />
         <div><Link to={`/staff/record/${loan.record.id}`}>{loan.record.title}</Link> ({loan.barcode})</div>
         <div>Due date: {dateString}</div>
-        <div>Location: {loan.location.name}</div>
-        <div>Renew times left: {/* TODO:  */}</div>
+        {staff && <div>Location: {loan.location.name}</div>}
+        <div>Renew times left: {renewTimes}</div>
         {staff && <button onClick={() => returnItemWithId(loan.id)}>Return</button>}
-        <button onClick={() => renewItemWithId(loan.id)}>Renew</button>
+        {renewTimes > 0 && <button onClick={() => renewItemWithId(loan.id)}>Renew</button>}
     </div>);
 };
 

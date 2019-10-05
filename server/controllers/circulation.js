@@ -94,6 +94,8 @@ circulationRouter.post("/renew", async (req, res, next) => {
         item.stateDueDate = dueDate;
         item.stateTimesRenewed = item.stateTimesRenewed || 1;
 
+        await item.save();
+
         res.json({ id: itemId, dueDate });
     }
     catch (err) {

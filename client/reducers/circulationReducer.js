@@ -50,6 +50,23 @@ const circulationReducer = (state = init, action) => {
                     loans: state.user.loans.filter(l => l.id !== action.returned)
                 }
             };
+        case "PSUCCESS_CIRCULATION_RENEW":
+            return {
+                ...state,
+                item: state.item && state.item.id === action.item ? {
+                    ...state.item,
+                    stateDueDate: action.dueDate,
+                    stateTimesRenewed: state.item.stateTimesRenewed + 1
+                } : state.item,
+                user: !state.user ? state.user : {
+                    ...state.user,
+                    loans: state.user.loans.map(l => l.id !== action.item ? l : {
+                        ...l,
+                        dueDate: action.dueDate,
+                        stateTimesRenewed: l.stateTimesRenewed + 1
+                    })
+                }
+            };
         case "CLEAR_ITEM":
             return {
                 ...state,
@@ -134,7 +151,8 @@ export const renewItemWithId = id => (dispatch, getState) => {
         .then(result => {
             dispatch({
                 type: "PSUCCESS_CIRCULATION_RENEW",
-                result
+                item: result.id,
+                dueDate: result.dueDate
             });
             console.log("renewed item", result);
         })

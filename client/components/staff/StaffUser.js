@@ -27,7 +27,8 @@ const StaffUser = ({ users, user, searchForUser }) => {
                 {user && <>
                     <div>Name: {user.name}</div>
                     <div>Barcode: {user.barcode}</div>
-                    <div>Loans: {user.loans.map(loan => <Loan key={loan.id} loan={loan} staff={true} />)}</div>
+                    <div>Loans: {user.loans.length}</div>
+                    <div>{user.loans.map(loan => <Loan key={loan.id} loan={loan} staff={true} />)}</div>
                 </>}
             </div>
         </>
