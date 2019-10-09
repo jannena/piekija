@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../../app");
 
-const { clearDatabase, addUserToDb, addLocationToDb, getTokenForUser, locationsInDb } = require("./testutils");
+const { clearDatabase, addUserToDb, addLocationToDb, getTokenForUser, locationsInDb, addItemToDb, addLoantypeToDb, addRecordToDb } = require("./testutils");
 
 const api = supertest(app);
 
@@ -99,8 +99,23 @@ describe("when there is users and locations in db (location tests)", () => {
             expect(await locationsInDb()).toBe(locationsAtStart - 1);
         });
 
-        test("location cannot be removed if any item is attached to it", () => {
-            // TODO: Do the test.
+        describe("and there is items that uses the location", () => {
+            beforeEach(async () => {
+                const record = await addRecordToDb();
+                const loantype = await addLoantypeToDb(true, true, 4, 28);
+                const item = await addItemToDb(record, locationIds[0], loantype._id);
+                console.log("ITEM!!!!!!!!!!", record, loantype._id, locationIds[0]);
+            });
+            test("location cannot be removed", async () => {
+                console.log("This is the locationId", locationIds[0]);
+                const result = await api
+                    .delete(`/api/location/${locationIds[0]}`)
+                    .set({ Authorization: staffToken })
+                    .expect(409)
+                    .expect("Content-type", /application\/json/);
+
+                expect(result.body.error).toBe("there are items using this location");
+            });
         });
     });
 

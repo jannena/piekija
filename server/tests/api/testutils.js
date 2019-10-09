@@ -3,6 +3,8 @@ const User = require("../../models/User");
 const Record = require("../../models/Record");
 const Location = require("../../models/Location");
 const Shelf = require("../../models/Shelf");
+const Item = require("../../models/Item");
+const Loantype = require("../../models/Loantype");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const otp = require("speakeasy");
@@ -110,6 +112,38 @@ const addShelfToDb = async (name, publicity, authorId, sharedWith, records = [])
     }
 };
 
+const addLoantypeToDb = async (canBeLoaned, canBePlacedAHold, renewTimes, loanTime) => {
+    const newLoantype = new Loantype({
+        name: "This is a loantype",
+        canBeLoaned,
+        canBePlacedAHold,
+        renewTimes,
+        loanTime
+    });
+    try {
+        return await newLoantype.save();
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+const addItemToDb = async (record, location, loantype) => {
+    const newItem = new Item({
+        record,
+        location,
+        loantype,
+        barcode: "moikkuli-" + Math.random(),
+        state: "not loaned"
+    });
+    try {
+        return await newItem.save();
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
 const addRecordToShelf = async (shelf, record, note) => {
     return (await Shelf.findByIdAndUpdate(
         shelf,
@@ -175,6 +209,8 @@ module.exports = {
     addRecordToDb,
     addLocationToDb,
     addShelfToDb,
+    addItemToDb,
+    addLoantypeToDb,
     clearDatabase,
 
     addRecordToShelf,
