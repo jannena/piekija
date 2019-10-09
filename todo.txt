@@ -8,6 +8,7 @@
     - MARC editor
     - circulation
     - search
+    - "Tables"
 
 - EAN scanner
 - Simple editor

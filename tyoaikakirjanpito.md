@@ -40,5 +40,6 @@
 | 29.9. | 4 | locationin, loantypejen ja itemien backendiä ja frontendiä; lainaustoiminnallisuuksien aloittaminen |
 | 30.9. | 1 | lainaustoiminnallisuuksien jatkaminen, käyttäjähenkilökuntanäytön aloittaminen |
 | 5.10. | 2,5 | lainaustoiminallisuuksien jatkaminen, käyttäjähenkilökuntanäytön jatkaminen, osoitteelliset välilehdet |
+| 9.10. | 1 | backendin testien päivittäminen |
 | | | |
-| yht. | 87 | |
+| yht. | 88 | |
