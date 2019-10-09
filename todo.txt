@@ -1,12 +1,18 @@
-- less than and greater than verbs to advanced search
-- search result order
-- search result filtering
+- SEARCH
+    - search result order
+    - search result filtering
+    - create better spelling
 
-- Remove loader from shelf editor (full load / partial load for loading reducer)
+- APPEARANCE
+    - record
+    - MARC editor
+    - circulation
+    - search
 
-- Spelling index for records
+- EAN scanner
+- Simple editor
+- frontpage news
+- documentation
 
-- items (backend)
-    - search items (by state)
-- loantype (backend)
+- E2E tests?
 - finish backend tests (shelves, items, ...)
