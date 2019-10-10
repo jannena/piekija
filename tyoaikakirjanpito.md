@@ -41,5 +41,6 @@
 | 30.9. | 1 | lainaustoiminnallisuuksien jatkaminen, käyttäjähenkilökuntanäytön aloittaminen |
 | 5.10. | 2,5 | lainaustoiminallisuuksien jatkaminen, käyttäjähenkilökuntanäytön jatkaminen, osoitteelliset välilehdet |
 | 9.10. | 1 | backendin testien päivittäminen |
+| 10.10. | 2 | lainaustoiminnallisuuksia, etusivu-uutisia, taulukottomat taulukot |
 | | | |
-| yht. | 88 | |
+| yht. | 90 | |
