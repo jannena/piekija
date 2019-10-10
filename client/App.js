@@ -14,13 +14,14 @@ import AdvancedSearch from "./components/AdvancedSearch";
 import SearchField from "./components/SearchField";
 import Staff from "./components/staff/Staff";
 import StaffEditRecord from "./components/staff/StaffEditRecord";
+import { getLastNotes } from "./reducers/noteReducer";
 
 import { addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf } from "./reducers/shelfReducer";
 import { setSocketIOEventListeners, startWS } from "./socket";
 
 // TODO: Learn how React router works or make better (clearer) router
 
-const App = ({ token, user, getUser, setToken, shelf, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf }) => {
+const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, getLastNotes, news }) => {
     useEffect(() => {
         if (token && user) {
             startWS();
@@ -54,14 +55,20 @@ const App = ({ token, user, getUser, setToken, shelf, addRecord, removeRecord, u
         if (savedToken) setToken(savedToken);
     }, []);
 
+    useEffect(() => {
+        getLastNotes();
+    }, []);
+
     return (
         <Router>
             <Container>
                 {/* Screens open for everyone */}
                 <Route exact path="/" render={() => <>
-                    Etusivu
-                    <Link to="/search">Hae</Link>
-                    <Link to="/login">Kirjaudu sisään</Link>
+                    <h2>News</h2>
+                    {news.map(n => <div>
+                        <h3>{n.title}</h3>
+                        <div>{n.content}</div>
+                    </div>)}
                 </>} />
                 <Route exact path="/search" render={({ location, history }) =>
                     <>
@@ -98,7 +105,8 @@ const App = ({ token, user, getUser, setToken, shelf, addRecord, removeRecord, u
 export default connect(
     state => ({
         token: state.token.token,
-        user: state.user
+        user: state.user,
+        news: state.notes
     }),
-    { setToken, getUser, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf }
+    { setToken, getUser, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, getLastNotes }
 )(App);
