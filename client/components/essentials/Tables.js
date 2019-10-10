@@ -10,7 +10,7 @@ export const TableRow = ({ children, widths, data, color, form }) => {
     console.log(children);
     const [isOpen, setIsOpen] = useState(false);
     return <>
-        <div style={{ backgroundColor: color, display: "flex", padding: "10px 0px" }}>
+        <div onClick={() => setIsOpen(!isOpen)} style={{ backgroundColor: color, display: "flex", padding: "10px 0px" }}>
             {React.Children.map(children, (child, i) => {
                 if (i === 0) return <TableCell>
                     <a onClick={() => setIsOpen(!isOpen)} href="javascript:void(0);">
