@@ -18,11 +18,31 @@ const create = (title, content, token) => {
             { title, content },
             { headers: { Authorization: `Bearer ${token}` } }
         )
-    .then(response => response.data);
+        .then(response => response.data);
+};
+
+const update = (id, title, content, token) => {
+    return axios
+        .put(
+            `${baseUrl}/${id}`,
+            { title, content },
+            { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then(response => response.data);
+};
+
+const remove = id => {
+    return axios
+        .delete(
+            `${baseUrl}/${id}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then(response => response.data);
 };
 
 export default {
     getLast,
     getAll,
-    create
+    create,
+    update
 };

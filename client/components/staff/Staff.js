@@ -9,6 +9,7 @@ import StaffLocations from "./StaffLocations";
 import StaffLoantypes from "./StaffLoantypes";
 import Circulation from "./Circulation";
 import StaffUser from "./StaffUser";
+import StaffNotes from "./StaffNotes";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
@@ -52,8 +53,8 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history }) =>
     };
 
     return <AddressedTabs
-        titles={["Welocme ", "Records ", "Locations ", "Loantypes ", "Users ", "Circulation "]}
-        addresses={["", "records", "locations", "loantypes", "users", "circulation"]}
+        titles={["Welocme ", "Records ", "Locations ", "Loantypes ", "Users ", "Circulation ", "Notes "]}
+        addresses={["", "records", "locations", "loantypes", "users", "circulation", "notes"]}
         root="staff">
         <Tab>
             <p>Welocme!</p>
@@ -84,6 +85,9 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history }) =>
         </Tab>
         <Tab>
             <Circulation history={history} />
+        </Tab>
+        <Tab>
+            <StaffNotes />
         </Tab>
     </AddressedTabs>
 };
