@@ -15,6 +15,14 @@ const userReducer = (state = null, action) => {
             const stateToUpdate = { ...state };
             stateToUpdate.shelves = [...stateToUpdate.shelves, { note: "", id: { id: action.shelf.if, name: action.shelf.name }, author: true }];
             return stateToUpdate;
+        case "PSUCCESS_CIRCULATION_RENEW":
+            return {
+                ...state,
+                loans: state.loans.map(l => action.item !== l.id ? l : ({
+                    ...l,
+                    stateDueDate: action.dueDate,
+                    stateTimesRenewed: l.stateTimesRenewed + 1 }))
+            };
     }
     return state;
 };

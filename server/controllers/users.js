@@ -9,8 +9,13 @@ userRouter.get("/me", async (req, res, next) => {
 
     try {
         await User.populate(req.authenticated, {
-            path: "shelves.id",
-            select: "name"
+            path: "shelves.id loans",
+            select: "name loantype record stateDueDate stateTimesRenewed"
+        });
+
+        await User.populate(req.authenticated, {
+            path: "loans.loantype loans.record",
+            select: "title renewTimes"
         });
 
         res.send(req.authenticated);

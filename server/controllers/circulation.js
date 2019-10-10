@@ -92,7 +92,8 @@ circulationRouter.post("/renew", async (req, res, next) => {
         const dueDate = new Date();
         dueDate.setUTCDate(dueDate.getUTCDate() + (loanTime || 1));
         item.stateDueDate = dueDate;
-        item.stateTimesRenewed = item.stateTimesRenewed || 1;
+        console.log("item.stateTimesRenewed", item.stateTimesRenewed);
+        item.stateTimesRenewed = item.stateTimesRenewed + 1 || 1;
 
         await item.save();
 

@@ -11,7 +11,7 @@ const Loan = ({ loan, staff = false, returnItemWithId, renewItemWithId }) => {
 
     return (<div>
         <hr />
-        <div><Link to={`/staff/record/${loan.record.id}`}>{loan.record.title}</Link> ({loan.barcode})</div>
+        <div><Link to={`${staff === true ? "/staff" : ""}/record/${loan.record.id}`}>{loan.record.title}</Link> {staff ? <span>({loan.barcode})</span> : null}</div>
         <div>Due date: {dateString}</div>
         {staff && <div>Location: {loan.location.name}</div>}
         <div>Renew times left: {renewTimes}</div>

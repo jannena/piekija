@@ -5,6 +5,7 @@ import TFAForm from "./TFAForm";
 import { Tabs, Tab } from "./Tabs";
 import { connect } from "react-redux";
 import { createShelf } from "../reducers/shelfReducer";
+import Loan from "./staff/Loan";
 
 
 const UserInfo = ({ user, createShelf }) => {
@@ -28,9 +29,9 @@ const UserInfo = ({ user, createShelf }) => {
             <div>{user.username}</div>
             <div>{user.barcode}</div>
             <h3>Loans</h3>
-            <ul>
-                {user.loans.map(loan => <li key={loan.title}>{JSON.stringify(loan)}</li>)}
-            </ul>
+            <div>
+                {user.loans.map(loan => <Loan key={loan.id} loan={loan} staff={false} />)}
+            </div>
             <h3>Shelves</h3>
             <Tabs titles={["my shelves ", " shared with me"]}>
                 <Tab>
