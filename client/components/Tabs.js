@@ -45,6 +45,8 @@ const TabsWithoutRouter = ({ titles, root, addresses, children, history }) => {
         setSelectedTab(i);
     };
 
+    // TODO: Show correct selected tab styled after reload
+
     return (
         <div>
             <div style={{ display: "flex" }}>
