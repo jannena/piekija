@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getAllNotes, createNote, updateNote } from "../../reducers/noteReducer";
 import { Table, TableRow, TableCell } from "../essentials/Tables";
+import Expandable from "../essentials/Expandable";
 
 const StaffNotes = ({ notes, getAllNotes, createNote, updateNote }) => {
     useEffect(() => {
@@ -25,6 +26,13 @@ const StaffNotes = ({ notes, getAllNotes, createNote, updateNote }) => {
 
     return (<>
         <div>Notes</div>
+        <Expandable title="Create new note">
+            <form onSubmit={e => e.preventDefault()}>
+                <input />
+                <textarea />
+                <button>Create note</button>
+            </form>
+        </Expandable>
         <Table widths={[75]} colors={["#dcdcdc", "#f5f5f5"]} form={form} data={notes}>
             {notes.map(n => <TableRow>
                 <TableCell>{n.title}</TableCell>
