@@ -17,22 +17,16 @@ export const Table = ({ children, widths, titles, data, colors = ["#dcdcdc", "#f
 export const TableRow = ({ children, widths, data, color, form }) => {
     console.log(children);
     const [isOpen, setIsOpen] = useState(false);
-    return <>
-        <div onClick={() => setIsOpen(!isOpen)} style={{ backgroundColor: color, display: "flex", padding: "10px 0px" }}>
-            {React.Children.map(children, (child, i) => {
-                if (i === 0) return <TableCell>
-                    <a onClick={() => setIsOpen(!isOpen)} href="javascript:void(0);">
-                        {React.Children.toArray(child)[0]}
-                    </a>
-                </TableCell>
-                return React.cloneElement(child, { style: { width: `${(widths && widths[i]) || 0}%` } })
-            }
+    return <div /* style={{ margin: isOpen ? "20px 0px" : "0px 0x" }} */>
+        <div onClick={() => setIsOpen(!isOpen)} style={{ backgroundColor: color, display: "flex", padding: "10px 20px" }}>
+            {React.Children.map(children, (child, i) =>
+                React.cloneElement(child, { style: { width: `${(widths && widths[i]) || 0}%` } })
             )}
             {/* <div style={{ backgroundColor: color }}><button onClick={() => setIsOpen(!isOpen)}>Open</button></div> */}
 
         </div>
-        <div style={{ width: "100%", marginBottom: 10, display: isOpen ? "block" : "none" }}>{form(data)}</div>
-    </>
+        <div style={{ width: "100%", border: "1px solid black", padding: 20, marginBottom: 10, display: isOpen ? "block" : "none" }}>{form(data)}</div>
+    </ div>
 };
 
 export const TableCell = ({ children, style }) => {

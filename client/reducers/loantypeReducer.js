@@ -57,14 +57,14 @@ export const removeLoantype = id => (dispatch, getState) => {
         .catch(onError(dispatch, "PFAILURE_LOANTYPE_REMOVE"));
 };
 
-export const updateLoantype = (name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime) => (dispatch, getState) => {
+export const updateLoantype = (id, name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime) => (dispatch, getState) => {
     dispatch({ type: "PREQUEST_LOANTYPE_UPDATE" });
     loantypeService
         .update(id, name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime, getState().token.token)
-        .then(() => {
+        .then(loantype => {
             dispatch({
                 type: "PSUCCESS_LOANTYPE_UPDATE",
-                loantype: id
+                loantype
             });
         })
         .catch(onError(dispatch, "PFAILURE_LOANTYPE_UPDATE"));
