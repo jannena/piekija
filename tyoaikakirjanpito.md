@@ -42,6 +42,7 @@
 | 5.10. | 2,5 | lainaustoiminallisuuksien jatkaminen, käyttäjähenkilökuntanäytön jatkaminen, osoitteelliset välilehdet |
 | 9.10. | 1 | backendin testien päivittäminen |
 | 10.10. | 2 | lainaustoiminnallisuuksia, etusivu-uutisia, taulukottomat taulukot |
-| 13.10. | 1 | ulkoasua |
+| 12.10. | 1 | ulkoasua |
+| 13.10. | 2,5 | ulkoasua |
 | | | |
-| yht. | 91 | |
+| yht. | 93,5 | |
