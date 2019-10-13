@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 
-export const Table = ({ children, widths, data, colors = ["grey", "lightgrey"], form }) => {
-    return React.Children.map(children, (child, i) =>
-        React.cloneElement(child, { data: data[i], widths, form, color: colors[i % 2] })
-    );
+export const Table = ({ children, widths, titles, data, colors = ["grey", "lightgrey"], form }) => {
+    return (
+        <div>
+            <div style={{ display: "flex", lineHeight: "50px", backgroundColor: "black", color: "white", paddingLeft: "20px" }}>
+                {titles.map((title, i) => <div key={title} style={{ width: `${widths[i]}%` }}>{title}</div>)}
+            </div>
+            {React.Children.map(children, (child, i) =>
+                React.cloneElement(child, { data: data[i], widths, form, color: colors[i % 2] })
+            )}
+        </div>);
 };
 
 export const TableRow = ({ children, widths, data, color, form }) => {
@@ -23,7 +29,7 @@ export const TableRow = ({ children, widths, data, color, form }) => {
             {/* <div style={{ backgroundColor: color }}><button onClick={() => setIsOpen(!isOpen)}>Open</button></div> */}
 
         </div>
-        {isOpen && <div style={{ width: "100%", marginBottom: 10 }}>{form(data)}</div>}
+        <div style={{ width: "100%", marginBottom: 10, display: isOpen ? "block" : "none" }}>{form(data)}</div>
     </>
 };
 

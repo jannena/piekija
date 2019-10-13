@@ -20,7 +20,7 @@ export const Input = ({ id = null, name, title, description, value, type = "text
     return (
         <StyledContainer>
             <StyledInputTitle>
-                <label style={{ lineHeight: "30px", fontSize: "1.1em" }} htmlFor={id || name}>{title}</label>
+                <label style={{ lineHeight: "30px", fontSize: "1.1em", display: "block" }} htmlFor={id || name}>{title}</label>
                 <div style={{ color: "#717171" }}>{description}</div>
             </StyledInputTitle>
             <StyledInputContainer>

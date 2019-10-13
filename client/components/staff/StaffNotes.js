@@ -10,20 +10,17 @@ const StaffNotes = ({ notes, getAllNotes, createNote, updateNote }) => {
         getAllNotes();
     }, []);
 
-    const saveNote = id => e => {
+    const handleUpdateNote = id => e => {
         e.preventDefault();
         const { title, content } = e.target;
         updateNote(id, title.value, content.value);
     };
 
-    const form = data => <div>
-        <form onSubmit={saveNote(data.id)}>
-            <input name="title" defaultValue={data.title} />
-            <textarea name="content" defaultValue={data.content} />
-            <button>Save</button>
-        </form>
-        <button>Remove</button>
-    </div>;
+    const form = data => <Form onSubmit={handleUpdateNote(data.id)}>
+        <Input id={`${data.id}-title`} name="title" title="Title" description="" value={data.title} />
+        <Input type="textarea" id={`${data.id}-content`} name="content" title="Content" description="" value={data.content} />
+        <Button title="Save" />
+    </Form>;
 
     return (<>
         <div>Notes</div>
@@ -34,7 +31,7 @@ const StaffNotes = ({ notes, getAllNotes, createNote, updateNote }) => {
                 <Button title="Save" />
             </Form>
         </Expandable>
-        <Table widths={[75]} colors={["#dcdcdc", "#f5f5f5"]} form={form} data={notes}>
+        <Table titles={["Note title"]} widths={[100]} colors={["#dcdcdc", "#f5f5f5"]} form={form} data={notes}>
             {notes.map(n => <TableRow>
                 <TableCell>{n.title}</TableCell>
             </TableRow>)}
