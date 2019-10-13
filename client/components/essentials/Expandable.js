@@ -10,6 +10,11 @@ const StyledExpandableTitle = styled.div`
     width: 100%;
     line-height: 50px;
     background-color: lightgrey;
+    padding-left: 20px;
+`;
+const StyledExpandableContent = styled.div`
+    padding: 20px;
+    display: ${props => props.isOpen ? "block" : "none"}
 `;
 
 // TODO: Add logo?
@@ -19,7 +24,7 @@ const Expandable = ({ defaultIsOpen = false, title, children }) => {
 
     return <StyledExpandable>
         <StyledExpandableTitle onClick={() => setIsOpen(!isOpen)}>{title}</StyledExpandableTitle>
-        {isOpen && <div>{children}</div>}
+        <StyledExpandableContent isOpen={isOpen}>{children}</StyledExpandableContent>
     </StyledExpandable>;
 };
 
