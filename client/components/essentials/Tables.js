@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export const Table = ({ children, widths, titles, data, colors = ["grey", "lightgrey"], form }) => {
+export const Table = ({ children, widths, titles, data, colors = ["#dcdcdc", "#f5f5f5"], form }) => {
     return (
         <div>
             <div style={{ display: "flex", lineHeight: "50px", backgroundColor: "black", color: "white", paddingLeft: "20px" }}>
@@ -12,6 +12,8 @@ export const Table = ({ children, widths, titles, data, colors = ["grey", "light
         </div>);
 };
 
+// TODO: Close after save
+// TODO: Change colors
 export const TableRow = ({ children, widths, data, color, form }) => {
     console.log(children);
     const [isOpen, setIsOpen] = useState(false);
