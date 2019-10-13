@@ -2,7 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 export const Form = ({ children, onSubmit }) => {
-    return <div><form onSubmit={onSubmit}>{children}</form></div>
+    return <div><form onSubmit={e => {
+        e.preventDefault();
+        onSubmit(e);
+    }}>{children}</form></div>
 };
 
 const StyledContainer = styled.div`
