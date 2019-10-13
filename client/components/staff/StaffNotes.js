@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { getAllNotes, createNote, updateNote } from "../../reducers/noteReducer";
 import { Table, TableRow, TableCell } from "../essentials/Tables";
 import Expandable from "../essentials/Expandable";
-import { Form, Input, Button } from "../essentials/forms";
+import { Form, Input, Button, Textarea } from "../essentials/forms";
 
 const StaffNotes = ({ notes, getAllNotes, createNote, updateNote }) => {
     useEffect(() => {
@@ -18,7 +18,7 @@ const StaffNotes = ({ notes, getAllNotes, createNote, updateNote }) => {
 
     const form = data => <Form onSubmit={handleUpdateNote(data.id)}>
         <Input id={`${data.id}-title`} name="title" title="Title" description="" value={data.title} />
-        <Input type="textarea" id={`${data.id}-content`} name="content" title="Content" description="" value={data.content} />
+        <Textarea id={`${data.id}-content`} name="content" title="Content" description="" value={data.content} />
         <Button title="Save" />
     </Form>;
 
@@ -27,7 +27,7 @@ const StaffNotes = ({ notes, getAllNotes, createNote, updateNote }) => {
         <Expandable title="Create new note">
             <Form onSubmit={e => e.preventDefault()}>
                 <Input title="Title" name="title" description="Write the title of the note here." />
-                <Input type="textarea" title="Content" name="content" description="Write the content of the note here." />
+                <Textarea title="Content" name="content" description="Write the content of the note here." />
                 <Button title="Save" />
             </Form>
         </Expandable>

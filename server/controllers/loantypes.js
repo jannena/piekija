@@ -1,5 +1,6 @@
 const loantypeRouter = require("express").Router();
 const Loantype = require("../models/Loantype");
+const Item = require("../models/Loantype");
 
 loantypeRouter.get("/", (req, res, next) => {
     Loantype
@@ -46,9 +47,18 @@ loantypeRouter.put("/:id", (req, res, next) => {
         .catch(next);
 });
 
-loantypeRouter.delete("/:id", (req, res, next) => {
+loantypeRouter.delete("/:id", async (req, res, next) => {
     // TODO: Authorization
     const { id } = req.params;
+
+    try {
+        // TODO: Performance?
+        const itemsUsingThisLoantype = await Item.findOne({ loantype: id });
+        if (itemsUsingThisLoantype) return res.status(409).json({ error: "there are items that using this loantype" });
+    }
+    catch (err) {
+        next(err);
+    }
 
     Loantype
         .findByIdAndRemove(id)

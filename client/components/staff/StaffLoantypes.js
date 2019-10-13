@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { createLoantype, getLoantypes, removeLoantype, updateLoantype } from "../../reducers/loantypeReducer";
 import Expandable from "../essentials/Expandable";
-import { Form, Input, Button } from "../essentials/forms";
+import { Form, Input, Button, Checkbox } from "../essentials/forms";
 import { Table, TableRow, TableCell } from "../essentials/Tables";
 
 const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes, removeLoantype, updateLoantype }) => {
@@ -27,8 +27,8 @@ const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes, removeLoantyp
     const form = data => <>
         <Form onSubmit={handleUpdateLoantype(data.id)}>
             <Input id={`${data.id}-name`} value={data.name} title="Name" name="name" />
-            <Input id={`${data.id}-cbph`} value={data.canBePlacedAHold} type="checkbox" name="canBePlacedAHold" title="Can be placed a hold" />
-            <Input id={`${data.id}-cabl`} value={data.canBeLoaned} type="checkbox" name="canBeLoaned" title="Can be loaned" description="If true, users cannot loan this item" />
+            <Checkbox id={`${data.id}-cbph`} checked={data.canBePlacedAHold} type="checkbox" name="canBePlacedAHold" title="Can be placed a hold" />
+            <Checkbox id={`${data.id}-cabl`} checked={data.canBeLoaned} type="checkbox" name="canBeLoaned" title="Can be loaned" description="If true, users cannot loan this item" />
             <Input id={`${data.id}-rent`} value={data.renewTimes} type="number" name="renewTimes" title="Renew times" description="How many times item can be renewed" />
             <Input id={`${data.id}-loat`} value={data.loanTime} type="number" name="loanTime" title="Loan time" description="How many days is the loan time" />
             <Button title="Create" />
