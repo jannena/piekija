@@ -15,7 +15,24 @@ const create = (name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime, token
     ).then(response => response.data)
 };
 
+const remove = (id, token) => {
+    return axios.delete(
+        `${baseUrl}/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
+const update = (id, name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime, token) => {
+    return axios.put(
+        `${baseUrl}/${id}`,
+        { name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime, token },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
 export default {
     getAll,
-    create
+    create,
+    remove,
+    update
 };
