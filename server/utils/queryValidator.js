@@ -123,7 +123,8 @@ const validateSimpleQuery = query => {
     console.log("what is query?", query);
     try {
         if (!queryContainsOps(query)) return [
-            "AND", query.split(" ").map(q => (["spelling1", q.toLowerCase(), "is"]))
+            "AND",
+            query.split(" ").map(q => (["spelling1", q.toLowerCase(), "is"]))
         ];
         return simplifySimpleQuery(validateSimpleQueryRecursion(query));
     }
@@ -136,8 +137,8 @@ const validateSimpleQuery = query => {
 };
 
 // const result123 = validateSimpleQuery("(moi AND hei AND terve AND moikku) OR (terkut OR heippa OR moiksu OR joojoo)")
-const result123 = validateSimpleQuery("(Seita AND Parkkola) OR Nightwish");
-console.log(JSON.stringify(result123));
+// const result123 = validateSimpleQuery("(Seita AND Parkkola) OR Nightwish");
+// console.log(JSON.stringify(result123));
 
 module.exports = {
     validateAdvancedQuery,
