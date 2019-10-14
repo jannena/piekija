@@ -17,7 +17,7 @@ const search = async (req, res, next, simple) => {
 
     try {
         const readyQuery = simple ? validateAdvancedQuery(validateSimpleQuery(query)) : validateAdvancedQuery(query);
-        console.log(readyQuery);
+        console.log("ready query", readyQuery);
         const result = await Record
             .find(readyQuery, { title: 1, author: 1, contentType: 1, year: 1 })
             .skip(searchResultsPerPage * page)

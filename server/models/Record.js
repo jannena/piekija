@@ -101,7 +101,13 @@ const RecordSchema = new mongoose.Schema({
         required: true
     },
 
-    spelling: {
+    spelling1: {
+        type: [
+            { type: String }
+        ],
+        required: true
+    },
+    spelling2: {
         type: [
             { type: String }
         ],

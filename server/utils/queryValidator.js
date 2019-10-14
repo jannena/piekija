@@ -6,7 +6,7 @@ const isValidOperator = operator =>
         "title", "author", "authors", "language", "languages", "year", "contentType",
         "series", "classification", "standardCodes", "country",
         "subjects", "genres",
-        "spelling"
+        "spelling1", "spelling2"
     ].indexOf(operator) !== -1;
 
 const validateAdvancedQuery = ([operator, value, type]) => {
@@ -40,11 +40,12 @@ const validateAdvancedQuery = ([operator, value, type]) => {
         }
     }
 
-    if (operator === "AND") {
+    // TODO: This does not work if we are searching for two values in same array
+    /* if (operator === "AND") {
         let combined = {};
         validatedQuery[newOperator].forEach(o => combined = { ...combined, ...o });
         validatedQuery = combined;
-    }
+    } */
 
     return validatedQuery;
 };
@@ -86,8 +87,8 @@ const validateSimpleQueryRecursion = query => {
     return [
         pair[1],
         [
-            (queryContainsOps(pair[0]) ? validateSimpleQuery(pair[0]) : ["spelling", pair[0], "is"]),
-            (queryContainsOps(pair[2]) ? validateSimpleQuery(pair[2]) : ["spelling", pair[2], "is"])
+            (queryContainsOps(pair[0]) ? validateSimpleQuery(pair[0]) : ["spelling1", pair[0].toLowerCase(), "is"]),
+            (queryContainsOps(pair[2]) ? validateSimpleQuery(pair[2]) : ["spelling1", pair[2].toLowerCase(), "is"])
         ]
     ];
 };
@@ -117,24 +118,26 @@ const simplifySimpleQuery = query => {
 };
 
 // TODO: fix parsing queries containing extra brackets
-const validateSimpleQuery = q => {
-    const query = q.toLowerCase();
+const validateSimpleQuery = query => {
+    // const query = q.toLowerCase();
     console.log("what is query?", query);
     try {
         if (!queryContainsOps(query)) return [
-            "AND", query.split(" ").map(q => (["spelling", q, "is"]))
+            "AND", query.split(" ").map(q => (["spelling1", q.toLowerCase(), "is"]))
         ];
         return simplifySimpleQuery(validateSimpleQueryRecursion(query));
     }
     catch (err) {
         console.log(err);
         return ["AND", [
-            ["spelling", query, "is"]
+            ["spelling1", query.toLowerCase(), "is"]
         ]];
     }
 };
 
-// console.log(validateSimpleQuery("(moi AND hei AND terve AND moikku) OR (terkut OR heippa OR moiksu OR joojoo)"));
+// const result123 = validateSimpleQuery("(moi AND hei AND terve AND moikku) OR (terkut OR heippa OR moiksu OR joojoo)")
+const result123 = validateSimpleQuery("(Seita AND Parkkola) OR Nightwish");
+console.log(JSON.stringify(result123));
 
 module.exports = {
     validateAdvancedQuery,

@@ -33,6 +33,8 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
     const appearance = MARC21.getSubfields(record.record, "300", ["a", "b", "c", "e", "f", "g"]);
     const series = MARC21.getFieldsAndSubfields(record.record, ["490"], ["a"]).map(s => <div key={s.a}>{s.a}</div>);
 
+    const spelling = MARC21.getSpelling(record.record);
+
     return !record || !record.result || record.result.id !== id
         ? null
         : <div>
@@ -82,7 +84,8 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
                     <MARC21Screen parsedMARC={record.record} />
                 </Tab>
                 <Tab>
-                    {MARC21.getSpelling(record.record).map(spell => <div key={spell}>{spell}</div>)}
+                    <div>Spelling1: {spelling.spelling1.join(", ")}</div>
+                    <div>Spelling2: {spelling.spelling2.join(", ")}</div>
                 </Tab>
             </Tabs>}
         </div>

@@ -1,4 +1,5 @@
 const fromentries = require("object.fromentries");
+const flat = require("array.prototype.flat");
 const logger = require("./logger");
 const { pad, byteLength, utf8_substr, removeLastCharacters, removeFirstCharacters } = require("./stringUtils");
 
@@ -240,6 +241,7 @@ const tryParse = marc => {
 
 const getFieldSpelling = (parsedMARC, fields, subfields) => {
     const marc = getFieldsAndSubfields(parsedMARC, fields, subfields);
+    // console.log("marc !!!", marc);
     const ret = [];
     marc.forEach(field => {
         subfields.forEach(subfield => {
@@ -247,9 +249,16 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
             // console.log(field[subfield].map(term => term.split(" ")));
             // console.log("jyyyy", field[subfield]);
             try {
-                ret.push(...field[subfield]
-                    .map(term => term.split(" "))
-                    .flat()
+                console.log("field[subfield]", field[subfield]);
+                /* const temp1 = field[subfield].map(term => term.split(" "));
+                const temp = flat(temp1);
+                console.log("temp !!!", temp, "temp1 !!!", temp1);
+                ret.push(temp
+                    .map(removeLastCharacters)
+                    .map(removeFirstCharacters)
+                    .map(s => s.toLowerCase())); */
+                ret.push(...flat(field[subfield]
+                    .map(term => term.split(" ")))
                     .map(removeLastCharacters)
                     .map(removeFirstCharacters)
                     .map(s => s.toLowerCase()));
@@ -259,11 +268,17 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
             }
         });
     });
+    console.log("ret !!!", ret);
     return ret;
 };
 
+/*
+ * Spelling 1: otsikko (osissa), tekijät (osissa), asiasanat ja ala-asiasanat, standardikoodit, luokitus
+ * Spelling 2: julkaisija, huomautukset, sarja
+*/
 const getSpelling = parsedMARC => {
-    const spelling = [...new Set([].concat(
+    console.log("parsedMARC !!!", parsedMARC);
+    const spelling1 = [...new Set([].concat(
         // title
         getFieldSpelling(
             parsedMARC,
@@ -282,6 +297,8 @@ const getSpelling = parsedMARC => {
             ["100", "110", "700", "710"],
             ["a", "b", "c"]
         ),
+    ))].filter(value => value.length > 2);
+    const spelling2 = [...new Set([].concat(
         // publishersEtc
         getFieldSpelling(
             parsedMARC,
@@ -292,7 +309,7 @@ const getSpelling = parsedMARC => {
         getFieldSpelling(
             parsedMARC,
             ["505"],
-            ["a", "g"]
+            ["a", "g", "r", "s", "t"]
         ),
         // abstractEtc
         getFieldSpelling(
@@ -331,15 +348,9 @@ const getSpelling = parsedMARC => {
                 "585", "586", "588"
             ],
             ["a"]
-        ),
-        // appearance
-        getFieldSpelling(
-            parsedMARC,
-            ["300"],
-            ["a", "b", "c"]
         )
-    ))].filter(value => value.length > 2)
-    return spelling;
+    ))].filter(value => value.length > 2);
+    return { spelling1, spelling2 };
 };
 
 const parseMARCToDatabse = (parsedMARC, data) => {
@@ -408,6 +419,10 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     //     FIELDS: fromentries(Object.entries(parsedMARC.FIELDS).filter(([field]) => (Number(field) < 800 || Number(field) === 856)))
     // });
 
+    const { spelling1, spelling2 } = getSpelling(parsedMARC);
+
+    console.log(spelling1, spelling2);
+
     return {
         timeAdded: new Date(),
         timeModified: new Date(),
@@ -432,7 +447,9 @@ const parseMARCToDatabse = (parsedMARC, data) => {
 
         recordType: "marc21",
         record: data,
-        spelling: getSpelling(parsedMARC)
+
+        spelling1,
+        spelling2
     };
 };
 
