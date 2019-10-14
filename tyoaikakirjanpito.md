@@ -44,5 +44,6 @@
 | 10.10. | 2 | lainaustoiminnallisuuksia, etusivu-uutisia, taulukottomat taulukot |
 | 12.10. | 1 | ulkoasua |
 | 13.10. | 2,5 | ulkoasua |
+| 14.10. | 2,5 | ulkoasua, mongodb:n aggregationeihin tutustumista, hakutulosten järjestäminen relevanssin mukaan |
 | | | |
-| yht. | 93,5 | |
+| yht. | 96 | |
