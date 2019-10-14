@@ -12,19 +12,19 @@ const ReocrdSubjects = ({ record }) => {
         </>);
     };
 
+    const parsedSubjects = MARC21.getFieldsAndSubfields(record.record, ["600", "650", "651", "653"], ["a", "v", "x", "y", "z", "t", "n", "r"])
+
     return (
         <>
-            <div>
-                Subjects:
-                <ul>
-                    {MARC21
-                        .getFieldsAndSubfields(record.record, ["600", "650", "651", "653"], ["a", "v", "x", "y", "z", "t", "n", "r"])
-                        .map(subject => <li key={JSON.stringify(subject)}>
-                            {subjects(subject)}
-                        </li>)}
-                </ul>
-            </div>
-            <div>
+            <tr>
+                <td>Subjects</td>
+                <td>
+                    {parsedSubjects.map(subject => <div key={JSON.stringify(subject)}>
+                        {subjects(subject)}
+                    </div>)}
+                </td>
+            </tr>
+            {/* <div>
                 Genres:
                 <ul>
                     {MARC21
@@ -33,7 +33,8 @@ const ReocrdSubjects = ({ record }) => {
                             {subjects(genre)}
                         </li>)}
                 </ul>
-            </div></>
+            </div> */}
+        </>
     );
 };
 

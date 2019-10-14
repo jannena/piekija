@@ -10,18 +10,20 @@ const RecordClassification = ({ record }) => {
     if (LoC.length + udk.length + others.length === 0) return null;
 
     return (
-        <div>
-            <div>Classification:</div>
-            {LoC.map((c, i) => <div key={i}>
-                {"LoC"} {c.a}
-            </div>)}
-            {udk.map((c, i) => <div key={i}>
-                {"udk"} {c.a}
-            </div>)}
-            {others.map((c, i) => <div key={i}>
-                {c["2"]} {c.a}
-            </div>)}
-        </div>
+        <tr>
+            <td>Classification</td>
+            <td>
+                {LoC.map((c, i) => <div key={i}>
+                    {"LoC"} {c.a}
+                </div>)}
+                {udk.map((c, i) => <div key={i}>
+                    {"udk"} {c.a}
+                </div>)}
+                {others.map((c, i) => <div key={i}>
+                    {c["2"]} {c.a}
+                </div>)}
+            </td>
+        </tr>
     );
 };
 

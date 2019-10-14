@@ -23,16 +23,16 @@ const RecordLanguages = ({ record }) => {
     })();
 
     return (<>
-        {countryOfOrigin && <div>countries: {[countryOfOrigin].concat(...countries.map(c => c.a)).join(", ")}</div>}
-        {mainLanguage && <div>Main language: {mainLanguage}</div>}
+        {countryOfOrigin && <tr><td>countries:</td> {[countryOfOrigin].concat(...countries.map(c => c.a)).join(", ")}</tr>}
+        {mainLanguage && <tr><td>Main language</td> <td>{mainLanguage}</td></tr>}
         {langs.map(lang => <>
-            <div>{!!lang["a"].length && "Text: " + lang["a"].join(", ")}</div>
-            <div>{!!lang["b"].length && "Summar or abstract: " + lang["b"].join(", ")}</div>
-            <div>{!!lang["d"].length && "Sung or spoken text: " + lang["d"].join(", ")}</div>
-            <div>{!!lang["f"].length && "Table of contents: " + lang["f"].join(", ")}</div>
-            <div>{!!lang["h"].length && "Original: " + lang["h"].join(", ")}</div>
-            <div>{!!lang["j"].length && "Subtitles: " + lang["j"].join(", ")}</div>
-            <div>{!!lang["k"].length && "Intermediate translations: " + lang["k"].join(", ")}</div>
+            {!!lang["a"].length && <tr><td>Text language</td> <td>{lang["a"].join(", ")}</td></tr>}
+            {!!lang["b"].length && <tr><td>Language of summar or abstract</td> <td>{lang["b"].join(", ")}</td></tr>}
+            {!!lang["d"].length && <tr><td>Sung or spoken text language</td> <td>{lang["d"].join(", ")}</td></tr>}
+            {!!lang["f"].length && <tr><td>Language of table of contents</td> <td>{lang["f"].join(", ")}</td></tr>}
+            {!!lang["h"].length && <tr><td>Original language</td> <td>{lang["h"].join(", ")}</td></tr>}
+            {!!lang["j"].length && <tr><td>Subtitles language</td> <td>{lang["j"].join(", ")}</td></tr>}
+            {!!lang["k"].length && <tr><td>Intermediate translation languages</td> <td>{lang["k"].join(", ")}</td></tr>}
         </>)}
     </>);
 };

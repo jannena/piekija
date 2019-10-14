@@ -30,6 +30,9 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
     if (state.state === 1) return <Loader />
     if (state.state === 3) return <p>Error: {state.error}</p>;
 
+    const appearance = MARC21.getSubfields(record.record, "300", ["a", "b", "c", "e", "f", "g"]);
+    const series = MARC21.getFieldsAndSubfields(record.record, ["490"], ["a"]).map(s => <div key={s.a}>{s.a}</div>);
+
     return !record || !record.result || record.result.id !== id
         ? null
         : <div>
@@ -42,29 +45,26 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
                 Content type: {MARC21.contentTypes[record.record.LEADER.substring(6, 7)]}
             </div>
             <RecordTime record={record} />
-            <RecordClassification record={record} />
-            <hr />
-            <RecordStandardCodes record={record} />
-            <hr />
-            <RecordPublisherInfo record={record} />
-            <hr />
-            {MARC21
-                .getFieldsAndSubfields(record.record, ["856"], ["indicators", "y", "u"])
-                .map(link => <div>
-                    <a href={link.u} target="_blank">{link.y}</a>
-                </div>)}
-            <hr />
-            <RecordLanguages record={record} />
-            <hr />
-            <div>
-                Appearance: {MARC21.getSubfields(record.record, "300", ["a", "b", "c", "e", "f", "g"]).join(" ")}
-            </div>
-            <div>
-                Series: {MARC21.getFieldsAndSubfields(record.record, ["490"], ["a"]).map(s => <span key={s.a}>{s.a}</span>)}
-            </div>
-            <RecordNotes record={record} />
-            <RecordAuthors record={record} />
-            <RecordSubjects record={record} />
+
+            <table style={{ width: "100%" }}>
+                <tbody>
+                    <RecordAuthors record={record} />
+                    <RecordSubjects record={record} />
+                    <RecordClassification record={record} />
+                    <RecordStandardCodes record={record} />
+                    <RecordPublisherInfo record={record} />
+                    <RecordLanguages record={record} />
+                    {!!series.length && <tr><td>Series</td> <td>{series}</td></tr>}
+                    {!!appearance.length && <tr><td>Appearance</td> <td>{appearance.join(" ")}</td></tr>}
+                    <tr><td>Links</td> <td>{MARC21
+                        .getFieldsAndSubfields(record.record, ["856"], ["indicators", "y", "u"])
+                        .map(link => <div>
+                            <a href={link.u} target="_blank">{link.y}</a>
+                        </div>)}</td></tr>
+
+                    {/* TODO: Add notes <RecordNotes record={record} /> */}
+                </tbody>
+            </table>
 
 
             {!isPreview && <Tabs titles={["Items |", " MARC |", " spelling"]}>
