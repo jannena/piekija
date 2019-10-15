@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Select from "./Select";
 import { connect } from "react-redux";
 import { setQuery } from "../reducers/queryReducer";
+import Expandable from "./essentials/Expandable";
+import { Button } from "./essentials/forms";
 
 const QueryGroupStyle = {
     border: "1px solid black",
@@ -86,9 +88,6 @@ const AdvancedSearchGroup = ({ query, setQuery, removeGroup }) => {
 
     return (
         <div style={QueryGroupStyle}>
-            <button type="button" onClick={addNewField}>Add new FIELD to this group</button>
-            <button type="button" onClick={addNewGroup}>Add new GROUP to this group</button>
-            {removeGroup && <button onClick={removeGroup}>Remove this group</button>}
             <Select
                 options={[["with all these (and)", "AND"], ["with any of these (or)", "OR"]]}
                 selected={query[0]}
@@ -97,6 +96,9 @@ const AdvancedSearchGroup = ({ query, setQuery, removeGroup }) => {
                     setQuery(query);
                 }}
             />
+            <button type="button" onClick={addNewField}>Add FIELD</button>
+            <button type="button" onClick={addNewGroup}>Add GROUP</button>
+            {removeGroup && <button onClick={removeGroup}>Remove this group</button>}
             {/* If, second element of the array is an array, element is a group.
                     Else, element is a field
                 */}
@@ -168,7 +170,7 @@ const AdvancedSearch = ({ query: q, setQuery: setQ }) => {
     };
 
     return (
-        <div>
+        <Expandable noPadding={true} title="Advanced search">
             <form onSubmit={search}>
                 <AdvancedSearchGroup
                     query={query}
@@ -177,9 +179,10 @@ const AdvancedSearch = ({ query: q, setQuery: setQ }) => {
                         setQuery(newQuery);
                     }}
                 />
-                <button type="submit" onClick={search}>Search</button>
+                <Button title="Search" />
+                {/* <button type="submit" onClick={search}>Search</button> */}
             </form>
-        </div>
+        </Expandable>
     );
 };
 

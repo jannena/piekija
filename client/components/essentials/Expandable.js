@@ -13,18 +13,18 @@ const StyledExpandableTitle = styled.div`
     padding-left: 20px;
 `;
 const StyledExpandableContent = styled.div`
-    padding: 20px;
+    padding: ${props => props.noPadding ? "0px" : "20px"};
     display: ${props => props.isOpen ? "block" : "none"}
 `;
 
 // TODO: Add logo?
 
-const Expandable = ({ defaultIsOpen = false, title, children }) => {
+const Expandable = ({ defaultIsOpen = false, noPadding = false, title, children }) => {
     const [isOpen, setIsOpen] = useState(defaultIsOpen);
 
     return <StyledExpandable>
         <StyledExpandableTitle onClick={() => setIsOpen(!isOpen)}>{title}</StyledExpandableTitle>
-        <StyledExpandableContent isOpen={isOpen}>{children}</StyledExpandableContent>
+        <StyledExpandableContent noPadding={noPadding} isOpen={isOpen}>{children}</StyledExpandableContent>
     </StyledExpandable>;
 };
 
