@@ -273,8 +273,9 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
 };
 
 /*
- * Spelling 1: otsikko (osissa), tekijät (osissa), asiasanat ja ala-asiasanat, standardikoodit, luokitus
- * Spelling 2: julkaisija, huomautukset, sarja
+ * Spelling 1: otsikko (osissa), tekijät (osissa)
+ * Spelling 2: asiasanat ja ala-asiasanat, standardikoodit, luokitus
+ * Spelling 3: julkaisija, huomautukset, sarja
 */
 const getSpelling = parsedMARC => {
     console.log("parsedMARC !!!", parsedMARC);

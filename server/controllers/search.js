@@ -50,10 +50,51 @@ const simpleSearch = async (req, res, next) => {
     const firstTime = process.hrtime();
 
     try {
-        const allwords = query.split(" ");
+        const subquery = [];
+
+        const allwords = [];
+        query.toLowerCase().split(" ").map(w => {
+            if (w[0] === "+") {
+                subquery.push({
+                    $or: [
+
+                        { "spelling1": w.substring(1) },
+                        { "spelling2": w.substring(1) },
+                    ]
+                });
+                allwords.push(w.substring(1));
+            }
+            else if (w[0] === "-") {
+                subquery.push({
+                    $and: [
+                        { "spelling1": { $ne: w.substring(1) } },
+                        { "spelling2": { $ne: w.substring(1) } },
+                    ]
+                });
+                // allwords.push(w.substring(1));
+            }
+            else allwords.push(w);
+        });
+
+        const query2 = {
+            $and: [
+                {
+                    $or:
+                        [
+                            { "spelling1": { "$in": allwords } },
+                            { "spelling2": { "$in": allwords } }
+                        ]
+                }
+            ]
+        };
+        if (subquery.length > 0) query2.$and.push(...subquery);
+
+        console.log("New ready query", JSON.stringify(query2));
+
 
         const result = await Record.aggregate([
-            { $match: { $or: [{ "spelling1": { "$in": allwords } }, { "spelling2": { "$in": allwords } }] } },
+            // { $match: { $or: [{ "spelling1": { "$in": allwords } }, { "spelling2": { "$in": allwords } }] } },
+            { $match: query2 },
             { $unwind: "$spelling1" },
             // { $unwind: "$spelling2" },
             // { $match: { "spelling1": { "$in": allwords } } },
@@ -67,9 +108,17 @@ const simpleSearch = async (req, res, next) => {
                         $sum: {
                             $cond: {
                                 if: { $not: { $in: ["$spelling1", allwords] } },
-                                then: 0,
-                                else: 1
+                                then: 1,
+                                else: 3
                             }
+                            /* $switch: {
+                                branches: [
+                                    // { "case": { $not: { $in: ["$spelling1", allwords] } }, then: 0 }
+                                    { "case": { $in: ["$spelling1", allwords] }, then: 5 },
+                                    { "case": { $in: ["$spelling2", allwords] }, then: 2 }
+                                ],
+                                default: 0
+                            } */
                         },
 
                     }
@@ -77,6 +126,13 @@ const simpleSearch = async (req, res, next) => {
             },
             { $sort: { numRelTags: -1 } }
         ]);
+
+        /*$cond: {
+            if: { $not: { $in: ["$spelling1", allwords] } },
+            then: 0,
+            else: 2
+        }
+        */
 
         /* const readyQuery = validateAdvancedQuery(validateSimpleQuery(query));
         console.log("ready query", readyQuery);
