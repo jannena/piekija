@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { searchForUser, searchForItem, clearUser, clearItem, loanItem, returnItem, history } from "../../reducers/circulationReducer";
+import { searchForUser, searchForItem, clearUser, clearItem, loanItem, returnItem } from "../../reducers/circulationReducer";
 
 const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clearItem, loanItem, returnItem, history }) => {
     const searchUser = e => {
@@ -15,7 +15,7 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
 
     return (<>
         <div>
-            <div>
+            <div style={{ display: "flex" }}>
                 <form onSubmit={searchUser}>
                     <label htmlFor="user">User barcode</label> <input id="user" name="user" />
                     <button>Search</button>
@@ -25,14 +25,14 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
             {user && <div style={{ paddingLeft: 10 }}>
                 <div>Barcode: {user.barcode}</div>
                 <div>Name: {user.name} ({user.loans.length} loans)</div>
-                <button>Show user</button>
+                <button onClick={() => history.push("/staff/users")}>Show user</button>
             </div>}
         </div>
 
         <hr />
 
         <div>
-            <div>
+            <div style={{ display: "flex" }}>
                 <form onSubmit={searchItem}>
                     <label htmlFor="item">Item barcode: </label> <input id="item" name="item" />
                     <button>Search</button>
@@ -43,7 +43,7 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
                 <div>Title: {item.record && item.record.title}</div>
                 <div>Location: {item.location && item.location.name}</div>
                 <div>Loantype: {item.loantype && item.loantype.name}</div>
-                <div>State: <strong>{item.state}</strong> {item.state === "loaned" && `for ${item.statePersonInCharge.name}`}</div>
+                <div>State: <strong>{item.state}</strong> {item.state === "loaned" && `for ${item.statePersonInCharge && item.statePersonInCharge.name}`}</div>
                 {/* TODO: If loaned, show return button */}
                 {item.state === "loaned" && <button onClick={returnItem}>Return</button>}
                 <button onClick={() => history.push(`/staff/record/${item.record.id}`)}>Show record</button>

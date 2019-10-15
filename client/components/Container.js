@@ -26,8 +26,8 @@ const Container = ({ loading, history, simpleSearch, setQuery, children }) => {
                     <p>Currently loading {loading} things</p>
                     <div id="search">
                         <form onSubmit={handleSearch}>
-                            <input name="query" style={{ width: "90%" }} />
-                            <button style={{ width: "10%" }}>Search</button>
+                            <input name="query" style={{ width: "90%", margin: 0 }} />
+                            <button style={{ width: "10%", margin: 0 }}>Search</button>
                         </form>
                     </div>
                     <nav>

@@ -85,7 +85,7 @@ const circulationReducer = (state = init, action) => {
         case "PSUCCESS_CIRCULATION_UPDATE_USER":
             return {
                 ...state,
-                user: action.user
+                user: { ...action.user, loans: state.user && state.user.loans }
             };
     }
     return state;

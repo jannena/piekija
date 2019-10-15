@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { searchForUser, clearUser, createUser, updateUser } from "../../reducers/circulationReducer";
 import Loan from "./Loan";
 import { Tabs, Tab } from "../Tabs";
+import { Form, Input, Button } from "../essentials/forms";
 
 const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUser }) => {
     const handleUserSearch = e => {
@@ -46,19 +47,18 @@ const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUs
                     </div>
                 </Tab>
                 <Tab>
-                    <h3>Edit</h3>
-                    <form onSubmit={handleUpdateUser}>
-                        <div>name: <input defaultValue={user.name} name="name" /></div>
-                        <div>username: <input defaultValue={user.username} name="username" /></div>
-                        <div>barcode: <input defaultValue={user.barcode} name="barcode" /></div>
-                        <div>password: <input type="password" name="password" /></div>
-                        <button>Save</button>
+                    <Form onSubmit={handleUpdateUser}>
+                        <Input name="name" title="Name" value={user.name} />
+                        <Input name="username" title="Username" value={user.username} />
+                        <Input name="barcode" title="barcode" value={user.barcode} />
+                        <Input name="password" title="password" type="password" />
+                        <Button title="Save" />
 
                         {/* TODO: 
                         address: <input username="address" />
                         email: <input username="email" />
                         phone: <input username="phone" />*/}
-                    </form>
+                    </Form>
                 </Tab>
             </Tabs>}
         </>
