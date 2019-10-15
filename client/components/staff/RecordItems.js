@@ -39,7 +39,7 @@ const RecordItems = ({ items, locations, loantypes, addItem, removeItem, updateI
             <FormSelect id={`${data.id}-location`} selected={data.location.id} title="Location" name="location" options={locations.map(location => [location.name, location.id])} />
             <Input id={`${data.id}-state`} value={data.state} name="state" title="State" />
             <Input id={`${data.id}-note`} value={data.note} name="note" title="Note" />
-            <Button title="Create item" />
+            <Button title="Save item" />
         </Form>
         <Form onSubmit={handleRemoveItem(data.id)}>
             <Button title="Remove" />
@@ -52,8 +52,8 @@ const RecordItems = ({ items, locations, loantypes, addItem, removeItem, updateI
             <Expandable title="Create new item">
                 <Form onSubmit={handleCreateItem}>
                     <Input name="barcode" title="Barcode" description="Unique code for every item" />
-                    <Select name="loantype" options={loantypes.map(loantype => [loantype.name, loantype.id])} />
-                    <Select name="location" options={locations.map(location => [location.name, location.id])} />
+                    <FormSelect name="loantype" title="Loantype" options={loantypes.map(loantype => [loantype.name, loantype.id])} />
+                    <FormSelect name="location" title="Location" options={locations.map(location => [location.name, location.id])} />
                     <Input name="state" title="State" />
                     <Input name="note" title="Note" />
                     <Button title="Create item" />
