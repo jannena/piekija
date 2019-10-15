@@ -25,7 +25,7 @@ const itemSchema = new mongoose.Schema({
     state: {
         type: String,
         required: true,
-        enum: ["loaned", "not loaned", "broken", "placed a hold", "other"]
+        enum: ["not in use", "loaned", "not loaned", "broken", "placed a hold", "other"]
     },
     statePersonInCharge: {
         type: mongoose.Schema.Types.ObjectId,

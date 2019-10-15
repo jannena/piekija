@@ -54,7 +54,10 @@ const RecordItems = ({ items, locations, loantypes, addItem, removeItem, updateI
                     <Input name="barcode" title="Barcode" description="Unique code for every item" />
                     <FormSelect name="loantype" title="Loantype" options={loantypes.map(loantype => [loantype.name, loantype.id])} />
                     <FormSelect name="location" title="Location" options={locations.map(location => [location.name, location.id])} />
-                    <Input name="state" title="State" />
+                    <FormSelect name="state" title="State" options={[
+                        ["not in use", "not in use"], ["loaned", "loaned"], ["not loaned", "not loaned"], ["broken", "broken"],
+                        ["placed a hold", "placed a hold"], ["other", "other"]
+                    ]} />
                     <Input name="note" title="Note" />
                     <Button title="Create item" />
                 </Form>

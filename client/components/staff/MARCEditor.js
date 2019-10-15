@@ -187,7 +187,7 @@ const RecordEditor = ({ record, updateRecord }) => {
                                         <td></td>
                                         <td>
                                             <input value={value} onChange={onSubfieldChange(field, i, subfieldCode, n)} />
-                                            <button onClick={onRemoveSubfield(field, i, subfieldCode, n)}>Remove subfield</button>
+                                            <button onClick={onRemoveSubfield(field, i, subfieldCode, n)}>x</button>
                                         </td>
                                     </tr>)}
                                 </React.Fragment>)}

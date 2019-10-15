@@ -35,6 +35,12 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
 
     const spelling = MARC21.getSpelling(record.record);
 
+    const colorByState = state => {
+        if (state === "not loaned") return "#00d400";
+        else if (state === "not in use") return "white";
+        else return "#ff3c3c";
+    };
+
     return !record || !record.result || record.result.id !== id
         ? null
         : <div>
@@ -71,12 +77,15 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
             </table>
 
 
-            {!isPreview && <Tabs titles={["Items |", " MARC |", " spelling"]}>
+            {!isPreview && <Tabs titles={["Items", "MARC", "spelling"]}>
                 <Tab>
-                    <table>
+                    <table style={{ width: "100%" }}>
                         <tbody>
                             {record.result.items.map((item, i) =>
-                                <tr key={i}><td>{item.location.name}</td><td>{item.state}</td></tr>
+                                <tr key={i}>
+                                    <td>{item.location.name}</td>
+                                    <td style={{ backgroundColor: colorByState(item.state || "loaned"), lineHeight: "30px", textAlign: "center" }}>{item.state}</td>
+                                </tr>
                             )}
                         </tbody>
                     </table>
