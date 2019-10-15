@@ -30,10 +30,15 @@ const getCached = (state, key) => state.search.searches[JSON.stringify(key)];
 
 export const search = (query, page, sort, advanced) => (dispatch, getState) => {
     const key = { query, page, sort };
-    if (isCached(getState(), key)) return dispatch({
-        type: "SET_RESULT",
-        result: getCached(getState(), key)
-    });
+    if (isCached(getState(), key)) {
+        dispatch({
+            type: "SET_RESULT",
+            result: getCached(getState(), key)
+        });
+        return dispatch({
+            type: "SUCCESS_SEARCH_GET_FROM_CACHE"
+        });
+    }
     dispatch({ type: "REQUEST_SEARCH" });
     searchService
         .search(query, page, sort, advanced)
