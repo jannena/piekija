@@ -23,7 +23,11 @@ const RecordEditor = ({ record, updateRecord }) => {
     if (!record.record || !editedRecord) return null;
 
     const fieldSeparatorStyle = {
-        borderTop: "2px solid black"
+        height: 10
+    };
+
+    const indicatorInputStyle = {
+        width: 40
     };
 
 
@@ -140,58 +144,60 @@ const RecordEditor = ({ record, updateRecord }) => {
 
     // TODO: ADD KEYS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     return (
-        <table style={{ width: "100%" }}>
-            <tbody>
-                <tr>
-                    <td>Add field</td>
-                    <td><form onSubmit={onAddField}>
-                        <input name="field" maxLength="3" minLength="3" />
-                        <button>Add field</button>
-                    </form></td>
-                </tr>
-                {editedRecord.FIELDS.map(([code = "000", fieldsData = {}], field) => <React.Fragment key={code}>
-                    {fieldsData.map((fieldData, i) => <React.Fragment key={i}>
-                        {/* console.log(fieldData, fieldData.subfields) */}
-                        <tr><td colSpan="3" style={fieldSeparatorStyle}></td></tr>
-                        <tr>
-                            <td>{code}</td>
-                            <td>
-                                {fieldData.subfields && <form onSubmit={onAddSubfield(code, field, i)}>
-                                    <input name="subfield" minLength="1" maxLength="1" />
-                                    <button>Add subfield</button>
-                                </form>}
-                                <button onClick={onRemoveField(code, i)}>Remove field</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                {fieldData.indicators ? <>
-                                    <input value={fieldData.indicators[0]} onChange={onIndicatorChange(field, i, 0)} />
-                                    <input value={fieldData.indicators[1]} onChange={onIndicatorChange(field, i, 1)} />
-                                </>
-                                    : <input value={fieldData} onChange={onFieldChange(code)} />}
-                            </td>
-                        </tr>
-                        {fieldData.subfields && Object.entries(fieldData.subfields).map(([subfieldCode, subfieldData]) =>
-                            <React.Fragment key={subfieldCode}>
-                                <tr>
-                                    <td>{subfieldCode}</td>
-                                </tr>
-                                {subfieldData.map((value, n) => <tr key={n}>
-                                    <td></td>
-                                    <td>
-                                        <input value={value} onChange={onSubfieldChange(field, i, subfieldCode, n)} />
-                                        <button onClick={onRemoveSubfield(field, i, subfieldCode, n)}>Remove subfield</button>
-                                    </td>
-                                </tr>)}
-                            </React.Fragment>)}
+        <>
+            <div id="top" style={{ margin: "20px 0px" }}>
+                Fields in this record: {editedRecord.FIELDS.map(([code]) => <><a href={`#field-${code}`}>{code}</a>, </>)}
+            </div>
+            <table style={{ width: "100%" }}>
+                <tbody>
+                    <tr>
+                        <td>Add field</td>
+                        <td><form onSubmit={onAddField}>
+                            <input name="field" maxLength="3" minLength="3" />
+                            <button>Add field</button>
+                        </form></td>
+                    </tr>
+                    {editedRecord.FIELDS.map(([code = "000", fieldsData = {}], field) => <React.Fragment key={code}>
+                        {fieldsData.map((fieldData, i) => <React.Fragment key={i}>
+                            {/* console.log(fieldData, fieldData.subfields) */}
+                            <tr><td colSpan="3" style={fieldSeparatorStyle}><hr /></td></tr>
+                            <tr>
+                                <td id={`field-${code}`}>{code} <a href="#top">Top</a></td>
+                                <td>
+                                    {fieldData.indicators ? <>
+                                        <input style={indicatorInputStyle} value={fieldData.indicators[0]} onChange={onIndicatorChange(field, i, 0)} />
+                                        <input style={indicatorInputStyle} value={fieldData.indicators[1]} onChange={onIndicatorChange(field, i, 1)} />
+                                    </>
+                                        : <input value={fieldData} onChange={onFieldChange(code)} />}
+                                </td>
+                                <td style={{ display: "flex" }}>
+                                    {fieldData.subfields && <form onSubmit={onAddSubfield(code, field, i)}>
+                                        <input name="subfield" minLength="1" maxLength="1" />
+                                        <button>Add subfield</button>
+                                    </form>}
+                                    <button onClick={onRemoveField(code, i)}>Remove field</button>
+                                </td>
+                            </tr>
+                            {fieldData.subfields && Object.entries(fieldData.subfields).map(([subfieldCode, subfieldData]) =>
+                                <React.Fragment key={subfieldCode}>
+                                    <tr>
+                                        <td>{subfieldCode}</td>
+                                    </tr>
+                                    {subfieldData.map((value, n) => <tr key={n}>
+                                        <td></td>
+                                        <td>
+                                            <input value={value} onChange={onSubfieldChange(field, i, subfieldCode, n)} />
+                                            <button onClick={onRemoveSubfield(field, i, subfieldCode, n)}>Remove subfield</button>
+                                        </td>
+                                    </tr>)}
+                                </React.Fragment>)}
+                        </React.Fragment>)}
                     </React.Fragment>)}
-                </React.Fragment>)}
-                <tr><td colSpan={3}><button onClick={onSave}>Save</button></td></tr>
-                <tr><td colSpan={3}><button onClick={onPreviewSave}>Save for Preview</button></td></tr>
-            </tbody>
-        </table>
+                    <tr><td colSpan={3}><button onClick={onSave}>Save</button></td></tr>
+                    <tr><td colSpan={3}><button onClick={onPreviewSave}>Save for Preview</button></td></tr>
+                </tbody>
+            </table>
+        </>
     );
 };
 
