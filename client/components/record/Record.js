@@ -64,6 +64,8 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
                             <a href={link.u} target="_blank">{link.y}</a>
                         </div>)}</td></tr>
 
+                    <RecordNotes record={record} />
+
                     {/* TODO: Add notes <RecordNotes record={record} /> */}
                 </tbody>
             </table>
