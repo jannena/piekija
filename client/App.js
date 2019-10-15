@@ -11,7 +11,6 @@ import { getUser } from "./reducers/userReducer";
 import { setToken } from "./reducers/tokenReducer";
 import "./css/global.css";
 import AdvancedSearch from "./components/AdvancedSearch";
-import SearchField from "./components/SearchField";
 import Staff from "./components/staff/Staff";
 import StaffEditRecord from "./components/staff/StaffEditRecord";
 import { getLastNotes } from "./reducers/noteReducer";
@@ -72,7 +71,6 @@ const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRe
                 </>} />
                 <Route exact path="/search" render={({ location, history }) =>
                     <>
-                        <SearchField />
                         <AdvancedSearch />
                         <hr />
                         <Search />
