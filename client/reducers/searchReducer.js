@@ -41,7 +41,10 @@ export const search = (query, page, sort, advanced) => (dispatch, getState) => {
             dispatch({
                 type: "SUCCESS_SEARCH",
                 key,
-                result
+                result,
+
+                page: page || 1,
+                query, sort, advanced
             });
             dispatch(notify("success", "searched"));
         })

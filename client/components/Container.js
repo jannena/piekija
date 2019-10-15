@@ -5,13 +5,16 @@ import Notifications from "./Notifications";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { simpleSearch } from "../reducers/searchReducer";
+import { setQuery } from "../reducers/queryReducer";
 
 // TODO: Create user/login/staff menu
 
-const Container = ({ loading, history, simpleSearch, children }) => {
+const Container = ({ loading, history, simpleSearch, setQuery, children }) => {
     const handleSearch = e => {
         e.preventDefault();
-        simpleSearch(e.target.query.value);
+        const newQuery = e.target.query.value
+        simpleSearch(newQuery);
+        setQuery("simple", newQuery);
         history.push("/search");
     };
 
@@ -52,5 +55,5 @@ export default connect(
     state => ({
         loading: state.loading.loading
     }),
-    { simpleSearch }
+    { simpleSearch, setQuery }
 )(withRouter(Container));
