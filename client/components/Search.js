@@ -1,6 +1,4 @@
 import React from "react";
-import SearchField from "./SearchField";
-import AdvancedSearch from "./AdvancedSearch";
 import Select from "./Select";
 import RecordPreview from "./RecordPreview";
 import { connect } from "react-redux";
@@ -9,7 +7,7 @@ import Loader from "./Loader";
 
 const resultsPerPage = 3;
 
-const Search = ({ state, result, page, sort, nextPage, previousPage, resort }) => {
+const Search = ({ state, type, result, page, sort, nextPage, previousPage, resort }) => {
 
     const handleResort = e => {
         resort(e.target.value);
@@ -32,7 +30,11 @@ const Search = ({ state, result, page, sort, nextPage, previousPage, resort }) =
                 : <>
                     <p>Found {result.found} records in {(result.time || NaN).toFixed(0)} milliseconds</p>
                     <div>
-                        <Select onChange={handleResort} defaultSelected={sort} options={[["Relevance", "relevance"], ["Year (newest first)", "year"], ["Latest added first", "timeAdded"]]} />
+                        <Select onChange={handleResort} defaultSelected={sort} options={
+                            type === "advanced"
+                                ? [["Year (newest first)", "year"], ["Latest added first", "timeAdded"]]
+                                : [["Relevance", "relevance"], ["Year (newest first)", "year"], ["Latest added first", "timeAdded"]]
+                        } />
                     </div>
                     {/* TODO: Print also where was the match?? Not possible yet */}
                     {result.result.map(record => <RecordPreview key={record.id} record={record} />)}
@@ -51,7 +53,8 @@ export default connect(
         result: state.search.result,
         page: state.query.page,
         state: state.loading.search,
-        sort: state.query.sort
+        sort: state.query.sort,
+        type: state.query.type
     }),
     { nextPage, previousPage, resort }
 )(Search);

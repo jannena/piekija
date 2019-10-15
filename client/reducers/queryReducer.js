@@ -45,7 +45,7 @@ export const resort = sort => (dispatch, getState) => {
         type: "RESORT",
         sort
     });
-    dispatch(search(getState().query.query, 1, sort, getState().query.advancement === "advanced"));
+    dispatch(search(getState().query.query, 1, sort, getState().query.type === "advanced"));
 };
 
 export const nextPage = () => (dispatch, getState) => {
