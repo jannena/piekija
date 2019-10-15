@@ -11,7 +11,7 @@ const StyledTabTitle = styled.div`
     margin-bottom: -1px;
 `;
 
-{/* TODO: Fix selected shadow: over border. Make container? */}
+{/* TODO: Fix selected shadow: over border. Make container? */ }
 const StyledSelectedTabTitle = styled.div`
     color: black;
     background-color: white;
@@ -42,7 +42,7 @@ const TabsWithoutRouter = ({ titles, root, addresses, children, history }) => {
 
     const handleTabChange = i => () => {
         history.push(`/${root}/${addresses[i]}`);
-        setSelectedTab(i);
+        // setSelectedTab(i);
     };
 
     // TODO: Show correct selected tab styled after reload
@@ -56,7 +56,10 @@ const TabsWithoutRouter = ({ titles, root, addresses, children, history }) => {
                 )}
             </div>
             {children.map((child, i) =>
-                <Route exact path={`/${root}/${addresses[i]}`} render={() => <StyledTabContainer>{child}</StyledTabContainer>} />
+                <Route exact path={`/${root}/${addresses[i]}`} render={() => <StyledTabContainer>
+                    {setSelectedTab(i)}
+                    {child}
+                </StyledTabContainer>} />
             )}
         </div>
     );
