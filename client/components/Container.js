@@ -13,8 +13,8 @@ const Container = ({ loading, history, simpleSearch, setQuery, children }) => {
     const handleSearch = e => {
         e.preventDefault();
         const newQuery = e.target.query.value
-        simpleSearch(newQuery);
-        setQuery("simple", newQuery);
+        // simpleSearch(newQuery, 1, "relevance");
+        setQuery("simple", newQuery, "relevance", 1);
         history.push("/search");
     };
 

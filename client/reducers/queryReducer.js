@@ -3,7 +3,7 @@ import { search } from "./searchReducer";
 const init = {
     type: "",
     query: "",
-    sort: null,
+    sort: "relevance",
     page: 1
 };
 
@@ -22,20 +22,30 @@ const queryReducer = (state = init, action) => {
                 page: 1
             };
         case "RESORT":
-            break;
+            return { ...state, sort: action.sort };
     }
     return state;
 };
 
 export default queryReducer;
 
-export const setQuery = (advancement, query) => dispatch => {
+export const setQuery = (advancement, query, sort = "relevance", page = 1) => dispatch => {
     dispatch({
         type: "SET_QUERY",
         advancement,
-        query
+        query,
+        sort,
+        page
     });
-    dispatch(search(query, 1, undefined, advancement === "advanced"));
+    dispatch(search(query, page, sort, advancement === "advanced"));
+};
+
+export const resort = sort => (dispatch, getState) => {
+    dispatch({
+        type: "RESORT",
+        sort
+    });
+    dispatch(search(getState().query.query, 1, sort, getState().query.advancement === "advanced"));
 };
 
 export const nextPage = () => (dispatch, getState) => {
@@ -45,7 +55,7 @@ export const nextPage = () => (dispatch, getState) => {
     dispatch(search(
         getState().query.query,
         getState().query.page,
-        undefined,
+        getState().query.sort,
         getState().query.type === "advanced"
     ));
 };
@@ -57,7 +67,7 @@ export const previousPage = () => (dispatch, getState) => {
     dispatch(search(
         getState().query.query,
         getState().query.page,
-        undefined,
+        getState().query.sort,
         getState().query.type === "advanced"
     ));
 };

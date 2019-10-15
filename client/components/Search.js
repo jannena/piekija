@@ -4,12 +4,16 @@ import AdvancedSearch from "./AdvancedSearch";
 import Select from "./Select";
 import RecordPreview from "./RecordPreview";
 import { connect } from "react-redux";
-import { nextPage, previousPage } from "../reducers/queryReducer";
+import { nextPage, previousPage, resort } from "../reducers/queryReducer";
 import Loader from "./Loader";
 
 const resultsPerPage = 3;
 
-const Search = ({ state, result, page, nextPage, previousPage }) => {
+const Search = ({ state, result, page, sort, nextPage, previousPage, resort }) => {
+
+    const handleResort = e => {
+        resort(e.target.value);
+    };
 
     console.log("rendered search");
     console.log("sivulla", page, !page || page === 1);
@@ -27,6 +31,10 @@ const Search = ({ state, result, page, nextPage, previousPage }) => {
                 ? `No results in${result.time && ` ${result.time} ms`}`
                 : <>
                     <p>Found {result.found} records in {(result.time || NaN).toFixed(0)} milliseconds</p>
+                    <div>
+                        <Select onChange={handleResort} defaultSelected={sort} options={[["Relevance", "relevance"], ["Year (newest first)", "year"], ["Latest added first", "timeAdded"]]} />
+                    </div>
+                    {/* TODO: Print also where was the match?? Not possible yet */}
                     {result.result.map(record => <RecordPreview key={record.id} record={record} />)}
                     <p>
                         {page >= 2 && <button onClick={previousPage}>&lt;&lt; previous</button>}
@@ -42,7 +50,8 @@ export default connect(
     state => ({
         result: state.search.result,
         page: state.query.page,
-        state: state.loading.search
+        state: state.loading.search,
+        sort: state.query.sort
     }),
-    { nextPage, previousPage }
+    { nextPage, previousPage, resort }
 )(Search);

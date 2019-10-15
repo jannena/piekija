@@ -91,6 +91,15 @@ const simpleSearch = async (req, res, next) => {
         console.log("New ready query", JSON.stringify(query2));
 
 
+        const sortObject = (() => {
+            switch (sort) {
+                case "relevance": return { $sort: { numRelTags: -1 } };
+                case "year": return { $sort: { year: -1 } };
+                case "timeAdded": return { $sort: { timeAdded: -1 } };
+            }
+        })();
+
+
         const result = await Record.aggregate([
             {
                 $facet: {
@@ -125,7 +134,7 @@ const simpleSearch = async (req, res, next) => {
                                 }
                             }
                         },
-                        { $sort: { numRelTags: -1 } },
+                        sortObject,
                         { $skip: searchResultsPerPage * page },
                         { $limit: searchResultsPerPage }
                     ],
