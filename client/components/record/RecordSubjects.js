@@ -1,13 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { setQuery } from "../../reducers/queryReducer";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
-const ReocrdSubjects = ({ record }) => {
+const ReocrdSubjects = ({ record, history, setQuery }) => {
+    const searchForSubject = subject => () => {
+        setQuery("advanced", ["AND", [["subjects", subject, "is"]]]);
+        history.push("/search");
+    };
+
     const subjects = subject => {
         const everythingButA = subject["v"].concat(subject["x"], subject["y"], subject["z"], subject["t"], subject["n"], subject["r"]);
         return (<>
-            <Link to={`/search?type=simple&q=${subject["a"].join("")}`}>{subject["a"].join("")}</Link>
+            <a href="javascript:void(0);" onClick={searchForSubject(subject["a"].join(""))}>{subject["a"].join("")}</a>
             {!!everythingButA.length && " --> " + everythingButA.join(" --> ")}
         </>);
     };
@@ -38,4 +45,7 @@ const ReocrdSubjects = ({ record }) => {
     );
 };
 
-export default ReocrdSubjects;
+export default connect(
+    null,
+    { setQuery }
+)(withRouter(ReocrdSubjects));
