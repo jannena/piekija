@@ -17,6 +17,7 @@ import { getLastNotes } from "./reducers/noteReducer";
 
 import { addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf } from "./reducers/shelfReducer";
 import { setSocketIOEventListeners, startWS } from "./socket";
+import FrontPageNews from "./components/FrontPageNews";
 
 // TODO: Learn how React router works or make better (clearer) router
 
@@ -62,13 +63,7 @@ const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRe
         <Router>
             <Container>
                 {/* Screens open for everyone */}
-                <Route exact path="/" render={() => <>
-                    <h2>News</h2>
-                    {news.map(n => <div>
-                        <h3>{n.title}</h3>
-                        <div>{n.content}</div>
-                    </div>)}
-                </>} />
+                <Route exact path="/" render={() => <FrontPageNews />} />
                 <Route exact path="/search" render={({ location, history }) =>
                     <>
                         <AdvancedSearch />
