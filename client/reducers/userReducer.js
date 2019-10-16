@@ -1,8 +1,12 @@
 import userService from "../services/userService";
 import { notify } from "./notificationReducer";
 
+// TODO: Update to user loader
+
 const userReducer = (state = null, action) => {
     switch (action.type) {
+        case "SAVE_USER":
+            return { ...action.user, loans: state.loans }
         case "SET_USER":
             return action.user;
         case "SET_TFA":
@@ -16,12 +20,14 @@ const userReducer = (state = null, action) => {
             stateToUpdate.shelves = [...stateToUpdate.shelves, { note: "", id: { id: action.shelf.if, name: action.shelf.name }, author: true }];
             return stateToUpdate;
         case "PSUCCESS_CIRCULATION_RENEW":
+            // TODO: Check whether loaner is same as logged in user
             return {
                 ...state,
                 loans: state.loans.map(l => action.item !== l.id ? l : ({
                     ...l,
                     stateDueDate: action.dueDate,
-                    stateTimesRenewed: l.stateTimesRenewed + 1 }))
+                    stateTimesRenewed: l.stateTimesRenewed + 1
+                }))
             };
     }
     return state;
@@ -53,7 +59,7 @@ export const updateUser = (oldPassword, name, password) => async (dispatch, getS
             password
         }, getState().token.token);
         dispatch({
-            type: "SET_USER",
+            type: "SAVE_USER",
             user: newMe
         });
         dispatch(notify("success", "User infomation updated!"));
