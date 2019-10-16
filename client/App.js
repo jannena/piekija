@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Search from "./components/Search";
 import Record from "./components/record/Record";
 import Login from "./components/Login";
@@ -62,34 +62,39 @@ const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRe
     return (
         <Router>
             <Container>
-                {/* Screens open for everyone */}
-                <Route exact path="/" render={() => <FrontPageNews />} />
-                <Route exact path="/search" render={({ location, history }) =>
-                    <>
-                        <AdvancedSearch />
-                        <hr />
-                        <Search />
-                    </>
-                } />
-                <Route exact path="/record/:id" render={({ match, history }) => {
-                    console.log(match, match.params, match.params.id);
-                    return <Record id={match.params.id} history={history} />
-                }} />
+                <Switch>
+                    {/* Screens open for everyone */}
+                    <Route exact path="/" render={() => <FrontPageNews />} />
+                    <Route exact path="/search" render={({ location, history }) =>
+                        <>
+                            <AdvancedSearch />
+                            <hr />
+                            <Search />
+                        </>
+                    } />
+                    <Route exact path="/record/:id" render={({ match, history }) => {
+                        console.log(match, match.params, match.params.id);
+                        return <Record id={match.params.id} history={history} />
+                    }} />
 
 
-                {/* Screens for logged in users */}
-                <Route exact path="/login" render={() => <Login setToken={setToken} />} />
-                <Route exact path="/user" render={() => {
-                    return <UserInfo />;
-                }} />
-                <Route exact path="/shelf/:id" render={({ match }) => {
-                    return <Shelf shelfId={match.params.id} />;
-                }} />
+                    {/* Screens for logged in users */}
+                    <Route exact path="/login" render={() => <Login setToken={setToken} />} />
+                    <Route exact path="/user" render={() => {
+                        return <UserInfo />;
+                    }} />
+                    <Route exact path="/shelf/:id" render={({ match }) => {
+                        return <Shelf shelfId={match.params.id} />;
+                    }} />
 
 
-                {/* Staff screens */}
-                <Route path="/staff" render={({ history }) => <Staff history={history} />} />
-                <Route path="/staff/record/:id" render={({ match }) => <StaffEditRecord id={match.params.id} />} />
+                    {/* Staff screens */}
+                    <Route path="/staff" render={({ history }) => <Staff history={history} />} />
+                    <Route path="/staff/record/:id" render={({ match }) => <StaffEditRecord id={match.params.id} />} />
+
+                    {/* Not found */}
+                    <Route path="*" render={() => <p>Not found</p>} />
+                </Switch>
             </Container>
         </Router>
     );
