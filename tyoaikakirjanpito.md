@@ -45,7 +45,8 @@
 | 12.10. | 1 | ulkoasua |
 | 13.10. | 2,5 | ulkoasua |
 | 14.10. | 2,5 | ulkoasua, mongodb:n aggregationeihin tutustumista, hakutulosten järjestäminen relevanssin mukaan |
-| 15.10. | 1 | yksinkertaisen haun päivitys,  |
+| 15.10. | 1 | yksinkertaisen haun päivitys |
 | 16.10. | 1 | "sälää": ulkoasua ja korjailua |
+| 17.10. | 1 | ulkoasua |
 | | | |
-| yht. | 98 | |
+| yht. | 99 | |
