@@ -29,6 +29,7 @@ header {
 }
 
 main {
+    min-height: calc(100vh - 250px);
     margin: auto;
     width: 100%;
     max-width: 1000px;
@@ -36,6 +37,10 @@ main {
 }
 
 footer {
+    width: 100%;
+    color: white;
+    background-color: black;
+    padding: 20px;
     text-align: center;
 }
 
