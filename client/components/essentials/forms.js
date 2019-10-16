@@ -9,14 +9,25 @@ export const Form = ({ children, onSubmit }) => {
 };
 
 const StyledContainer = styled.div`
-    display: flex;
     margin: 20px 0px;
+    
+    @media only screen and (min-width: 768px) {
+        display: flex;
+    }
 `;
 const StyledInputTitle = styled.div`
-    width: 50%;
+    width: 100%;
+
+    @media only screen and (min-width: 768px) 
+        width: 50%;
+    }
 `;
 const StyledInputContainer = styled.div`
-    width: 50%;
+    width: 100%;
+    
+    @media only screen and (min-width: 768px) 
+        width: 50%;
+    }
 `;
 
 const InputTemplate = ({ id, name, title, description, children }) => <StyledContainer>
