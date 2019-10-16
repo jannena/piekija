@@ -11,6 +11,12 @@ const StyledTabTitle = styled.div`
     margin-bottom: -1px;
 `;
 
+const StyledTabTitlesContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    background-color: black;
+`;
+
 {/* TODO: Fix selected shadow: over border. Make container? */ }
 const StyledSelectedTabTitle = styled.div`
     color: black;
@@ -49,12 +55,12 @@ const TabsWithoutRouter = ({ titles, root, addresses, children, history }) => {
 
     return (
         <div>
-            <div style={{ display: "flex" }}>
+            <StyledTabTitlesContainer>
                 {titles.map((title, i) => i === selectedTab
                     ? <StyledSelectedTabTitle key={i} onClick={handleTabChange(i)}>{title}</StyledSelectedTabTitle>
                     : <StyledTabTitle key={i} onClick={handleTabChange(i)}>{title}</StyledTabTitle>
                 )}
-            </div>
+            </StyledTabTitlesContainer>
             {children.map((child, i) =>
                 <Route exact path={`/${root}/${addresses[i]}`} render={() => <StyledTabContainer>
                     {setSelectedTab(i)}
@@ -72,11 +78,11 @@ export const Tabs = ({ titles, children }) => {
 
     return (
         <div>
-            <div style={{ display: "flex" }}>
+            <StyledTabTitlesContainer>
                 {titles.map((title, i) => i === selectedTab
                     ? <StyledSelectedTabTitle key={i} onClick={() => setSelectedTab(i)}>{title}</StyledSelectedTabTitle>
                     : <StyledTabTitle key={i} onClick={() => setSelectedTab(i)}>{title}</StyledTabTitle>)}
-            </div>
+            </StyledTabTitlesContainer>
             <StyledTabContainer>{children[selectedTab]}</StyledTabContainer>
         </div>
     );
