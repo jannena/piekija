@@ -21,6 +21,13 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
     if (state.state === 1) return <Loader />;
     if (state.state === 3) return <p>Error: {state.error}</p>;
 
+    // TODO: Fast page selector
+    const howManyPages = Math.ceil(((result && result.found) || 0) / resultsPerPage);
+    /* const selectPage = () => {
+        const array = new Array(5).fill(0);
+        return array.map((page, i) => <span>{i}</span>);
+    }; */
+
     return (
         <div>
             {/* Order by {<Select options={[["default", "default"], ["time added", "timeAdded"], ["year", "year"], ["alphapetical", "a"]]} />} */}
@@ -38,11 +45,11 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
                     </div>
                     {/* TODO: Print also where was the match?? Not possible yet */}
                     {result.result.map(record => <RecordPreview key={record.id} record={record} />)}
-                    <p>
-                        {page >= 2 && <button onClick={previousPage}>&lt;&lt; previous</button>}
-                        | Page {page} |
-                        {(result.found > page * resultsPerPage) && <button onClick={nextPage}>next &gt;&gt;</button>}
-                    </p>
+                    <div style={{ textAlign: "center", lineHeight: "50px" }}>
+                        {page >= 2 && <a href="javascript:void(0);" onClick={previousPage}>&lt;&lt; Previous</a>}
+                        | Page {page} / {howManyPages} |
+                        {(result.found > page * resultsPerPage) && <a href="javascript:void(0);" onClick={nextPage}>Next &gt;&gt;</a>}
+                    </div>
                 </>}
         </div>
     );
