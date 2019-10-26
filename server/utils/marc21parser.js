@@ -249,7 +249,7 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
             // console.log(field[subfield].map(term => term.split(" ")));
             // console.log("jyyyy", field[subfield]);
             try {
-                console.log("field[subfield]", field[subfield]);
+                // console.log("field[subfield]", field[subfield]);
                 /* const temp1 = field[subfield].map(term => term.split(" "));
                 const temp = flat(temp1);
                 console.log("temp !!!", temp, "temp1 !!!", temp1);
@@ -268,7 +268,7 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
             }
         });
     });
-    console.log("ret !!!", ret);
+    // console.log("ret !!!", ret);
     return ret;
 };
 
@@ -278,7 +278,7 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
  * Spelling 3: julkaisija, huomautukset, sarja
 */
 const getSpelling = parsedMARC => {
-    console.log("parsedMARC !!!", parsedMARC);
+    // console.log("parsedMARC !!!", parsedMARC);
     const spelling1 = [...new Set([].concat(
         // title
         getFieldSpelling(
@@ -298,6 +298,24 @@ const getSpelling = parsedMARC => {
             ["100", "110", "700", "710"],
             ["a", "b", "c"]
         ),
+        // series
+        getFieldSpelling(
+            parsedMARC,
+            ["490", "830"],
+            ["a"]
+        ),
+        // standardCodes
+        getFieldSpelling(
+            parsedMARC,
+            ["020", "022", "024"],
+            ["a"]
+        ),
+        // classification
+        getFieldSpelling(
+            parsedMARC,
+            ["050", "080", "082", "084"],
+            ["a"]
+        )
     ))].filter(value => value.length > 2);
     const spelling2 = [...new Set([].concat(
         // publishersEtc
@@ -317,24 +335,6 @@ const getSpelling = parsedMARC => {
             parsedMARC,
             ["520"],
             ["a", "b"]
-        ),
-        // series
-        getFieldSpelling(
-            parsedMARC,
-            ["490", "830"],
-            ["a"]
-        ),
-        // standardCodes
-        getFieldSpelling(
-            parsedMARC,
-            ["020", "022", "024"],
-            ["a"]
-        ),
-        // classification
-        getFieldSpelling(
-            parsedMARC,
-            ["050", "080", "082", "084"],
-            ["a"]
         ),
         // notes
         getFieldSpelling(
@@ -360,7 +360,8 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     // TODO: There are catalouging rules.
     const year = (() => {
         try {
-            return Number(parsedMARC.FIELDS["008"][0].substring(7, 11));
+            const y = Number(parsedMARC.FIELDS["008"][0].substring(7, 11));
+            return isNaN(y) ? -10000 : y;
         }
         catch (err) {
             return -10000;
@@ -422,7 +423,7 @@ const parseMARCToDatabse = (parsedMARC, data) => {
 
     const { spelling1, spelling2 } = getSpelling(parsedMARC);
 
-    console.log(spelling1, spelling2);
+    // console.log(spelling1, spelling2);
 
     return {
         timeAdded: new Date(),

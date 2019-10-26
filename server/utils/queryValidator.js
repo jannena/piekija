@@ -142,5 +142,6 @@ const validateSimpleQuery = query => {
 
 module.exports = {
     validateAdvancedQuery,
-    validateSimpleQuery
+    validateSimpleQuery,
+    queryContainsOps
 };

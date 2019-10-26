@@ -1,7 +1,7 @@
 const searchRouter = require("express").Router();
 const Record = require("../models/Record");
 
-const { validateAdvancedQuery, validateSimpleQuery } = require("../utils/queryValidator");
+const { validateAdvancedQuery, validateSimpleQuery, queryContainsOps } = require("../utils/queryValidator");
 
 // TODO: pagination
 
@@ -49,8 +49,14 @@ const search = async (req, res, next, simple) => {
     }
 };
 
-// TODO: This implementation does not support AND and OR operators :(
 const simpleSearch = async (req, res, next) => {
+    return queryContainsOps(req.body.query)
+        ? await search(req, res, next, true)
+        : await relevanceSimpleSearch(req, res, next);
+};
+
+// TODO: This implementation does not support AND and OR operators :(
+const relevanceSimpleSearch = async (req, res, next) => {
     const { query, page: p, sort } = req.body;
     if (!query) return res.status(401).json({ error: "query is missing" });
 
