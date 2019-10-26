@@ -5,7 +5,7 @@ const { validateAdvancedQuery, validateSimpleQuery, queryContainsOps } = require
 
 // TODO: pagination
 
-const searchResultsPerPage = 3;
+const searchResultsPerPage = 20;
 
 const search = async (req, res, next, simple) => {
     const { query, page: p, sort } = req.body;

@@ -18,7 +18,7 @@ const queryReducer = (state = init, action) => {
             return {
                 type: action.advancement,
                 query: action.query,
-                sort: null,
+                sort: action.sort,
                 page: 1
             };
         case "RESORT":

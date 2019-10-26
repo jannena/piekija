@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { nextPage, previousPage, resort } from "../reducers/queryReducer";
 import Loader from "./Loader";
 
-const resultsPerPage = 3;
+const resultsPerPage = 20;
 
 const Search = ({ state, type, result, page, sort, nextPage, previousPage, resort }) => {
 
