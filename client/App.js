@@ -89,8 +89,8 @@ const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRe
 
 
                     {/* Staff screens */}
-                    <Route path="/staff" render={({ history }) => <Staff history={history} />} />
                     <Route path="/staff/record/:id" render={({ match }) => <StaffEditRecord id={match.params.id} />} />
+                    <Route path="/staff" render={({ history }) => <Staff history={history} />} />
 
                     {/* Not found */}
                     <Route path="*" render={() => <p>Not found</p>} />
