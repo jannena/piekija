@@ -13,9 +13,20 @@ import { getRecord } from "../../reducers/recordReducer";
 import Loader from "../Loader";
 import RecordPublisherInfo from "./RecordPublisherInfo";
 import RecordAuthors from "./RecordAuthors";
+import styled from "styled-components";
+import "../../css/record.css";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
+
+const StyledTBody = styled.tbody`
+    border-bottom: 1px solid black;
+
+    &:after {
+        content "";
+        height: 5px;
+    }
+`;
 
 const Record = ({ state, record, getRecord, id, history, isPreview }) => {
     console.log(id);
@@ -54,14 +65,17 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
             </div>
             <RecordTime record={record} />
 
-            <table style={{ width: "100%" }}>
-                <tbody>
+            <table className="record-table">
+                <StyledTBody>
                     <RecordAuthors record={record} />
                     <RecordSubjects record={record} />
+                </StyledTBody>
+                <StyledTBody>
                     <RecordClassification record={record} />
                     <RecordStandardCodes record={record} />
+                </StyledTBody>
+                <StyledTBody>
                     <RecordPublisherInfo record={record} />
-                    <RecordLanguages record={record} />
                     {!!series.length && <tr><td>Series</td> <td>{series}</td></tr>}
                     {!!appearance.length && <tr><td>Appearance</td> <td>{appearance.join(" ")}</td></tr>}
                     <tr><td>Links</td> <td>{MARC21
@@ -69,11 +83,16 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
                         .map(link => <div>
                             <a href={link.u} target="_blank">{link.y}</a>
                         </div>)}</td></tr>
+                </StyledTBody>
 
+                <StyledTBody className="record-languages-rows">
+                    <RecordLanguages record={record} />
+                </StyledTBody>
+                <StyledTBody>
                     <RecordNotes record={record} />
 
                     {/* TODO: Add notes <RecordNotes record={record} /> */}
-                </tbody>
+                </StyledTBody>
             </table>
 
 
