@@ -5,9 +5,18 @@ import { connect } from "react-redux";
 import { nextPage, previousPage, resort } from "../reducers/queryReducer";
 import Loader from "./Loader";
 import Expandable from "./essentials/Expandable";
-import Columns from "./essentials/Columns";
+import { Columns, Column } from "./essentials/Columns";
 
 const resultsPerPage = 20;
+
+const SearchFilterTemplate = ({ title, type, data }) => <>
+    <p>{title}</p>
+    <div>
+        <ul>
+            {data.filter(({ _id }) => _id).map(({ _id, count }) => <li key={_id}>{_id} ({count})</li>)}
+        </ul>
+    </div>
+</>;
 
 const Search = ({ state, type, result, page, sort, nextPage, previousPage, resort }) => {
 
@@ -32,8 +41,6 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
 
     return (
         <div>
-            {/* Order by {<Select options={[["default", "default"], ["time added", "timeAdded"], ["year", "year"], ["alphapetical", "a"]]} />} */}
-
             {result.result.length === 0
                 ? `No results in${result.time && ` ${result.time} ms`}`
                 : <>
@@ -46,22 +53,22 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
                         } />
                     </div>
                     <div>
-                        <Expandable title="Filter search" noPadding={true}>
+                        {result.filters && <Expandable title="Filter search" noPadding={true}>
                             <Columns>
-                                <div>
-                                    <p>Subject</p>
-                                </div>
-                                <div>
-                                    <p>Author</p>
-                                </div>
-                                <div>
-                                    <p>Year</p>
-                                </div>
-                                <div>
-                                    <p>Language</p>
-                                </div>
+                                <Column>
+                                    <SearchFilterTemplate title="Subjects" data={result.filters.subjects} />
+                                </Column>
+                                <Column>
+                                    <SearchFilterTemplate title="Authors" data={result.filters.authors} />
+                                </Column>
+                                <Column>
+                                    <SearchFilterTemplate title="Years" data={result.filters.years} />
+                                </Column>
+                                <Column>
+                                    <SearchFilterTemplate title="Languages" data={result.filters.languages} />
+                                </Column>
                             </Columns>
-                        </Expandable>
+                        </Expandable>}
                     </div>
                     {/* TODO: Print also where was the match?? Not possible yet */}
                     {result.result.map(record => <RecordPreview key={record.id} record={record} />)}
