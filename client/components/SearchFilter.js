@@ -12,6 +12,7 @@ const SearchFilter = ({ query, filters, setQuery }) => {
 
     const handleSearchFilterClick = (fieldType, value) => () => {
         if (query.type === "advanced") {
+            // TODO: What if operator is not AND?
             const newQuery = ["AND", [...query.query[1], [fieldType, value, "is"]]];
             setQuery("advanced", newQuery);
         }

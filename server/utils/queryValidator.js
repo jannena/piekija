@@ -6,7 +6,7 @@ const isValidOperator = operator =>
         "title", "author", "authors", "language", "languages", "year", "contentType",
         "series", "classification", "standardCodes", "country",
         "subjects", "genres",
-        "spelling1", "spelling2"
+        "spelling", "spelling1", "spelling2"
     ].indexOf(operator) !== -1;
 
 const validateAdvancedQuery = ([operator, value, type]) => {
@@ -171,13 +171,13 @@ const validateSimpleQuery = query => {
             "AND",
             query.split(" ").map(q => (["spelling1", q.toLowerCase(), "is"]))
         ]; */
-        return simplifySimpleQuery(validateSimpleQueryRecursion(query));
+        return validateAdvancedQuery(simplifySimpleQuery(validateSimpleQueryRecursion(query)));
     }
     catch (err) {
         console.log(err);
-        return ["AND", [
+        return validateAdvancedQuery(["AND", [
             ["spelling1", query.toLowerCase(), "is"]
-        ]];
+        ]]);
     }
 };
 

@@ -1,7 +1,7 @@
 const searchRouter = require("express").Router();
 const Record = require("../models/Record");
 
-const { validateAdvancedQuery, validateSimpleQuery, queryContainsOps } = require("../utils/queryValidator");
+const { validateAdvancedQuery, validateSimpleQuery } = require("../utils/queryValidator");
 
 // TODO: pagination
 
@@ -13,6 +13,7 @@ const search = async (req, res, next, simple) => {
 
     const page = Number(p) - 1 || 0
 
+    // TODO: sorting (also alpapetical?)
     const sortObject = (() => {
         switch (sort) {
             case "year": return { year: -1 };
@@ -25,7 +26,7 @@ const search = async (req, res, next, simple) => {
     const firstTime = process.hrtime();
 
     try {
-        let readyQuery = simple ? validateAdvancedQuery(validateSimpleQuery(query)) : validateAdvancedQuery(query);
+        let readyQuery = simple ? validateSimpleQuery(query) : validateAdvancedQuery(query);
         console.log("ready query", readyQuery);
         const result = await Record
             .find(readyQuery, { title: 1, author: 1, contentType: 1, year: 1 })
@@ -37,7 +38,9 @@ const search = async (req, res, next, simple) => {
         else {
             const found = await Record.countDocuments(readyQuery).then(number => number);
             console.log("found", found, result);
-            
+
+            // TODO: preformance_limit to config
+            // TODO: classification? maybe not
             const subjects = await Record.aggregate([
                 { $match: readyQuery },
                 { $unwind: "$subjects" },
