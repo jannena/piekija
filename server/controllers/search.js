@@ -29,18 +29,48 @@ const search = async (req, res, next, simple) => {
         console.log("ready query", readyQuery);
         const result = await Record
             .find(readyQuery, { title: 1, author: 1, contentType: 1, year: 1 })
-            .sort(sortObject)
+            // .sort(sortObject)
             .skip(searchResultsPerPage * page)
             .limit(searchResultsPerPage);
 
-        if (!result) res.status(404).json({ error: "no results" });
+        if (!result) res.status(404).end();
         else {
             const found = await Record.countDocuments(readyQuery).then(number => number);
             console.log("found", found, result);
 
+            // TODO: Search for search filters
+            const filters = (found <= 10000 && found > 0)
+                ? (await Record.aggregate([{
+                    $facet: {
+                        authors: [
+                            { $match: readyQuery },
+                            { $unwind: "$authors" },
+                            { $sortByCount: "$authors" },
+                            { $limit: 100 }
+                        ],
+                        subjects: [
+                            { $match: readyQuery },
+                            { $unwind: "$subjects" },
+                            { $sortByCount: "$subjects" },
+                            { $limit: 100 }
+                        ],
+                        years: [
+                            { $match: readyQuery },
+                            { $sortByCount: "$year" },
+                            { $limit: 100 }
+                        ],
+                        languages: [
+                            { $match: readyQuery },
+                            { $unwind: "$languages" },
+                            { $sortByCount: "$languages" }
+                        ]
+                    }
+                }]))[0]
+                : null;
+
             const secondTime = process.hrtime(firstTime);
 
-            res.json({ result, found, time: (secondTime[0] * 1e9 + secondTime[1]) * 1e-6 });
+            res.json({ result, found, time: (secondTime[0] * 1e9 + secondTime[1]) * 1e-6, filters });
         }
 
         // console.log(`${simple ? "simple" : "advanced"} search time ${(secondTime[0] * 1e9 + secondTime[1]) * 1e-6} ms`);
@@ -243,7 +273,8 @@ const relevanceSimpleSearch = async (req, res, next) => {
     }
 };
 
-searchRouter.post("/simple", async (req, res, next) => await simpleSearch(req, res, next, true));
+// searchRouter.post("/simple", async (req, res, next) => await simpleSearch(req, res, next, true));
+searchRouter.post("/simple", async (req, res, next) => await search(req, res, next, true));
 searchRouter.post("/advanced", async (req, res, next) => await search(req, res, next, false));
 
 module.exports = searchRouter;

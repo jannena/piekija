@@ -117,15 +117,60 @@ const simplifySimpleQuery = query => {
     return query;
 };
 
+const parseRequestNotContainingOps = query => {
+    const subquery = [];
+
+    const allwords = [];
+    query.toLowerCase().split(" ").map(w => {
+        if (w[0] === "+") {
+            subquery.push({
+                $or: [
+
+                    { "spelling1": w.substring(1) },
+                    { "spelling2": w.substring(1) },
+                ]
+            });
+            allwords.push(w.substring(1));
+        }
+        else if (w[0] === "-") {
+            subquery.push({
+                $and: [
+                    { "spelling1": { $ne: w.substring(1) } },
+                    { "spelling2": { $ne: w.substring(1) } },
+                ]
+            });
+            // allwords.push(w.substring(1));
+        }
+        else allwords.push(w);
+    });
+
+    const query2 = {
+        $and: [
+            {
+                $or:
+                    [
+                        ...allwords.map(w => ({ spelling1: w })),
+                        ...allwords.map(w => ({ spelling2: w }))
+                        /* { "spelling1": { "$in": allwords } },
+                        { "spelling2": { "$in": allwords } } */
+                    ]
+            }
+        ]
+    };
+    if (subquery.length > 0) query2.$and.push(...subquery);
+
+    return query2;
+};
+
 // TODO: fix parsing queries containing extra brackets
 const validateSimpleQuery = query => {
     // const query = q.toLowerCase();
     console.log("what is query?", query);
     try {
-        if (!queryContainsOps(query)) return [
+        if (!queryContainsOps(query)) return parseRequestNotContainingOps(query) /* return [
             "AND",
             query.split(" ").map(q => (["spelling1", q.toLowerCase(), "is"]))
-        ];
+        ]; */
         return simplifySimpleQuery(validateSimpleQueryRecursion(query));
     }
     catch (err) {
