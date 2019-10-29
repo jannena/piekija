@@ -13,13 +13,18 @@ const search = async (req, res, next, simple) => {
 
     const page = Number(p) - 1 || 0
 
-    // TODO: sorting (also alpapetical?)
+    // TODO: sorting (also alphapetical?)
     const sortObject = (() => {
         switch (sort) {
-            case "year": return { year: -1 };
+            case "year":
             case "relevance":
+                return { year: -1 };
+            case "yeardesc":
+                return { year: 1 };
             case "timeAdded":
-                return { timeAdded: -1 };
+                return { _id: -1 };
+            case "alphapetical":
+                return { title: -1 };
         }
     })();
 
@@ -30,7 +35,7 @@ const search = async (req, res, next, simple) => {
         console.log("ready query", readyQuery);
         const result = await Record
             .find(readyQuery, { title: 1, author: 1, contentType: 1, year: 1 })
-            // .sort(sortObject)
+            .sort(sortObject)
             .skip(searchResultsPerPage * page)
             .limit(searchResultsPerPage);
 

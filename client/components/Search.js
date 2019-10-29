@@ -34,11 +34,14 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
                 : <>
                     <p>Found {result.found} records in {(result.time || NaN).toFixed(0)} milliseconds</p>
                     <div>
-                        <Select onChange={handleResort} defaultSelected={sort} options={
+                        {/* <Select onChange={handleResort} defaultSelected={sort} options={
                             type === "advanced"
                                 ? [["Year (newest first)", "year"], ["Latest added first", "timeAdded"]]
                                 : [["Relevance", "relevance"], ["Year (newest first)", "year"], ["Latest added first", "timeAdded"]]
-                        } />
+                        } /> */}
+                        <Select onChange={handleResort} defaultSelected={sort}
+                            options={[["Year (newest first)", "year"], ["Year (oldest first)", "yeardesc"], ["Alphapetical", "alpapetical"], ["Latest added first", "timeAdded"]]}
+                        />
                     </div>
                     <SearchFilter />
                     {/* TODO: Print also where was the match?? Not possible yet */}
