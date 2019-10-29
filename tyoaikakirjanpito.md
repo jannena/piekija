@@ -48,5 +48,6 @@
 | 15.10. | 1 | yksinkertaisen haun päivitys |
 | 16.10. | 1 | "sälää": ulkoasua ja korjailua |
 | 17.10. | 1 | ulkoasua |
+| 26.10. | >2 | mongodb:n aggregationeihin tutustumista, haun päivittämisen yrittämistä |
 | | | |
-| yht. | 99 | |
+| yht. | 101 | |

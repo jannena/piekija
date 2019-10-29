@@ -4,6 +4,8 @@ import RecordPreview from "./RecordPreview";
 import { connect } from "react-redux";
 import { nextPage, previousPage, resort } from "../reducers/queryReducer";
 import Loader from "./Loader";
+import Expandable from "./essentials/Expandable";
+import Columns from "./essentials/Columns";
 
 const resultsPerPage = 20;
 
@@ -42,6 +44,24 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
                                 ? [["Year (newest first)", "year"], ["Latest added first", "timeAdded"]]
                                 : [["Relevance", "relevance"], ["Year (newest first)", "year"], ["Latest added first", "timeAdded"]]
                         } />
+                    </div>
+                    <div>
+                        <Expandable title="Filter search" noPadding={true}>
+                            <Columns>
+                                <div>
+                                    <p>Subject</p>
+                                </div>
+                                <div>
+                                    <p>Author</p>
+                                </div>
+                                <div>
+                                    <p>Year</p>
+                                </div>
+                                <div>
+                                    <p>Language</p>
+                                </div>
+                            </Columns>
+                        </Expandable>
                     </div>
                     {/* TODO: Print also where was the match?? Not possible yet */}
                     {result.result.map(record => <RecordPreview key={record.id} record={record} />)}

@@ -56,8 +56,10 @@ const simpleSearch = async (req, res, next) => {
 };
 
 // TODO: This implementation does not support AND and OR operators :(
+// TODO: This implementation uses too much memory :(
 const relevanceSimpleSearch = async (req, res, next) => {
-    const { query, page: p, sort } = req.body;
+    const { query, page: p } = req.body;
+    const sort = "timeAdded";
     if (!query) return res.status(401).json({ error: "query is missing" });
 
     const page = Number(p) - 1 || 0
@@ -96,8 +98,10 @@ const relevanceSimpleSearch = async (req, res, next) => {
                 {
                     $or:
                         [
-                            { "spelling1": { "$in": allwords } },
-                            { "spelling2": { "$in": allwords } }
+                            ...allwords.map(w => ({ spelling1: w })),
+                            ...allwords.map(w => ({ spelling2: w }))
+                            /* { "spelling1": { "$in": allwords } },
+                            { "spelling2": { "$in": allwords } } */
                         ]
                 }
             ]
@@ -107,60 +111,104 @@ const relevanceSimpleSearch = async (req, res, next) => {
         console.log("New ready query", JSON.stringify(query2));
 
 
-        const sortObject = (() => {
+        const sortObject = ((sort) => {
             switch (sort) {
                 case "relevance": return { $sort: { numRelTags: -1 } };
                 case "year": return { $sort: { year: -1 } };
                 case "timeAdded": return { $sort: { timeAdded: -1 } };
             }
-        })();
+        })("timeAdded");
+
+        /* const result = await Record
+            .find(query2, { title: 1, author: 1, contentType: 1, year: 1 })
+            .sort({ timeAdded: 1 })
+            .skip(searchResultsPerPage * page)
+            .limit(searchResultsPerPage); */
+
+        const result = await Record.aggregate([{
+            $facet: {
+                result: [
+                    { $match: query2 },
+                    { $limit: searchResultsPerPage },
+                    { $project: { title: 1, author: 1, year: 1 } }
+                ]/* ,
+                count: [
+                    { $match: query2 },
+                    { $project: { _id: 1 } },
+                    { $count: "count" }
+                ] */,
+                subjects: [
+                    { $match: query2 },
+                    { $limit: 10000 },
+                    { $unwind: "$subjects" },
+                    { $sort: { subjects: 1 } },
+                    { $group: { _id: "$subjects", count: { $sum: 1 } } },
+                    { $sort: { count: -1 } },
+                    { $limit: 100 }
+                ]
+            }
+        }]);
+
+        const count = await Record.countDocuments(query2).then(number => number);
 
 
-        const result = await Record.aggregate([
-            {
-                $facet: {
-                    result: [// { $match: { $or: [{ "spelling1": { "$in": allwords } }, { "spelling2": { "$in": allwords } }] } },
-                        { $match: query2 },
-                        { $unwind: "$spelling1" },
-                        // { $unwind: "$spelling2" },
-                        // { $match: { "spelling1": { "$in": allwords } } },
-                        { $match: { $or: [{ "spelling1": { "$in": allwords } }, { "spelling2": { "$in": allwords } }] } },
-                        {
-                            /* TODO: Now the record with more spelling2 things is ranked better. */
-                            $group: {
-                                id: { $first: "$_id" }, title: { $first: "$title" }, year: { $first: "$year" }, author: { $first: "$author" },
-                                _id: "$_id",
-                                numRelTags: {
-                                    $sum: {
-                                        $cond: {
-                                            if: { $not: { $in: ["$spelling1", allwords] } },
-                                            then: 0,
-                                            else: 3
-                                        }
-                                        // $switch: {
-                                        //     branches: [
-                                        //         // { "case": { $not: { $in: ["$spelling1", allwords] } }, then: 0 }
-                                        //         { "case": { $in: ["$spelling1", allwords] }, then: 5 },
-                                        //         { "case": { $in: ["$spelling2", allwords] }, then: 2 }
-                                        //     ],
-                                        //     default: 0
-                                        // }
-                                    },
-
+        /* const result = await Record.aggregate(
+            sort === "relevance"
+                // If sorting by relevance
+                ? [{
+                    $facet: {
+                        result: [
+                            { $match: query2 },
+                            { $unwind: "$spelling1" },
+                            { $match: { $or: [{ "spelling1": { "$in": allwords } }, { "spelling2": { "$in": allwords } }] } },
+                            {
+                                $group: {
+                                    id: { $first: "$_id" }, title: { $first: "$title" }, year: { $first: "$year" }, author: { $first: "$author" },
+                                    _id: "$_id",
+                                    numRelTags: {
+                                        $sum: {
+                                            $cond: {
+                                                if: { $not: { $in: ["$spelling1", allwords] } },
+                                                then: 0,
+                                                else: 1
+                                            }
+                                        },
+        
+                                    }
+                                }
+                            },
+                            sortObject,
+                            { $skip: searchResultsPerPage * page },
+                            { $limit: searchResultsPerPage }
+                        ],
+                        count: [
+                            { $match: query2 },
+                            { $count: "count" }
+                        ]
+                    }
+                }]
+                // If not sorting by relevance but year etc.
+                : [{
+                    $facet: {
+                        result: [
+                            { $match: query2 },
+                            sortObject,
+                            { $skip: searchResultsPerPage * page },
+                            { $limit: searchResultsPerPage },
+                            {
+                                $group: {
+                                    id: { $first: "$_id" }, title: { $first: "$title" }, year: { $first: "$year" }, author: { $first: "$author" },
+                                    _id: "$_id",
                                 }
                             }
-                        },
-                        sortObject,
-                        { $skip: searchResultsPerPage * page },
-                        { $limit: searchResultsPerPage }
-                    ],
-                    count: [
-                        { $match: query2 },
-                        { $count: "count" }
-                    ]
-                }
-            }
-        ]);
+                        ],
+                        count: [
+                            { $match: query2 },
+                            { $count: "count" }
+                        ]
+                    }
+                }]
+        ); */
 
         /*$cond: {
             if: { $not: { $in: ["$spelling1", allwords] } },
@@ -180,11 +228,13 @@ const relevanceSimpleSearch = async (req, res, next) => {
         if (!result) res.status(404).json({ error: "no results" });
         else {
             // const found = await Record.countDocuments(readyQuery).then(number => number);
-            console.log("found", result[0].result, "kpl", result[0].count, "full result", result[0]);
+            // console.log("found", result[0].result, "kpl", result[0].count, "full result", result[0]);
 
             const secondTime = process.hrtime(firstTime);
 
-            res.json({ result: result[0].result, found: result[0].count[0].count, time: (secondTime[0] * 1e9 + secondTime[1]) * 1e-6 });
+            // res.json({ result: result[0].result, found: result[0].count[0].count, time: (secondTime[0] * 1e9 + secondTime[1]) * 1e-6 });
+            res.json({ result: result[0].result, found: count, time: (secondTime[0] * 1e9 + secondTime[1]) * 1e-6, subjects: result[0].subjects });
+            // res.json({ result: result, found: count, time: (secondTime[0] * 1e9 + secondTime[1]) * 1e-6 });
         }
 
         // console.log(`${simple ? "simple" : "advanced"} search time ${(secondTime[0] * 1e9 + secondTime[1]) * 1e-6} ms`);
