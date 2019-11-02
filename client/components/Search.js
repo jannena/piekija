@@ -40,7 +40,7 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
                                 : [["Relevance", "relevance"], ["Year (newest first)", "year"], ["Latest added first", "timeAdded"]]
                         } /> */}
                         <Select onChange={handleResort} defaultSelected={sort}
-                            options={[["Year (newest first)", "year"], ["Year (oldest first)", "yeardesc"], ["Alphapetical", "alpapetical"], ["Latest added first", "timeAdded"]]}
+                            options={[["Year (newest first)", "year"], ["Year (oldest first)", "yeardesc"], ["Alphapetical (A-Ö)", "alphapetical"], ["Alphapetical (Ö-A)", "alphapeticaldesc"], ["Latest added first", "timeAdded"]]}
                         />
                     </div>
                     <SearchFilter />
