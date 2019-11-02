@@ -6,6 +6,7 @@
   "scripts": {
     "start:fe": "webpack-dev-server --mode=development --host=0.0.0.0",
     "start:be": "nodemon ./server/index.js",
+    "start:docs": "webpack-dev-server --mode=development --docs=docs --host=0.0.0.0",
     "test": "jest",
     "marctodb": "cross-env LOG=false node --max-old-space-size=4096 ./server/utils/marcToDb.js"
   },
@@ -24,6 +25,7 @@
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
+    "@mdx-js/loader": "^1.5.1",
     "babel-loader": "^8.0.6",
     "cross-env": "^5.2.1",
     "css-loader": "^3.2.0",

@@ -6,7 +6,7 @@ const webpack = require("webpack");
 
 const config = (env, argv) => {
     return {
-        entry: ["@babel/polyfill", "./client/index.js"],
+        entry: ["@babel/polyfill", argv.docs === "docs" ? "./docs/index.js" : "./client/index.js"],
         output: {
             path: path.resolve(__dirname, "server/build"),
             filename: "main.js",
@@ -15,7 +15,7 @@ const config = (env, argv) => {
         devServer: {
             contentBase: path.resolve(__dirname, "server/build"),
             compress: true,
-            port: 3000,
+            port: argv.docs === "docs" ? 3001 : 3000,
             historyApiFallback: true,
             https: false
         },
@@ -32,6 +32,13 @@ const config = (env, argv) => {
                 {
                     test: /\.css$/,
                     loader: ["style-loader", "css-loader"]
+                },
+                {
+                    test: /\.mdx$/,
+                    loader: [
+                        "babel-loader",
+                        "@mdx-js/loader"
+                    ]
                 }
             ]
         },
