@@ -15,7 +15,7 @@ const config = (env, argv) => {
         devServer: {
             contentBase: path.resolve(__dirname, "server/build"),
             compress: true,
-            port: argv.docs === "docs" ? 3001 : 3000,
+            port: argv.docs === "docs" ? 3002 : 3000,
             historyApiFallback: true,
             https: false
         },

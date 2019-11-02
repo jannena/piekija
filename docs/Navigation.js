@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const NavCategory = ({ title, children }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -10,13 +11,14 @@ const NavCategory = ({ title, children }) => {
     </>;
 };
 
-const NavTitle = ({ title }) => <div class="title">{title}</div>
+const NavTitle = ({ title, address }) => <div class="title"><Link to={`/docs/${address}`}>{title}</Link></div>
 
 const Navigation = () => {
     return <div id="navigation">
+        <NavTitle title="Aloitus" address="" />
         <NavCategory title="Käyttäjälle">
-            <NavTitle title="Hakuohjeet" />
-            <NavTitle title="Käyttäjäyili" />
+            <NavTitle title="Hakuohjeet" address="search-help" />
+            <NavTitle title="Käyttäjätili" />
             <NavTitle title="Hyllyt" />
         </NavCategory>
         <NavCategory title="Henkilökunnalle">
