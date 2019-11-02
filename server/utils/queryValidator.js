@@ -10,16 +10,19 @@ const isValidOperator = operator =>
     ].indexOf(operator) !== -1;
 
 const validateAdvancedQuery = ([operator, value, type]) => {
+    console.log("debug021119", operator, value, type)
     if (!isValidOperator(operator)) throw new Error(`Operator ${operator} is invalid.`);
 
     let validatedQuery = {};
 
     const newOperator = changeAndAndOrIfNeeded(operator);
 
+    console.log("typeof validateAdvancedQuery: ", typeof validateAdvancedQuery);
     if (Array.isArray(value)) validatedQuery[newOperator] = value.map(query => validateAdvancedQuery(query));
     else {
         if (!type) throw new Error(`Operator ${operator} needs a type.`);
-        switch (type) {
+        else if (operator === "spelling") validatedQuery = validateSimpleQuery(value, false);
+        else switch (type) {
             case "not":
                 validatedQuery[newOperator] = { $ne: value };
                 break;
@@ -87,8 +90,8 @@ const validateSimpleQueryRecursion = query => {
     return [
         pair[1],
         [
-            (queryContainsOps(pair[0]) ? validateSimpleQuery(pair[0]) : ["spelling1", pair[0].toLowerCase(), "is"]),
-            (queryContainsOps(pair[2]) ? validateSimpleQuery(pair[2]) : ["spelling1", pair[2].toLowerCase(), "is"])
+            (queryContainsOps(pair[0]) ? validateSimpleQuery(pair[0], true) : ["spelling1", pair[0].toLowerCase(), "is"]),
+            (queryContainsOps(pair[2]) ? validateSimpleQuery(pair[2], true) : ["spelling1", pair[2].toLowerCase(), "is"])
         ]
     ];
 };
@@ -163,18 +166,23 @@ const parseRequestNotContainingOps = query => {
 };
 
 // TODO: fix parsing queries containing extra brackets
-const validateSimpleQuery = query => {
+const validateSimpleQuery = (query, notFirst) => {
     // const query = q.toLowerCase();
     console.log("what is query?", query);
+    console.log("typeof validateAdvancedQuery: ", typeof validateAdvancedQuery);
     try {
         if (!queryContainsOps(query)) return parseRequestNotContainingOps(query) /* return [
             "AND",
             query.split(" ").map(q => (["spelling1", q.toLowerCase(), "is"]))
         ]; */
-        return validateAdvancedQuery(simplifySimpleQuery(validateSimpleQueryRecursion(query)));
+
+        console.log("typeof validateAdvancedQuery: ", typeof validateAdvancedQuery);
+        const validatedSimpleQuery = validateSimpleQueryRecursion(query);
+        return notFirst ? validatedSimpleQuery : validateAdvancedQuery(validatedSimpleQuery);
+        // return validateAdvancedQuery(validatedSimpleQuery);
     }
     catch (err) {
-        console.log(err);
+        console.log(err.stack);
         return validateAdvancedQuery(["AND", [
             ["spelling1", query.toLowerCase(), "is"]
         ]]);
@@ -182,8 +190,15 @@ const validateSimpleQuery = query => {
 };
 
 // const result123 = validateSimpleQuery("(moi AND hei AND terve AND moikku) OR (terkut OR heippa OR moiksu OR joojoo)")
-// const result123 = validateSimpleQuery("(Seita AND Parkkola) OR Nightwish");
+// console.log(validateAdvancedQuery.toString());
+/* const result123 = validateSimpleQuery("hei AND tervehdys OR moi");
+console.log(JSON.stringify(result123)); */
+
+// console.log("-----------------------------------------------------------------------------------------");
 // console.log(JSON.stringify(result123));
+// console.log(validateAdvancedQuery.toString());
+/* const moi = validateAdvancedQuery(["AND", [["spelling1", "hei", "is"], ["OR", [["spelling1", "tervehdys", "is"], ["spelling1", "moi", "is"]]]]]);
+console.log(JSON.stringify(moi)); */
 
 module.exports = {
     validateAdvancedQuery,
