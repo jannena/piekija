@@ -3,8 +3,8 @@ import { baseUrl as b } from "../globals";
 
 const baseUrl = `${b}/search`;
 
-const search = (query, page, sort, advanced) => {
-    return axios.post(`${baseUrl}/${advanced ? "advanced" : "simple"}`, { query, page, sort }).then(response => response.data);
+const search = (query, page, sort, advanced, filter) => {
+    return axios.post(`${baseUrl}/${advanced ? "advanced" : "simple"}`, { query, page, sort, filter }).then(response => response.data);
 };
 
 export default {

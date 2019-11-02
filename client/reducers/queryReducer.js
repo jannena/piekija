@@ -29,7 +29,7 @@ const queryReducer = (state = init, action) => {
 
 export default queryReducer;
 
-export const setQuery = (advancement, query, sort = "relevance", page = 1) => dispatch => {
+export const setQuery = (advancement, query, sort = "timeAdded", page = 1) => dispatch => {
     dispatch({
         type: "SET_QUERY",
         advancement,
@@ -37,7 +37,7 @@ export const setQuery = (advancement, query, sort = "relevance", page = 1) => di
         sort,
         page
     });
-    dispatch(search(query, page, sort, advancement === "advanced"));
+    dispatch(search(query, page, sort, advancement === "advanced", true));
 };
 
 export const resort = sort => (dispatch, getState) => {
@@ -45,7 +45,7 @@ export const resort = sort => (dispatch, getState) => {
         type: "RESORT",
         sort
     });
-    dispatch(search(getState().query.query, 1, sort, getState().query.type === "advanced"));
+    dispatch(search(getState().query.query, 1, sort, getState().query.type === "advanced", false));
 };
 
 export const nextPage = () => (dispatch, getState) => {
@@ -56,7 +56,8 @@ export const nextPage = () => (dispatch, getState) => {
         getState().query.query,
         getState().query.page,
         getState().query.sort,
-        getState().query.type === "advanced"
+        getState().query.type === "advanced",
+        false
     ));
 };
 
@@ -68,6 +69,7 @@ export const previousPage = () => (dispatch, getState) => {
         getState().query.query,
         getState().query.page,
         getState().query.sort,
-        getState().query.type === "advanced"
+        getState().query.type === "advanced",
+        false
     ));
 };

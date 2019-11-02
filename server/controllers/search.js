@@ -8,7 +8,7 @@ const { validateAdvancedQuery, validateSimpleQuery } = require("../utils/queryVa
 const searchResultsPerPage = 20;
 
 const search = async (req, res, next, simple) => {
-    const { query, page: p, sort } = req.body;
+    const { query, page: p, sort, filter } = req.body;
     if (!query) return res.status(401).json({ error: "query is missing" });
 
     const page = Number(p) - 1 || 0
@@ -44,37 +44,41 @@ const search = async (req, res, next, simple) => {
             const found = await Record.countDocuments(readyQuery).then(number => number);
             console.log("found", found, result);
 
+            let filters = null;
+
             // TODO: preformance_limit to config
             // TODO: classification? maybe not
-            const subjects = await Record.aggregate([
-                { $match: readyQuery },
-                { $unwind: "$subjects" },
-                { $sortByCount: "$subjects" },
-                { $limit: 100 }
-            ]);
-            const authors = await Record.aggregate([
-                { $match: readyQuery },
-                { $unwind: "$authors" },
-                { $sortByCount: "$authors" },
-                { $limit: 100 }
-            ]);
-            const years = await Record.aggregate([
-                { $match: readyQuery },
-                { $sortByCount: "$year" },
-                { $limit: 100 }
-            ]);
-            const languages = await Record.aggregate([
-                { $match: readyQuery },
-                { $unwind: "$languages" },
-                { $sortByCount: "$languages" }
-            ]);
+            if (filter) {
+                const subjects = await Record.aggregate([
+                    { $match: readyQuery },
+                    { $unwind: "$subjects" },
+                    { $sortByCount: "$subjects" },
+                    { $limit: 100 }
+                ]);
+                const authors = await Record.aggregate([
+                    { $match: readyQuery },
+                    { $unwind: "$authors" },
+                    { $sortByCount: "$authors" },
+                    { $limit: 100 }
+                ]);
+                const years = await Record.aggregate([
+                    { $match: readyQuery },
+                    { $sortByCount: "$year" },
+                    { $limit: 100 }
+                ]);
+                const languages = await Record.aggregate([
+                    { $match: readyQuery },
+                    { $unwind: "$languages" },
+                    { $sortByCount: "$languages" }
+                ]);
 
-            const filters = {
-                subjects,
-                authors,
-                years,
-                languages
-            };
+                filters = {
+                    subjects,
+                    authors,
+                    years,
+                    languages
+                };
+            }
 
             const secondTime = process.hrtime(firstTime);
 

@@ -5,6 +5,7 @@ import { onError } from "./errorHandingHelper";
 const init = {
     searches: {},
     result: {
+        filters: null,
         result: [],
         time: 0,
         found: 0
@@ -28,7 +29,7 @@ export default recordReducer;
 const isCached = (state, key) => state.search.searches[JSON.stringify(key)] !== undefined;
 const getCached = (state, key) => state.search.searches[JSON.stringify(key)];
 
-export const search = (query, page, sort, advanced) => (dispatch, getState) => {
+export const search = (query, page, sort, advanced, filter) => (dispatch, getState) => {
     const key = { query, page, sort };
     if (isCached(getState(), key)) {
         dispatch({
@@ -41,8 +42,10 @@ export const search = (query, page, sort, advanced) => (dispatch, getState) => {
     }
     dispatch({ type: "REQUEST_SEARCH" });
     searchService
-        .search(query, page, sort, advanced)
+        .search(query, page, sort, advanced, filter)
         .then(result => {
+            if (getState().search.result.filters !== null) result.filters = getState().search.result.filters;
+
             dispatch({
                 type: "SUCCESS_SEARCH",
                 key,
