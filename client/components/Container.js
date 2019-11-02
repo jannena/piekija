@@ -33,9 +33,9 @@ const Container = ({ loading, history, simpleSearch, setQuery, children }) => {
                     </div>
                     <nav>
                         <ul>
-                                <li><Link to="/">Frontpage</Link></li>
-                                <li><Link to="/search">Search</Link></li>
-                                <li><Link to="/docs">Help</Link></li>
+                            <li><Link to="/">Frontpage</Link></li>
+                            <li><Link to="/search">Search</Link></li>
+                            <li><a href="/docs">Help</a></li>
                         </ul>
                         <UserMenu />
                     </nav>

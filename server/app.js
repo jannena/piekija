@@ -30,8 +30,6 @@ mongoose
 mongoose.set("useFindAndModify", false);
 
 app.use(bodyParser.json());
-
-app.use("/", express.static("build"));
 app.use(cors());
 
 app.use(authenticationMiddleware);
@@ -46,6 +44,14 @@ app.use("/api/login", loginRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/circulation", circulationRouter);
 app.use("/api/note", noteRouter);
+
+app.use("/api/*", (req, res, next) => {
+    next(new Error("APINOTFOUND"));
+});
+
+// Frontend
+app.use("/docs", express.static(`${__dirname}/build/docs`));
+app.use("*", express.static(`${__dirname}/build`));
 
 app.use(errorHandler);
 
