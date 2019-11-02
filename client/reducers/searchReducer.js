@@ -44,7 +44,8 @@ export const search = (query, page, sort, advanced, filter) => (dispatch, getSta
     searchService
         .search(query, page, sort, advanced, filter)
         .then(result => {
-            if (getState().search.result.filters !== null) result.filters = getState().search.result.filters;
+            // JSON.stringify(query) === JSON.stringify(getState().query.query) &&
+            if (!filter && getState().search.result.filters !== null) result.filters = getState().search.result.filters;
 
             dispatch({
                 type: "SUCCESS_SEARCH",
