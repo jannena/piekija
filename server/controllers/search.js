@@ -1,5 +1,6 @@
 const searchRouter = require("express").Router();
 const Record = require("../models/Record");
+const { PERFORMANCE_LIMIT } = require("../utils/config");
 
 const { validateAdvancedQuery, validateSimpleQuery } = require("../utils/queryValidator");
 
@@ -46,9 +47,11 @@ const search = async (req, res, next, simple) => {
 
             let filters = null;
 
+            console.log("found", found, "PERFORMANCE_LIMIT", PERFORMANCE_LIMIT);
+
             // TODO: preformance_limit to config
             // TODO: classification? maybe not
-            if (filter) {
+            if (filter && found < PERFORMANCE_LIMIT) {
                 const subjects = await Record.aggregate([
                     { $match: readyQuery },
                     { $unwind: "$subjects" },
@@ -69,7 +72,8 @@ const search = async (req, res, next, simple) => {
                 const languages = await Record.aggregate([
                     { $match: readyQuery },
                     { $unwind: "$languages" },
-                    { $sortByCount: "$languages" }
+                    { $sortByCount: "$languages" },
+                    { $limit: 100 }
                 ]);
 
                 filters = {
