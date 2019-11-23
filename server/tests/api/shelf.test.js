@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const app = require("../../app");
 const supertest = require("supertest");
 
+const [test, afterAll] = [it, after];
+const expect = require("expect");
+
 const api = supertest(app);
 
 const Shelf = require("../../models/Shelf");
@@ -15,7 +18,7 @@ let shelvesAtStart = 0;
 let records = [];
 
 describe("when there is users and shelves in database (shelf tests)", () => {
-    beforeEach(async (done) => {
+    beforeEach(async () => {
         await clearDatabase();
         users = [
             await addUserToDb("first", "salasanasalasana", false),
@@ -34,8 +37,6 @@ describe("when there is users and shelves in database (shelf tests)", () => {
         shelvesAtStart = await shelvesInDb();
         records[0] = await addRecordToDb();
         records[1] = await addRecordToDb();
-
-        done();
     });
 
     test("shelf can be created and it will be added to user's document", async () => {

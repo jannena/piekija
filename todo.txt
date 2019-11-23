@@ -1,19 +1,17 @@
-- SEARCH
-    - search result order
-    - search result filtering
-    - create better spelling
+BEFORE 1.0
 
-- APPEARANCE
-    - record
-    - MARC editor
-    - circulation
-    - search
-    - "Tables"
+- ??search??
+    - ??create better spelling??
 
-- EAN scanner
+- appearance
+    - login
+    - ?record?
+    - shelves
+    - user menu
+    - norification
+
 - Simple editor
-- frontpage news
 - documentation
-
-- E2E tests?
-- finish backend tests (shelves, items, ...)
+- finish backend tests
+- go through all TODOs
+- ??statistics??

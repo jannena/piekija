@@ -5,6 +5,9 @@ const escapeJSON = require("../../utils/escape-json");
 
 console.log(escapeJSON.toString());
 
+const [test, afterAll] = [it, after];
+const expect = require("expect");
+
 const api = supertest(app);
 
 const { addUserToDb, clearDatabase, getTokenForUser, initMARC21Data, escapedMARC21Data, recordsInDb, addRecordToDb }

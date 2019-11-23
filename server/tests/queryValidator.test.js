@@ -1,5 +1,8 @@
 const { validateAdvancedQuery, validateSimpleQuery } = require("../utils/queryValidator");
 
+const [test, afterAll] = [it, after];
+const expect = require("expect");
+
 describe("simple query validator tests", () => {
     test("simple query validator works without AND and OR", () => {
         expect(validateSimpleQuery("kissa"))

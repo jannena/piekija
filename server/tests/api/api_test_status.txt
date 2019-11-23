@@ -2,8 +2,9 @@ login       ready
 user        -           TODO: tfa
 record      -           TODO: removeLastChars and changed 
 shelf       -           TODO: A few tests
-circulation -           almost ready
+circulation -           TODO: due dates
 
 item        -           Not started
 location    ready
 loantype    -           Not started
+notes       -           Not started

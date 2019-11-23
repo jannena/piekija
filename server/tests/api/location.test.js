@@ -4,6 +4,9 @@ const app = require("../../app");
 
 const { clearDatabase, addUserToDb, addLocationToDb, getTokenForUser, locationsInDb, addItemToDb, addLoantypeToDb, addRecordToDb } = require("./testutils");
 
+const [test, afterAll] = [it, after];
+const expect = require("expect");
+
 const api = supertest(app);
 
 describe("when there is users and locations in db (location tests)", () => {

@@ -51,5 +51,6 @@
 | 26.10. | >2 | mongodb:n aggregationeihin tutustumista, haun päivittämisen yrittämistä |
 | 29.10. | 1,5 | haun ja haun rajaamisen päivittäminen |
 | 2.11. | 3 | haun päivittäminen, dokumentaation aloittaminen |
+| 23.11. | 2,5 | backendin testien päivittäminen |
 | | | |
-| yht. | 105,5 | |
+| yht. | 108 | |

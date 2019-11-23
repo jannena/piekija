@@ -6,6 +6,9 @@ const marcs = [
     "01603njm  22004457a 45000010008000000080047000080240018000550280035000730410018001080910007001260940011001330950012001441000029001562450035001852600040002203000040002605000035003005050145003355110216004805180076006965460013007725750037007855770028008225990021008506480014008716500027008856510011009126550016009237000031009397000032009707000031010027000031010337000025010647000030010898520008011198520008011278520008011358520008011439770006011512284684140317s2016    xx |||||||||||||| | eng||njm a 3 a541493994432101aPIASR905CDXbPlay It Again Sam0 aengdenggeng  a77  a78.891  a788.33 1 aObel, Agnes,eesittäjä10aCitizen of glass /cAgnes Obel  a[S.l.] :bPlay It Again Sam,cp2016  a1 CD-äänilevy +elaulutekstiliite  aLiitteessä kappaleiden sanat.0 aStretch your eyes. Familiar. Red virgin soil. It's happening again. Stone. Trojan horses. Citizen of glass. Golden green. Grasshopper. Mary.0 aAgnes Obel (säveltäjä, sanoittaja, voc, perc, p, ml, cembalo, keyb). Mukana myös: Kristina Koropecki (vc), Charlotte Danhier (vc), Frederique Labbow (vc), John Corban (v), Daniel Matz (trautonium, helistin).  aÄänitys: 2014-2016, Chalk Wood Studio & Brand New Studio (Berliini).   aenglanti  atoni.korpi@espoo.fi b1701espmus  b2 VIIKON LAINA 01-07-17  aCDLEVY / CDSKIVA 7a2010-luku 7alaulaja-lauluntekijät 7aTanska 7apopmusiikki1 aObel, Agnes,esäveltäjä1 aKoropecki, Kristina,esello1 aDanhier, Charlotte,esello1 aLabbow, Frederique,esello1 aCorban, John,eviulu1 aMatz, Daniel,etrautonium  bh90  bh53  bv60  bh72  a3"
 ];
 
+const [test, afterAll] = [it, after];
+const expect = require("expect");
+
 describe("parser can parse marc21 string to JSON", () => {
     describe("#1", () => {
         const parsedMARC = MARC21.parse(marcs[0]);

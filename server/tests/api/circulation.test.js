@@ -4,9 +4,10 @@ const app = require("../../app");
 const Item = require("../../models/Item");
 
 const { getTokenForUser, clearDatabase, addItemToDb, addLoantypeToDb, addLocationToDb, addRecordToDb, addUserToDb, loanItemTo, itemIsLoanedBy, itemIsNotLoanedBy } = require("./testutils");
-const [test, afterAll] = [it, after];
 
+const [test, afterAll] = [it, after];
 const expect = require("expect");
+
 const api = supertest(app);
 
 let users = [];

@@ -7,7 +7,7 @@
     "start:fe": "webpack-dev-server --mode=development --host=0.0.0.0",
     "start:be": "nodemon ./server/index.js",
     "start:docs": "webpack-dev-server --mode=development --docs=docs --host=0.0.0.0",
-    "test": "mocha \"./server/tests/api/circulation.test.js\" --timeout 20000",
+    "test": "mocha \"./server/tests/api/user.test.js\" --timeout 20000",
     "marctodb": "cross-env LOG=false node --max-old-space-size=4096 ./server/utils/marcToDb.js"
   },
   "repository": {

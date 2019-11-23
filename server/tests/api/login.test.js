@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const app = require("../../app");
 const supertest = require("supertest");
 
+const [test, afterAll, beforeAll] = [it, after, before];
+const expect = require("expect");
+
 const api = supertest(app);
 
 const { addUserToDb, clearDatabase, generateCode } = require("./testutils");
