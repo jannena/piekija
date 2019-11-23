@@ -4,7 +4,9 @@ const User = require("../models/User");
 const Item = require("../models/Item");
 
 circulationRouter.post("/loan", async (req, res, next) => {
-    // TODO: authorization
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const { user: userId, item: itemId } = req.body;
 
     if (!userId || !itemId) return res.status(404).json({ error: "user or item is missing" });
@@ -39,6 +41,7 @@ circulationRouter.post("/loan", async (req, res, next) => {
         await user.save();
         await item.save();
 
+        // TODO: Send only relevant data
         res.json({ user, item });
     }
     catch (err) {
@@ -47,7 +50,9 @@ circulationRouter.post("/loan", async (req, res, next) => {
 });
 
 circulationRouter.post("/return", async (req, res, next) => {
-    // TODO: authorization
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const { item: itemId } = req.body;
 
     if (!itemId) return res.status(400).json({ error: "item is missing" });
@@ -59,6 +64,7 @@ circulationRouter.post("/return", async (req, res, next) => {
         // if (!item.statePersonInCharge) return res.status(400).json({ error: "item has not been loaned" });
         const user = await User.findById(item.statePersonInCharge);
         if (!user) return res.status(400).json({ error: "item has not been loaned" });
+        // TODO: Remove from every possible place where can be marked as loaned
 
         // console.log(typeof user.loans[0]._id.toString(), typeof itemId, user.loans[0]._id.toString() === itemId);
         user.loans = user.loans.filter(l => l.toString() !== itemId);
@@ -78,12 +84,14 @@ circulationRouter.post("/return", async (req, res, next) => {
 });
 
 circulationRouter.post("/renew", async (req, res, next) => {
-    // TODO: Authorization
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+
     const { item: itemId } = req.body;
 
     try {
         const item = await Item.findById(itemId).populate("loantype");
         if (item.statePersonInCharge === req.authenticated._id.toString() || req.authenticated.staff) console.log("You can renew this item");
+        else return res.status(403).json({ error: "you cannot renew this loan" });
 
         const { loanTime, renewTimes } = item.loantype;
         // TODO: Fix error code

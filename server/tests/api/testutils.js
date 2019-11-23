@@ -173,6 +173,58 @@ const shareShelfWith = async (shelfId, userId) => {
     };
 };
 
+const loanItemTo = async (userId, itemId) => {
+    try {
+        const user = await User.findById(userId);
+        const item = await Item.findById(itemId).populate("loantype");
+
+        user.loans.push(item._id);
+        item.statePersonInCharge = user._id;
+        item.stateTimesRenewed = 0;
+        item.state = "loaned";
+
+        const dueDate = new Date();
+        dueDate.setUTCDate(dueDate.getUTCDate() + (item.loantype.loanTime || 1));
+        item.stateDueDate = dueDate;
+
+        await user.save();
+        await item.save();
+
+        return { user, item };
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+const itemIsLoanedBy = async (userId, itemId) => {
+    try {
+        const user = await User.findById(userId);
+        const item = await Item.findById(itemId);
+
+        if (user.loans.indexOf(itemId.toString()) > -1 && item.statePersonInCharge.toString() === userId.toString() && item.state === "loaned") return true;
+
+        return false;
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+const itemIsNotLoanedBy = async (userId, itemId) => {
+    try {
+        const user = await User.findById(userId);
+        const item = await Item.findById(itemId);
+
+        if (user.loans.indexOf(itemId.toString()) === -1 && item.statePersonInCharge.toString() !== userId.toString()) return true;
+
+        return false;
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
 const getTokenForUser = user => {
     const tokenData = {
         id: user._id,
@@ -215,6 +267,10 @@ module.exports = {
 
     addRecordToShelf,
     shareShelfWith,
+
+    loanItemTo,
+    itemIsLoanedBy,
+    itemIsNotLoanedBy,
 
     getTokenForUser,
 
