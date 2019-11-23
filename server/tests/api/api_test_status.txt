@@ -2,7 +2,7 @@ login       ready
 user        -           TODO: tfa
 record      -           TODO: removeLastChars and changed 
 shelf       -           TODO: A few tests
-circulation -           Not started
+circulation -           almost ready
 
 item        -           Not started
 location    ready

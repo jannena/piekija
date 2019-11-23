@@ -4,8 +4,9 @@ const app = require("../../app");
 const Item = require("../../models/Item");
 
 const { getTokenForUser, clearDatabase, addItemToDb, addLoantypeToDb, addLocationToDb, addRecordToDb, addUserToDb, loanItemTo, itemIsLoanedBy, itemIsNotLoanedBy } = require("./testutils");
-// const [test, afterAll] = [it, after];
+const [test, afterAll] = [it, after];
 
+const expect = require("expect");
 const api = supertest(app);
 
 let users = [];
@@ -14,7 +15,7 @@ let tokens = [];
 
 const RENEW_TIMES = 3;
 
-describe("when there are users, records, items, locations and loantypes initially in the database", () => {
+describe("when there are users, records, items, locations and loantypes initially in the database (circulation tests)", () => {
     beforeEach(async () => {
         await clearDatabase();
         users = [
@@ -45,8 +46,8 @@ describe("when there are users, records, items, locations and loantypes initiall
                 .expect(200)
                 .expect("Content-Type", /application\/json/);
 
-            expect(res.body.item.dueDate).toBeDefined(); // TODO: Check if due date is correct
-            expect(res.body.item.statePersonInCharge).toBe(users[0]._id);
+            expect(res.body.item.stateDueDate).toBeDefined(); // TODO: Check if due date is correct
+            expect(res.body.item.statePersonInCharge).toBe(users[1]._id.toString());
 
             /* const user = await User.findById(users[1]._id);
             const item = await Item.findById(items[0]._id);
@@ -84,14 +85,14 @@ describe("when there are users, records, items, locations and loantypes initiall
             expect(res.body.error).toBe("item has already been loaned");
 
             expect(await itemIsLoanedBy(users[2]._id, items[0]._id)).toBe(true);
-            expect(await itemIsNotLoanedBy(users[1], _id, items[0]._id)).toBe(true);
+            expect(await itemIsLoanedBy(users[1]._id, items[0]._id)).toBe(false);
         });
 
         test("item cannot be loaned if user does not exist", async () => {
             const res = await api
                 .post("/api/circulation/loan")
                 .set(tokens[0])
-                .send({ user: users[1]._id.toString().split("").reverse().join(""), item: items[2]._id })
+                .send({ user: users[1]._id.toString().split("").reverse().join(""), item: items[0]._id })
                 .expect(400)
                 .expect("Content-Type", /application\/json/);
 
@@ -117,9 +118,8 @@ describe("when there are users, records, items, locations and loantypes initiall
             const res = await api
                 .post("/api/circulation/return")
                 .set(tokens[0])
-                .send({ user: users[1]._id, item: items[2]._id.toString().split("").reverse().join("") })
-                .expect(200)
-                .expect("Content-Type", /application\/json/);
+                .send({ user: users[1]._id, item: items[0]._id })
+                .expect(200);
 
             expect(await itemIsNotLoanedBy(users[1]._id, items[2]._id)).toBe(true);
         });
@@ -145,10 +145,10 @@ describe("when there are users, records, items, locations and loantypes initiall
                 .post("/api/circulation/renew")
                 .set(tokens[0])
                 .send({ item: items[0]._id })
-                .expect(200)
+                .expect(400)
                 .expect("Content-Type", /application\/json/);
 
-            expect(res.body.error).toBe("renewTimes exceeded");
+            expect(res.body.error).toBe("renewTimes exeeded");
             // TODO: ??Check if anything changed??
         });
     });
@@ -211,10 +211,10 @@ describe("when there are users, records, items, locations and loantypes initiall
                     .post("/api/circulation/renew")
                     .set(tokens[1])
                     .send({ item: items[0]._id })
-                    .expect(200)
+                    .expect(400)
                     .expect("Content-Type", /application\/json/);
 
-                expect(res.body.error).toBe("renewTimes exceeded");
+                expect(res.body.error).toBe("renewTimes exeeded");
                 // TODO: ??Check if anything changed??
             });
         });

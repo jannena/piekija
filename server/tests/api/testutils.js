@@ -202,7 +202,7 @@ const itemIsLoanedBy = async (userId, itemId) => {
         const user = await User.findById(userId);
         const item = await Item.findById(itemId);
 
-        if (user.loans.indexOf(itemId.toString()) > -1 && item.statePersonInCharge.toString() === userId.toString() && item.state === "loaned") return true;
+        if (user.loans.indexOf(itemId.toString()) > -1 && (item.statePersonInCharge && item.statePersonInCharge.toString()) === userId.toString() && item.state === "loaned") return true;
 
         return false;
     }
@@ -216,7 +216,7 @@ const itemIsNotLoanedBy = async (userId, itemId) => {
         const user = await User.findById(userId);
         const item = await Item.findById(itemId);
 
-        if (user.loans.indexOf(itemId.toString()) === -1 && item.statePersonInCharge.toString() !== userId.toString()) return true;
+        if (user.loans.indexOf(itemId.toString()) === -1 && (item.statePersonInCharge && item.statePersonInCharge.toString()) !== userId.toString()) return true;
 
         return false;
     }
@@ -241,7 +241,9 @@ const clearDatabase = async () => {
     await Record.deleteMany({});
     await User.deleteMany({});
     await Location.deleteMany({});
+    await Loantype.deleteMany({});
     await Shelf.deleteMany({});
+    await Item.deleteMany({});
 };
 
 const usersInDb = async () => (await User.find({})).length;

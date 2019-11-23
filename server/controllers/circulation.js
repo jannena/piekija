@@ -15,11 +15,12 @@ circulationRouter.post("/loan", async (req, res, next) => {
         const user = await User.findById(userId);
         const item = await Item.findById(itemId).populate("loantype");
 
+        if (!user) return res.status(400).json({ error: "user does not exist" });
+        if (!item) return res.status(400).json({ error: "item does not exist" });
+
         // TODO: Check error code
         if (item.loantype.canBeLoaned === false) return res.status(400).json({ error: "item cannot be loaned because of loantype" });
 
-        if (!user) return res.status(400).json({ error: "user does not exist" });
-        if (!item) return res.status(400).json({ error: "record does not exist" });
         console.log(user.loans[0], typeof user.loans[0], item._id, typeof item._id);
         if (user.loans && user.loans.some(l => l.toString() === item._id.toString())) return res.status(400).json({ error: "user has already loaned this item" });
 
@@ -90,7 +91,7 @@ circulationRouter.post("/renew", async (req, res, next) => {
 
     try {
         const item = await Item.findById(itemId).populate("loantype");
-        if (item.statePersonInCharge === req.authenticated._id.toString() || req.authenticated.staff) console.log("You can renew this item");
+        if (item.statePersonInCharge.toString() === req.authenticated._id.toString() || req.authenticated.staff === true) console.log("You can renew this item");
         else return res.status(403).json({ error: "you cannot renew this loan" });
 
         const { loanTime, renewTimes } = item.loantype;
