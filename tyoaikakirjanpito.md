@@ -52,5 +52,6 @@
 | 29.10. | 1,5 | haun ja haun rajaamisen päivittäminen |
 | 2.11. | 3 | haun päivittäminen, dokumentaation aloittaminen |
 | 23.11. | 2,5 | backendin testien päivittäminen |
+| 25.11. | 0,5 | käännösten aloittaminen |
 | | | |
-| yht. | 108 | |
+| yht. | 108,5 | |

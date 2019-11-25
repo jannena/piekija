@@ -12,6 +12,7 @@ import loantypeReducer from "./reducers/loantypeReducer";
 import loadingReducer from "./reducers/loadingReducer";
 import circulationReducer from "./reducers/circulationReducer";
 import noteReducer from "./reducers/noteReducer";
+import languageReducer from "./reducers/languageReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 const reducer = combineReducers({
@@ -26,7 +27,8 @@ const reducer = combineReducers({
     loantype: loantypeReducer,
     loading: loadingReducer,
     circulation: circulationReducer,
-    notes: noteReducer
+    notes: noteReducer,
+    language: languageReducer
 });
 
 const store = createStore(reducer, composeWithDevTools(

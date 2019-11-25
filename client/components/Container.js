@@ -7,10 +7,13 @@ import { withRouter } from "react-router-dom";
 import { simpleSearch } from "../reducers/searchReducer";
 import { setQuery } from "../reducers/queryReducer";
 import UserMenu from "./UserMenu";
+import Select from "./Select";
+import { setLanguage } from "../reducers/languageReducer";
+import __ from "../langs";
 
 // TODO: Create user/login/staff menu
 
-const Container = ({ loading, history, simpleSearch, setQuery, children }) => {
+const Container = ({ loading, history, simpleSearch, setQuery, children, language, setLanguage, __ }) => {
     const handleSearch = e => {
         e.preventDefault();
         const newQuery = e.target.query.value
@@ -28,14 +31,14 @@ const Container = ({ loading, history, simpleSearch, setQuery, children }) => {
                     <div id="search">
                         <form onSubmit={handleSearch}>
                             <input name="query" style={{ width: "90%", margin: 0 }} />
-                            <button style={{ width: "10%", margin: 0 }}>Search</button>
+                            <button style={{ width: "10%", margin: 0 }}>{__("Search-button")}</button>
                         </form>
                     </div>
                     <nav>
                         <ul>
-                            <li><Link to="/">Frontpage</Link></li>
-                            <li><Link to="/search">Search</Link></li>
-                            <li><a href="/docs">Help</a></li>
+                            <li><Link to="/">{__("Frontpage")}</Link></li>
+                            <li><Link to="/search">{__("Search-menu")}</Link></li>
+                            <li><a href="/docs">{__("Help")}</a></li>
                         </ul>
                         <UserMenu />
                     </nav>
@@ -45,14 +48,21 @@ const Container = ({ loading, history, simpleSearch, setQuery, children }) => {
                 {children}
                 <Notifications />
             </main>
-            <footer>This is the footer.</footer>
+            <footer>
+                <div>This is the footer.</div>
+                <div>
+                    <Select selected={language} options={[["Suomi", "fi"], ["English", "en"]]} onChange={e => setLanguage(e.target.value)} />
+                </div>
+            </footer>
         </div>
     );
 };
 
 export default connect(
     state => ({
-        loading: state.loading.loading
+        loading: state.loading.loading,
+        language: state.language,
+        __: __(state)
     }),
-    { simpleSearch, setQuery }
+    { simpleSearch, setQuery, setLanguage }
 )(withRouter(Container));
