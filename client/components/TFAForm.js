@@ -2,8 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { setTFA } from "../reducers/userReducer";
 import { useField } from "../hooks";
+import __ from "../langs";
 
-const TFAForm = ({ setTFA, tfa, tfaqr }) => {
+const TFAForm = ({ setTFA, tfa, tfaqr, __ }) => {
     const oldPassword = useField("password");
 
     const handleTFAEnable = () => {
@@ -18,13 +19,13 @@ const TFAForm = ({ setTFA, tfa, tfaqr }) => {
 
     return (<>
         {tfaqr && <div>
-            <p>Scan this QR code with Google Authenticator or other authenticator application.</p>
+            <p>{__("scan-qr-code-info")}</p>
             <img src={tfaqr} />
         </div>}
-        Current password <input {...oldPassword.props} />
+        {__("Current password")} <input {...oldPassword.props} />
         {tfa
-            ? <p>Enabled <button onClick={handleTFADisable}>Disable</button></p>
-            : <p>Disabled <button onClick={handleTFAEnable}>Enable</button></p>
+            ? <p>{__("Enabled")} <button onClick={handleTFADisable}>{__("Disable")}</button></p>
+            : <p>{__("Disabled")} <button onClick={handleTFAEnable}>{__("Enable")}</button></p>
         }
     </>);
 
@@ -33,7 +34,8 @@ const TFAForm = ({ setTFA, tfa, tfaqr }) => {
 export default connect(
     state => ({
         tfa: state.user.tfa,
-        tfaqr: state.user.tfaqr
+        tfaqr: state.user.tfaqr,
+        __: __(state)
     }),
     { setTFA }
 )(TFAForm);

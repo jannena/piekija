@@ -31,9 +31,9 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
     return (
         <div>
             {result.result.length === 0
-                ? `No results in${result.time && ` ${result.time} ms`}`
+                ? `${__("No results")} ${__("in-before-milliseconds")} ${result.time && ` ${result.time} ${__("in-milliseconds")}`}`
                 : <>
-                    <p>Found {result.found} records in {(result.time || NaN).toFixed(0)} milliseconds</p>
+                    <p>{__("Found")} {result.found} {__("records-in")} {__("in-before-milliseconds")} {(result.time || NaN).toFixed(0)} {__("in-milliseconds")}</p>
                     <div>
                         {/* <Select onChange={handleResort} defaultSelected={sort} options={
                             type === "advanced"
@@ -48,9 +48,9 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
                     {/* TODO: Print also where was the match?? Not possible yet */}
                     {result.result.map(record => <RecordPreview key={record.id} record={record} />)}
                     <div style={{ textAlign: "center", lineHeight: "50px" }}>
-                        {page >= 2 && <a href="javascript:void(0);" onClick={previousPage}>&lt;&lt; Previous</a>}
-                        | Page {page} / {howManyPages} |
-                        {(result.found > page * resultsPerPage) && <a href="javascript:void(0);" onClick={nextPage}>Next &gt;&gt;</a>}
+                        {page >= 2 && <a href="javascript:void(0);" onClick={previousPage}>&lt;&lt; {__("Previous")}</a>}
+                        | {__("Page")} {page} / {howManyPages} |
+                        {(result.found > page * resultsPerPage) && <a href="javascript:void(0);" onClick={nextPage}>{__("Next")} &gt;&gt;</a>}
                     </div>
                 </>}
         </div>

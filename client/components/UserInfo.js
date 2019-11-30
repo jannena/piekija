@@ -8,9 +8,10 @@ import { updateUser } from "../reducers/userReducer";
 import { notify } from "../reducers/notificationReducer";
 import Loan from "./staff/Loan";
 import { Form, Input, Button } from "./essentials/forms";
+import __ from "../langs";
 
 
-const UserInfo = ({ user, createShelf, updateUser, notify }) => {
+const UserInfo = ({ user, createShelf, updateUser, notify, __ }) => {
     if (!user) return <div></div>;
 
     const printShelves = shelves => {
@@ -32,23 +33,23 @@ const UserInfo = ({ user, createShelf, updateUser, notify }) => {
     };
 
     return (
-        <Tabs titles={["Loans", "Shelves", "Holds", "Edit me", "Two-factor authentication"]}>
+        <Tabs titles={[__("Loans"), __("Shelves"), __("Holds"), __("Edit me"), __("Two-factor authentication")]}>
             <Tab>
                 <h2>{user.name}</h2>
                 <div>{user.username}</div>
                 <div>{user.barcode}</div>
-                <h3>Loans</h3>
+                <h3>{__("Loans")}</h3>
                 <div>
                     {user.loans.map(loan => <Loan key={loan.id} loan={loan} staff={false} />)}
                 </div>
             </Tab>
             <Tab>
-                <h3>Shelves</h3>
-                <Tabs titles={["my shelves ", " shared with me"]}>
+                <h3>{__("Shelves")}</h3>
+                <Tabs titles={[__("My shelves"), __("Shared with me")]}>
                     <Tab>
                         <form onSubmit={createNewShelf}>
                             <input name="newShelfName" />
-                            <button>Create shelf</button>
+                            <button>{__("Create shelf")}</button>
                         </form>
                         <ul>
                             {printShelves(user.shelves.filter(shelf => shelf.author))}
@@ -68,16 +69,16 @@ const UserInfo = ({ user, createShelf, updateUser, notify }) => {
 
             <Tab>
                 <Form onSubmit={handleUpdateMe}>
-                    <Input name="name" title="Name" value={user.name} />
-                    <Input type="password" title="New password" description="Leave empty if you do not want to change it." name="password" />
-                    <Input type="password" title="New password again" name="againPassword" />
-                    <Input type="password" title="Old password" name="oldPassword" />
-                    <Button title="Save " />
+                    <Input name="name" title={__("Name")} value={user.name} />
+                    <Input type="password" title={__("New password")} description="Leave empty if you do not want to change it." name="password" />
+                    <Input type="password" title={__("New password again")} name="againPassword" />
+                    <Input type="password" title={__("Old password")} name="oldPassword" />
+                    <Button title={__("save-button")} />
                 </Form>
             </Tab>
 
             <Tab>
-                <h3> Two-factor authentication</h3>
+                <h3>{__("Two-factor authentication")}</h3>
                 <TFAForm />
             </Tab>
         </Tabs>
@@ -86,7 +87,8 @@ const UserInfo = ({ user, createShelf, updateUser, notify }) => {
 
 export default connect(
     state => ({
-        user: state.user
+        user: state.user,
+        __: __(state)
     }),
     { createShelf, updateUser, notify }
 )(UserInfo);

@@ -3,8 +3,9 @@ import shelfService from "../services/shelfService";
 import { connect } from "react-redux";
 import { shareShelf, unshareShelf } from "../reducers/shelfReducer";
 import { useField } from "../hooks";
+import __ from "../langs";
 
-const ShelfSharing = ({ shelf, isAuthor, shareShelf, unshareShelf }) => {
+const ShelfSharing = ({ shelf, isAuthor, shareShelf, unshareShelf, __ }) => {
     const { reset: resetShareWith, ...shareWith } = useField("text");
 
     const handleShelfSharing = e => {
@@ -18,21 +19,23 @@ const ShelfSharing = ({ shelf, isAuthor, shareShelf, unshareShelf }) => {
     };
 
     return (<>
-        <h3>Shared with</h3>
+        <h3>{__("Shared with")}</h3>
         <ul>
             {shelf.sharedWith.map(user => <li key={user.id}>
                 {user.name} ({user.username})
-                {isAuthor && <button onClick={handleShelfUnsharing(user.username)}>Unshare</button>}
+                {isAuthor && <button onClick={handleShelfUnsharing(user.username)}>{__("unshare-button")}</button>}
             </li>)}
         </ul>
         {isAuthor && <form onSubmit={handleShelfSharing}>
-            <input placeholder="Share with..." {...shareWith} />
-            <button>Share</button>
+            <input placeholder={__("Share with...")} {...shareWith} />
+            <button>{__("share-button")}</button>
         </form>}
     </>);
 };
 
 export default connect(
-    null,
+    state => ({
+        __: __(state)
+    }),
     { shareShelf, unshareShelf }
 )(ShelfSharing);

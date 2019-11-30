@@ -1,8 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import Loader from "./Loader";
+import __ from "../langs";
 
-const FrontPageNews = ({ news }) => {
+const FrontPageNews = ({ news, __ }) => {
     if (!news) return <Loader />;
 
     const printDate = date => {
@@ -14,7 +15,7 @@ const FrontPageNews = ({ news }) => {
         <h1>Welcome</h1>
         {news.map(n => <div key={n.id} style={{ borderTop: "1px solid black", marginBottom: 20 }}>
             <h3>{n.title}</h3>
-            <div>Created on {printDate(n.created)}, Updated on {printDate(n.modified)}</div>
+            <div>{__("Created on")} {printDate(n.created)}, {__("Updated on")} {printDate(n.modified)}</div>
             <br />
             <div>{n.content.split("\n").map(row => <span>{row} <br /></span>)}</div>
         </div>)}
@@ -23,6 +24,7 @@ const FrontPageNews = ({ news }) => {
 
 export default connect(
     state => ({
-        news: state.notes
+        news: state.notes,
+        __: __(state)
     })
 )(FrontPageNews);

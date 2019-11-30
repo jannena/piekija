@@ -1,6 +1,12 @@
 
 export default (slog, def) => {
     return {
+        // Essentials
+        "cancel-button": "Cancel",
+        "save-button": "Save",
+        "edit-button": "Edit",
+        "delete-button": "Remove",
+
         // Search.js
         "Error": "Error",
         "Givethesearchquery": "Give the search query",
@@ -9,12 +15,20 @@ export default (slog, def) => {
         "sortbyalphapetical": "Alphapetical (A-Z)",
         "sortbyalphapeticaldesc": "Alphapetical (Z-A)",
         "sortbytimeadded": "Latest added first",
+        "Previous": "",
+        "Next": "",
+        "Page": "",
+        "No results": "",
+        "Found": "",
+        "records-in": "records",
+        "in-before-milliseconds": "in",
+        "in-milliseconds": "milliseconds",
 
         // AdvancedSearch.js
         "advancedsearch": "Advanced Search",
-        "AddGROUP":"Add GROUP",
-        "AddFIELD":"Add FIELD",
-        "removethisgroup":"Remove this group",
+        "AddGROUP": "Add GROUP",
+        "AddFIELD": "Add FIELD",
+        "removethisgroup": "Remove this group",
         "withallthese(and)": "With all of these (and)",
         "withanyofthese(or)": "With any of these (or)",
         "is exactly": "is exactly",
@@ -40,6 +54,16 @@ export default (slog, def) => {
         "Search-menu": "Search",
         "Search-button": "Search",
         "Help": "Help",
+
+        // FrontpageNews.js
+        "Created on": "",
+        "Updated on": "",
+
+        // Login.js
+        "Username": "",
+        "Pasword": "",
+        "Log in -button": "Log in",
+        "Two-factor authentication code": "",
 
         // UserMenu.js
         "Log in": "",
@@ -114,11 +138,45 @@ export default (slog, def) => {
         "Subtitles language": "",
         "Intermediate translation languages": "",
 
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
+        // Shelf.js
+        "Public shelf": "",
+        "you": "",
+        "Description": "",
+        "Author": "",
+        "records-shelves": "Records",
+        "Share with": "",
+
+        // ShelfRecord.js
+        "Record does not exist": "",
+
+        // ShelfSharing.js
+        "share-button": "Share",
+        "unshare-button": "Unshare",
+        "Shared with": "",
+        "Share with...": "",
+
+        // TFAForm.js
+        "scan-qr-code-info": "Scan this QR code with Google Authenticator or other authenticator application.",
+        "Current password": "",
+        "Enabled": "",
+        "Disabled": "",
+        "Enable": "",
+        "Disable": "",
+
+        // UserInfo.js
+        "Loans": "",
+        "Shelves": "",
+        "Holds": "",
+        "Edit me": "",
+        "Two-factor authentication": "",
+        "My shelves": "",
+        "Shared with me": "",
+        "Create shelf": "",
+        "Name": "",
+        "New password": "",
+        "New password again": "",
+        "Old password": "",
+        "new-password-info": "Leave empty if you do not want to change it.",
         "": "",
     }[slog] || def || slog;
 };

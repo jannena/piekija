@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { deleteRecordFromShelf, updateRecordInShelf } from "../reducers/shelfReducer";
+import __ from "../langs"
 
-const ShelfRecord = ({ record, canEdit, updateRecordInShelf, deleteRecordFromShelf }) => {
+const ShelfRecord = ({ record, canEdit, updateRecordInShelf, deleteRecordFromShelf, __ }) => {
     // console.log("I'm in this shelf", record);
 
     const [isOpen, setIsOpen] = useState(false);
@@ -30,22 +31,24 @@ const ShelfRecord = ({ record, canEdit, updateRecordInShelf, deleteRecordFromShe
     const recordDeleted = record.record.id === undefined;
 
     return <tr>
-        <td>{recordDeleted ? <p><strong>[Record does not exist]</strong></p> : <Link to={`/record/${record.record.id}`}>{record.record.title}</Link>}</td>
+        <td>{recordDeleted ? <p><strong>[{__("Record does not exist")}]</strong></p> : <Link to={`/record/${record.record.id}`}>{record.record.title}</Link>}</td>
         <td>{isOpen
             ? <>
                 <input value={note} onChange={e => setNote(e.target.value)} />
-                <button onClick={handleEditNote}>save</button>
-                <button onClick={cancelEditing}>cancel</button>
+                <button onClick={handleEditNote}>{__("save-button")}</button>
+                <button onClick={cancelEditing}>{__("cancel-button")}</button>
             </>
             : record.note}</td>
         <td>{canEdit && <>
-            {recordDeleted ? <p></p> : <button onClick={() => setIsOpen(true)}>edit note</button>}
-            <button onClick={handleRemoveFromShelf}>delete from shelf</button>
+            {recordDeleted ? <p></p> : <button onClick={() => setIsOpen(true)}>{__("edit-button")}</button>}
+            <button onClick={handleRemoveFromShelf}>{__("delete-button")}</button>
         </>}</td>
     </tr>;
 };
 
 export default connect(
-    null,
+    state => ({
+        __: __(state)
+    }),
     { updateRecordInShelf, deleteRecordFromShelf }
 )(ShelfRecord);
