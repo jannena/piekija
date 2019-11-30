@@ -4,8 +4,9 @@ import { searchForUser, clearUser, createUser, updateUser } from "../../reducers
 import Loan from "./Loan";
 import { Tabs, Tab } from "../Tabs";
 import { Form, Input, Button } from "../essentials/forms";
+import __ from "../../langs";
 
-const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUser }) => {
+const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUser, __ }) => {
     const handleUserSearch = e => {
         e.preventDefault();
         const { barcode, name } = e.target;
@@ -27,32 +28,32 @@ const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUs
             {!user && <>
                 <div>
                     <form onSubmit={handleUserSearch}>
-                        <div>Barcode: <input name="barcode" /></div>
-                        <div>Name: <input name="name" /></div>
-                        <div><button>Search</button></div>
+                        <div>{__("Barcode")}: <input name="barcode" /></div>
+                        <div>{__("Name")}: <input name="name" /></div>
+                        <div><button>{__("search-button")}</button></div>
                     </form>
                 </div>
                 <hr />
-                <div><button onClick={handleCreateNewUser}>Create new user</button></div>
+                <div><button onClick={handleCreateNewUser}>{__("Create new user")}</button></div>
             </>}
             {/* TODO: User list */}
-            {user && <Tabs titles={["Loans |", " Edit"]}>
+            {user && <Tabs titles={[__("Loans"), __("edit-button")]}>
                 <Tab>
                     <div>
-                        <button onClick={clearUser}>Clear</button>
-                        <div>Name: {user.name}</div>
-                        <div>Barcode: {user.barcode}</div>
-                        <div>Loans: {user.loans.length}</div>
+                        <button onClick={clearUser}>{__("clear-button")}</button>
+                        <div>{__("Name")}: {user.name}</div>
+                        <div>{__("Barcode")}: {user.barcode}</div>
+                        <div>{__("Loans")}: {user.loans.length}</div>
                         <div>{user.loans.map(loan => <Loan key={loan.id} loan={loan} staff={true} />)}</div>
                     </div>
                 </Tab>
                 <Tab>
                     <Form onSubmit={handleUpdateUser}>
-                        <Input name="name" title="Name" value={user.name} />
-                        <Input name="username" title="Username" value={user.username} />
-                        <Input name="barcode" title="barcode" value={user.barcode} />
-                        <Input name="password" title="password" type="password" />
-                        <Button title="Save" />
+                        <Input name="name" title={__("Name")} value={user.name} />
+                        <Input name="username" title={__("Username")} value={user.username} />
+                        <Input name="barcode" title={__("Barcode")} value={user.barcode} />
+                        <Input name="password" title={__("Password")} type="password" />
+                        <Button title={__("save-button")} />
 
                         {/* TODO: 
                         address: <input username="address" />
@@ -67,7 +68,8 @@ const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUs
 
 export default connect(
     state => ({
-        user: state.circulation.user
+        user: state.circulation.user,
+        __: __(state)
     }),
     { searchForUser, clearUser, createUser, updateUser }
 )(StaffUser);

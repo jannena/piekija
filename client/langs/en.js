@@ -6,6 +6,19 @@ export default (slog, def) => {
         "save-button": "Save",
         "edit-button": "Edit",
         "delete-button": "Remove",
+        "search-button": "Search",
+        "clear-button": "Clear",
+        "renew-button": "Renew",
+        "return-button": "Return",
+        "create-button": "Create",
+
+        // item states
+        "not loaned": "Not loaned",
+        "loaned": "Loaned",
+        "not in use": "Not in use",
+        "broken": "Broken",
+        "placed a hold": "Placed a hold",
+        "other": "Other",
 
         // Search.js
         "Error": "Error",
@@ -177,6 +190,87 @@ export default (slog, def) => {
         "New password again": "",
         "Old password": "",
         "new-password-info": "Leave empty if you do not want to change it.",
+
+        // Staff.js
+        "Forbidden!": "",
+        "Welcome": "",
+        "Records": "",
+        "Locations": "",
+        "Loantypes": "",
+        "Users": "",
+        "Circulation": "",
+        "Notes": "",
+        "Create empty record from template": "",
+        "Add record by scanning EAN code": "",
+        "ISBN or EAN": "",
+        "Search external databases for this record": "",
+        "View in Finna": "",
+        "Preview": "",
+
+        // Circulation.js
+        "User barcode": "",
+        "Barcode": "",
+        "Name": "",
+        "after-number-loans": "loans",
+        "Show user": "",
+        "Item barcode": "",
+        "Title": "",
+        "Location": "",
+        "Loantype": "",
+        "State": "",
+        "Show record": "",
+        "Loan item to": "",
+
+        // Loan.js
+        "Renew times left": "",
+        "Due date": "",
+
+        // MARCEditor.js
+        "Fields in this record": "",
+        "Add field": "",
+        "back-to-top": "Top",
+        "Save for preview": "",
+        "Add subfield": "",
+        "Remove field": "",
+
+        // RecordItems.js
+        "staff-item-barcode-info": "Unique code for every item",
+        "Create new item": "",
+
+        // StaffEditRecord.js
+        "Save to database": "",
+        "watching-preview-info": "You are watching record in preview mode. Record has not yet been saved to the database.",
+        "cannot-remove-items-info": "All items attached to this record must be removed before removing the record.",
+        "Remove this record": "",
+        "items-tab": "Items",
+        "preview-tab": "Preview",
+        "simple-editor-tab": "Simple editor",
+        "remove-tab": "",
+        "MARC-tab": "",
+
+        // StaffUser.js
+        "Create new user": "",
+
+        // StaffNotes.js
+        "Create new note": "",
+        "Title": "",
+        "Content": "",
+
+        // StaffLocations.js
+        "Create new location": "",
+        "Location name": "",
+        "location-name-info": "Visible for all users",
+
+        // StaffLoantypes.js
+        "Create new loantype": "",
+        "canBePlacedAHold": "Can be placed a hold",
+        "canBeLoaned": "Can be loaned",
+        "renewTimes": "Renew Times",
+        "loanTime": "Loan time",
+        "canBeLoaned-info": "If true, users cannot loan this item.",
+        "renewTime-info": "How many times item can be renewed. Cannot be renewed if 0.",
+        "loanTime-into": "How many days the loan time is",
+        "": "",
         "": "",
     }[slog] || def || slog;
 };

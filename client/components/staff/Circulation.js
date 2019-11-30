@@ -1,8 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { searchForUser, searchForItem, clearUser, clearItem, loanItem, returnItem } from "../../reducers/circulationReducer";
+import __ from "../../langs";
 
-const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clearItem, loanItem, returnItem, history }) => {
+const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clearItem, loanItem, returnItem, history, __ }) => {
     const searchUser = e => {
         e.preventDefault();
         searchForUser({ barcode: e.target.user.value });
@@ -17,15 +18,15 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
         <div>
             <div style={{ display: "flex" }}>
                 <form onSubmit={searchUser}>
-                    <label htmlFor="user">User barcode</label> <input id="user" name="user" />
-                    <button>Search</button>
+                    <label htmlFor="user">{__("User barcode")}</label> <input id="user" name="user" />
+                    <button>{__("search-button")}</button>
                 </form>
-                {user && <button onClick={clearUser}>Clear</button>}
+                {user && <button onClick={clearUser}>{__("clear-button")}</button>}
             </div>
             {user && <div style={{ paddingLeft: 10 }}>
-                <div>Barcode: {user.barcode}</div>
-                <div>Name: {user.name} ({user.loans.length} loans)</div>
-                <button onClick={() => history.push("/staff/users")}>Show user</button>
+                <div>{__("Barcode")}: {user.barcode}</div>
+                <div>{__("Name")}: {user.name} ({user.loans.length} {__("after-number-loans")})</div>
+                <button onClick={() => history.push("/staff/users")}>{__("Show user")}</button>
             </div>}
         </div>
 
@@ -34,19 +35,19 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
         <div>
             <div style={{ display: "flex" }}>
                 <form onSubmit={searchItem}>
-                    <label htmlFor="item">Item barcode: </label> <input id="item" name="item" />
-                    <button>Search</button>
+                    <label htmlFor="item">{__("Item barcode")}: </label> <input id="item" name="item" />
+                    <button>{__("search-button")}</button>
                 </form>
-                {item && <button onClick={clearItem}>Clear</button>}
+                {item && <button onClick={clearItem}>{__("clear-button")}</button>}
             </div>
             {item && <div style={{ paddingLeft: 10 }}>
-                <div>Title: {item.record && item.record.title}</div>
-                <div>Location: {item.location && item.location.name}</div>
-                <div>Loantype: {item.loantype && item.loantype.name}</div>
-                <div>State: <strong>{item.state}</strong> {item.state === "loaned" && `for ${item.statePersonInCharge && item.statePersonInCharge.name}`}</div>
+                <div>{__("Title")}: {item.record && item.record.title}</div>
+                <div>{__("Location")}: {item.location && item.location.name}</div>
+                <div>{__("Loantype")}: {item.loantype && item.loantype.name}</div>
+                <div>{__("State")}: <strong>{item.state}</strong> {item.state === "loaned" && `for ${item.statePersonInCharge && item.statePersonInCharge.name}`}</div>
                 {/* TODO: If loaned, show return button */}
-                {item.state === "loaned" && <button onClick={returnItem}>Return</button>}
-                <button onClick={() => history.push(`/staff/record/${item.record.id}`)}>Show record</button>
+                {item.state === "loaned" && <button onClick={returnItem}>{__("Return")}</button>}
+                <button onClick={() => history.push(`/staff/record/${item.record.id}`)}>{__("Show record")}</button>
             </div>}
         </div>
 
@@ -55,9 +56,9 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
         {(user && item) && <>
             <div>
                 {/* TODO: If user has not already loaned this item */}
-                {item.state !== "loaned" && <button onClick={loanItem}>Loan item to {user.name}</button>}
+                {item.state !== "loaned" && <button onClick={loanItem}>{__("Loan item to")} {user.name}</button>}
                 {/* TODO: If user has already loaned this item */}
-                {user.loans.some(l => l._id === item.id) && <button>Renew</button>}
+                {user.loans.some(l => l._id === item.id) && <button>{__("renew-button")}</button>}
             </div>
         </>}
     </>);
@@ -66,7 +67,8 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
 export default connect(
     state => ({
         user: state.circulation.user,
-        item: state.circulation.item
+        item: state.circulation.item,
+        __: __(state)
     }),
     { searchForItem, searchForUser, clearItem, clearUser, loanItem, returnItem }
 )(Circulation);

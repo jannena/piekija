@@ -7,8 +7,9 @@ import Record from "../record/Record";
 import Loader from "../Loader";
 import RecordItems from "./RecordItems";
 import SimpleRecordEditor from "./SimpleRecordEditor";
+import __ from "../../langs";
 
-const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRecord }) => {
+const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRecord, __ }) => {
 
     useEffect(() => {
         console.log(id);
@@ -31,8 +32,8 @@ const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRec
     };
 
     return <>
-        {(record && record.result && record.result.id && record.result.id === "preview") && <button onClick={onSaveToDatabase}>Save to database</button>}
-        <AddressedTabs titles={["Preview |", "Items |", "MARC |", "Simple editor |", "Remove "]}
+        {(record && record.result && record.result.id && record.result.id === "preview") && <button onClick={onSaveToDatabase}>{__("Save to database")}</button>}
+        <AddressedTabs titles={[__("preview-tab"), __("items-tab"), __("MARC-tab"), __("simple-editor-tab"), __("remove-tab")]}
             addresses={["", "items", "marc", "simple", "remove"]}
             root={`staff/record/${id}`}>
             <Tab>
@@ -48,9 +49,9 @@ const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRec
                 <SimpleRecordEditor />
             </Tab>
             <Tab>
-                {isPreview && <p>You are watching record in preview mode. Record has not yet been saved to the database.</p>}
-                {hasItems && <p>All items attached to this record must be removed before removing the record.</p>}
-                <button onClick={onRemoveRecord} disabled={isPreview || hasItems}>Remove this record</button>
+                {isPreview && <p>{__("watching-preview-info")}</p>}
+                {hasItems && <p>{__("cannot-remove-items-info")}</p>}
+                <button onClick={onRemoveRecord} disabled={isPreview || hasItems}>{__("Remove this record")}</button>
             </Tab>
         </AddressedTabs>
     </>
@@ -59,7 +60,8 @@ const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRec
 export default connect(
     state => ({
         state: state.loading.record,
-        record: state.record.record
+        record: state.record.record,
+        __: __(state)
     }),
     { getRecord, removeRecord, createRecord }
 )(StaffEditRecord);

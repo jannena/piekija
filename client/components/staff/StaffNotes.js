@@ -4,34 +4,40 @@ import { getAllNotes, createNote, updateNote } from "../../reducers/noteReducer"
 import { Table, TableRow, TableCell } from "../essentials/Tables";
 import Expandable from "../essentials/Expandable";
 import { Form, Input, Button, Textarea } from "../essentials/forms";
+import __ from "../../langs";
 
-const StaffNotes = ({ notes, getAllNotes, createNote, updateNote }) => {
+const StaffNotes = ({ notes, getAllNotes, createNote, updateNote, __ }) => {
     useEffect(() => {
         getAllNotes();
     }, []);
 
     const handleUpdateNote = id => e => {
-        e.preventDefault();
         const { title, content } = e.target;
         updateNote(id, title.value, content.value);
     };
 
+
+    const handleCreateNote = e => {
+        const { title, content } = e.target;
+        createNote(title, content);
+    };
+
     const form = data => <Form onSubmit={handleUpdateNote(data.id)}>
-        <Input id={`${data.id}-title`} name="title" title="Title" description="" value={data.title} />
-        <Textarea id={`${data.id}-content`} name="content" title="Content" description="" value={data.content} />
+        <Input id={`${data.id}-title`} name="title" title={_("Title")} description="" value={data.title} />
+        <Textarea id={`${data.id}-content`} name="content" title={__("Content")} description="" value={data.content} />
         <Button title="Save" />
     </Form>;
 
     return (<>
-        <div>Notes</div>
-        <Expandable title="Create new note">
-            <Form onSubmit={e => e.preventDefault()}>
-                <Input title="Title" name="title" description="Write the title of the note here." />
-                <Textarea title="Content" name="content" description="Write the content of the note here." />
-                <Button title="Save" />
+        <div>{__("Notes")}</div>
+        <Expandable title={__("Create new note")}>
+            <Form onSubmit={e => handleCreateNote}>
+                <Input title={__("Title")} name="title" description="" />
+                <Textarea title={__("Content")} name="content" description="" />
+                <Button title={__("create-button")} />
             </Form>
         </Expandable>
-        <Table titles={["Note title"]} widths={[100]} colors={["#dcdcdc", "#f5f5f5"]} form={form} data={notes}>
+        <Table titles={[__("Title")]} widths={[100]} colors={["#dcdcdc", "#f5f5f5"]} form={form} data={notes}>
             {notes.map(n => <TableRow>
                 <TableCell>{n.title}</TableCell>
             </TableRow>)}
@@ -41,7 +47,8 @@ const StaffNotes = ({ notes, getAllNotes, createNote, updateNote }) => {
 
 export default connect(
     state => ({
-        notes: state.notes
+        notes: state.notes,
+        __: __(state)
     }),
     { getAllNotes, createNote, updateNote }
 )(StaffNotes);

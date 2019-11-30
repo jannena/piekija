@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
+// TODO: Translate
+
 const SimpleRecordEditor = ({ record }) => {
     return (
         <div>

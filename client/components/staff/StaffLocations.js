@@ -4,8 +4,9 @@ import { getLocations, createLocation, updateLocation, removeLocation } from "..
 import Expandable from "../essentials/Expandable";
 import { Form, Input, Button } from "../essentials/forms";
 import { Table, TableCell, TableRow } from "../essentials/Tables";
+import __ from "../../langs";
 
-const StaffLocations = ({ locations, getLocations, createLocation, updateLocation, removeLocation }) => {
+const StaffLocations = ({ locations, getLocations, createLocation, updateLocation, removeLocation, __ }) => {
     useEffect(() => {
         getLocations();
     }, []);
@@ -29,23 +30,23 @@ const StaffLocations = ({ locations, getLocations, createLocation, updateLocatio
 
     const form = data => <div>
         <Form onSubmit={handleUpdateLocation(data.id)}>
-            <Input id={`${data.id}-name`} name="name" title="Location name" value={data.name} />
-            <Button title="Save" />
+            <Input id={`${data.id}-name`} name="name" title={__("Location name")} value={data.name} description={__("location-name-info")} />
+            <Button title={__("save-button")} />
         </Form>
         <Form onSubmit={handleRemoveLocation(data.id)}>
-            <Button title="Remove" />
+            <Button title={__("remove-button")} />
         </Form>
     </div>
 
     return (
         <div>
-            <Expandable title="Create new location">
+            <Expandable title={__("Create new location")}>
                 <Form onSubmit={handleCreateLocation}>
-                    <Input name="name" title="Location name" description="Visible for all users" />
-                    <Button title="Create location" />
+                    <Input name="name" title={__("Location name")} description={__("location-name-info")} />
+                    <Button title={__("create-button")} />
                 </Form>
             </Expandable>
-            <Table titles={["Name"]} widths={[100]} form={form} data={locations}>
+            <Table titles={[__("Name")]} widths={[100]} form={form} data={locations}>
                 {locations.map(l => <TableRow>
                     <TableCell>{l.name}</TableCell>
                 </TableRow>)}
@@ -56,7 +57,8 @@ const StaffLocations = ({ locations, getLocations, createLocation, updateLocatio
 
 export default connect(
     state => ({
-        locations: state.location
+        locations: state.location,
+        __: __(state)
     }),
     { getLocations, createLocation, updateLocation, removeLocation }
 )(StaffLocations);

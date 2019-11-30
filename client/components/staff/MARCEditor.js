@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { getRecord, updateRecord, createTemporaryRecord } from "../../reducers/recordReducer";
+import __ from "../../langs";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
 // TODO: Success and error messages
 
-const RecordEditor = ({ record, updateRecord }) => {
+const RecordEditor = ({ record, updateRecord, __ }) => {
     console.log("editing", record);
 
     const [editedRecord, setEditedRecord] = useState(null);
@@ -146,15 +147,15 @@ const RecordEditor = ({ record, updateRecord }) => {
     return (
         <>
             <div id="top" style={{ margin: "20px 0px" }}>
-                Fields in this record: {editedRecord.FIELDS.map(([code]) => <><a href={`#field-${code}`}>{code}</a>, </>)}
+                {__("Fields in this record")}: {editedRecord.FIELDS.map(([code]) => <><a href={`#field-${code}`}>{code}</a>, </>)}
             </div>
             <table style={{ width: "100%" }}>
                 <tbody>
                     <tr>
-                        <td>Add field</td>
+                        <td>{__("Add field")}</td>
                         <td><form onSubmit={onAddField}>
                             <input name="field" maxLength="3" minLength="3" />
-                            <button>Add field</button>
+                            <button>{__("Add field")}</button>
                         </form></td>
                     </tr>
                     {editedRecord.FIELDS.map(([code = "000", fieldsData = {}], field) => <React.Fragment key={code}>
@@ -162,7 +163,7 @@ const RecordEditor = ({ record, updateRecord }) => {
                             {/* console.log(fieldData, fieldData.subfields) */}
                             <tr><td colSpan="3" style={fieldSeparatorStyle}><hr /></td></tr>
                             <tr>
-                                <td id={`field-${code}`}>{code} <a href="#top">Top</a></td>
+                                <td id={`field-${code}`}>{code} <a href="#top">{__("back-to-top")}</a></td>
                                 <td>
                                     {fieldData.indicators ? <>
                                         <input style={indicatorInputStyle} value={fieldData.indicators[0]} onChange={onIndicatorChange(field, i, 0)} />
@@ -173,9 +174,9 @@ const RecordEditor = ({ record, updateRecord }) => {
                                 <td style={{ display: "flex" }}>
                                     {fieldData.subfields && <form onSubmit={onAddSubfield(code, field, i)}>
                                         <input name="subfield" minLength="1" maxLength="1" />
-                                        <button>Add subfield</button>
+                                        <button>{__("Add subfield")}</button>
                                     </form>}
-                                    <button onClick={onRemoveField(code, i)}>Remove field</button>
+                                    <button onClick={onRemoveField(code, i)}>{__("Remove field")}</button>
                                 </td>
                             </tr>
                             {fieldData.subfields && Object.entries(fieldData.subfields).map(([subfieldCode, subfieldData]) =>
@@ -193,8 +194,8 @@ const RecordEditor = ({ record, updateRecord }) => {
                                 </React.Fragment>)}
                         </React.Fragment>)}
                     </React.Fragment>)}
-                    <tr><td colSpan={3}><button onClick={onSave}>Save</button></td></tr>
-                    <tr><td colSpan={3}><button onClick={onPreviewSave}>Save for Preview</button></td></tr>
+                    <tr><td colSpan={3}><button onClick={onSave}>{__("save-button")}</button></td></tr>
+                    <tr><td colSpan={3}><button onClick={onPreviewSave}>{__("Save for preview")}</button></td></tr>
                 </tbody>
             </table>
         </>
@@ -203,7 +204,8 @@ const RecordEditor = ({ record, updateRecord }) => {
 
 export default connect(
     state => ({
-        record: state.record.record
+        record: state.record.record,
+        __: __(state)
     }),
     { getRecord, updateRecord }
 )(RecordEditor);

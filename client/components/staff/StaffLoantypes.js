@@ -4,8 +4,9 @@ import { createLoantype, getLoantypes, removeLoantype, updateLoantype } from "..
 import Expandable from "../essentials/Expandable";
 import { Form, Input, Button, Checkbox } from "../essentials/forms";
 import { Table, TableRow, TableCell } from "../essentials/Tables";
+import __ from "../../langs";
 
-const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes, removeLoantype, updateLoantype }) => {
+const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes, removeLoantype, updateLoantype, __ }) => {
     useEffect(() => {
         getLoantypes();
     }, []);
@@ -26,31 +27,31 @@ const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes, removeLoantyp
 
     const form = data => <>
         <Form onSubmit={handleUpdateLoantype(data.id)}>
-            <Input id={`${data.id}-name`} value={data.name} title="Name" name="name" />
-            <Checkbox id={`${data.id}-cbph`} checked={data.canBePlacedAHold} type="checkbox" name="canBePlacedAHold" title="Can be placed a hold" />
-            <Checkbox id={`${data.id}-cabl`} checked={data.canBeLoaned} type="checkbox" name="canBeLoaned" title="Can be loaned" description="If true, users cannot loan this item" />
-            <Input id={`${data.id}-rent`} value={data.renewTimes} type="number" name="renewTimes" title="Renew times" description="How many times item can be renewed" />
-            <Input id={`${data.id}-loat`} value={data.loanTime} type="number" name="loanTime" title="Loan time" description="How many days is the loan time" />
-            <Button title="Create" />
+            <Input id={`${data.id}-name`} value={data.name} title={__("Name")} name="name" />
+            <Checkbox id={`${data.id}-cbph`} checked={data.canBePlacedAHold} type="checkbox" name="canBePlacedAHold" title={__("canBePlacedAHold")} />
+            <Checkbox id={`${data.id}-cabl`} checked={data.canBeLoaned} type="checkbox" name="canBeLoaned" title={__("canBeLoaned")} description={__("canBeLoaned-info")} />
+            <Input id={`${data.id}-rent`} value={data.renewTimes} type="number" name="renewTimes" title={__("renewTimes")} description={__("renewTimes-info")} />
+            <Input id={`${data.id}-loat`} value={data.loanTime} type="number" name="loanTime" title={__("loanTime")} description={__("loanTime.info")} />
+            <Button title={__("create-button")} />
         </Form>
         <Form onSubmit={handleRemoveLoantype(data.id)}>
-            <Button title="Remove" />
+            <Button title={__("remove-button")} />
         </Form>
     </>;
 
     return (
         <>
-            <Expandable title="Create new loantype">
+            <Expandable title={__("Create new loantype")}>
                 <Form onSubmit={handleCreateLoantype}>
-                    <Input title="Name" name="name" />
-                    <Input type="checkbox" name="canBePlacedAHold" title="Can be placed a hold" />
-                    <Input type="checkbox" name="canBeLoaned" title="Can be loaned" description="If true, users cannot loan this item" />
-                    <Input type="number" name="renewTimes" title="Renew times" description="How many times item can be renewed" />
-                    <Input type="number" name="loanTime" title="Loan time" description="How many days is the loan time" />
-                    <Button title="Create" />
+                    <Input title={__("Name")} name="name" />
+                    <Input type="checkbox" name="canBePlacedAHold" title={__("canBePlacedAHold")} />
+                    <Input type="checkbox" name="canBeLoaned" title={__("canBeLoaned")} description={__("canBeLoaned-info")} />
+                    <Input type="number" name="renewTimes" title={__("renewTimes")} description={__("renewTimes-info")} />
+                    <Input type="number" name="loanTime" title={__("loanTime")} description={__("loanTime.info")} />
+                    <Button title={__("create-button")} />
                 </Form>
             </Expandable>
-            <Table widths={[40, 15, 15, 15, 15]} titles={["Name", "canBePlacedAHold", "canBeLoaned", "renewTimes", "loanTime"]} form={form} data={loantypes}>
+            <Table widths={[40, 15, 15, 15, 15]} titles={[__("Name"), __("canBePlacedAHold"), __("canBeLoaned"), __("renewTimes"), __("loanTime")]} form={form} data={loantypes}>
                 {loantypes.map(l => <TableRow key={l.id}>
                     <TableCell>{l.name}</TableCell>
                     <TableCell>{String(l.canBePlacedAHold)}</TableCell>
@@ -65,7 +66,8 @@ const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes, removeLoantyp
 
 export default connect(
     state => ({
-        loantypes: state.loantype
+        loantypes: state.loantype,
+        __: __(state)
     }),
     { createLoantype, getLoantypes, removeLoantype, updateLoantype }
 )(StaffLoantypes);
