@@ -7,10 +7,11 @@ import Loader from "./Loader";
 import Expandable from "./essentials/Expandable";
 import { Columns, Column } from "./essentials/Columns";
 import SearchFilter from "./SearchFilter";
+import __ from "../langs";
 
 const resultsPerPage = 20;
 
-const Search = ({ state, type, result, page, sort, nextPage, previousPage, resort }) => {
+const Search = ({ state, type, result, page, sort, nextPage, previousPage, resort, __ }) => {
 
     const handleResort = e => {
         resort(e.target.value);
@@ -20,9 +21,9 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
     console.log("sivulla", page, !page || page === 1);
     console.log("doNotShowNextPageLink?", result.found / 3 <= page);
 
-    if (state.state === 0) return <p>Give the search query</p>;
+    if (state.state === 0) return <p>{__("Givethesearchquery")}</p>;
     if (state.state === 1) return <Loader />;
-    if (state.state === 3) return <p>Error: {state.error}</p>;
+    if (state.state === 3) return <p>{__("Error")}: {state.error}</p>;
 
     // TODO: Fast page selector
     const howManyPages = Math.ceil(((result && result.found) || 0) / resultsPerPage);
@@ -40,7 +41,7 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
                                 : [["Relevance", "relevance"], ["Year (newest first)", "year"], ["Latest added first", "timeAdded"]]
                         } /> */}
                         <Select onChange={handleResort} defaultSelected={sort}
-                            options={[["Year (newest first)", "year"], ["Year (oldest first)", "yeardesc"], ["Alphapetical (A-Ö)", "alphapetical"], ["Alphapetical (Ö-A)", "alphapeticaldesc"], ["Latest added first", "timeAdded"]]}
+                            options={[[__("sortbyyear"), "year"], [__("sortbyyeardesc"), "yeardesc"], [__("sortbyalphapetical"), "alphapetical"], [__("sortbyalphapeticaldesc"), "alphapeticaldesc"], [__("sortbytimeadded"), "timeAdded"]]}
                         />
                     </div>
                     <SearchFilter />
@@ -62,7 +63,8 @@ export default connect(
         page: state.query.page,
         state: state.loading.search,
         sort: state.query.sort,
-        type: state.query.type
+        type: state.query.type,
+        __: __(state)
     }),
     { nextPage, previousPage, resort }
 )(Search);
