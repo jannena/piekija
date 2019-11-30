@@ -250,6 +250,7 @@ const usersInDb = async () => (await User.find({})).length;
 const recordsInDb = async () => (await Record.find({})).length;
 const locationsInDb = async () => (await Location.find({})).length;
 const shelvesInDb = async () => (await Shelf.find({})).length;
+const loantypesInDb = async () => (await Loantype.find({})).length;
 
 const generateCode = secret => {
     return otp.totp({
@@ -286,6 +287,7 @@ module.exports = {
     recordsInDb,
     locationsInDb,
     shelvesInDb,
+    loantypesInDb,
 
     generateCode
 };

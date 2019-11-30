@@ -9,7 +9,22 @@ loantypeRouter.get("/", (req, res, next) => {
         .catch(next);
 });
 
+loantypeRouter.get("/:id", (req, res, next) => {
+    const id = req.params.id;
+
+    Loantype
+        .findById(id)
+        .then(result => {
+            if (result) return res.json(result.toJSON());
+            else res.status(404).end();
+        })
+        .catch(next);
+});
+
 loantypeRouter.post("/", (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const { name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime } = req.body;
     if (!name || canBePlacedAHold === undefined || canBeLoaned === undefined || renewTimes === undefined || loanTime === undefined)
         return res.status(400).json({ error: "name or canBePlacedAHold or canBeLoaned or renewTimes or loanTime is missing" });
@@ -28,6 +43,9 @@ loantypeRouter.post("/", (req, res, next) => {
 });
 
 loantypeRouter.put("/:id", (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const { id } = req.params;
 
     const { name, canBePlacedAHold, canBeLoaned, renewTimes, loanTime } = req.body;
@@ -48,16 +66,20 @@ loantypeRouter.put("/:id", (req, res, next) => {
 });
 
 loantypeRouter.delete("/:id", async (req, res, next) => {
-    // TODO: Authorization
-    const { id } = req.params;
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
+    const id = req.params.id;
 
     try {
         // TODO: Performance?
-        const itemsUsingThisLoantype = await Item.findOne({ loantype: id });
-        if (itemsUsingThisLoantype) return res.status(409).json({ error: "there are items that using this loantype" });
+        console.log("Trying to remove loantype", id);
+        const itemUsingThisLoantype = await Item.findOne({ loantype: id });
+        console.log(itemUsingThisLoantype);
+        if (itemUsingThisLoantype) return res.status(409).json({ error: "there are items that using this loantype" });
     }
     catch (err) {
-        next(err);
+        return next(err);
     }
 
     Loantype

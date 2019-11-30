@@ -61,11 +61,18 @@ locationRouter.delete("/:id", async (req, res, next) => {
 
     const id = req.params.id;
 
-    const itemUsingThisLocation = await Item.findOne({ location: id });
+    try {
+        const itemUsingThisLocation = await Item.findOne({ location: id });
 
-    // TODO: Check the http status code
-    // TODO: How about performance?
-    if (itemUsingThisLocation) return res.status(409).json({ error: "there are items using this location" });
+        console.log("Removing location", id, itemUsingThisLocation);
+
+        // TODO: Check the http status code
+        // TODO: How about performance?
+        if (itemUsingThisLocation) return res.status(409).json({ error: "there are items using this location" });
+    }
+    catch(err) {
+        return next(err);
+    } 
 
     Location
         .findByIdAndRemove(id)
