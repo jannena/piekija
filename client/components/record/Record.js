@@ -15,6 +15,7 @@ import RecordPublisherInfo from "./RecordPublisherInfo";
 import RecordAuthors from "./RecordAuthors";
 import styled from "styled-components";
 import "../../css/record.css";
+import __ from "../../langs";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
@@ -28,7 +29,7 @@ const StyledTBody = styled.tbody`
     }
 `;
 
-const Record = ({ state, record, getRecord, id, history, isPreview }) => {
+const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
     console.log(id);
     console.log("record", record);
 
@@ -56,29 +57,29 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
         ? null
         : <div>
             {!isPreview && <>
-                <button onClick={history.goBack}>&lt; Back</button>
-                <RecordTools record={record} history={history} />
+                <button onClick={history.goBack}>&lt; {__("Back")}</button>
+                <RecordTools __={__} record={record} history={history} />
             </>}
             {MARC21.getFieldsAndSubfields(record.record, ["245"], ["a", "b", "c"]).slice(0, 1).map(title => <h2 key={title.a[0]}>{`${title.a[0] || ""} ${title.b[0] || ""} ${title.c[0] || ""}`}</h2>)}
             <div>
-                Content type: {MARC21.contentTypes[record.record.LEADER.substring(6, 7)]}
+                {__("Content type")}: {MARC21.contentTypes[record.record.LEADER.substring(6, 7)]}
             </div>
             <RecordTime record={record} />
 
             <table className="record-table">
                 <StyledTBody>
-                    <RecordAuthors record={record} />
-                    <RecordSubjects record={record} />
+                    <RecordAuthors __={__} record={record} />
+                    <RecordSubjects __={__} record={record} />
                 </StyledTBody>
                 <StyledTBody>
-                    <RecordClassification record={record} />
-                    <RecordStandardCodes record={record} />
+                    <RecordClassification __={__} record={record} />
+                    <RecordStandardCodes __={__} record={record} />
                 </StyledTBody>
                 <StyledTBody>
-                    <RecordPublisherInfo record={record} />
-                    {!!series.length && <tr><td>Series</td> <td>{series}</td></tr>}
-                    {!!appearance.length && <tr><td>Appearance</td> <td>{appearance.join(" ")}</td></tr>}
-                    <tr><td>Links</td> <td>{MARC21
+                    <RecordPublisherInfo __={__} record={record} />
+                    {!!series.length && <tr><td>{__("Series")}</td> <td>{series}</td></tr>}
+                    {!!appearance.length && <tr><td>{__("Appearance")}</td> <td>{appearance.join(" ")}</td></tr>}
+                    <tr><td>{__("Links")}</td> <td>{MARC21
                         .getFieldsAndSubfields(record.record, ["856"], ["indicators", "y", "u"])
                         .map(link => <div>
                             <a href={link.u} target="_blank">{link.y}</a>
@@ -86,17 +87,17 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
                 </StyledTBody>
 
                 <StyledTBody className="record-languages-rows">
-                    <RecordLanguages record={record} />
+                    <RecordLanguages __={__} record={record} />
                 </StyledTBody>
                 <StyledTBody>
-                    <RecordNotes record={record} />
+                    <RecordNotes __={__} record={record} />
 
                     {/* TODO: Add notes <RecordNotes record={record} /> */}
                 </StyledTBody>
             </table>
 
 
-            {!isPreview && <Tabs titles={["Items", "MARC", "spelling"]}>
+            {!isPreview && <Tabs titles={[__("Items"), __("MARC"), __("spelling")]}>
                 <Tab>
                     <table style={{ width: "100%" }}>
                         <tbody>
@@ -124,7 +125,8 @@ const Record = ({ state, record, getRecord, id, history, isPreview }) => {
 export default connect(
     state => ({
         record: state.record.record,
-        state: state.loading.record
+        state: state.loading.record,
+        __: __(state)
     }),
     { getRecord }
 )(Record);

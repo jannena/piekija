@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
-const ReocrdSubjects = ({ record, history, setQuery }) => {
+const ReocrdSubjects = ({ record, history, setQuery, __ }) => {
     const searchForSubject = subject => () => {
         setQuery("advanced", ["AND", [["subjects", subject, "is"]]]);
         history.push("/search");
@@ -24,7 +24,7 @@ const ReocrdSubjects = ({ record, history, setQuery }) => {
     return (
         <>
             <tr>
-                <td>Subjects</td>
+                <td>{__("Subjects")}</td>
                 <td>
                     {parsedSubjects.map(subject => <div key={JSON.stringify(subject)}>
                         {subjects(subject)}

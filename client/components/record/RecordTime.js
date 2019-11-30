@@ -2,7 +2,7 @@ import React from "react";
 
 // TODO: MARC21 field 046 contains something
 
-const RecordTime = ({ record }) => {
+const RecordTime = ({ record, __ }) => {
     try {
         const oo8 = record.record.FIELDS["008"][0].substring(6, 7);
         const first = record.record.FIELDS["008"][0].substring(7, 11);
@@ -10,13 +10,13 @@ const RecordTime = ({ record }) => {
 
         const title = (() => {
             switch (oo8) {
-                case "c": return `Currently published: ${first}-`
-                case "d": return `Ceased publishing: ${first}-${second}`;
-                case "e": return `Detailed date: ${second.substring(2)}.${second.substring(0, 2)}.${first}`;
-                case "n": return `Dates unknown`;
-                case "q": return `Questionable data: ${first}-${second}`;
+                case "c": return `${__("Currently published")}: ${first}-`
+                case "d": return `${__("Ceased publishing")}: ${first}-${second}`;
+                case "e": return `${__("Detailed date")}: ${second.substring(2)}.${second.substring(0, 2)}.${first}`;
+                case "n": return `${__("Dates unknown")}`;
+                case "q": return `${__("Questionable data")}: ${first}-${second}`;
                 case "s": return `${first}`;
-                case "b": return `eKr.`;
+                case "b": return `${__("BC")}`;
             }
         })();
 

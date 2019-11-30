@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { setQuery } from "../reducers/queryReducer";
 import Expandable from "./essentials/Expandable";
 import { Button } from "./essentials/forms";
+import __ from "../langs";
 
 const QueryGroupStyle = {
     border: "1px solid black",
@@ -14,7 +15,9 @@ const QueryGroupStyle = {
 
 const MARC21 = require("../../server/utils/marc21parser");
 
-const AdvancedSearchField = ({ query, setQuery, removeField }) => {
+// TODO: Language lists
+
+const AdvancedSearchField = ({ query, setQuery, removeField, __ }) => {
     const onChange = index => e => {
         // const newQuery = [...query];
         // newQuery[index] = e.target.value
@@ -24,10 +27,10 @@ const AdvancedSearchField = ({ query, setQuery, removeField }) => {
     };
     const operatorsByField = field => {
         return {
-            year: [["is exactly", "is"], ["is not", "not"], ["is less than", "lt"], ["is greater than", "gt"]]
+            year: [[__("is exactly"), "is"], [__("is not"), "not"], [__("is less than"), "lt"], [__("is greater than"), "gt"]]
         }[field] || [
-                ["is exactly", "is"],
-                ["is not", "not"]
+                [__("is exactly"), "is"],
+                [__("is not"), "not"]
             ];
     };
     const optionsByField = (field, value, onChange) => {
@@ -44,19 +47,19 @@ const AdvancedSearchField = ({ query, setQuery, removeField }) => {
         <div>
             <Select
                 options={[
-                    ["everything", "spelling"],
-                    ["content type", "contentType"],
-                    ["title", "title"],
-                    ["subject", "subjects"],
-                    ["genre", "genres"],
-                    ["author", "authors"],
-                    ["year", "year"],
-                    ["country", "country"],
-                    ["standard code (ISBN/ISSN/...)", "standardCodes"],
-                    ["series", "series"],
-                    ["classification", "classification"],
-                    ["main language", "language"],
-                    ["language", "languages"]
+                    [__("everything"), "spelling"],
+                    [__("content type"), "contentType"],
+                    [__("title"), "title"],
+                    [__("subject"), "subjects"],
+                    [__("genre"), "genres"],
+                    [__("author"), "authors"],
+                    [__("year"), "year"],
+                    [__("country"), "country"],
+                    [__("standard code (ISBN/ISSN/...)"), "standardCodes"],
+                    [__("series"), "series"],
+                    [__("classification"), "classification"],
+                    [__("main language"), "language"],
+                    [__("language"), "languages"]
                 ]}
                 selected={query[0]}
                 onChange={onChange(0)}
@@ -73,7 +76,7 @@ const AdvancedSearchField = ({ query, setQuery, removeField }) => {
 };
 
 // This is a recursive component
-const AdvancedSearchGroup = ({ query, setQuery, removeGroup }) => {
+const AdvancedSearchGroup = ({ query, setQuery, removeGroup, __ }) => {
     // Event handlers for new group and field addition
     const addToThisLevel = toBeAdded => {
         const updatedQuery = [...query];
@@ -89,16 +92,16 @@ const AdvancedSearchGroup = ({ query, setQuery, removeGroup }) => {
     return (
         <div style={QueryGroupStyle}>
             <Select
-                options={[["with all these (and)", "AND"], ["with any of these (or)", "OR"]]}
+                options={[[__("withallthese(and)"), "AND"], [__("withanyofthese(or)"), "OR"]]}
                 selected={query[0]}
                 onChange={e => {
                     query[0] = e.target.value;
                     setQuery(query);
                 }}
             />
-            <button type="button" onClick={addNewField}>Add FIELD</button>
-            <button type="button" onClick={addNewGroup}>Add GROUP</button>
-            {removeGroup && <button onClick={removeGroup}>Remove this group</button>}
+            <button type="button" onClick={addNewField}>{__("AddFIELD")}</button>
+            <button type="button" onClick={addNewGroup}>{__("AddGROUP")}</button>
+            {removeGroup && <button onClick={removeGroup}>{__("removethisgroup")}</button>}
             {/* If, second element of the array is an array, element is a group.
                     Else, element is a field
                 */}
@@ -119,6 +122,7 @@ const AdvancedSearchGroup = ({ query, setQuery, removeGroup }) => {
                         updatedQuery[1].splice(i, 1);
                         setQuery(updatedQuery);
                     }}
+                    __={__}
                 />
 
                 : <AdvancedSearchField
@@ -134,6 +138,7 @@ const AdvancedSearchGroup = ({ query, setQuery, removeGroup }) => {
                         updatedQuery[1].splice(i, 1);
                         setQuery(updatedQuery);
                     }}
+                    __={__}
                 />
             )}
         </div>
@@ -155,7 +160,7 @@ const AdvancedSearchGroup = ({ query, setQuery, removeGroup }) => {
     ]
 */
 
-const AdvancedSearch = ({ query: q, setQuery: setQ }) => {
+const AdvancedSearch = ({ query: q, setQuery: setQ, __ }) => {
     const [query, setQuery] = useState(["AND", []]);
 
     console.log("query here", query);
@@ -170,7 +175,7 @@ const AdvancedSearch = ({ query: q, setQuery: setQ }) => {
     };
 
     return (
-        <Expandable noPadding={true} title="Advanced search">
+        <Expandable noPadding={true} title={__("advancedsearch")}>
             <form onSubmit={search}>
                 <AdvancedSearchGroup
                     query={query}
@@ -178,8 +183,9 @@ const AdvancedSearch = ({ query: q, setQuery: setQ }) => {
                         console.log("updatedQuery", newQuery, JSON.stringify(newQuery));
                         setQuery(newQuery);
                     }}
+                    __={__}
                 />
-                <Button title="Search" />
+                <Button title={__("Search-button")} />
                 {/* <button type="submit" onClick={search}>Search</button> */}
             </form>
         </Expandable>
@@ -188,7 +194,8 @@ const AdvancedSearch = ({ query: q, setQuery: setQ }) => {
 
 export default connect(
     state => ({
-        query: state.query.type === "advanced" ? state.query.query : null
+        query: state.query.type === "advanced" ? state.query.query : null,
+        __: __(state)
     }),
     { setQuery }
 )(AdvancedSearch);

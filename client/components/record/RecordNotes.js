@@ -2,12 +2,12 @@ import React from "react";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
-const RecordNotes = ({ record }) => {
+const RecordNotes = ({ record, __ }) => {
 
     const g500 = () => <>
         {MARC21
             .getFields(record.record, ["500"], "a")
-            .map(n => <tr key={n}><td>General note</td><td>{n}</td></tr>)}
+            .map(n => <tr key={n}><td>{__("General note")}</td><td>{n}</td></tr>)}
     </>
 
     // TODO: What if subfields s, t and r are used?
@@ -15,7 +15,7 @@ const RecordNotes = ({ record }) => {
         {MARC21
             .getFieldsAndSubfields(record.record, ["505"], ["indicators", "a"])
             .map(n => <tr key={n["a"][0]}>
-                <td>{["Contents", "Incomplete contents", "Partial contents", "", "", "", "", "", ""][n.indicators[0]] + ": "}</td>
+                <td>{__(["Contents", "Incomplete contents", "Partial contents", "", "", "", "", "", ""][n.indicators[0]]) + ": "}</td>
                 <td>{n["a"].join("").split("--").map(part => <div key={part}>{part}</div>)}</td>
             </tr>)}
     </>;
@@ -24,7 +24,7 @@ const RecordNotes = ({ record }) => {
         {MARC21
             .getFieldsAndSubfields(record.record, ["520"], ["indicators", "a", "c"])
             .map(n => <tr key={n["a"][0]}>
-                <td>{["Summary", "Subject", "Review", "Scope and content", "Abstract", "Content advice"][n.indicators[0] !== " " ? n.indicators[0] + 1 : 0] + ": "}</td>
+                <td>{__(["Summary", "Subject", "Review", "Scope and content", "Abstract", "Content advice"][n.indicators[0] !== " " ? n.indicators[0] + 1 : 0]) + ": "}</td>
                 <td>{n["a"][0] + n["c"][0]}</td>
             </tr>)}
     </>;
@@ -46,7 +46,7 @@ const RecordNotes = ({ record }) => {
             ], "a")
             .map((note, i) =>
                 <tr key={i}>
-                    <td>Other note (not named yet)</td>
+                    <td>__{("Other note (not named yet)")}</td>
                     <td>{note}</td>
                 </tr>
             )}

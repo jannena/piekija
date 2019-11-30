@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
 
-const RecordAuthors = ({ record, history, setQuery }) => {
+const RecordAuthors = ({ record, history, setQuery, __ }) => {
     const authors = MARC21.getFieldsAndSubfields(record.record, ["100", "110", "700", "710"], ["a", "d", "e"]);
     if (!authors.length) return null;
 
@@ -17,7 +17,7 @@ const RecordAuthors = ({ record, history, setQuery }) => {
 
     return (
         <tr>
-            <td>Authors</td>
+            <td>{__("Authors")}</td>
             <td>
                 {authors.map(author => <div key={author["a"][0]}>
                     <a href="javascript:void(0);" onClick={searchForAuthor(removeLastCharacters(author["a"][0]))}>{removeLastCharacters(author["a"][0]) + ","}</a>

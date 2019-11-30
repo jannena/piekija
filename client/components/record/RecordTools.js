@@ -3,7 +3,7 @@ import Select from "../Select";
 import { connect } from "react-redux";
 import { addRecordToShelf } from "../../reducers/shelfReducer";
 
-const RecordTools = ({ record, user, addRecordToShelf, history }) => {
+const RecordTools = ({ record, user, addRecordToShelf, history, __ }) => {
 
     if (!user) return null;
 
@@ -21,9 +21,9 @@ const RecordTools = ({ record, user, addRecordToShelf, history }) => {
         <div>
             <form onSubmit={handleAddToShelf}>
                 <Select name="shelf" options={user.shelves.map(shelf => [shelf.id.name, shelf.id.id])} />
-                <button>Add to shelf</button>
+                <button>{__("Add to shelf")}</button>
             </form>
-            {user.staff === true && <button onClick={handleEditRecord}>Edit record</button>}
+            {user.staff === true && <button onClick={handleEditRecord}>{__("Edit record")}</button>}
         </div>
     );
 };

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { Link, withRouter } from "react-router-dom";
+import __ from "../langs";
 
 const StyledUserMenuItem = styled.div`
     line-height: 50px;
@@ -13,7 +14,7 @@ const StyledUserMenuTitle = styled.div`
 
 const MenuItem = ({ title, link }) => <StyledUserMenuItem><Link to={link}>{title}</Link></StyledUserMenuItem>;
 
-const UserMenu = ({ isLoggedIn, isStaff, user, history }) => {
+const UserMenu = ({ isLoggedIn, isStaff, user, history, __ }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const logout = () => {
@@ -26,11 +27,11 @@ const UserMenu = ({ isLoggedIn, isStaff, user, history }) => {
         : history.push("/login");
 
     return <div>
-        <StyledUserMenuTitle onClick={handleMenuClick}>{isLoggedIn ? user.name : "Log in"}</StyledUserMenuTitle>
+        <StyledUserMenuTitle onClick={handleMenuClick}>{isLoggedIn ? user.name : __("Log in")}</StyledUserMenuTitle>
         <div style={{ display: isOpen ? "block" : "none" }}>
-            <MenuItem title="You" link="/user" />
-            {isStaff && <MenuItem title="Staff" link="/staff" />}
-            <StyledUserMenuItem onClick={logout}>Logout</StyledUserMenuItem>
+            <MenuItem title={__("You")} link="/user" />
+            {isStaff && <MenuItem title={__("Staff")} link="/staff" />}
+            <StyledUserMenuItem onClick={logout}>{__("Logout")}</StyledUserMenuItem>
         </div>
     </div>;
 };
@@ -39,7 +40,8 @@ export default connect(
     state => ({
         isLoggedIn: !!state.user,
         user: state.user,
-        isStaff: state.user && state.user.staff === true
+        isStaff: state.user && state.user.staff === true,
+        __: __(state)
     }),
     {}
 )(withRouter(UserMenu));
