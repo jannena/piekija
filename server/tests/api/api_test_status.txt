@@ -6,5 +6,5 @@ circulation -           TODO: due dates
 
 item        -           Not started
 location    ready
-loantype    -           Not started
+loantype    -           TODO: used loantype can currently be removed
 notes       -           Not started
