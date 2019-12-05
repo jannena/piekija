@@ -54,7 +54,7 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history, __ }
     };
 
     return <AddressedTabs
-        titles={[__("Welocme"), __("Records"), __("Locations"), __("Loantypes"), __("Users"), __("Circulation"), __("Notes")]}
+        titles={[__("Welcome"), __("Records"), __("Locations"), __("Loantypes"), __("Users"), __("Circulation"), __("Notes")]}
         addresses={["", "records", "locations", "loantypes", "users", "circulation", "notes"]}
         root="staff">
         <Tab>

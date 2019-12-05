@@ -6,6 +6,7 @@ export default (slog, def) => {
         "save-button": "Save",
         "edit-button": "Edit",
         "delete-button": "Remove",
+        "remove-button": "Remove",
         "search-button": "Search",
         "clear-button": "Clear",
         "renew-button": "Renew",
@@ -268,9 +269,7 @@ export default (slog, def) => {
         "renewTimes": "Renew Times",
         "loanTime": "Loan time",
         "canBeLoaned-info": "If true, users cannot loan this item.",
-        "renewTime-info": "How many times item can be renewed. Cannot be renewed if 0.",
-        "loanTime-into": "How many days the loan time is",
-        "": "",
-        "": "",
+        "renewTimes-info": "How many times item can be renewed. Cannot be renewed if 0.",
+        "loanTime-info": "How many days the loan time is"
     }[slog] || def || slog;
 };

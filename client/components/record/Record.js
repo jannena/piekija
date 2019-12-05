@@ -104,7 +104,7 @@ const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
                             {record.result.items.map((item, i) =>
                                 <tr key={i}>
                                     <td>{item.location.name}</td>
-                                    <td style={{ backgroundColor: colorByState(item.state || "loaned"), lineHeight: "30px", textAlign: "center" }}>{item.state}</td>
+                                    <td style={{ backgroundColor: colorByState(item.state || "loaned"), lineHeight: "30px", textAlign: "center" }}>{__(item.state)}</td>
                                 </tr>
                             )}
                         </tbody>

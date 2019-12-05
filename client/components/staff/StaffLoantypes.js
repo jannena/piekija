@@ -47,7 +47,7 @@ const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes, removeLoantyp
                     <Input type="checkbox" name="canBePlacedAHold" title={__("canBePlacedAHold")} />
                     <Input type="checkbox" name="canBeLoaned" title={__("canBeLoaned")} description={__("canBeLoaned-info")} />
                     <Input type="number" name="renewTimes" title={__("renewTimes")} description={__("renewTimes-info")} />
-                    <Input type="number" name="loanTime" title={__("loanTime")} description={__("loanTime.info")} />
+                    <Input type="number" name="loanTime" title={__("loanTime")} description={__("loanTime-info")} />
                     <Button title={__("create-button")} />
                 </Form>
             </Expandable>
