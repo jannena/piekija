@@ -114,6 +114,8 @@ const RecordSchema = new mongoose.Schema({
         required: true
     },
 
+    previewText: Array,
+
     items: [
         {
             type: mongoose.Schema.Types.ObjectId,

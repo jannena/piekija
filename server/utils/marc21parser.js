@@ -416,6 +416,15 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     const subjectsWithLastCharacters = getFields(parsedMARC, ["600", "650", "651", "653", "610", "611", "630", "647", "648", "654", "656", "657", "658", "662"], "a"); // parsedMARC.FIELDS["650"].map(f => f.subfields["a"][0]);
     const subjects = subjectsWithLastCharacters.map(removeLastCharacters);
 
+    const previewTexts = getFieldsAndSubfields(parsedMARC, ["990"], ["a", "u", "y"]);
+    let previewText = [];
+    console.log("----------Try to find previewText", previewTexts);
+    previewTexts.forEach(pr => {
+        console.log("Tässä on preview", pr);
+        if (pr["a"] && pr["u"] && pr["y"]) return previewText.push([pr["a"][0], pr["u"][0], pr["y"][0]]);
+        else if (pr["a"]) return previewText = [...previewText, ...pr["a"]];
+    });
+
     // Remove marc fields 9xx and 8xx expect 856
     // logger.log(fromentries(Object.entries(parsedMARC.FIELDS)));
     // data = stringify({
@@ -453,7 +462,9 @@ const parseMARCToDatabse = (parsedMARC, data) => {
         record: data,
 
         spelling1,
-        spelling2
+        spelling2,
+
+        previewText
     };
 };
 
