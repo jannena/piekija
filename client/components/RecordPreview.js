@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const MARC21 = require("../../server/utils/marc21parser");
 
-const RecordPreview = ({ record }) => {
+const RecordPreview = ({ record, __ }) => {
     const previewStyle = {
         height: 150,
         display: "flex",
@@ -28,7 +28,7 @@ const RecordPreview = ({ record }) => {
             <div style={imageStyle}><img></img></div>
             <div style={infoStyle}>
                 <div style={titleStyle}><strong><Link to={`/record/${record.id}`}>{record.title}</Link></strong></div>
-                <div>{MARC21.contentTypes[record.contentType] || null}</div>
+                <div>{__(record.contentType) || null}</div>
                 <div>{record.author}</div>
                 <div>{Number(record.year) || null}</div>
             </div>

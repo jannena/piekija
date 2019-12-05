@@ -13,13 +13,29 @@ export default (slog, def) => {
         "return-button": "Return",
         "create-button": "Create",
 
-        // item states
+        // Item states
         "not loaned": "Not loaned",
         "loaned": "Loaned",
         "not in use": "Not in use",
         "broken": "Broken",
         "placed a hold": "Placed a hold",
         "other": "Other",
+
+        // Content types
+        "a": "Language material",
+        "c": "Notated music",
+        "d": "Manuscript notated music",
+        "e": "Cartographic material",
+        "f": "Manuscript cartographic material",
+        "g": "Projected medium",
+        "i": "Nonmusical sound recording",
+        "j": "Musical sound recording",
+        "k": "Two-dimensional nonprojectable graphic",
+        "m": "Computer file",
+        "o": "Kit",
+        "p": "Mixed materials",
+        "r": "Three-dimensional artifact or naturally occurring object",
+        "t": "Manuscript language material",
 
         // Search.js
         "Error": "Error",

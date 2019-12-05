@@ -36,7 +36,7 @@ const AdvancedSearchField = ({ query, setQuery, removeField, __ }) => {
     const optionsByField = (field, value, onChange) => {
         return {
             "language": <Select options={[["Finnish", "fin"], ["Swedish", "swe"], ["English", "eng"]]} value={value} onChange={onChange(1)} />,
-            "contentType": <Select options={Object.entries(MARC21.contentTypes).map(([a, b]) => [b, a])} value={value} onChange={onChange(1)} />
+            "contentType": <Select options={MARC21.contentTypes.map(c => [__(c), c])} value={value} onChange={onChange(1)} />
         }[field]
             || <input
                 value={value}

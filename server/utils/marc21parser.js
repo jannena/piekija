@@ -205,7 +205,9 @@ const getFieldsAndSubfields = (parsedMARC, fields, subfields) => {
     return ret;
 };
 
-const contentTypes = {
+const contentTypes = ["a", "c", "d", "e", "f", "g", "i", "j", "k", "m", "o", "p", "r", "t"];
+
+/* const contentTypes = {
     a: "Language material",
     c: "Notated music",
     d: "Manuscript notated music",
@@ -220,7 +222,7 @@ const contentTypes = {
     p: "Mixed materials",
     r: "Three-dimensional artifact or naturally occurring object",
     t: "Manuscript language material"
-};
+}; */
 
 const languages = {
     fin: "Finnish",

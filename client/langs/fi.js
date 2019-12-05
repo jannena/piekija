@@ -21,6 +21,22 @@ export default (slog, def) => {
         "placed a hold": "Varattu",
         "other": "Muu",
 
+        // Content types
+        "a": "Tekstiaineisto",
+        "c": "Nuottijulkaisu",
+        "d": "Nuottikäsikirjoitus",
+        "e": "Kartta-aineisto",
+        "f": "Karttakäsikirjoitus",
+        "g": "Heijastettava kuva tai viestin",
+        "i": "Puheäänite",
+        "j": "Musiikkiäänite",
+        "k": "Kuva",
+        "m": "Elektroninen aineisto",
+        "o": "Moniviestin",
+        "p": "Sekalainen aineisto",
+        "r": "Esine",
+        "t": "Tekstikäsikirjoitus",
+
         // Search.js
         "Error": "Virhe",
         "Givethesearchquery": "Give the search query",
