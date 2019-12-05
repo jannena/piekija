@@ -3,10 +3,11 @@ import { setQuery } from "../reducers/queryReducer";
 import { connect } from "react-redux";
 import Expandable from "./essentials/Expandable";
 import { Columns, Column } from "./essentials/Columns";
+import __ from "../langs";
 
-const SearchFilter = ({ query, filters, setQuery }) => {
+const SearchFilter = ({ query, filters, setQuery, __ }) => {
     console.log("!!!!!!!!!!!", filters);
-    if (!filters) return <p>Filter cannot be used in this search.</p>;
+    if (!filters) return <p>{__("cannot-use-search-filter")}</p>;
 
     // console.log(search);
 
@@ -33,19 +34,19 @@ const SearchFilter = ({ query, filters, setQuery }) => {
 
     console.log("!!!!!!!!!!", filters);
     return <div>
-        <Expandable title="Filter search" noPadding={true}>
+        <Expandable title={__("Filter search")} noPadding={true}>
             <Columns>
                 <Column>
-                    {searchFilterTemplate("Subjects", "subjects", filters.subjects)}
+                    {searchFilterTemplate(__("Subjects"), "subjects", filters.subjects)}
                 </Column>
                 <Column>
-                    {searchFilterTemplate("Authors", "authors", filters.authors)}
+                    {searchFilterTemplate(__("Authors"), "authors", filters.authors)}
                 </Column>
                 <Column>
-                    {searchFilterTemplate("Years", "year", filters.years)}
+                    {searchFilterTemplate(__("Years"), "year", filters.years)}
                 </Column>
                 <Column>
-                    {searchFilterTemplate("Languages", "languages", filters.languages)}
+                    {searchFilterTemplate(__("Languages"), "languages", filters.languages)}
                 </Column>
             </Columns>
         </Expandable>
@@ -55,7 +56,8 @@ const SearchFilter = ({ query, filters, setQuery }) => {
 export default connect(
     state => ({
         query: state.query,
-        filters: state.search && state.search.result && state.search.result.filters
+        filters: state.search && state.search.result && state.search.result.filters,
+        __: __(state)
     }),
     { setQuery }
 )(SearchFilter);

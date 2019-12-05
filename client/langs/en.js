@@ -54,6 +54,12 @@ export default (slog, def) => {
         "in-before-milliseconds": "in",
         "in-milliseconds": "milliseconds",
 
+        // SearchFilter.js
+        "cannot-use-search-filter": "Filter cannot be used in this search.",
+        "Filter search": "",
+        "Years": "",
+        "Languages": "",
+
         // AdvancedSearch.js
         "advancedsearch": "Advanced Search",
         "AddGROUP": "Add GROUP",

@@ -39,7 +39,7 @@ export default (slog, def) => {
 
         // Search.js
         "Error": "Virhe",
-        "Givethesearchquery": "Give the search query",
+        "Givethesearchquery": "Anna hakulauseke",
         "sortbyyear": "Vuosi (uusin ensin)",
         "sortbyyeardesc": "Vuosi (vanhin ensin)",
         "sortbyalphapetical": "Aakkosjärjestys (A-Ö)",
@@ -51,8 +51,14 @@ export default (slog, def) => {
         "No results": "Ei tuloksia",
         "Found": "Löydetty",
         "records-in": "tietuetta",
-        "in-before-milliseconds": "",
+        "in-before-milliseconds": " ",
         "in-milliseconds": "millisekuntissa",
+
+        // SearchFilter.js
+        "cannot-use-search-filter": "Tätä hakua ei voi rajata.",
+        "Filter search": "Rajaa hakua",
+        "Years": "Vuodet",
+        "Languages": "Kielet",
 
         // AdvancedSearch.js
         "advancedsearch": "Tarkennettu haku",
@@ -260,7 +266,7 @@ export default (slog, def) => {
         "cannot-remove-items-info": "Kaikki tähän tietueeseen liitetyt nimikkeet on poistettava ennen kuin tietue voidaan poistaa.",
         "Remove this record": "Poista tietue",
         "items-tab": "Nimikkeet",
-        "preview-tab": "Preview",
+        "preview-tab": "Esikatselu",
         "simple-editor-tab": "Yksinkertainen muokkain",
         "remove-tab": "Poista",
         "MARC-tab": "MARC",

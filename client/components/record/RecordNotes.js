@@ -46,7 +46,7 @@ const RecordNotes = ({ record, __ }) => {
             ], "a")
             .map((note, i) =>
                 <tr key={i}>
-                    <td>__{("Other note (not named yet)")}</td>
+                    <td>{__("Other note (not named yet)")}</td>
                     <td>{note}</td>
                 </tr>
             )}
