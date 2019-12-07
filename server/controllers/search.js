@@ -10,7 +10,7 @@ const searchResultsPerPage = 20;
 
 const search = async (req, res, next, simple) => {
     const { query, page: p, sort, filter } = req.body;
-    if (!query) return res.status(401).json({ error: "query is missing" });
+    // if (!query) //return res.status(401).json({ error: "query is missing" });
 
     const page = Number(p) - 1 || 0
 
@@ -34,7 +34,9 @@ const search = async (req, res, next, simple) => {
     const firstTime = process.hrtime();
 
     try {
-        let readyQuery = simple ? validateSimpleQuery(query) : validateAdvancedQuery(query);
+        let readyQuery = !!query ?
+            simple ? validateSimpleQuery(query) : validateAdvancedQuery(query)
+            : {};
         console.log("ready query", readyQuery);
         const result = await Record
             .find(readyQuery, { title: 1, author: 1, contentType: 1, year: 1, previewText: 1 })
