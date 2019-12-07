@@ -21,7 +21,7 @@ input {
     margin: 5px;
 }
 
-button {
+button, .buttonLikeLinks {
     padding: 10px;
     height: 40px;
     background-color: #cacaca;

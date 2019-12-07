@@ -37,6 +37,10 @@ const init = {
         state: 0,
         error: null
     },
+    statistics: {
+        state: 0,
+        error: null
+    },
     loading: 0
 };
 
@@ -69,6 +73,12 @@ const loadingReducer = (state = init, action) => {
             return {
                 ...state,
                 record: { state: updateToState, error: action.error || null },
+                loading
+            };
+        case "STATISTICS":
+            return {
+                ...state,
+                statistics: { state: updateToState, error: action.error || null },
                 loading
             };
     }
