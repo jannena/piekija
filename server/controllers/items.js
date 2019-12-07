@@ -22,15 +22,21 @@ itemRouter.post("/", async (req, res, next) => {
         return res.status(400).json({ error: "barcode or record or location or loantype or state is missing" });
 
     const newItem = new Item({
+        created: new Date(),
         barcode,
         record,
         location,
         loantype,
         note: note ? note : "",
         state,
+        
         statePersonInCharge: null,
         stateDueDate: null,
-        stateTimesRenewed: null
+        stateTimesRenewed: null,
+
+        loanHistory: [],
+        lastLoaned: new Date(0),
+        loanTimes: 0
     });
 
     try {
@@ -57,12 +63,13 @@ itemRouter.post("/", async (req, res, next) => {
 itemRouter.put("/:id", (req, res, next) => {
     // TODO: authorization
     const { id } = req.params;
-    const { location, loantype, state, note } = req.body;
+    const { barcode, location, loantype, state, note } = req.body;
     console.log(location, loantype, state, note);
     if (!location || !loantype || !state || note === undefined)
         return res.status(400).json({ error: "location or loantype or state or note is missing" });
 
     const updatedItem = {
+        barcode,
         location,
         loantype,
         state,

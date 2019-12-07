@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const itemSchema = new mongoose.Schema({
+    created: {
+        type: Date,
+        required: true
+    },
     barcode: {
         type: String,
         required: true,
@@ -35,6 +39,15 @@ const itemSchema = new mongoose.Schema({
         type: Date
     },
     stateTimesRenewed : {
+        type: Number
+    },
+    loanHistory: Array,
+    lastLoaned: {
+        required: true,
+        type: Date
+    },
+    loanTimes: {
+        required: true,
         type: Number
     }
 });
