@@ -55,4 +55,5 @@
 | 25.11. | 0,5 | käännösten aloittaminen |
 | 30.11. | 3 | backendin testien päivittäminen, käännösten jatkaminen |
 | 5.12. | 1 | suomenkielinen käännös, hakutuloslistauksen tekstit ja linkit |
-| yht. | 112,5 | |
+| 7.12. | 2,5 | tilastohaun aloittaminen |
+| yht. | 115 | |
