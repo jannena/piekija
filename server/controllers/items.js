@@ -29,7 +29,7 @@ itemRouter.post("/", async (req, res, next) => {
         loantype,
         note: note ? note : "",
         state,
-        
+
         statePersonInCharge: null,
         stateDueDate: null,
         stateTimesRenewed: null,
@@ -63,13 +63,12 @@ itemRouter.post("/", async (req, res, next) => {
 itemRouter.put("/:id", (req, res, next) => {
     // TODO: authorization
     const { id } = req.params;
-    const { barcode, location, loantype, state, note } = req.body;
+    const { location, loantype, state, note } = req.body;
     console.log(location, loantype, state, note);
     if (!location || !loantype || !state || note === undefined)
         return res.status(400).json({ error: "location or loantype or state or note is missing" });
 
     const updatedItem = {
-        barcode,
         location,
         loantype,
         state,

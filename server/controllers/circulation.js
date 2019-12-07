@@ -33,6 +33,9 @@ circulationRouter.post("/loan", async (req, res, next) => {
         item.stateTimesRenewed = 0;
         item.state = "loaned";
 
+        item.lastLoaned = new Date();
+        item.loanTimes = item.loanTimes + 1 || 1;
+
         const dueDate = new Date();
         dueDate.setUTCDate(dueDate.getUTCDate() + (item.loantype.loanTime || 1));
         item.stateDueDate = dueDate;
@@ -103,6 +106,9 @@ circulationRouter.post("/renew", async (req, res, next) => {
         item.stateDueDate = dueDate;
         console.log("item.stateTimesRenewed", item.stateTimesRenewed);
         item.stateTimesRenewed = item.stateTimesRenewed + 1 || 1;
+
+        item.loanTimes = item.loanTimes + 1 || 1;
+        item.lastLoaned = new Date();
 
         await item.save();
 
