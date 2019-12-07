@@ -44,5 +44,6 @@ export default {
     getLast,
     getAll,
     create,
-    update
+    update,
+    remove
 };

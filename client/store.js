@@ -13,6 +13,7 @@ import loadingReducer from "./reducers/loadingReducer";
 import circulationReducer from "./reducers/circulationReducer";
 import noteReducer from "./reducers/noteReducer";
 import languageReducer from "./reducers/languageReducer";
+import statisticsReducer from "./reducers/statisticsReducer"
 import { composeWithDevTools } from "redux-devtools-extension";
 
 const reducer = combineReducers({
@@ -28,7 +29,8 @@ const reducer = combineReducers({
     loading: loadingReducer,
     circulation: circulationReducer,
     notes: noteReducer,
-    language: languageReducer
+    language: languageReducer,
+    statistics: statisticsReducer
 });
 
 const store = createStore(reducer, composeWithDevTools(
