@@ -26,11 +26,11 @@ const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRec
 
     const onSaveToDatabase = () => {
         // TODO: change page to record just created
-        createRecord(record.result.record);
+        createRecord(record.result.record, history);
     };
 
     const onRemoveRecord = () => {
-        removeRecord();
+        removeRecord(history);
     };
 
     const recordTools = () => {

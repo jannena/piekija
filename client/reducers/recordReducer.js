@@ -1,5 +1,6 @@
 import recordService from "../services/recordService";
 import itemService from "../services/itemService";
+import { notify } from "./notificationReducer";
 import { onError } from "./errorHandingHelper";
 
 const MARC21 = require("../../server/utils/marc21parser");
@@ -107,20 +108,22 @@ export const updateRecord = (recordId, recordMARC) => (dispatch, getState) => {
         .catch(onError(dispatch, "PFAILURE_RECORD_UPDATE"));
 };
 
-export const removeRecord = () => (dispatch, getState) => {
-    dispatch({ type: "REQUEST_RECORD_REMOVE" });
+export const removeRecord = history => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_RECORD_REMOVE" });
     recordService
-        .remove(getState().record.record.id, getState().token.token)
+        .remove(getState().record.record.result.id, getState().token.token)
         .then(() => {
             dispatch({
-                type: "SUCCESS_RECORD_REMOVE",
+                type: "PSUCCESS_RECORD_REMOVE",
                 record: getState().record.record.id
             });
+            dispatch(notify("success", "Successfully removed record!"));
+            history.push("/staff/records");
         })
-        .catch(onError(dispatch, "FAILURE_RECORD_REMOVE"));
+        .catch(onError(dispatch, "PFAILURE_RECORD_REMOVE"));
 };
 
-export const createRecord = recordMARC => (dispatch, getState) => {
+export const createRecord = (recordMARC, history) => (dispatch, getState) => {
     dispatch({ type: "REQUEST_RECORD_CREATE" });
     recordService
         .createWithMARC(recordMARC, getState().token.token)
@@ -133,6 +136,8 @@ export const createRecord = recordMARC => (dispatch, getState) => {
                     record: MARC21.tryParse(record.record)
                 }
             });
+            dispatch(notify("success", "Successfully saved to database!"));
+            history.push(`/staff/record/${record.id}`);
         })
         .catch(onError(dispatch, "FAILURE_RECORD_CREATE"));
 };
