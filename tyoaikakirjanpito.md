@@ -56,4 +56,5 @@
 | 30.11. | 3 | backendin testien päivittäminen, käännösten jatkaminen |
 | 5.12. | 1 | suomenkielinen käännös, hakutuloslistauksen tekstit ja linkit |
 | 7.12. | 2,5 | tilastohaun aloittaminen |
-| yht. | 115 | |
+| 25.12. | 1,5 | tilastohakua, yksinkertaista muokkainta |
+| yht. | 116,5 | |
