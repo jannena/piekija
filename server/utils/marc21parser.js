@@ -196,7 +196,7 @@ const getFieldsAndSubfields = (parsedMARC, fields, subfields) => {
                     else if (f.subfields[subfield]) fieldData[subfield] = f.subfields[subfield];
                     else fieldData[subfield] = [];
                 });
-                ret.push(fieldData);
+                ret.push({ field, ...fieldData });
             });
         }
         catch (e) { }
