@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { getNotLoanedSince, getTotal } from "../../reducers/statisticsReducer";
+import { getNotLoanedSince, getTotalLoans, getTotal } from "../../reducers/statisticsReducer";
 import { getLocations } from "../../reducers/locationReducer";
 import __ from "../../langs";
 import { Form, FormSelect, Input, Button } from "../essentials/forms";
@@ -36,7 +36,7 @@ import Loader from "../Loader";
     </Document>;
 }; */
 
-const StaffStatistics = ({ getLocations, locations, getNotLoanedSince, getTotal, language, statistics, loading, __ }) => {
+const StaffStatistics = ({ getLocations, locations, getNotLoanedSince, getTotalLoans, getTotal, language, statistics, loading, __ }) => {
     useEffect(() => {
         if (!locations || locations.length === 0) getLocations();
     }, []);
@@ -46,22 +46,34 @@ const StaffStatistics = ({ getLocations, locations, getNotLoanedSince, getTotal,
         getTotal();
     };
 
+    const handleGetToalLoans = e => {
+        e.preventDefault();
+        getTotalLoans();
+    };
+
     const handleGetNotLoanedSince = e => {
         const { location, date } = e.target;
         getNotLoanedSince(location.value, null, date.value, language);
     };
 
     return <>
-        <div>How many things in total</div>
-        <button onClick={handleGetTotal}>Get</button>
-        {statistics && statistics.total && <>
-            <div>Items: {statistics.total.items}</div>
-            <div>Records: {statistics.total.records}</div>
-            <div>Users: {statistics.total.users}</div>
-        </>}
-        <hr />
+        <p>More statistics can be received in each location an item record.</p>
+        <Expandable title={__("How many things in total")}>
+            <button onClick={handleGetTotal}>Get</button>
+            {statistics && statistics.total && <>
+                <div>Items: {statistics.total.items}</div>
+                <div>Records: {statistics.total.records}</div>
+                <div>Users: {statistics.total.users}</div>
+            </>}
+        </Expandable>
         <Expandable title={__("Total loans")}>
-            <p>Coming soon</p>
+            <button onClick={handleGetToalLoans}>Get</button>
+            {statistics && statistics.totalLoans && <>
+                <a href={`data:text/plain;charset=utf-8,${encodeURIComponent(
+                    "Total loans\n" +
+                    statistics.totalLoans.map(i => i.join(";")).join("\n")
+                )}`} download="piekija.totalloans.csv">Download CSV</a>
+            </>}
         </Expandable>
 
         <Expandable title={__("Not loaned since")}>
@@ -72,7 +84,7 @@ const StaffStatistics = ({ getLocations, locations, getNotLoanedSince, getTotal,
             </Form>
             {loading.state === 4 && <Loader />}
             {loading.state === 6 && <p>{__("Error")}: {loading.error}</p>}
-            {loading.state === 5 && <>
+            {loading.state === 5 && statistics.notLoanedSince && <>
                 <p>Found {statistics.notLoanedSince && statistics.notLoanedSince.items && statistics.notLoanedSince.items.length} items</p>
                 {/* <PDFDownloadLink
                     fileName="piekija.notloanedsince.pdf"
@@ -98,5 +110,5 @@ export default connect(
         loading: state.loading.statistics,
         __: __(state)
     }),
-    { getTotal, getNotLoanedSince, getLocations }
+    { getTotal, getNotLoanedSince, getLocations, getTotalLoans }
 )(StaffStatistics);

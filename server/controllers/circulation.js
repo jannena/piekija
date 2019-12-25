@@ -2,6 +2,7 @@ const circulationRouter = require("express").Router();
 
 const User = require("../models/User");
 const Item = require("../models/Item");
+const Location = require("../models/Location");
 
 circulationRouter.post("/loan", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
@@ -40,8 +41,12 @@ circulationRouter.post("/loan", async (req, res, next) => {
         dueDate.setUTCDate(dueDate.getUTCDate() + (item.loantype.loanTime || 1));
         item.stateDueDate = dueDate;
 
-        // TODO: Populate 
+        // TODO: Populate
 
+        const location = await Location.findById(item.location);
+        location.totalLoanCount = (location.totalLoanCount + 1) || 1;
+
+        await location.save();
         await user.save();
         await item.save();
 
@@ -110,6 +115,10 @@ circulationRouter.post("/renew", async (req, res, next) => {
         item.loanTimes = item.loanTimes + 1 || 1;
         item.lastLoaned = new Date();
 
+        const location = await Location.findById(item.location);
+        location.totalLoanCount = (location.totalLoanCount + 1) || 1;
+
+        await location.save();
         await item.save();
 
         res.json({ id: itemId, dueDate });

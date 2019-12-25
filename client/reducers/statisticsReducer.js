@@ -10,6 +10,8 @@ const statisticsReducer = (state = INIT, action) => {
     switch (action.type) {
         case "PSUCCESS_STATISTICS_TOTAL":
             return { ...state, total: action.total };
+        case "PSUCCESS_STATISTICS_TOTALLOANS":
+            return { ...state, totalLoans: action.data };
         case "PSUCCESS_STATISTICS_SINCE":
             return { ...state, notLoanedSince: action.data };
     }
@@ -29,6 +31,19 @@ export const getTotal = () => (dispatch, getState) => {
             })
         })
         .catch(onError(dispatch, "PFAILURE_STATISTICS_TOTAL"))
+};
+
+export const getTotalLoans = () => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_STATISTICS_TOTALLOANS" });
+    statisticsService
+        .totalLoans(getState().token.token)
+        .then(data => {
+            dispatch({
+                type: "PSUCCESS_STATISTICS_TOTALLOANS",
+                data
+            })
+        })
+        .catch(onError(dispatch, "PFAILURE_STATISTICS_TOTALLOANS"));
 };
 
 export const getNotLoanedSince = (location, shelfLocation, date, language) => (dispatch, getState) => {

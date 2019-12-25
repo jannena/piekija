@@ -5,6 +5,10 @@ const locationSchema = new mongoose.Schema({
         type: String,
         require: true,
         unique: true
+    },
+    totalLoanCount: {
+        type: Number,
+        require: true
     }
 });
 

@@ -11,7 +11,13 @@ const total = token => {
     ).then(response => response.data);
 };
 
-const totalLoans = (token) => { };
+const totalLoans = (token) => {
+    return axios.post(
+        `${baseUrl}/totalLoans`,
+        {},
+        { Authorixation: `Bearer ${token}` }
+    ).then(response => response.data);
+};
 
 const notLoanedSince = (location, shelfLocation, date, language, token) => {
     return axios.post(
