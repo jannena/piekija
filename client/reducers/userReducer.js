@@ -15,9 +15,9 @@ const userReducer = (state = null, action) => {
                 tfa: action.tfa,
                 tfaqr: action.tfaqr
             }
-        case "CREATE_SHELF":
+        case "SUCCESS_SHELF_CREATE":
             const stateToUpdate = { ...state };
-            stateToUpdate.shelves = [...stateToUpdate.shelves, { note: "", id: { id: action.shelf.if, name: action.shelf.name }, author: true }];
+            stateToUpdate.shelves = [...stateToUpdate.shelves, { note: "", id: { id: action.shelf.id, name: action.shelf.name }, author: true }];
             return stateToUpdate;
         case "PSUCCESS_CIRCULATION_RENEW":
             // TODO: Check whether loaner is same as logged in user
