@@ -4,11 +4,9 @@ BEFORE 1.0
     - ??create better spelling??
 
 - appearance
-    - login
     - ?record?
     - shelves
-    - user menu
-    - norification
+    - notification
 
 - Simple editor
 - documentation

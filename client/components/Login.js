@@ -1,13 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { tryLogin } from "../reducers/tokenReducer";
+import { Redirect } from "react-router-dom";
 import __ from "../langs";
 
-const Login = ({ tryLogin, usetfa, __ }) => {
+// TODO: redirection after login
+
+const Login = ({ tryLogin, usetfa, user, __ }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [code, setCode] = useState("");
+
+    if (user !== null) return <Redirect to="/user" />
 
     const handleLogin = e => {
         e.preventDefault();
@@ -17,21 +21,26 @@ const Login = ({ tryLogin, usetfa, __ }) => {
         // setCode("");
     };
 
-    return (
-        <div>
-            <form onSubmit={handleLogin}>
-                <label>{__("Username")}</label>
-                <input value={username} onChange={e => setUsername(e.target.value)} />
+    const inputStyle = {
+        width: "100%",
+        marginBottom: 20
+    };
 
-                <label>{__("Password")}</label>
-                <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+    return (
+        <div style={{ margin: "auto", width: "100%", maxWidth: 500 }}>
+            <form onSubmit={handleLogin}>
+                <label for="username">{__("Username")}</label>
+                <input style={inputStyle} id="username" value={username} onChange={e => setUsername(e.target.value)} />
+
+                <label for="current-password">{__("Password")}</label>
+                <input style={inputStyle} id="current-password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
 
                 {usetfa && <>
                     <label>{__("Two-factor authentication code")}</label>
-                    <input value={code} onChange={e => setCode(e.target.value)} />
+                    <input style={inputStyle} value={code} onChange={e => setCode(e.target.value)} />
                 </>}
 
-                <button>{__("Log in -button")}</button>
+                <button style={inputStyle}>{__("Log in -button")}</button>
             </form>
         </div>
     );
@@ -40,6 +49,7 @@ const Login = ({ tryLogin, usetfa, __ }) => {
 export default connect(
     state => ({
         usetfa: state.token.usetfa,
+        user: state.user,
         __: __(state)
     }),
     { tryLogin }
