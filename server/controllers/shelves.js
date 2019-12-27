@@ -146,7 +146,16 @@ shelfRouter.delete("/:id", async (req, res, next) => {
             { _id: { $in: users } },
             { $pull: { shelves: { id } } });
 
-        res.status(204).end();  // TODO: Send to other editors
+        io.socket.to(`shelf-${id}`).emit("remove", {
+            inCharge: {
+                username: req.authenticated.username,
+                name: req.authenticated.name,
+                id: req.authenticated._id
+            },
+            id
+        });
+        console.log("Removing shelf...");
+        res.status(204).end();
     }
     catch (err) {
         next(err);

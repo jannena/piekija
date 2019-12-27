@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, withRouter } from "react-router-dom";
 import Search from "./components/Search";
 import Record from "./components/record/Record";
 import Login from "./components/Login";
@@ -15,13 +15,13 @@ import Staff from "./components/staff/Staff";
 import StaffEditRecord from "./components/staff/StaffEditRecord";
 import { getLastNotes } from "./reducers/noteReducer";
 
-import { addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf } from "./reducers/shelfReducer";
+import { addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf } from "./reducers/shelfReducer";
 import { setSocketIOEventListeners, startWS } from "./socket";
 import FrontPageNews from "./components/FrontPageNews";
 
 // TODO: Learn how React router works or make better (clearer) router
 
-const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, getLastNotes, news }) => {
+const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf, getLastNotes, history }) => {
     useEffect(() => {
         if (token && user) {
             startWS();
@@ -40,7 +40,8 @@ const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRe
                 shelf => console.log("changed to shelf", shelf),
                 user => runIfNotMe(user, localShare),
                 user => runIfNotMe(user, localUnhare),
-                data => runIfNotMe(data, localUpdateShelf)
+                data => runIfNotMe(data, localUpdateShelf),
+                data => runIfNotMe({ ...data, history }, localRemoveShelf)
             );
         }
     }, [token, user]);
@@ -60,43 +61,43 @@ const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRe
     }, []);
 
     return (
-        <Router>
-            <Container>
-                <Switch>
-                    {/* Screens open for everyone */}
-                    <Route exact path="/" render={() => <FrontPageNews />} />
-                    <Route exact path="/search" render={({ location, history }) =>
-                        <>
-                            <AdvancedSearch />
-                            <hr />
-                            <Search />
-                        </>
-                    } />
-                    <Route exact path="/record/:id" render={({ match, history }) => {
-                        console.log(match, match.params, match.params.id);
-                        return <Record id={match.params.id} history={history} />
-                    }} />
+        // <Router>
+        <Container>
+            <Switch>
+                {/* Screens open for everyone */}
+                <Route exact path="/" render={() => <FrontPageNews />} />
+                <Route exact path="/search" render={({ location, history }) =>
+                    <>
+                        <AdvancedSearch />
+                        <hr />
+                        <Search />
+                    </>
+                } />
+                <Route exact path="/record/:id" render={({ match, history }) => {
+                    console.log(match, match.params, match.params.id);
+                    return <Record id={match.params.id} history={history} />
+                }} />
 
 
-                    {/* Screens for logged in users */}
-                    <Route exact path="/login" render={() => <Login setToken={setToken} />} />
-                    <Route exact path="/user" render={() => {
-                        return <UserInfo />;
-                    }} />
-                    <Route exact path="/shelf/:id" render={({ match }) => {
-                        return <Shelf shelfId={match.params.id} />;
-                    }} />
+                {/* Screens for logged in users */}
+                <Route exact path="/login" render={() => <Login setToken={setToken} />} />
+                <Route exact path="/user" render={() => {
+                    return <UserInfo />;
+                }} />
+                <Route exact path="/shelf/:id" render={({ match }) => {
+                    return <Shelf shelfId={match.params.id} />;
+                }} />
 
 
-                    {/* Staff screens */}
-                    <Route path="/staff/record/:id" render={({ match }) => <StaffEditRecord id={match.params.id} />} />
-                    <Route path="/staff" render={({ history }) => <Staff history={history} />} />
+                {/* Staff screens */}
+                <Route path="/staff/record/:id" render={({ match }) => <StaffEditRecord id={match.params.id} />} />
+                <Route path="/staff" render={({ history }) => <Staff history={history} />} />
 
-                    {/* Not found */}
-                    <Route path="*" render={() => <p>Not found</p>} />
-                </Switch>
-            </Container>
-        </Router>
+                {/* Not found */}
+                <Route path="*" render={() => <p>Not found</p>} />
+            </Switch>
+        </Container>
+        // </Router>
     );
 };
 
@@ -106,5 +107,5 @@ export default connect(
         user: state.user,
         news: state.notes
     }),
-    { setToken, getUser, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, getLastNotes }
-)(App);
+    { setToken, getUser, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf, getLastNotes }
+)(withRouter(App));

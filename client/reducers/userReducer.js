@@ -15,6 +15,11 @@ const userReducer = (state = null, action) => {
                 tfa: action.tfa,
                 tfaqr: action.tfaqr
             }
+        case "LOCAL_REMOVE":
+            return {
+                ...state,
+                shelves: state.shelves.filter(shelf => action.id !== shelf.id.id)
+            };
         case "SUCCESS_SHELF_CREATE":
             return {
                 ...state,

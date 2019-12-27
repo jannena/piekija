@@ -8,7 +8,7 @@ export const startWS = () => {
     // io = openSocket(`//${location.hostname}:3001`);
 };
 
-export const setSocketIOEventListeners = (addRecord, removeRecord, updateRecord, changeShelf, localShare, localUnshare, localUpdate) => {
+export const setSocketIOEventListeners = (addRecord, removeRecord, updateRecord, changeShelf, localShare, localUnshare, localUpdate, localRemove) => {
     io.removeAllListeners();
     io.on("add record", addRecord);
     io.on("remove record", removeRecord);
@@ -17,4 +17,5 @@ export const setSocketIOEventListeners = (addRecord, removeRecord, updateRecord,
     io.on("share", localShare);
     io.on("unshare", localUnshare); // TODO: If it is me, remove all listeners and close the connection.
     io.on("update", localUpdate);
+    io.on("remove", localRemove);
 };

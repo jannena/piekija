@@ -61,6 +61,11 @@ const shelfReducer = (state = init, action) => {
                     sharedWith: state.shelf.sharedWith.filter(u => u.username !== action.user.username)
                 }
             };
+        case "LOCAL_REMOVE":
+            return {
+                ...state,
+                shelf: null
+            };
         case "LOCAL_UPDATE":
             return {
                 ...state,
@@ -281,6 +286,14 @@ export const localUpdateShelf = data => dispatch => {
         info: data.info
     });
     dispatch(notify("warning", `${data.inCharge.name} updated publicity, description or title`));
+};
+export const localRemoveShelf = data => dispatch => {
+    dispatch({
+        type: "LOCAL_REMOVE",
+        id: data.id
+    });
+    dispatch(notify("error", `${data.inCharge.name} removed shelf`));
+    data.history.push("/user");
 };
 export const addRecord = data => dispatch => {
     dispatch({
