@@ -18,7 +18,7 @@ const userReducer = (state = null, action) => {
         case "SUCCESS_SHELF_CREATE":
             return {
                 ...state,
-                shelves: shelves.concat({ note: "", id: { id: action.shelf.id, name: action.shelf.name }, author: true })
+                shelves: state.shelves.concat({ note: "", id: { id: action.shelf.id, name: action.shelf.name }, author: true })
             };
         case "PSUCCESS_SHELF_REMOVE":
             return {

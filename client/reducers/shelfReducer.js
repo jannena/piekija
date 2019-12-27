@@ -108,7 +108,7 @@ const shelfReducer = (state = init, action) => {
                 }
             };
         case "PSUCCESS_SHELF_ADD_RECORD":
-            if (state.shelf.id !== action.shelfId) return state;
+            if (!state.shelf || state.shelf.id !== action.shelfId) return state;
             return {
                 ...state,
                 shelf: {
