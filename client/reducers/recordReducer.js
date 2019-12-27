@@ -19,6 +19,7 @@ const recordReducer = (state = init, action) => {
                 record: action.record
             };
         case "SET_RECORD":
+            console.log("joojoo");
             return {
                 ...state,
                 record: action.record
@@ -159,18 +160,15 @@ export const copyRecord = () => (dispatch, getState) => {
         .catch(onError(dispatch, "FAILURE_RECORD_COPY"));
 };
 
-export const createTemporaryRecord = record => dispatch => {
+export const createTemporaryRecord = (record, result = { id: "preview", items: [], record }) => dispatch => {
+    console.log("joojoo1");
     dispatch({
         type: "SET_RECORD",
         record: {
-            result: {
-                id: "preview",
-                items: [],
-                record
-            },
+            result: { ...result, record },
             record: MARC21.tryParse(record)
         }
-    })
+    });
 };
 
 export const addItem = (loantype, location, state, note, barcode) => (dispatch, getState) => {

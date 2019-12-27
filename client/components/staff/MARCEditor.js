@@ -7,7 +7,7 @@ const MARC21 = require("../../../server/utils/marc21parser");
 
 // TODO: Success and error messages
 
-const RecordEditor = ({ record, updateRecord, __ }) => {
+const RecordEditor = ({ record, updateRecord, createTemporaryRecord, __ }) => {
     console.log("editing", record);
 
     const [editedRecord, setEditedRecord] = useState(null);
@@ -29,6 +29,13 @@ const RecordEditor = ({ record, updateRecord, __ }) => {
 
     const indicatorInputStyle = {
         width: 40
+    };
+
+    const onLEADERChange = e => {
+        setEditedRecord({
+            ...editedRecord,
+            LEADER: e.target.value
+        });
     };
 
 
@@ -146,7 +153,7 @@ const RecordEditor = ({ record, updateRecord, __ }) => {
             FIELDS: Object.fromEntries(editedRecord.FIELDS)
         });
         console.log(joo);
-        createTemporaryRecord(joo);
+        createTemporaryRecord(joo, record.result);
     };
 
     // TODO: ADD KEYS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -163,6 +170,11 @@ const RecordEditor = ({ record, updateRecord, __ }) => {
                             <input name="field" maxLength="3" minLength="3" />
                             <button>{__("Add field")}</button>
                         </form></td>
+                    </tr>
+                    <tr><td colSpan="3" style={fieldSeparatorStyle}><hr /></td></tr>
+                    <tr>
+                        <td>LEADER</td>
+                        <td><input onChange={onLEADERChange} value={editedRecord.LEADER} /></td>
                     </tr>
                     {editedRecord.FIELDS.map(([code = "000", fieldsData = {}], field) => <React.Fragment key={code}>
                         {fieldsData.map((fieldData, i) => <React.Fragment key={i}>
@@ -213,5 +225,5 @@ export default connect(
         record: state.record.record,
         __: __(state)
     }),
-    { getRecord, updateRecord }
+    { getRecord, updateRecord, createTemporaryRecord }
 )(RecordEditor);
