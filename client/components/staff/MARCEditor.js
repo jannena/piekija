@@ -19,7 +19,7 @@ const RecordEditor = ({ record, updateRecord, createTemporaryRecord, __ }) => {
             ...record.record,
             FIELDS: Object.entries(record.record.FIELDS).sort(fieldSortFunction)
         });
-    }, []);
+    }, [record]);
 
     if (!record.record || !editedRecord) return null;
 

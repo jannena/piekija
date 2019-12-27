@@ -2,18 +2,24 @@ import React, { useState, useEffect } from "react";
 import Select from "../Select";
 import Loader from "../Loader";
 import { connect } from "react-redux";
+import { updateRecord } from "../../reducers/recordReducer";
 import __ from "../../langs";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
 // TODO: Translate
+// TODO: Clean
 
-const SimpleRecordEditor = ({ record2, __ }) => {
+// TODO: Things go bad after simple editor save
+
+const SimpleRecordEditor = ({ updateRecord, record2, __ }) => {
     const [record, setRecord] = useState(null);
     useEffect(() => {
         setRecord(record2);
     }, [record2]);
     if (!record || !record.result || !record.record) return <Loader />
+
+    window.testailenvaan = record;
 
     const handleAddField = field => (data = { subfields: { a: [""] }, indicators: [" ", " "] }) => e => {
         e.preventDefault();
@@ -63,13 +69,24 @@ const SimpleRecordEditor = ({ record2, __ }) => {
         setRecord({ ...record });
     };
 
+    const handleUpdateRecord = () => {
+        updateRecord(record2.result.id, MARC21.stringify(record.record));
+    };
+
     return (
         <div>
             <h2>Basic</h2>
             <div>
                 Title
-                <input placeholder="Title" onChange={handleChangeValue("245", 0, "a")} value={MARC21.getFieldsAndSubfields(record.record, ["245"], ["a"]).map(s => s.a).join("")} />
-                <input placeholder="Sub-title" onChange={handleChangeValue("245", 0, "b")} value={MARC21.getFieldsAndSubfields(record.record, ["245"], ["b"]).map(s => s.b).join("")} />
+                {(() => {
+
+                    return (record.record.FIELDS["245"] && record.record.FIELDS["245"].length > 0)
+                        ? <>
+                            <input placeholder="Title" onChange={handleChangeValue("245", 0, "a")} value={MARC21.getFieldsAndSubfields(record.record, ["245"], ["a"]).map(s => s.a).join("")} />
+                            <input placeholder="Sub-title" onChange={handleChangeValue("245", 0, "b")} value={MARC21.getFieldsAndSubfields(record.record, ["245"], ["b"]).map(s => s.b).join("")} />
+                        </>
+                        : <button onClick={handleAddField("245")({ subfields: { a: [""], b: [""] }, indicators: [" ", " "] })}>Add title</button>;
+                })()}
             </div>
 
             <div>
@@ -90,12 +107,10 @@ const SimpleRecordEditor = ({ record2, __ }) => {
             <div>
                 Main author
                 {(() => {
-                    const author = MARC21.getFieldsAndSubfields(record.record, ["100", "110"], ["a", "d", "e"]).filter(s => s.a)[0] || [];
-                    return <>
-                        <input defaultValue={author["a"]} />
-                        (<input defaultValue={author["d"]} />)
-                        <input defaultValue={author["e"]} />
-                    </>;
+                    const author = MARC21.getFieldsAndSubfields(record.record, ["100"], ["a"]).filter(s => s.a)[0] || null;
+                    return author
+                        ? <input onChange={handleChangeValue("100", 0, "a")} value={author["a"]} />
+                        : <button onClick={handleAddField("100")({ subfields: { a: [""] }, indicators: ["1", " "] })}>Add author</button>
                 })()}
             </div>
 
@@ -109,7 +124,7 @@ const SimpleRecordEditor = ({ record2, __ }) => {
                     return <>
                         {other.map((c, i) => <div>
                             {(!c["2"] || c["2"][0] === "ykl" && <span>ykl</span>) || "OTHER"}
-                            <input value={c.a} />
+                            <input onChange={handleChangeValue("084", i, "a")} value={c.a} />
                             <button onClick={handleRemoveField("084", i)}>Remove</button>
                         </div>)}
                         <button onClick={handleAddField("084")({ subfields: { a: [""], 2: ["ykl"] }, indicators: [" ", " "] })}>Add</button>
@@ -126,14 +141,14 @@ const SimpleRecordEditor = ({ record2, __ }) => {
                     const ean = MARC21.getFieldsAndSubfields(record.record, ["024"], ["indicators", "a"]);
                     console.log("EAN", ean);
                     return <>
-                        {isbn.map((s, i) => <div key={JSON.stringify(s)}>
+                        {isbn.map((s, i) => <div key={i}>
                             ISBN:
-                            <input value={s.a} />
+                            <input onChange={handleChangeValue("020", i, "a")} value={s.a} />
                             <button onClick={handleRemoveField("020", i)}>Remove</button>
                         </div>)}
-                        {ean.map((s, i) => <div key={JSON.stringify(s)}>
+                        {ean.map((s, i) => <div key={i}>
                             {(s.indicators[0] === "3" && "EAN:") || "OTHER"}
-                            <input value={s.a} />
+                            <input onChange={handleChangeValue("024", i, "a")} value={s.a} />
                             <button onClick={handleRemoveField("024", i)}>Remove</button>
                         </div>)}
                         <button onClick={handleAddField("020")()}>Add ISBN</button>
@@ -146,16 +161,25 @@ const SimpleRecordEditor = ({ record2, __ }) => {
 
             <div>
                 {(() => {
-                    const authors = MARC21.getFieldsAndSubfields(record.record, ["700", "710"], ["a", "d", "e"]);
+                    const authors = MARC21.getFieldsAndSubfields(record.record, ["700"], ["a", "d", "e"]);
+                    const corporates = MARC21.getFieldsAndSubfields(record.record, ["710"], ["a", "d", "e"]);
                     return <>
                         <h2>Other authors</h2>
-                        {authors.map(a => <div key={JSON.stringify(a)}>
-                            {a.field === "700" ? "personal" : "corporate"}
-                            <input placeholder="name, (last name, first name)" value={a["a"]} />
-                            (<input placeholder="when did they live?" value={a["d"]} />)
-                            <input placeholder="what did they do?" value={a["e"]} />
+                        {authors.map((a, i) => <div key={i}>
+                            personal
+                            <input onChange={handleChangeValue("700", i, "a")} placeholder={__("last name, first name")} value={a["a"]} />
+                            {/* (<input placeholder="when did they live?" value={a["d"]} />)
+                            <input placeholder="what did they do?" value={a["e"]} /> */}
+                            <button onClick={handleRemoveField("700", i)}>Remove</button>
                         </div>)}
-                        <button onClick={handleAddField("700")()}>Add (personal)</button>
+                        <button onClick={handleAddField("700")()}>Add</button>
+                        {corporates.map((a, i) => <div key={JSON.stringify(a)}>
+                            corporate
+                            <input disabled value={a["a"]} />
+                            {/* (<input placeholder="when did they live?" value={a["d"]} />)
+                            <input placeholder="what did they do?" value={a["e"]} /> */}
+                            <button onClick={handleRemoveField("710", i)}>Remove</button>
+                        </div>)}
                     </>;
                 })()}
             </div>
@@ -164,22 +188,27 @@ const SimpleRecordEditor = ({ record2, __ }) => {
 
             <div>
                 {(() => {
-                    const subjects = MARC21.getFieldsAndSubfields(record.record, ["600", "650", "655", "653"], ["a", "x", "y", "z"]);
+                    const printSubjects = field =>
+                        MARC21.getFieldsAndSubfields(record.record, [field], ["a", "x", "y", "z"])
+                            .map((a, i) => <div key={`${field}-${i}`}>
+                                <input onChange={handleChangeValue(field, i, "a")} /* placeholder="subject" */ defaultValue={a["a"]} /> --&gt;
+                                <input onChange={handleChangeValue(field, i, "x")} /* placeholder="additional" */ defaultValue={a["x"]} /> --&gt;
+                                <input onChange={handleChangeValue(field, i, "y")} /* placeholder="when?" */ defaultValue={a["y"]} /> --&gt;
+                                <input onChange={handleChangeValue(field, i, "z")} /* placeholder="where?" */ defaultValue={a["z"]} />
+                                <button onClick={handleRemoveField(field, i)}>Remove</button>
+                            </div>);
                     return <>
                         <h2>Subjects</h2>
-                        {subjects.map(a => <div key={JSON.stringify(a)}>
-                            <input /* placeholder="subject" */ defaultValue={a["a"]} /> --&gt;
-                            <input /* placeholder="additional" */ defaultValue={a["x"]} /> --&gt;
-                            <input /* placeholder="when?" */ defaultValue={a["y"]} /> --&gt;
-                            <input /* placeholder="where?" */ defaultValue={a["z"]} />
-                            <button>Remove</button>
-                        </div>)}
-                        <button onClick={handleAddField("653")({ subfields: { a: [""], x: [""], y: [""], z: [""] }, indicators: ["3", " "] })}>Add</button>
+                        {printSubjects("650")}
+                        {printSubjects("655")}
+                        {printSubjects("653")}
+                        <button onClick={handleAddField("653")({ subfields: { a: [""], x: [""], y: [""], z: [""] }, indicators: ["3", " "] })}>Add (653)</button>
+                        {/* TODO: Does not work this way (check preview) */}
                     </>
                 })()}
             </div>
 
-            <button>Save</button>
+            <button onClick={handleUpdateRecord}>Save</button>
 
 
             {/* TODO: Notes */}
@@ -193,5 +222,6 @@ export default connect(
     state => ({
         record2: state.record.record,
         __: __(state)
-    })
+    }),
+    { updateRecord }
 )(SimpleRecordEditor);

@@ -482,3 +482,6 @@ module.exports = {
     getSpelling,
     MARCXMLToMARC // This can be used only in frontend
 };
+
+// const moikkeliskoo = parse("00197ccm a2200085La 4500008004100000100001600041245003600057700000800093700001000101860327s1985 fi a 000 0 fin d1 aJoku ihmeee aKissoja ja koiria :bkaikkialla aasd ayytyy");
+// console.log(moikkeliskoo);

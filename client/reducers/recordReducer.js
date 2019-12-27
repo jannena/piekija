@@ -105,6 +105,7 @@ export const updateRecord = (recordId, recordMARC) => (dispatch, getState) => {
                     record: MARC21.tryParse(record.record)
                 }
             })
+            console.log("TALLENSIN RECORDIN!!!", record.record, MARC21.tryParse(record.record));
         })
         .catch(onError(dispatch, "PFAILURE_RECORD_UPDATE"));
 };
