@@ -34,28 +34,11 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, __ }
 
     return (
         <>
-            <div>
-                {isOpen && isAuthor()
-                    ? <>
-                        <form onSubmit={saveShelf}>
-                            <div><input name="name" defaultValue={shelf.name} /></div>
-                            <div><textarea name="description" defaultValue={shelf.description} /></div>
-                            <div><input name="public" id="public" type="checkbox" defaultChecked={shelf.public} /> <label htmlFor="public">{__("Public shelf")}</label></div>
-                            <button>{__("save-button")}</button>
-                        </form>
-                        <button onClick={() => setIsOpen(false)}>{__("cancel-button")}</button>
-                    </>
-
-                    : <>
-                        <h2>{shelf.name}</h2>
-                        <div>{__("Description")}: {shelf.description}</div>
-                        <div>{__("Author")}: {isAuthor() ? __("you") : shelf.author.name}</div>
-
-                        {isAuthor() && <div><button onClick={() => setIsOpen(true)}>{__("edit-button")}</button></div>}
-                    </>
-                }
+            <div style={{ display: "flex" }}>
+                <h2>{shelf.name}</h2>
+                <div style={{ margin: 22 }}>{__("Author")}: {isAuthor() ? __("you") : shelf.author.name}</div>
             </div>
-            <Tabs titles={[__("records-shelves"), __("Share with")]}>
+            <Tabs titles={[__("records-shelves"), __("About shelf"), __("Share with")]}>
                 <Tab>
 
                     <h3>{__("records-shelves")}</h3>
@@ -69,6 +52,25 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, __ }
                                 />)}
                         </tbody>
                     </table>
+                </Tab>
+                <Tab>
+                    {isOpen && isAuthor()
+                        ? <>
+                            <form onSubmit={saveShelf}>
+                                <div><input name="name" defaultValue={shelf.name} /></div>
+                                <div><textarea name="description" defaultValue={shelf.description} /></div>
+                                <div><input name="public" id="public" type="checkbox" defaultChecked={shelf.public} /> <label htmlFor="public">{__("Public shelf")}</label></div>
+                                <button>{__("save-button")}</button>
+                            </form>
+                            <button onClick={() => setIsOpen(false)}>{__("cancel-button")}</button>
+                        </>
+
+                        : <>
+                            <div style={{ margin: 20 }}>{__("Description")}: {shelf.description}</div>
+
+                            {isAuthor() && <div><button onClick={() => setIsOpen(true)}>{__("edit-button")}</button></div>}
+                        </>
+                    }
                 </Tab>
                 <Tab>
                     {shelf.sharedWith && <ShelfSharing setShelf={() => { }} token={token} shelf={shelf} isAuthor={isAuthor()} />}
