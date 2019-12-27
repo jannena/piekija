@@ -30,8 +30,8 @@ const Container = ({ loading, history, simpleSearch, setQuery, children, languag
                     <p>Currently loading {loading} things</p>
                     <div id="search">
                         <form onSubmit={handleSearch}>
-                            <input name="query" style={{ width: "90%", margin: 0 }} />
-                            <button style={{ width: "10%", margin: 0 }}>{__("Search-button")}</button>
+                            <input name="query" style={{ width: "calc(90% - 70px)", margin: 0 }} />
+                            <button style={{ width: 70, margin: 0 }}>{__("Search-button")}</button>
                         </form>
                     </div>
                     <nav>

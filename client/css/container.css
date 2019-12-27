@@ -46,6 +46,7 @@ footer {
 
 nav {
     display: flex;
+    max-height: 50px;
 }
 
 nav ul {
