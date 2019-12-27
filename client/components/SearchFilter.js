@@ -13,12 +13,14 @@ const SearchFilter = ({ query, filters, setQuery, __ }) => {
 
     const handleSearchFilterClick = (fieldType, value) => () => {
         if (query.type === "advanced") {
-            // TODO: What if operator is not AND?
-            const newQuery = ["AND", [...query.query[1], [fieldType, value, "is"]]];
+            const newQuery = query.query[0] === "AND"
+                ? ["AND", [...query.query[1], [fieldType, value, "is"]]]
+                : ["AND", [query.query, [fieldType, value, "is"]]]
             setQuery("advanced", newQuery);
         }
         else {
-            // TODO: 
+            const newQuery = ["AND", [["spelling", query.query, "is"], [fieldType, value, "is"]]];
+            setQuery("advanced", newQuery);
         }
     };
     const searchFilterTemplate = (title, type, data) => <>
