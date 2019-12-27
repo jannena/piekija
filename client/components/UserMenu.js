@@ -17,12 +17,14 @@ const isOpenStyle = {
     backgroundColor: "black",
     padding: 10,
     paddingTop: 0,
-    width: "20%"
+    width: "20%",
+    zIndex: 1000
 };
 const isClosedStyle = {
     width: "20%",
     minWidth: 100,
-    paddingLeft: 10
+    paddingLeft: 10,
+    zIndex: 1000
 };
 
 const MenuItem = ({ title, link }) => <StyledUserMenuItem><Link to={link}>{title}</Link></StyledUserMenuItem>;

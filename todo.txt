@@ -2,14 +2,15 @@ BEFORE 1.0
 
 - ??search??
     - ??create better spelling??
+    - return relevance search to small searches
 
 - appearance
     - ?record?
-    - shelves
     - notification
+
+- add error and success messages and remove unnecessary ones
 
 - Simple editor
 - documentation
 - finish backend tests
 - go through all TODOs
-- ??statistics??

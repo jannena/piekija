@@ -41,13 +41,18 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, remo
         removeShelf(history);
     };
 
+    const titles = [__("records-shelves"), __("About shelf")];
+    if (canEdit()) titles.push(__("Share with"));
+    if (isAuthor()) titles.push(__("Remove shelf"));
+
     return (
         <>
             <div style={{ display: "flex" }}>
                 <h2>{shelf.name}</h2>
                 <div style={{ margin: 22 }}>{__("Author")}: {isAuthor() ? __("you") : shelf.author.name}</div>
             </div>
-            <Tabs titles={[__("records-shelves"), __("About shelf"), __("Share with"), __("Remove shelf")]}>
+            {/* TODO: Remove some tabs when author is not logged in */}
+            <Tabs titles={titles}>
                 <Tab>
 
                     <h3>{__("records-shelves")}</h3>
