@@ -186,6 +186,21 @@ export const updateShelf = (name, description, publicity) => (dispatch, getState
         .catch(onError(dispatch, "PFAILURE_SHELF_UPDATE"));
 };
 
+export const removeShelf = history => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_SHELF_REMOVE" });
+    shelfService
+        .remove(getState().shelf.shelf.id, getState().token.token)
+        .then(() => {
+            dispatch({
+                type: "PSUCCESS_SHELF_REMOVE",
+                id: getState().shelf.shelf.id
+            });
+            // TODO: Redirect other editors too
+            history.push("/user");
+        })
+        .catch(onError(dispatch, "PFAILURE_SHELF_REMOVE"));
+};
+
 export const addRecordToShelf = (recordId, shelfId) => (dispatch, getState) => {
     dispatch({ type: "PREQUEST_SHELF_ADD_RECORD" });
     const shelf = shelfId === undefined ? getState().shelf.shelf.id : shelfId;

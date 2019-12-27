@@ -34,6 +34,13 @@ const update = (id, name, description, publicity, token) => {
     ).then(response => response.data);
 };
 
+const remove = (id, token) => {
+    return axios.delete(
+        `${baseUrl}/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
 const addRecord = (shelfId, recordId, token) => {
     return axios.post(
         `${baseUrl}/${shelfId}/shelve`,
@@ -82,6 +89,7 @@ export default {
     get,
     create,
     update,
+    remove,
     addRecord,
     editRecord,
     removeRecord,

@@ -16,9 +16,15 @@ const userReducer = (state = null, action) => {
                 tfaqr: action.tfaqr
             }
         case "SUCCESS_SHELF_CREATE":
-            const stateToUpdate = { ...state };
-            stateToUpdate.shelves = [...stateToUpdate.shelves, { note: "", id: { id: action.shelf.id, name: action.shelf.name }, author: true }];
-            return stateToUpdate;
+            return {
+                ...state,
+                shelves: shelves.concat({ note: "", id: { id: action.shelf.id, name: action.shelf.name }, author: true })
+            };
+        case "PSUCCESS_SHELF_REMOVE":
+            return {
+                ...state,
+                shelves: state.shelves.filter(shelf => action.id !== shelf.id.id)
+            };
         case "PSUCCESS_CIRCULATION_RENEW":
             // TODO: Check whether loaner is same as logged in user
             return {

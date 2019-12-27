@@ -3,12 +3,14 @@ import Loader from "./Loader";
 import ShelfRecord from "./ShelfRecord";
 import ShelfSharing from "./ShelfSharing";
 import { connect } from "react-redux";
-import { getShelf, updateShelf } from "../reducers/shelfReducer";
+import { getShelf, updateShelf, removeShelf } from "../reducers/shelfReducer";
 import { Tabs, Tab } from "./Tabs";
+import { useField } from "../hooks";
+import { withRouter } from "react-router-dom";
 import __ from "../langs";
 import io from "../socket";
 
-const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, __ }) => {
+const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, removeShelf, history, __ }) => {
     useEffect(() => {
         if (shelfId && token && user && io) io.emit("change shelf", shelfId, token);
     }, [shelfId, token, user, io]);
@@ -18,6 +20,8 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, __ }
     }, [shelfId, token]);
 
     const [isOpen, setIsOpen] = useState();
+
+    const checkName = useField("text");
 
     if (state.state === 1) return <Loader />;
     if (state.state === 3) return <p>{__("Error")}: {state.error}</p>;
@@ -32,13 +36,18 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, __ }
         setIsOpen(false);
     };
 
+    const handleRemoveShelf = e => {
+        console.log("Joo");
+        removeShelf(history);
+    };
+
     return (
         <>
             <div style={{ display: "flex" }}>
                 <h2>{shelf.name}</h2>
                 <div style={{ margin: 22 }}>{__("Author")}: {isAuthor() ? __("you") : shelf.author.name}</div>
             </div>
-            <Tabs titles={[__("records-shelves"), __("About shelf"), __("Share with")]}>
+            <Tabs titles={[__("records-shelves"), __("About shelf"), __("Share with"), __("Remove shelf")]}>
                 <Tab>
 
                     <h3>{__("records-shelves")}</h3>
@@ -75,6 +84,13 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, __ }
                 <Tab>
                     {shelf.sharedWith && <ShelfSharing setShelf={() => { }} token={token} shelf={shelf} isAuthor={isAuthor()} />}
                 </Tab>
+                <Tab>
+                    {isAuthor() ? <div>
+                        <div>{__("Write the name of this shelf and press remove")}</div>
+                        <input {...checkName.props} />
+                        <div><button onClick={handleRemoveShelf} disabled={checkName.value !== shelf.name}>Remove</button></div>
+                    </div> : <div>{__("This shelf can be removed only by the owner")}</div>}
+                </Tab>
             </Tabs>
         </>
     );
@@ -88,5 +104,5 @@ export default connect(
         state: state.loading.shelf,
         __: __(state)
     }),
-    { getShelf, updateShelf }
-)(Shelf);
+    { getShelf, updateShelf, removeShelf }
+)(withRouter(Shelf));
