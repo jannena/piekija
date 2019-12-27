@@ -99,14 +99,20 @@ const RecordEditor = ({ record, updateRecord, __ }) => {
         setEditedRecord(copy);
     };
     const onRemoveField = (field, i) => () => {
-        setEditedRecord({
-            ...editedRecord,
-            FIELDS: editedRecord.FIELDS.map(([code, data]) => [code,
-                code === field
-                    ? data.filter((d, index) => index !== i)
-                    : data
-            ])
-        });
+        if (editedRecord.FIELDS.some(([fieldI, content]) => fieldI === field && content.length <= 1))
+            setEditedRecord({
+                ...editedRecord,
+                FIELDS: editedRecord.FIELDS.filter(([fieldI]) => fieldI !== field)
+            });
+        else
+            etEditedRecord({
+                ...editedRecord,
+                FIELDS: editedRecord.FIELDS.map(([code, data]) => [code,
+                    code === field
+                        ? data.filter((d, index) => index !== i)
+                        : data
+                ])
+            });
     };
     const onRemoveSubfield = (field, i, subfield, n) => () => {
         const copy = { ...editedRecord };
