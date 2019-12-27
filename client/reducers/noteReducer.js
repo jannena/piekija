@@ -7,6 +7,8 @@ const noteReducer = (state = [], action) => {
             return action.notes;
         case "SUCCESS_NOTES_CREATE":
             return state.concat(action.note);
+        case "SUCCESS_NOTES_REMOVE":
+            return state.filter(n => n.id !== action.id);
         case "SUCCESS_NOTES_UPDATE":
             return state.map(n => n.id === action.note.id ? action.note : n)
     }
@@ -52,6 +54,19 @@ export const createNote = (title, content) => (dispatch, getState) => {
             });
         })
         .catch(onError(dispatch, "FAILURE_NOTES_CREATE"));
+};
+
+export const removeNote = id => (dispatch, getState) => {
+    dispatch({ type: "REQUEST_NOTES_REMOVE" });
+    noteService
+        .remove(id, getState().token.token)
+        .then(() => {
+            dispatch({
+                type: "SUCCESS_NOTES_REMOVE",
+                id
+            });
+        })
+        .catch(onError(dispatch, "FAILURE_NOTES_REMOVE"));
 };
 
 export const updateNote = (id, title, content) => (dispatch, getState) => {

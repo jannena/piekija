@@ -31,7 +31,7 @@ const update = (id, title, content, token) => {
         .then(response => response.data);
 };
 
-const remove = id => {
+const remove = (id, token) => {
     return axios
         .delete(
             `${baseUrl}/${id}`,

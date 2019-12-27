@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { getAllNotes, createNote, updateNote } from "../../reducers/noteReducer";
+import { getAllNotes, createNote, updateNote, removeNote } from "../../reducers/noteReducer";
 import { Table, TableRow, TableCell } from "../essentials/Tables";
 import Expandable from "../essentials/Expandable";
 import { Form, Input, Button, Textarea } from "../essentials/forms";
 import __ from "../../langs";
 
-const StaffNotes = ({ notes, getAllNotes, createNote, updateNote, __ }) => {
+const StaffNotes = ({ notes, getAllNotes, createNote, updateNote, removeNote, __ }) => {
     useEffect(() => {
         getAllNotes();
     }, []);
@@ -19,19 +19,28 @@ const StaffNotes = ({ notes, getAllNotes, createNote, updateNote, __ }) => {
 
     const handleCreateNote = e => {
         const { title, content } = e.target;
-        createNote(title, content);
+        createNote(title.value, content.value);
     };
 
-    const form = data => <Form onSubmit={handleUpdateNote(data.id)}>
-        <Input id={`${data.id}-title`} name="title" title={_("Title")} description="" value={data.title} />
-        <Textarea id={`${data.id}-content`} name="content" title={__("Content")} description="" value={data.content} />
-        <Button title="Save" />
-    </Form>;
+    const handleRemoveNote = id => e => {
+        removeNote(id);
+    };
+
+    const form = data => <>
+        <Form onSubmit={handleUpdateNote(data.id)}>
+            <Input id={`${data.id}-title`} name="title" title={__("Title")} description="" value={data.title} />
+            <Textarea id={`${data.id}-content`} name="content" title={__("Content")} description="" value={data.content} />
+            <Button title={__("save-button")} />
+        </Form>
+        <Form onSubmit={handleRemoveNote(data.id)}>
+            <Button title={__("remove-button")}></Button>
+        </Form>
+    </>;
 
     return (<>
         <div>{__("Notes")}</div>
         <Expandable title={__("Create new note")}>
-            <Form onSubmit={e => handleCreateNote}>
+            <Form onSubmit={handleCreateNote}>
                 <Input title={__("Title")} name="title" description="" />
                 <Textarea title={__("Content")} name="content" description="" />
                 <Button title={__("create-button")} />
@@ -50,5 +59,5 @@ export default connect(
         notes: state.notes,
         __: __(state)
     }),
-    { getAllNotes, createNote, updateNote }
+    { getAllNotes, createNote, updateNote, removeNote }
 )(StaffNotes);
