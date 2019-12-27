@@ -57,4 +57,5 @@
 | 5.12. | 1 | suomenkielinen käännös, hakutuloslistauksen tekstit ja linkit |
 | 7.12. | 2,5 | tilastohaun aloittaminen |
 | 25.12. | 1,5 | tilastohakua, yksinkertaista muokkainta |
-| yht. | 116,5 | |
+| 27.12. | 4 | sekalaista korjailua ja lisäilyä (yksinkertaista muokkainta, hyllyjä, ulkoasua) |
+| yht. | 120,5 | |
