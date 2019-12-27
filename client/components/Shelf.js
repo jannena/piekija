@@ -51,16 +51,16 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, remo
                 <Tab>
 
                     <h3>{__("records-shelves")}</h3>
-                    <table>
-                        <tbody>
-                            {shelf.records.map(record =>
-                                <ShelfRecord
-                                    key={record.record.id}
-                                    record={record}
-                                    canEdit={canEdit()}
-                                />)}
-                        </tbody>
-                    </table>
+                    {/* <table>
+                        <tbody> */}
+                    {shelf.records.map(record =>
+                        <ShelfRecord
+                            key={record.record.id}
+                            record={record}
+                            canEdit={canEdit()}
+                        />)}
+                    {/*  </tbody>
+                    </table> */}
                 </Tab>
                 <Tab>
                     {isOpen && isAuthor()

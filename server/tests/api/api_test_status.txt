@@ -3,6 +3,7 @@ user        -           TODO: tfa
 record      -           TODO: removeLastChars and changed 
 shelf       -           TODO: A few tests
 circulation -           TODO: due dates
+statistics  -           Not started
 
 item        -           Not started
 location    ready

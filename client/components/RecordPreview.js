@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const MARC21 = require("../../server/utils/marc21parser");
 
-const RecordPreview = ({ record, __ }) => {
+const RecordPreview = ({ children, record, __ }) => {
     const printPreviewText = pr => {
         if (!pr) return null;
         return pr.map(p => {
@@ -29,7 +29,8 @@ const RecordPreview = ({ record, __ }) => {
     };
     const infoStyle = {
         width: "70%",
-        padding: 10
+        padding: 10,
+        position: "relative"
     };
     const previewTextStyle = {
         margin: 10
@@ -42,7 +43,8 @@ const RecordPreview = ({ record, __ }) => {
                 <div>{__(record.contentType) || null}</div>
                 <div>{record.author}</div>
                 <div>{Number(record.year) || null}</div>
-                {record.previewText && <div style={previewTextStyle}>{printPreviewText(record.previewText)}</div>}
+                {record.previewText && record.previewText.length > 0 && <div style={previewTextStyle}>{printPreviewText(record.previewText)}</div>}
+                {children && <div style={previewTextStyle}>{children}</div>}
             </div>
         </div>
     );

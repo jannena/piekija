@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { deleteRecordFromShelf, updateRecordInShelf } from "../reducers/shelfReducer";
 import __ from "../langs"
+import RecordPreview from "./RecordPreview";
 
 const ShelfRecord = ({ record, canEdit, updateRecordInShelf, deleteRecordFromShelf, __ }) => {
     // console.log("I'm in this shelf", record);
@@ -30,7 +31,27 @@ const ShelfRecord = ({ record, canEdit, updateRecordInShelf, deleteRecordFromShe
 
     const recordDeleted = record.record.id === undefined;
 
-    return <tr>
+    return <RecordPreview record={record.record} __={__}>
+        <div>
+            <div>
+                {isOpen
+                    ? <>
+                        <input value={note} onChange={e => setNote(e.target.value)} />
+                        <button onClick={handleEditNote}>{__("save-button")}</button>
+                        <button onClick={cancelEditing}>{__("cancel-button")}</button>
+                    </>
+                    : record.note}
+            </div>
+            <div style={{ height: 50 }}></div>
+            <div style={{ position: "absolute", bottom: 10, right: 10 }}>
+                {canEdit && <>
+                    {recordDeleted ? <p></p> : <button onClick={() => setIsOpen(true)}>{__("edit-button")}</button>}
+                    <button onClick={handleRemoveFromShelf}>{__("delete-button")}</button>
+                </>}
+            </div>
+        </div>
+    </RecordPreview >
+    {/* <tr>
         <td>{recordDeleted ? <p><strong>[{__("Record does not exist")}]</strong></p> : <Link to={`/record/${record.record.id}`}>{record.record.title}</Link>}</td>
         <td>{isOpen
             ? <>
@@ -43,7 +64,7 @@ const ShelfRecord = ({ record, canEdit, updateRecordInShelf, deleteRecordFromShe
             {recordDeleted ? <p></p> : <button onClick={() => setIsOpen(true)}>{__("edit-button")}</button>}
             <button onClick={handleRemoveFromShelf}>{__("delete-button")}</button>
         </>}</td>
-    </tr>;
+    </tr>; */}
 };
 
 export default connect(
