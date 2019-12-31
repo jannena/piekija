@@ -29,6 +29,24 @@ const StyledTBody = styled.tbody`
     }
 `;
 
+const StyledImageContainer = styled.div`
+    width: 100%;
+    text-align: center;
+    margin-right: 20px;
+
+    @media screen and (min-width: 600px) {
+        width: 200px;
+    }
+`;
+
+const StyledMainInfo = styled.div`
+    width: 100%;
+
+    @media screen and (min-width: 600px) {
+        width: calc(100% - 220px);
+    }
+`;
+
 const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
     console.log(id);
     console.log("record", record);
@@ -56,15 +74,22 @@ const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
     return !record || !record.result || record.result.id !== id
         ? null
         : <div>
-            {!isPreview && <>
-                <button onClick={history.goBack}>&lt; {__("Back")}</button>
-                <RecordTools __={__} record={record} history={history} />
-            </>}
-            {MARC21.getFieldsAndSubfields(record.record, ["245"], ["a", "b", "c"]).slice(0, 1).map(title => <h2 key={title.a[0]}>{`${title.a[0] || ""} ${title.b[0] || ""} ${title.c[0] || ""}`}</h2>)}
-            <div>
-                {__("Content type")}: {__(record.record.LEADER.substring(6, 7), "Unknown content type")}
+            {!isPreview && <RecordTools __={__} record={record} history={history} />}
+            <div style={{ display: "flex", flexWrap: "wrap" }}>
+                {record.result.image && <StyledImageContainer>
+                    <img style={{ maxWidth: "100%" }} src={record.result.image} />
+                </StyledImageContainer>}
+                <StyledMainInfo>
+                    {MARC21.getFieldsAndSubfields(record.record, ["245"], ["a", "b", "c"]).slice(0, 1).map(title => <h2 key={title.a[0]}>{`${title.a[0] || ""} ${title.b[0] || ""} ${title.c[0] || ""}`}</h2>)}
+                    <div>{record.result.author}</div>
+                    <div>
+                        {__("Content type")}: {__(record.record.LEADER.substring(6, 7), "Unknown content type")}
+                    </div>
+                    <RecordTime record={record} />
+                </StyledMainInfo>
             </div>
-            <RecordTime record={record} />
+
+            <hr />
 
             <table className="record-table">
                 <StyledTBody>
@@ -80,9 +105,10 @@ const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
                     {!!series.length && <tr><td>{__("Series")}</td> <td>{series}</td></tr>}
                     {!!appearance.length && <tr><td>{__("Appearance")}</td> <td>{appearance.join(" ")}</td></tr>}
                     <tr><td>{__("Links")}</td> <td>{MARC21
-                        .getFieldsAndSubfields(record.record, ["856"], ["indicators", "y", "u"])
+                        .getFieldsAndSubfields(record.record, ["856"], ["indicators", "y", "u", "z"])
                         .map(link => <div>
-                            <a href={link.u} target="_blank">{link.y}</a>
+                            {console.log("Linkki", link)}
+                            <a href={link.u} target="_blank">{(link.y && link.y.length > 0) ? link.y : link.z}</a>
                         </div>)}</td></tr>
                 </StyledTBody>
 
@@ -95,29 +121,31 @@ const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
             </table>
 
 
-            {!isPreview && <Tabs titles={[__("Items"), __("MARC"), __("spelling")]}>
-                <Tab>
-                    <table style={{ width: "100%" }}>
-                        <tbody>
-                            {record.result.items.map((item, i) =>
-                                <tr key={i}>
-                                    <td>{item.location.name}</td>
-                                    <td style={{ backgroundColor: colorByState(item.state || "loaned"), lineHeight: "30px", textAlign: "center" }}>{__(item.state)}</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </Tab>
-                <Tab>
-                    {/* TODO: Maybe search engine for MARC21 fields? */}
-                    <MARC21Screen parsedMARC={record.record} />
-                </Tab>
-                <Tab>
-                    <div>Spelling1: {spelling.spelling1.join(", ")}</div>
-                    <div>Spelling2: {spelling.spelling2.join(", ")}</div>
-                </Tab>
-            </Tabs>}
-        </div>
+            {
+                !isPreview && <Tabs titles={[__("Items"), __("MARC"), __("spelling")]}>
+                    <Tab>
+                        <table style={{ width: "100%" }}>
+                            <tbody>
+                                {record.result.items.map((item, i) =>
+                                    <tr key={i}>
+                                        <td>{item.location.name}</td>
+                                        <td style={{ backgroundColor: colorByState(item.state || "loaned"), lineHeight: "30px", textAlign: "center" }}>{__(item.state)}</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </Tab>
+                    <Tab>
+                        {/* TODO: Maybe search engine for MARC21 fields? */}
+                        <MARC21Screen parsedMARC={record.record} />
+                    </Tab>
+                    <Tab>
+                        <div>Spelling1: {spelling.spelling1.join(", ")}</div>
+                        <div>Spelling2: {spelling.spelling2.join(", ")}</div>
+                    </Tab>
+                </Tabs>
+            }
+        </div >
 };
 
 export default connect(
