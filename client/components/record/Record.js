@@ -80,7 +80,7 @@ const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
                     <img style={{ maxWidth: "100%" }} src={record.result.image} />
                 </StyledImageContainer>}
                 <StyledMainInfo>
-                    {MARC21.getFieldsAndSubfields(record.record, ["245"], ["a", "b", "c"]).slice(0, 1).map(title => <h2 key={title.a[0]}>{`${title.a[0] || ""} ${title.b[0] || ""} ${title.c[0] || ""}`}</h2>)}
+                    {MARC21.getFieldsAndSubfields(record.record, ["245"], ["a", "n", "b", "c"]).slice(0, 1).map(title => <h2 key={title.a[0]}>{`${title.a[0] || ""} ${title.n[0] || ""} ${title.b[0] || ""} ${title.c[0] || ""}`}</h2>)}
                     <div>{record.result.author}</div>
                     <div>
                         {__("Content type")}: {__(record.record.LEADER.substring(6, 7), "Unknown content type")}

@@ -286,7 +286,7 @@ const getSpelling = parsedMARC => {
         getFieldSpelling(
             parsedMARC,
             ["245", "246"],
-            ["a", "b", "c", "d", "x", "y", "z"]
+            ["a", "b", "c", "d", "p", "n", "x", "y", "z"]
         ),
         // subjects
         getFieldSpelling(
@@ -357,8 +357,6 @@ const getSpelling = parsedMARC => {
 };
 
 const parseMARCToDatabse = (parsedMARC, data) => {
-    // TODO: ohitusindikaattorit
-
     // TODO: There are catalouging rules.
     const year = (() => {
         try {
@@ -373,9 +371,8 @@ const parseMARCToDatabse = (parsedMARC, data) => {
 
     const nonFilingCharactersFromField = getFieldsAndSubfields(parsedMARC, ["245"], ["indicators"]);
     const nonFiling = (nonFilingCharactersFromField.length > 0 && Number(nonFilingCharactersFromField[0].indicators[1])) || 0;
-    let title = getField(parsedMARC, "245", "a"); // parsedMARC.FIELDS["245"][0].subfields["a"][0];
     // Remove last non-letter characters
-    title = removeLastCharacters(title);
+    title = removeLastCharacters(getField(parsedMARC, "245", "a")) + " " + removeLastCharacters(getField(parsedMARC, "245", "n"));
     const alphabetizableTitle = title.substring(nonFiling).toLowerCase();
     console.log("non filing characters", nonFilingCharactersFromField, nonFiling);
 
