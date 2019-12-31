@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { createLoantype, getLoantypes, removeLoantype, updateLoantype } from "../../reducers/loantypeReducer";
 import Expandable from "../essentials/Expandable";
-import { Form, Input, Button, Checkbox } from "../essentials/forms";
+import { Form, Input, Button, Checkbox, Grid, DoNotSendButton } from "../essentials/forms";
 import { Table, TableRow, TableCell } from "../essentials/Tables";
 import __ from "../../langs";
 
@@ -32,10 +32,10 @@ const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes, removeLoantyp
             <Checkbox id={`${data.id}-cabl`} checked={data.canBeLoaned} type="checkbox" name="canBeLoaned" title={__("canBeLoaned")} description={__("canBeLoaned-info")} />
             <Input id={`${data.id}-rent`} value={data.renewTimes} type="number" name="renewTimes" title={__("renewTimes")} description={__("renewTimes-info")} />
             <Input id={`${data.id}-loat`} value={data.loanTime} type="number" name="loanTime" title={__("loanTime")} description={__("loanTime.info")} />
-            <Button title={__("create-button")} />
-        </Form>
-        <Form onSubmit={handleRemoveLoantype(data.id)}>
-            <Button title={__("remove-button")} />
+            <Grid>
+                <DoNotSendButton title={__("remove-button")} onClick={handleRemoveLoantype(data.id)} />
+                <Button title={__("create-button")} />
+            </Grid>
         </Form>
     </>;
 

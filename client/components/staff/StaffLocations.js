@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getLocations, createLocation, updateLocation, removeLocation } from "../../reducers/locationReducer";
 import Expandable from "../essentials/Expandable";
-import { Form, Input, Button } from "../essentials/forms";
+import { Form, Input, Button, Text, DoNotSendButton, Grid } from "../essentials/forms";
 import { Table, TableCell, TableRow } from "../essentials/Tables";
 import __ from "../../langs";
 
@@ -29,12 +29,13 @@ const StaffLocations = ({ locations, getLocations, createLocation, updateLocatio
     };
 
     const form = data => <div>
+        <Text type="text" disabled={true} title={__("Loan times")} value={data.totalLoanCount || 0} />
         <Form onSubmit={handleUpdateLocation(data.id)}>
             <Input id={`${data.id}-name`} name="name" title={__("Location name")} value={data.name} description={__("location-name-info")} />
-            <Button title={__("save-button")} />
-        </Form>
-        <Form onSubmit={handleRemoveLocation(data.id)}>
-            <Button title={__("remove-button")} />
+            <Grid>
+                <DoNotSendButton onClick={handleRemoveLocation(data.id)} title={__("remove-button")} />
+                <Button title={__("save-button")} />
+            </Grid>
         </Form>
     </div>
 

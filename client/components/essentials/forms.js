@@ -48,10 +48,26 @@ export const Input = props => <InputTemplate {...props}>
     <input style={{ width: "100%" }} id={props.id || props.name} name={props.name} type={props.type} defaultValue={props.value} />
 </InputTemplate>
 
+export const Text = props => <InputTemplate {...props}>
+    <span>{props.value}</span>
+</InputTemplate>;
+
 export const Button = ({ title }) => {
     return <div style={{ textAlign: "center", margin: "20px 0px" }}>
         <button>{title}</button>
-    </div>
+    </div>;
+};
+
+export const DoNotSendButton = ({ title, onClick }) => {
+    return <div style={{ textAlign: "center", margin: "20px 0px" }}>
+        <button style={{ backgroundColor: "#ff5c5c" }} onClick={onClick} type="button">{title}</button>
+    </div>;
+};
+
+export const Grid = ({ children }) => {
+    return <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+        {children}
+    </div>;
 };
 
 // TODO: Fix default values
