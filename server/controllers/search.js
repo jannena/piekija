@@ -25,9 +25,9 @@ const search = async (req, res, next, simple) => {
             case "timeAdded":
                 return { _id: -1 };
             case "alphapetical":
-                return { title: 1 };
+                return { alphabetizableTitle: 1 };
             case "alphapeticaldesc":
-                return { title: 1 };
+                return { alphabetizableTitle: -1 };
         }
     })();
 

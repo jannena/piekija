@@ -318,7 +318,7 @@ const getSpelling = parsedMARC => {
             ["050", "080", "082", "084"],
             ["a"]
         )
-    ))].filter(value => value.length > 2);
+    ))];
     const spelling2 = [...new Set([].concat(
         // publishersEtc
         getFieldSpelling(
@@ -352,7 +352,7 @@ const getSpelling = parsedMARC => {
             ],
             ["a"]
         )
-    ))].filter(value => value.length > 2);
+    ))];
     return { spelling1, spelling2 };
 };
 
@@ -371,15 +371,21 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     })();
     const contentType = parsedMARC.LEADER.substring(6, 7);
 
+    const nonFilingCharactersFromField = getFieldsAndSubfields(parsedMARC, ["245"], ["indicators"]);
+    const nonFiling = (nonFilingCharactersFromField.length > 0 && Number(nonFilingCharactersFromField[0].indicators[1])) || 0;
     let title = getField(parsedMARC, "245", "a"); // parsedMARC.FIELDS["245"][0].subfields["a"][0];
     // Remove last non-letter characters
     title = removeLastCharacters(title);
+    const alphabetizableTitle = title.substring(nonFiling).toLowerCase();
+    console.log("non filing characters", nonFilingCharactersFromField, nonFiling);
 
     const language = parsedMARC.FIELDS["008"][0].substring(35, 38);
     const languagesDuplicates = getSubfields(parsedMARC, "041", ["a", "b", "d", "e", "f", "g", "h", "j"]);  // MARC21.getFields(parsedMARC, ["041"], "j");
     languagesDuplicates.unshift(language);
+    const extractedLanguages = [];
+    languagesDuplicates.forEach(lang => extractedLanguages.push(...lang.match(/.{1,3}/g)));
     // Remove duplicates in languages
-    const languages = [...new Set(languagesDuplicates)];
+    const languages = [...new Set(extractedLanguages)];
 
     // TODO: Currently this splits the series to words...
     const series = [...new Set(getFieldSpelling(
@@ -412,10 +418,7 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     // Remove last non-letter characters
     authors = authors.map(removeLastCharacters);
 
-    // TODO: Remove genres
-    const genres = getFields(parsedMARC, ["655"], "a"); // parsedMARC.FIELDS["655"].map(f => f.subfields["a"][0]);
-    // TODO: Get also fields x, y, z, ...
-    const subjectsWithLastCharacters = getFields(parsedMARC, ["600", "650", "651", "653", "610", "611", "630", "647", "648", "654", "656", "657", "658", "662"], "a"); // parsedMARC.FIELDS["650"].map(f => f.subfields["a"][0]);
+    const subjectsWithLastCharacters = getFields(parsedMARC, ["600", "650", "651", "653", "655", "610", "611", "630", "647", "648", "654", "656", "657", "658", "662"], "a"); // parsedMARC.FIELDS["650"].map(f => f.subfields["a"][0]);
     const subjects = subjectsWithLastCharacters.map(removeLastCharacters);
 
     const previewTexts = getFieldsAndSubfields(parsedMARC, ["990"], ["a", "u", "y"]);
@@ -432,6 +435,7 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     console.log("trying to get image", image);
     const imageAddress = (image && image["u"] && image["u"][0]) || "";
 
+    // TODO: Add description
     /* const description = getFieldsAndSubfields(parsedMARC, ["856"], ["indicators", "y", "u", "z", "q"])
         .filter(link => link["q"].some(q => q.match(/image\//)))[0];
     console.log("trying to get image", image);
@@ -455,6 +459,8 @@ const parseMARCToDatabse = (parsedMARC, data) => {
         description: "",
         contentType,
 
+        alphabetizableTitle,
+
         title,
         country,
         language,
@@ -462,7 +468,6 @@ const parseMARCToDatabse = (parsedMARC, data) => {
         author,
         authors,
         year,
-        genres,
         subjects,
 
         classification,

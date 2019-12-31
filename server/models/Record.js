@@ -7,6 +7,10 @@ const RecordSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    alphabetizableTitle: {
+        type: "String",
+        required: true
+    },
     timeAdded: {
         type: Date,
         required: true
@@ -56,13 +60,6 @@ const RecordSchema = new mongoose.Schema({
         required: true
     },
 
-    // MARC21: 655
-    genres: {
-        type: [
-            { type: String }
-        ],
-        required: true
-    },
     // MARC21: 650, ?653 (also locations and persons 651, 600, 610)
     subjects: {
         type: [
