@@ -28,6 +28,10 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
     // TODO: Fast page selector
     const howManyPages = Math.ceil(((result && result.found) || 0) / resultsPerPage);
 
+    const sortOptions = [[__("sortbyyear"), "year"], [__("sortbyyeardesc"), "yeardesc"], [__("sortbyalphapetical"), "alphapetical"], [__("sortbyalphapeticaldesc"), "alphapeticaldesc"], [__("sortbytimeadded"), "timeAdded"]];
+    // TODO: Fix performance limit:
+    if (result.found <= 10000 && type === "simple") sortOptions.unshift([__("sortbyrelevance", "relevance")]);
+
     return (
         <div>
             {result.result.length === 0
@@ -41,7 +45,7 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
                                 : [["Relevance", "relevance"], ["Year (newest first)", "year"], ["Latest added first", "timeAdded"]]
                         } /> */}
                         <Select onChange={handleResort} defaultSelected={sort}
-                            options={[[__("sortbyyear"), "year"], [__("sortbyyeardesc"), "yeardesc"], [__("sortbyalphapetical"), "alphapetical"], [__("sortbyalphapeticaldesc"), "alphapeticaldesc"], [__("sortbytimeadded"), "timeAdded"]]}
+                            options={sortOptions}
                         />
                     </div>
                     <SearchFilter />
