@@ -58,4 +58,5 @@
 | 7.12. | 2,5 | tilastohaun aloittaminen |
 | 25.12. | 1,5 | tilastohakua, yksinkertaista muokkainta |
 | 27.12. | 4 | sekalaista korjailua ja lisäilyä (yksinkertaista muokkainta, hyllyjä, ulkoasua) |
-| yht. | 120,5 | |
+| 31.12. | 1,5 | sekalaista korjailua |
+| yht. | 122 | |
