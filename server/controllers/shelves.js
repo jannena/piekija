@@ -28,7 +28,7 @@ shelfRouter.get("/:id", async (req, res, next) => {
                 { sharedWith: req.authenticated && req.authenticated._id }
             ]
         })
-            .populate("records.record", { title: 1 })
+            .populate("records.record", { title: 1, image: 1 })
             .populate("author", { name: 1, username: 1 });
 
         if (!shelf) return res.status(404).end();

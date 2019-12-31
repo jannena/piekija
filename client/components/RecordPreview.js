@@ -23,10 +23,11 @@ const RecordPreview = ({ children, record, __ }) => {
     };
     const imageStyle = {
         width: 130,
-        height: 130,
+        minHeight: 130,
         border: "1px solid black",
         margin: 10
     };
+    const {border: joojoojoo, ...imageStyleWithoutBorder} = imageStyle;
     const infoStyle = {
         width: "70%",
         padding: 10,
@@ -37,7 +38,7 @@ const RecordPreview = ({ children, record, __ }) => {
     };
     return (
         <div style={previewStyle}>
-            <div style={imageStyle}><img></img></div>
+            <div style={record.image ? imageStyleWithoutBorder : imageStyle}>{record.image && <img src={record.image} style={{ width: 130 }} />}</div>
             <div style={infoStyle}>
                 <div style={titleStyle}><strong><Link to={`/record/${record.id}`}>{record.title}</Link></strong></div>
                 <div>{__(record.contentType) || null}</div>

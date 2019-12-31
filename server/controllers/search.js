@@ -39,7 +39,7 @@ const search = async (req, res, next, simple) => {
             : {};
         console.log("ready query", readyQuery);
         const result = await Record
-            .find(readyQuery, { title: 1, author: 1, contentType: 1, year: 1, previewText: 1 })
+            .find(readyQuery, { title: 1, author: 1, contentType: 1, year: 1, previewText: 1, image: 1 })
             .sort(sortObject)
             .skip(searchResultsPerPage * page)
             .limit(searchResultsPerPage);
