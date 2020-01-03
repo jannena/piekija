@@ -14,6 +14,7 @@ import Loader from "../Loader";
 import RecordPublisherInfo from "./RecordPublisherInfo";
 import RecordAuthors from "./RecordAuthors";
 import styled from "styled-components";
+import ShowMore from "../essentials/ShowMore";
 import "../../css/record.css";
 import __ from "../../langs";
 
@@ -21,7 +22,7 @@ const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
 
 const StyledTBody = styled.tbody`
-    border-bottom: 1px solid black;
+    border-bottomi: 1px solid black;
 
     &:after {
         content "";
@@ -65,6 +66,13 @@ const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
 
     const spelling = MARC21.getSpelling(record.record);
 
+    const links = MARC21
+        .getFieldsAndSubfields(record.record, ["856"], ["indicators", "y", "u", "z"])
+        .map(link => <div>
+            {console.log("Linkki", link)}
+            <a href={link.u} target="_blank">{(link.y && link.y.length > 0) ? link.y : link.z}</a>
+        </div>);
+
     const colorByState = state => {
         if (state === "not loaned") return "#00d400";
         else if (state === "not in use") return "white";
@@ -92,32 +100,30 @@ const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
             <hr />
 
             <table className="record-table">
-                <StyledTBody>
-                    <RecordAuthors __={__} record={record} />
-                    <RecordSubjects __={__} record={record} />
-                </StyledTBody>
-                <StyledTBody>
-                    <RecordClassification __={__} record={record} />
-                    <RecordStandardCodes __={__} record={record} />
-                </StyledTBody>
-                <StyledTBody>
-                    <RecordPublisherInfo __={__} record={record} />
-                    {!!series.length && <tr><td>{__("Series")}</td> <td>{series}</td></tr>}
-                    {!!appearance.length && <tr><td>{__("Appearance")}</td> <td>{appearance.join(" ")}</td></tr>}
-                    <tr><td>{__("Links")}</td> <td>{MARC21
-                        .getFieldsAndSubfields(record.record, ["856"], ["indicators", "y", "u", "z"])
-                        .map(link => <div>
-                            {console.log("Linkki", link)}
-                            <a href={link.u} target="_blank">{(link.y && link.y.length > 0) ? link.y : link.z}</a>
-                        </div>)}</td></tr>
-                </StyledTBody>
+                <ShowMore noDiv={true} buttonContainer={button => <tbody><tr><td style={{ textAlign: "center" }} colSpan={2}>{button}</td></tr></tbody>} show={1} data={[
+                    <StyledTBody>
+                        <RecordAuthors __={__} record={record} />
+                        <RecordSubjects __={__} record={record} />
+                    </StyledTBody>,
+                    <StyledTBody>
+                        <RecordClassification __={__} record={record} />
+                        <RecordStandardCodes __={__} record={record} />
+                    </StyledTBody>,
+                    <StyledTBody>
+                        <RecordPublisherInfo __={__} record={record} />
+                        {!!series.length && <tr><td>{__("Series")}</td><td>{series}</td></tr>}
+                        {!!appearance.length && <tr><td>{__("Appearance")}</td><td>{appearance.join(" ")}</td></tr>}
+                        {!!links.length && <tr><td>{__("Links")}</td><td>{links}</td></tr>}
+                    </StyledTBody>,
 
-                <StyledTBody className="record-languages-rows">
-                    <RecordLanguages __={__} record={record} />
-                </StyledTBody>
-                <StyledTBody>
-                    <RecordNotes __={__} record={record} />
-                </StyledTBody>
+                    <StyledTBody className="record-languages-rows">
+                        <RecordLanguages __={__} record={record} />
+                    </StyledTBody>,
+                    <StyledTBody>
+                        <RecordNotes __={__} record={record} />
+                    </StyledTBody>
+                ]} />
+
             </table>
 
 

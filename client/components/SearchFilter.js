@@ -24,11 +24,16 @@ const SearchFilter = ({ query, filters, setQuery, __ }) => {
             setQuery("advanced", newQuery);
         }
     };
+    const listItemStyle = {
+        display: "block",
+        textIndent: -10,
+        paddingLeft: 10
+    };
     const searchFilterTemplate = (title, type, data) => <>
         <p>{title}</p>
         <div>
-            <ul>
-                <ShowMore data={data.filter(({ _id }) => _id).map(({ _id, count }) => <li key={_id}>
+            <ul style={{ dispaly: "block", padding: 10 }}>
+                <ShowMore data={data.filter(({ _id }) => _id).map(({ _id, count }) => <li style={listItemStyle} key={_id}>
                     <a href="javascript:void(0)" onClick={handleSearchFilterClick(type, _id)}>{_id} ({count})</a>
                 </li>)} show={5} />
 

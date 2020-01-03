@@ -14,7 +14,7 @@ export const Columns = styled.div`
     flex-direction: column;
     padding-left: 20px;
     
-    @media screen and (min-width: 700px) {
+    @media screen and (min-width: 800px) {
         flex-direction: row;
     }
 `;

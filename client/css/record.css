@@ -1,16 +1,25 @@
 .record-table {
-    width: 90%;
+    width: 100%;
     border-collapse: collapse;
-    margin: 10px auto;
+    margin: 5px;
 }
 
 .record-table tr td {
-    width: 50%;
+    width: 75%;
+    vertical-align: top;
+    padding-bottom: 15px;
+}
+
+.record-table tr td div {
+    text-indent: -15px;
+    padding-left: 15px;
 }
 
 .record-table tr td:first-child {
     vertical-align: top;
-    padding: 5px 0;
+    width: 25% !important;
+    padding-bottom: 15px;
+    font-weight: bold;
 }
 
 .record-languages-rows td {
