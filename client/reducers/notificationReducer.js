@@ -29,11 +29,11 @@ const notificationReducer = (state = [], action) => {
 export default notificationReducer;
 
 
-export const notify = (type, message) => dispatch => {
+export const notify = (type, message, extension) => (dispatch, getState) => {
     dispatch({
         type: "NOTIFY",
         importance: type,
-        message
+        message: [message, extension]
     });
     setTimeout(() => {
         dispatch({

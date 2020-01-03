@@ -54,7 +54,6 @@ export const getUser = () => async (dispatch, getState) => {
             type: "SET_USER",
             user
         });
-        dispatch(notify("success", "User infomation received succesfully!"));
     }
     catch (err) {
         console.log(err);

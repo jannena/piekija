@@ -1,3 +1,4 @@
+import { notify } from "./notificationReducer";
 
 export const onError = (dispatch, type) => err => {
     try {
@@ -7,6 +8,7 @@ export const onError = (dispatch, type) => err => {
             type,
             error
         });
+        dispatch(notify("error", err.response.data.error));
         setTimeout(() => dispatch({
             type: "REMOVE_FIRST_NOTIFICATION"
         }), 8000);

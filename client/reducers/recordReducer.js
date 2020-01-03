@@ -104,7 +104,8 @@ export const updateRecord = (recordId, recordMARC) => (dispatch, getState) => {
                     result: record,
                     record: MARC21.tryParse(record.record)
                 }
-            })
+            });
+            dispatch(notify("success", "Successfully updated record!"));
             console.log("TALLENSIN RECORDIN!!!", record.record, MARC21.tryParse(record.record));
         })
         .catch(onError(dispatch, "PFAILURE_RECORD_UPDATE"));
@@ -194,6 +195,7 @@ export const updateItem = (itemId, loantype, location, state, note) => (dispatch
                 type: "PSUCCESS_RECORD_UPDATE_ITEM",
                 item: result
             });
+            dispatch(notify("success", "Successfully updated the item!"));
         })
         .catch(onError(dispatch, "PFAILURE_RECORD_UPDATE_ITEM"));
 };
@@ -207,6 +209,7 @@ export const removeItem = itemId => (dispatch, getState) => {
                 type: "PSUCCESS_RECORD_REMOVE_ITEM",
                 itemId
             });
+            dispatch(notify("success", "Successfully removed the item!"));
         })
         .catch(onError(dispatch, "PSUCCESS_RECORD_REMOVE_ITEM"));
 };

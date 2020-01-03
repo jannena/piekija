@@ -1,5 +1,4 @@
 import searchService from "../services/searchService";
-import { notify } from "./notificationReducer";
 import { onError } from "./errorHandingHelper";
 
 const init = {
@@ -55,7 +54,6 @@ export const search = (query, page, sort, advanced, filter) => (dispatch, getSta
                 page: page || 1,
                 query, sort, advanced
             });
-            dispatch(notify("success", "searched"));
         })
         .catch(onError(dispatch, "FAILURE_SEARCH"));
 };

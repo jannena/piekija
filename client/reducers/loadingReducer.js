@@ -41,12 +41,13 @@ const init = {
         state: 0,
         error: null
     },
+    others: {},
     loading: 0
 };
 
 const loadingReducer = (state = init, action) => {
     const { type } = action;
-    let [stateType = "", reducer = ""] = type.split("_");
+    let [stateType = "", reducer = "", actionName = ""] = type.split("_");
 
     const updateToState = ["", "REQUEST", "SUCCESS", "FAILURE", "PREQUEST", "PSUCCESS", "PFAILURE"].indexOf(stateType) || 3;
 
@@ -55,6 +56,19 @@ const loadingReducer = (state = init, action) => {
         if ([2, 3, 5, 6].indexOf(updateToState) !== -1) return -1;
         return 0;
     })();
+
+    /* return {
+        ...state,
+        [reducer + "_" + actionName]: {
+            state: loading,
+            error: action.error || null
+        },
+        [reducer]: {
+            state: loading,
+            error: action.error || null
+        },
+        loading
+    }; */
 
     switch (reducer) {
         case "SHELF":

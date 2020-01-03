@@ -174,6 +174,7 @@ export const createShelf = (name, publicity) => (dispatch, getState) => {
                 type: "SUCCESS_SHELF_CREATE",
                 shelf: response
             });
+            dispatch(notify("success", "Successfully created a shelf!"));
         })
         .catch(onError(dispatch, "FAILURE_SHELF_CREATE"));
 };
@@ -187,6 +188,7 @@ export const updateShelf = (name, description, publicity) => (dispatch, getState
                 type: "PSUCCESS_SHELF_UPDATE",
                 shelf: response
             });
+            dispatch(notify("success", "Successfully updated the shelf!"));
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_UPDATE"));
 };
@@ -200,7 +202,6 @@ export const removeShelf = history => (dispatch, getState) => {
                 type: "PSUCCESS_SHELF_REMOVE",
                 id: getState().shelf.shelf.id
             });
-            // TODO: Redirect other editors too
             history.push("/user");
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_REMOVE"));
@@ -217,6 +218,7 @@ export const addRecordToShelf = (recordId, shelfId) => (dispatch, getState) => {
                 record: addedRecord,
                 shelfId: shelf
             });
+            dispatch(notify("success", "Successfully added record to shelf!"));
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_ADD_RECORD"));
 };
@@ -231,7 +233,7 @@ export const updateRecordInShelf = (record, note) => (dispatch, getState) => {
                 recordId: record,
                 note
             });
-            dispatch(notify("success", "record changed"));
+            dispatch(notify("success", "Updated note!"));
             console.log("Changed state!!");
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_UPDATE_RECORD"));
@@ -246,6 +248,7 @@ export const deleteRecordFromShelf = record => (dispatch, getState) => {
                 type: "PSUCCESS_SHELF_REMOVE_RECORD",
                 recordId: record
             });
+            dispatch(notify("success", "Remove record from shelf"));
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_REMOVE_ERROR"));
 };
@@ -259,7 +262,7 @@ export const shareShelf = username => (dispatch, getState) => {
                 type: "PSUCCESS_SHELF_SHARE",
                 sharedWith: response
             });
-            dispatch(notify("success", `shared with ${response.username} (${response.name})`));
+            dispatch(notify("success", "Shared with", `${response.username} (${response.name})`));
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_SHARE"));
 };
@@ -273,7 +276,7 @@ export const unshareShelf = username => (dispatch, getState) => {
                 type: "PSUCCESS_SHELF_UNSHARE",
                 username
             });
-            dispatch(notify("success", `unshared with ${username}`));
+            dispatch(notify("success", "unsared with", username));
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_UNSHARE"));
 };
