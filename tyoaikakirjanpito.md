@@ -59,4 +59,6 @@
 | 25.12. | 1,5 | tilastohakua, yksinkertaista muokkainta |
 | 27.12. | 4 | sekalaista korjailua ja lisäilyä (yksinkertaista muokkainta, hyllyjä, ulkoasua) |
 | 31.12. | 1,5 | sekalaista korjailua |
-| yht. | 122 | |
+|  !! | 2020 | !! |
+| 3.1. | 2,5 | ulkosasun viimeistely, kääntämistä |
+| yht. | 124,5 | |

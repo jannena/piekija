@@ -1,16 +1,9 @@
 BEFORE 1.0
 
-- ??search??
-    - ??create better spelling??
-    - return relevance search to small searches
+- Translate error and success messages
+- Fix simple editor saving
+- Country and language codes lists
 
-- appearance
-    - ?record?
-    - notification
-
-- add error and success messages and remove unnecessary ones
-
-- Simple editor
 - documentation
 - finish backend tests
 - go through all TODOs
