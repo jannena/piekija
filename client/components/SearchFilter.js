@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Expandable from "./essentials/Expandable";
 import { Columns, Column } from "./essentials/Columns";
 import __ from "../langs";
+import ShowMore from "./essentials/ShowMore";
 
 const SearchFilter = ({ query, filters, setQuery, __ }) => {
     console.log("!!!!!!!!!!!", filters);
@@ -27,9 +28,10 @@ const SearchFilter = ({ query, filters, setQuery, __ }) => {
         <p>{title}</p>
         <div>
             <ul>
-                {data.filter(({ _id }) => _id).map(({ _id, count }) => <li key={_id}>
+                <ShowMore data={data.filter(({ _id }) => _id).map(({ _id, count }) => <li key={_id}>
                     <a href="javascript:void(0)" onClick={handleSearchFilterClick(type, _id)}>{_id} ({count})</a>
-                </li>)}
+                </li>)} show={5} />
+
             </ul>
         </div>
     </>;
