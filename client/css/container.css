@@ -20,6 +20,8 @@ header {
 
 #site-title {
     font-size: 3em;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 #header-content {

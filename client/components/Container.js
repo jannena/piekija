@@ -11,7 +11,6 @@ import Select from "./Select";
 import { setLanguage } from "../reducers/languageReducer";
 import __ from "../langs";
 
-// TODO: Create user/login/staff menu
 
 const Container = ({ loading, history, simpleSearch, setQuery, children, language, setLanguage, __ }) => {
     const handleSearch = e => {
