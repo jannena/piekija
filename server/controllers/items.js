@@ -17,9 +17,9 @@ itemRouter.get("/", (req, res, next) => {
 
 itemRouter.post("/", async (req, res, next) => {
     // TODO: authorization
-    const { barcode, record, location, loantype, state, note } = req.body;
-    if (!barcode || !record || !location || !loantype || !state)
-        return res.status(400).json({ error: "barcode or record or location or loantype or state is missing" });
+    const { barcode, record, location, loantype, state, note, shelfLocation } = req.body;
+    if (!barcode || !record || !location || !loantype || !state || !shelfLocation)
+        return res.status(400).json({ error: "barcode or record or location or loantype or state or shelfLocation is missing" });
 
     const newItem = new Item({
         created: new Date(),
@@ -29,6 +29,7 @@ itemRouter.post("/", async (req, res, next) => {
         loantype,
         note: note ? note : "",
         state,
+        shelfLocation,
 
         statePersonInCharge: null,
         stateDueDate: null,
@@ -63,16 +64,17 @@ itemRouter.post("/", async (req, res, next) => {
 itemRouter.put("/:id", (req, res, next) => {
     // TODO: authorization
     const { id } = req.params;
-    const { location, loantype, state, note } = req.body;
-    console.log(location, loantype, state, note);
-    if (!location || !loantype || !state || note === undefined)
-        return res.status(400).json({ error: "location or loantype or state or note is missing" });
+    const { location, loantype, state, note, shelfLocation } = req.body;
+    console.log(location, loantype, state, note, shelfLocation);
+    if (!location || !loantype || !state || note === undefined || !shelfLocation)
+        return res.status(400).json({ error: "location or loantype or state or note or shelfLocation is missing" });
 
     const updatedItem = {
         location,
         loantype,
         state,
-        note
+        note,
+        shelfLocation
     };
 
     Item

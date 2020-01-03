@@ -15,18 +15,18 @@ const RecordItems = ({ items, locations, loantypes, addItem, removeItem, updateI
         if (items && loantypes.length === 0) getLoantypes();
     }, [locations, loantypes, items]);
 
-    if (!items) return <p>Items are not available in preview</p>
+    if (!items) return <p>{__("Items are not available in preview")}</p>
 
     console.log("record items", items);
 
     const handleCreateItem = e => {
-        const { barcode, loantype, location, state, note } = e.target;
-        addItem(loantype.value, location.value, state.value, note.value, barcode.value);
+        const { barcode, loantype, location, state, note, shelfLocation } = e.target;
+        addItem(loantype.value, location.value, state.value, note.value, barcode.value, shelfLocation.value);
     };
 
     const handleUpdateItem = id => e => {
-        const { barcode, loantype, location, state, note } = e.target;
-        updateItem(id, loantype.value, location.value, state.value, note.value);
+        const { barcode, loantype, location, state, note, shelfLocation } = e.target;
+        updateItem(id, loantype.value, location.value, state.value, note.value, shelfLocation.value);
     };
 
     const handleRemoveItem = id => e => {
@@ -43,9 +43,10 @@ const RecordItems = ({ items, locations, loantypes, addItem, removeItem, updateI
             <Text title={__("Last loaned")} value={new Date(data.lastLoaned).toISOString()} />
             <Text title={__("Loan times")} value={data.loanTimes || 0} />
             <hr />
-            <Input id={`${data.id}-barcode`} value={data.barcode} name="barcode" title={__("Barcode")} description={__("staff-item-barcode-info")} />
+            <Text id={`${data.id}-barcode`} value={data.barcode} name="barcode" title={__("Barcode")} description={__("staff-item-barcode-info")} />
             <FormSelect id={`${data.id}-loantype`} selected={data.loantype ? data.loantype.id : ""} title={__("Loantype")} name="loantype" options={loantypes.map(loantype => [loantype.name, loantype.id])} />
             <FormSelect id={`${data.id}-location`} selected={data.location ? data.location.id : ""} title={__("Location")} name="location" options={locations.map(location => [location.name, location.id])} />
+            <Input id={`${data.id}-shelfLocation`} value={data.shelfLocation} name="shelfLocation" title={__("Shelf location")} description={__("shelf-location-help")} />
             {/* <Input id={`${data.id}-state`} value={data.state} name="state" title={__("State")} /> */}
             <FormSelect name="state" selected={data.state} title={__("State")} options={itemStateOptions} />
             <Input id={`${data.id}-note`} value={data.note} name="note" title={__("Note")} />
@@ -64,7 +65,8 @@ const RecordItems = ({ items, locations, loantypes, addItem, removeItem, updateI
                     <Input name="barcode" title={__("Barcode")} description={__("staff-item-barcode-info")} />
                     <FormSelect name="loantype" title={__("Loantype")} options={loantypes.map(loantype => [loantype.name, loantype.id])} />
                     <FormSelect name="location" title={__("Location")} options={locations.map(location => [location.name, location.id])} />
-                    <FormSelect name="state" title={__("State")} options={itemStateOptions} />
+                    <Input name="shelfLocation" title={__("Shelf location")} description={__("staff-item-shelf-location-info")} />
+                    <FormSelect name="state" title={__("State")} options={itemStateOptions} description={__("staff-item-state-info")} />
                     <Input name="note" title={__("Note")} />
                     <Button title={__("save-button")} />
                 </Form>

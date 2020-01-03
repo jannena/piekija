@@ -173,10 +173,10 @@ export const createTemporaryRecord = (record, result = { id: "preview", items: [
     });
 };
 
-export const addItem = (loantype, location, state, note, barcode) => (dispatch, getState) => {
+export const addItem = (loantype, location, state, note, barcode, shelfLocation) => (dispatch, getState) => {
     dispatch({ type: "PREQUEST_RECORD_ADD_ITEM" });
     itemService
-        .addItem(barcode, getState().record.record.result.id, loantype, location, state, note, getState().token.token)
+        .addItem(barcode, getState().record.record.result.id, loantype, location, state, note, shelfLocation, getState().token.token)
         .then(result => {
             dispatch({
                 type: "PSUCCESS_RECORD_ADD_ITEM",
@@ -186,10 +186,10 @@ export const addItem = (loantype, location, state, note, barcode) => (dispatch, 
         .catch(onError(dispatch, "PFAILURE_RECORD_ADD_ITEM"));
 };
 
-export const updateItem = (itemId, loantype, location, state, note) => (dispatch, getState) => {
+export const updateItem = (itemId, loantype, location, state, note, shelfLocation) => (dispatch, getState) => {
     dispatch({ type: "PREQUEST_RECORD_UPDATE_ITEM" });
     itemService
-        .updateItem(itemId, loantype, location, state, note, getState().token.token)
+        .updateItem(itemId, loantype, location, state, note, shelfLocation, getState().token.token)
         .then(result => {
             dispatch({
                 type: "PSUCCESS_RECORD_UPDATE_ITEM",

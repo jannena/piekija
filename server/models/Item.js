@@ -20,6 +20,10 @@ const itemSchema = new mongoose.Schema({
         ref: "Location",
         required: true
     },
+    shelfLocation: {
+        type: "String",
+        required: true
+    },
     loantype: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Loantype",
@@ -38,7 +42,7 @@ const itemSchema = new mongoose.Schema({
     stateDueDate: {
         type: Date
     },
-    stateTimesRenewed : {
+    stateTimesRenewed: {
         type: Number
     },
     loanHistory: Array,
