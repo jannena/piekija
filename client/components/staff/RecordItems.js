@@ -46,9 +46,9 @@ const RecordItems = ({ items, locations, loantypes, addItem, removeItem, updateI
             <Text id={`${data.id}-barcode`} value={data.barcode} name="barcode" title={__("Barcode")} description={__("staff-item-barcode-info")} />
             <FormSelect id={`${data.id}-loantype`} selected={data.loantype ? data.loantype.id : ""} title={__("Loantype")} name="loantype" options={loantypes.map(loantype => [loantype.name, loantype.id])} />
             <FormSelect id={`${data.id}-location`} selected={data.location ? data.location.id : ""} title={__("Location")} name="location" options={locations.map(location => [location.name, location.id])} />
-            <Input id={`${data.id}-shelfLocation`} value={data.shelfLocation} name="shelfLocation" title={__("Shelf location")} description={__("shelf-location-help")} />
+            <Input id={`${data.id}-shelfLocation`} value={data.shelfLocation} name="shelfLocation" title={__("Shelf location")} description={__("staff-item-shelf-location-info")} />
             {/* <Input id={`${data.id}-state`} value={data.state} name="state" title={__("State")} /> */}
-            <FormSelect name="state" selected={data.state} title={__("State")} options={itemStateOptions} />
+            <FormSelect name="state" selected={data.state} title={__("State")} options={itemStateOptions} description={__("staff-item-state-info")} />
             <Input id={`${data.id}-note`} value={data.note} name="note" title={__("Note")} />
             <Grid>
                 <DoNotSendButton onClick={handleRemoveItem(data.id)} title={__("delete-button")} />

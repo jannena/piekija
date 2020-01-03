@@ -219,10 +219,11 @@ export default (slog, def) => {
         "Welcome": "Tervetuloa",
         "Records": "Tietueet",
         "Locations": "Sijainnit",
-        "Loantypes": "Lainausasetus",
+        "Loantypes": "Lainausmallit",
         "Users": "Käyttäjät",
         "Circulation": "Lainaa ja palauta",
         "Notes": "Etusivu-uutiset",
+        "Statistics": "Tilastot",
         "Create empty record from template": "Luo tyhjä tietue mallista",
         "Add record by scanning EAN code": "Lisää tietue skannaamalla EAN-koodi",
         "ISBN or EAN": "ISBN tai EAN",
@@ -239,10 +240,11 @@ export default (slog, def) => {
         "Item barcode": "Aineiston viivakoodi",
         "Title": "Otsikko",
         "Location": "Sijainti",
-        "Loantype": "Lainausasetus",
+        "Loantype": "Lainausmalli",
         "State": "Tila",
         "Show record": "Näytä tietue",
         "Loan item to": "Lainaa käyttäjälle",
+        "circulation-for": "käyttäjälle",
 
         // Loan.js
         "Renew times left": "Uusimiskertoja jäljellä",
@@ -258,7 +260,12 @@ export default (slog, def) => {
 
         // RecordItems.js
         "staff-item-barcode-info": "Yksilöllinen koodi jokaiselle aineistolle",
+        "staff-item-shelf-location-info": "Sijainti hyllyssä, esim. luokitus ja tekijän nimi (84.2 TUD)",
+        "staff-item-state-info": "Älä muuta, jos tila on 'Lainattu'",
         "Create new item": "Luo uusi aineisto",
+        "Last loaned": "Viimeksi lainattu",
+        "Shelf location": "Hyllysijainti",
+        "Note": "Muistiinpano",
 
         // StaffEditRecord.js
         "Save to database": "Tallenna tietokantaan",
@@ -270,6 +277,8 @@ export default (slog, def) => {
         "simple-editor-tab": "Yksinkertainen muokkain",
         "remove-tab": "Poista",
         "MARC-tab": "MARC",
+        "Back to staff screen": "Palaa henkilökuntanäyttöön",
+        "Preview as normal user": "Tarkastele asiakkaana",
 
         // StaffUser.js
         "Create new user": "Lisää uusi käyttäjä",
@@ -283,15 +292,31 @@ export default (slog, def) => {
         "Create new location": "Lisää uusi sijainti",
         "Location name": "Sijainnin nimi",
         "location-name-info": "Näkyy kaikille käyttäjille",
+        "Loan times": "Lainauskerrat",
 
         // StaffLoantypes.js
-        "Create new loantype": "Lisää uusi lainausasetus",
+        "Create new loantype": "Lisää uusi lainausmalli",
         "canBePlacedAHold": "Voi varata",
         "canBeLoaned": "Voi lainata",
         "renewTimes": "Uusimiskertojen määrä",
         "loanTime": "Laina-aika",
-        "canBeLoaned-info": "Jos tässä on rasti, tätä nimikettä ei voi lainata.",
+        "canBeLoaned-info": "Jos tässä ei ole rastia, tätä nimikettä ei voi lainata.",
         "renewTimes-info": "Kuinka monta kertaa nimike voidaan uusia. Ei voi uusia, jos arvo on 0.",
-        "loanTime-info": "Kuinka monta päivää laina-aika on"
+        "loanTime-info": "Kuinka monta päivää laina-aika on",
+
+        // Statistics.js
+        "Date since item has not been loaned": "Päivämäärä, jonka jälkeen nimikettä ei ole lainattu.",
+        "Not loaned since": "Nimikkeet, joita ei ole lainattu pitkään aikaan",
+        "Total loans": "Kaikki lainaukset",
+        "Download CSV": "Lataa CSV-taulukko",
+        "How many things in total": "Yleiset tilastot",
+        "more-statistics-info": "Lisää tilastoja on sijaintivälilehdellä ja jokaisen tietueen nimekkeissä.",
+        "Date": "Päivämäärä",
+        "Get": "Hae",
+        "items": "nimekettä",
+
+        // ShowMore.js
+        "Show more": "Näytä lisää",
+        "Hide": "Piilota"
     }[slog] || def || slog;
 };

@@ -134,7 +134,7 @@ const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
                             <tbody>
                                 {record.result.items.map((item, i) =>
                                     <tr key={i}>
-                                        <td>{item.location.name}</td>
+                                        <td>{item.location.name} ({item.shelfLocation})</td>
                                         <td style={{ backgroundColor: colorByState(item.state || "loaned"), lineHeight: "30px", textAlign: "center" }}>{__(item.state)}</td>
                                     </tr>
                                 )}
@@ -142,7 +142,6 @@ const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
                         </table>
                     </Tab>
                     <Tab>
-                        {/* TODO: Maybe search engine for MARC21 fields? */}
                         <MARC21Screen parsedMARC={record.record} />
                     </Tab>
                     <Tab>

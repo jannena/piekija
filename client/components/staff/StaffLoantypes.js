@@ -31,7 +31,7 @@ const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes, removeLoantyp
             <Checkbox id={`${data.id}-cbph`} checked={data.canBePlacedAHold} type="checkbox" name="canBePlacedAHold" title={__("canBePlacedAHold")} />
             <Checkbox id={`${data.id}-cabl`} checked={data.canBeLoaned} type="checkbox" name="canBeLoaned" title={__("canBeLoaned")} description={__("canBeLoaned-info")} />
             <Input id={`${data.id}-rent`} value={data.renewTimes} type="number" name="renewTimes" title={__("renewTimes")} description={__("renewTimes-info")} />
-            <Input id={`${data.id}-loat`} value={data.loanTime} type="number" name="loanTime" title={__("loanTime")} description={__("loanTime.info")} />
+            <Input id={`${data.id}-loat`} value={data.loanTime} type="number" name="loanTime" title={__("loanTime")} description={__("loanTime-info")} />
             <Grid>
                 <DoNotSendButton title={__("remove-button")} onClick={handleRemoveLoantype(data.id)} />
                 <Button title={__("create-button")} />

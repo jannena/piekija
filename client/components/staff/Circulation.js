@@ -44,7 +44,7 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
                 <div>{__("Title")}: {item.record && item.record.title}</div>
                 <div>{__("Location")}: {item.location && item.location.name}</div>
                 <div>{__("Loantype")}: {item.loantype && item.loantype.name}</div>
-                <div>{__("State")}: <strong>{item.state}</strong> {item.state === "loaned" && `for ${item.statePersonInCharge && item.statePersonInCharge.name}`}</div>
+                <div>{__("State")}: <strong>{item.state}</strong> {item.state === "loaned" && `${__("circulation-for")} ${item.statePersonInCharge && item.statePersonInCharge.name}`}</div>
                 {item.note && <div>{__("Note")}: <strong>{item.note}</strong></div>}
                 {item.state === "loaned" && <button onClick={returnItem}>{__("Return")}</button>}
                 <button onClick={() => history.push(`/staff/record/${item.record.id}`)}>{__("Show record")}</button>

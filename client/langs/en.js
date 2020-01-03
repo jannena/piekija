@@ -223,6 +223,7 @@ export default (slog, def) => {
         "Users": "",
         "Circulation": "",
         "Notes": "",
+        "Statistics": "",
         "Create empty record from template": "",
         "Add record by scanning EAN code": "",
         "ISBN or EAN": "",
@@ -243,6 +244,7 @@ export default (slog, def) => {
         "State": "",
         "Show record": "",
         "Loan item to": "",
+        "circulation-for": "for",
 
         // Loan.js
         "Renew times left": "",
@@ -258,7 +260,12 @@ export default (slog, def) => {
 
         // RecordItems.js
         "staff-item-barcode-info": "Unique code for every item",
+        "staff-item-shelf-location-info": "Location in shelf, e.g. classification and author name (84.2 TUD)",
+        "staff-item-state-info": "Do not change if state is 'Loaned'.",
         "Create new item": "",
+        "Last loaned": "",
+        "Shelf location": "",
+        "Note": "",
 
         // StaffEditRecord.js
         "Save to database": "",
@@ -268,8 +275,10 @@ export default (slog, def) => {
         "items-tab": "Items",
         "preview-tab": "Preview",
         "simple-editor-tab": "Simple editor",
-        "remove-tab": "",
-        "MARC-tab": "",
+        "remove-tab": "Remove",
+        "MARC-tab": "MARC",
+        "Back to staff screen": "",
+        "Preview as normal user": "",
 
         // StaffUser.js
         "Create new user": "",
@@ -283,6 +292,7 @@ export default (slog, def) => {
         "Create new location": "",
         "Location name": "",
         "location-name-info": "Visible for all users",
+        "Loan times": "",
 
         // StaffLoantypes.js
         "Create new loantype": "",
@@ -290,8 +300,23 @@ export default (slog, def) => {
         "canBeLoaned": "Can be loaned",
         "renewTimes": "Renew Times",
         "loanTime": "Loan time",
-        "canBeLoaned-info": "If true, users cannot loan this item.",
+        "canBeLoaned-info": "If false, users cannot loan this item.",
         "renewTimes-info": "How many times item can be renewed. Cannot be renewed if 0.",
-        "loanTime-info": "How many days the loan time is"
+        "loanTime-info": "How many days the loan time is",
+
+        // Statistics.js
+        "Date since item has not been loaned": "",
+        "Not loaned since": "",
+        "Total loans": "",
+        "Download CSV": "",
+        "How many things in total": "",
+        "more-statistics-info": "More statistics can be received in each location an item record.",
+        "Date": "",
+        "Get": "",
+        "items": "",
+
+        // ShowMore.js
+        "Show more": "",
+        "Hide": ""
     }[slog] || def || slog;
 };

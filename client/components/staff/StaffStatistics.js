@@ -57,22 +57,22 @@ const StaffStatistics = ({ getLocations, locations, getNotLoanedSince, getTotalL
     };
 
     return <>
-        <p>More statistics can be received in each location an item record.</p>
+        <p>{__("more-statistics-info")}</p>
         <Expandable title={__("How many things in total")}>
-            <button onClick={handleGetTotal}>Get</button>
+            <button onClick={handleGetTotal}>{__("Get")}</button>
             {statistics && statistics.total && <>
-                <div>Items: {statistics.total.items}</div>
-                <div>Records: {statistics.total.records}</div>
-                <div>Users: {statistics.total.users}</div>
+                <div>{__("Items")}: {statistics.total.items}</div>
+                <div>{__("Records")}: {statistics.total.records}</div>
+                <div>{__("Users")}: {statistics.total.users}</div>
             </>}
         </Expandable>
         <Expandable title={__("Total loans")}>
-            <button onClick={handleGetToalLoans}>Get</button>
+            <button onClick={handleGetToalLoans}>{__("Get")}</button>
             {statistics && statistics.totalLoans && <>
                 <a href={`data:text/plain;charset=utf-8,${encodeURIComponent(
                     "Total loans\n" +
                     statistics.totalLoans.map(i => i.join(";")).join("\n")
-                )}`} download="piekija.totalloans.csv">Download CSV</a>
+                )}`} download="piekija.totalloans.csv">{__("Download CSV")}</a>
             </>}
         </Expandable>
 
@@ -80,12 +80,12 @@ const StaffStatistics = ({ getLocations, locations, getNotLoanedSince, getTotalL
             <Form onSubmit={handleGetNotLoanedSince}>
                 <FormSelect options={locations.map(l => [l.name, l.id]) || []} name="location" id="location" title={__("Location")} />
                 <Input type="date" name="date" id="date" title={__("Date")} description={__("Date since item has not been loaned")} />
-                <Button title={__("Get loans")} />
+                <Button title={__("Get")} />
             </Form>
             {loading.state === 4 && <Loader />}
             {loading.state === 6 && <p>{__("Error")}: {loading.error}</p>}
             {loading.state === 5 && statistics.notLoanedSince && <>
-                <p>Found {statistics.notLoanedSince && statistics.notLoanedSince.items && statistics.notLoanedSince.items.length} items</p>
+                <p>{__("Found")} {statistics.notLoanedSince && statistics.notLoanedSince.items && statistics.notLoanedSince.items.length} {__("items")}</p>
                 {/* <PDFDownloadLink
                     fileName="piekija.notloanedsince.pdf"
                     document={<PDFDocument items={statistics.notLoanedSince.items} />}

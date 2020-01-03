@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import __ from "../../langs";
 
-const ShowMore = ({ data, show, noDiv, buttonContainer }) => {
+const ShowMore = ({ data, show, noDiv, buttonContainer, __ }) => {
     const [showAll, setShowAll] = useState(false);
 
     const showDefault = data.slice(0, show);
@@ -14,7 +16,7 @@ const ShowMore = ({ data, show, noDiv, buttonContainer }) => {
         width: "100%"
     };
 
-    const button = <button style={buttonStyle} onClick={() => setShowAll(!showAll)}>{showAll ? <>&uarr; Hide</> : <>&darr; Show more</>}</button>;
+    const button = <button style={buttonStyle} onClick={() => setShowAll(!showAll)}>{showAll ? <>&uarr; {__("Hide")}</> : <>&darr; {__("Show more")}</>}</button>;
 
     if (noDiv) return <>
         {showDefault}
@@ -31,4 +33,8 @@ const ShowMore = ({ data, show, noDiv, buttonContainer }) => {
     </div>);
 };
 
-export default ShowMore;
+export default connect(
+    state => ({
+        __: __(state)
+    })
+)(ShowMore);
