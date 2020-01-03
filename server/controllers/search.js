@@ -40,7 +40,10 @@ const search = async (req, res, next, simple) => {
         console.log("ready query", readyQuery);
         const found = await Record.countDocuments(readyQuery).then(number => number);
 
-        if (!found) res.status(404).end();
+        if (!found) {
+            const secondTime = process.hrtime(firstTime);
+            res.json({ result: [], found: 0, time: (secondTime[0] * 1e9 + secondTime[1]) * 1e-6, filters: null });
+        }
         else {
             const result = Object.keys(readyQuery).length != 0 && found <= PERFORMANCE_LIMIT && simple === true && sort === "relevance"
                 // Relevance search

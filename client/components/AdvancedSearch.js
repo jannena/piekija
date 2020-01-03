@@ -84,7 +84,7 @@ const AdvancedSearchGroup = ({ query, setQuery, removeGroup, __ }) => {
         updatedQuery[1].push(toBeAdded);
         setQuery(updatedQuery);
     };
-    const addNewField = () => addToThisLevel(["record", "", "is"]);
+    const addNewField = () => addToThisLevel(["spelling", "", "is"]);
     const addNewGroup = () => addToThisLevel(["AND", []]);
 
     // console.log(setQuery.toString());

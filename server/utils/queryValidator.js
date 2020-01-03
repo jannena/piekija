@@ -21,7 +21,7 @@ const validateAdvancedQuery = ([operator, value, type]) => {
     if (Array.isArray(value)) validatedQuery[newOperator] = value.map(query => validateAdvancedQuery(query));
     else {
         if (!type) throw new Error(`Operator ${operator} needs a type.`);
-        else if (operator === "spelling") validatedQuery = validateSimpleQuery(value, false);
+        else if (operator === "spelling") validatedQuery = !!value ? validateSimpleQuery(value, false) : {};
         else switch (type) {
             case "not":
                 validatedQuery[newOperator] = { $ne: value };
