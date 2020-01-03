@@ -45,7 +45,7 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
                 <div>{__("Location")}: {item.location && item.location.name}</div>
                 <div>{__("Loantype")}: {item.loantype && item.loantype.name}</div>
                 <div>{__("State")}: <strong>{item.state}</strong> {item.state === "loaned" && `for ${item.statePersonInCharge && item.statePersonInCharge.name}`}</div>
-                {/* TODO: If loaned, show return button */}
+                {item.note && <div>{__("Note")}: <strong>{item.note}</strong></div>}
                 {item.state === "loaned" && <button onClick={returnItem}>{__("Return")}</button>}
                 <button onClick={() => history.push(`/staff/record/${item.record.id}`)}>{__("Show record")}</button>
             </div>}
@@ -55,9 +55,9 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
 
         {(user && item) && <>
             <div>
-                {/* TODO: If user has not already loaned this item */}
+                {/* If user has not already loaned this item */}
                 {item.state !== "loaned" && <button onClick={loanItem}>{__("Loan item to")} {user.name}</button>}
-                {/* TODO: If user has already loaned this item */}
+                {/* If user has already loaned this item */}
                 {user.loans.some(l => l._id === item.id) && <button>{__("renew-button")}</button>}
             </div>
         </>}
