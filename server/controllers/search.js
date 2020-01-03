@@ -2,7 +2,7 @@ const searchRouter = require("express").Router();
 const Record = require("../models/Record");
 const { PERFORMANCE_LIMIT } = require("../utils/config");
 
-const { validateAdvancedQuery, validateSimpleQuery } = require("../utils/queryValidator");
+const { validateAdvancedQuery, validateSimpleQuery, queryContainsOps } = require("../utils/queryValidator");
 
 // TODO: pagination
 
@@ -45,7 +45,7 @@ const search = async (req, res, next, simple) => {
             res.json({ result: [], found: 0, time: (secondTime[0] * 1e9 + secondTime[1]) * 1e-6, filters: null });
         }
         else {
-            const result = Object.keys(readyQuery).length != 0 && found <= PERFORMANCE_LIMIT && simple === true && sort === "relevance"
+            const result = Object.keys(readyQuery).length !== 0 && !queryContainsOps(query) && found <= PERFORMANCE_LIMIT && simple === true && sort === "relevance"
                 // Relevance search
                 // TODO: Add pagination
                 // TODO: previewText

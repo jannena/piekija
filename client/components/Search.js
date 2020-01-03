@@ -35,7 +35,7 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
     return (
         <div>
             {result.result.length === 0
-                ? `${__("No results")} ${__("in-before-milliseconds")} ${result.time && ` ${result.time} ${__("in-milliseconds")}`}`
+                ? `${__("No results")} ${__("in-before-milliseconds")} ${result.time && ` ${(result.time || NaN).toFixed(0)} ${__("in-milliseconds")}`}`
                 : <>
                     <p>{__("Found")} {result.found} {__("records-in")} {__("in-before-milliseconds")} {(result.time || NaN).toFixed(0)} {__("in-milliseconds")}</p>
                     <div>
