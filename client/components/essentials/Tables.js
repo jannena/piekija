@@ -25,7 +25,7 @@ export const TableRow = ({ children, widths, data, color, form }) => {
             {/* <div style={{ backgroundColor: color }}><button onClick={() => setIsOpen(!isOpen)}>Open</button></div> */}
 
         </div>
-        <div style={{ width: "100%", border: "1px solid black", padding: 20, marginBottom: 10, display: isOpen ? "block" : "none" }}>{form(data)}</div>
+        <div style={{ boxShadow: isOpen ? "black 0px 0px 50px" : "none", width: "100%", border: "1px solid black", padding: 20, marginBottom: 10, display: isOpen ? "block" : "none" }}>{form(data)}</div>
     </ div>
 };
 
