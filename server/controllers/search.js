@@ -42,11 +42,11 @@ const search = async (req, res, next, simple) => {
 
         if (!found) res.status(404).end();
         else {
-            const result = found <= PERFORMANCE_LIMIT && simple === true && sort === "relevance"
+            const result = Object.keys(readyQuery).length != 0 && found <= PERFORMANCE_LIMIT && simple === true && sort === "relevance"
                 // Relevance search
                 // TODO: Add pagination
                 // TODO: previewText
-                ? void (allwords = query.split(" ")) || await Record.aggregate([
+                ? void (allwords = query.split(" ").map(w => w.toLowerCase())) || await Record.aggregate([
                     { $match: { $or: [{ "spelling1": { "$in": allwords } }, { "spelling2": { "$in": allwords } }] } },
                     { $unwind: "$spelling1" },
                     // { $unwind: "$spelling2" },
