@@ -15,8 +15,8 @@ const RecordPreview = ({ children, record, __ }) => {
     const previewStyle = {
         minHeight: 150,
         display: "flex",
-        border: "1px solid black",
-        margin: 10
+        // border: "1px solid black",
+        marginBottom: 10
     };
     const titleStyle = {
         fontSize: "1.4em"
@@ -38,7 +38,7 @@ const RecordPreview = ({ children, record, __ }) => {
     };
     return (
         <div style={previewStyle}>
-            <div style={record.image ? imageStyleWithoutBorder : imageStyle}>{record.image && <img src={record.image} style={{ width: 130 }} />}</div>
+            <div style={record.image ? imageStyleWithoutBorder : imageStyle}>{record.image && <img src={record.image} style={{ width: "100%" }} />}</div>
             <div style={infoStyle}>
                 <div style={titleStyle}><strong><Link to={`/record/${record.id}`}>{record.title}</Link></strong></div>
                 <div>{__(record.contentType) || null}</div>

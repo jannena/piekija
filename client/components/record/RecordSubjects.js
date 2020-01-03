@@ -19,7 +19,7 @@ const ReocrdSubjects = ({ record, history, setQuery, __ }) => {
         </>);
     };
 
-    const parsedSubjects = MARC21.getFieldsAndSubfields(record.record, ["600", "650", "651", "653"], ["a", "v", "x", "y", "z", "t", "n", "r"])
+    const parsedSubjects = MARC21.getFieldsAndSubfields(record.record, ["600", "610", "611", "630", "647", "648", "650", "651", "653", "654", "655", "656", "657", "658", "662"], ["a", "v", "x", "y", "z", "t", "n", "r"])
 
     return (
         <>
