@@ -104,6 +104,7 @@ const addShelfToDb = async (name, publicity, authorId, sharedWith, records = [])
         sharedWith
     });
     try {
+        // TODO: Add to shared-withs' records too!!!
         const savedShelf = await newShelf.save();
         return savedShelf;
     }

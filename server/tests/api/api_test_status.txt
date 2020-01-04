@@ -1,6 +1,6 @@
 login       ready
-search      enough (not started)
-user        -           TODO: tfa
+search      -           not started, enough
+user        ready enough
 record      ready enough
 shelf       -           TODO: A few tests
 circulation -           TODO: due dates

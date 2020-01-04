@@ -1,6 +1,7 @@
 const userRouter = require("express").Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const Shelf = require("../models/Shelf");
 const otp = require("speakeasy");
 const QRCode = require("qrcode");
 
@@ -26,7 +27,7 @@ userRouter.get("/me", async (req, res, next) => {
 });
 
 
-// TODO: Add old password
+
 userRouter.put("/me", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
 
@@ -76,6 +77,7 @@ userRouter.put("/me", async (req, res, next) => {
 });
 
 
+// TODO: REMOVE
 userRouter.get("/", (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
     if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
@@ -96,12 +98,15 @@ userRouter.get("/:id", (req, res, next) => {
         .findById(id)
         .then(result => {
             if (!result) return res.status(404).end();
-            else res.json(result);
+            else {
+                const { tfa, ...sendable } = result.toJSON();
+                console.log("sendable", sendable);
+                res.json(sendable);
+            }
         })
         .catch(next);
 });
 
-// TODO: ?User search?
 
 userRouter.post("/", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
@@ -158,7 +163,10 @@ userRouter.put("/:id", async (req, res, next) => {
 
         User
             .findByIdAndUpdate(id, { $set: modifiedUser }, { new: true })
-            .then(result => void res.json(result.toJSON()))
+            .then(result => {
+                const { tfa, ...sendable } = result.toJSON();
+                res.json(sendable);
+            })
             .catch(next);
     }
     catch (err) {
@@ -166,11 +174,25 @@ userRouter.put("/:id", async (req, res, next) => {
     }
 });
 
-userRouter.delete("/:id", (req, res, next) => {
+userRouter.delete("/:id", async (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
     const id = req.params.id;
 
-    // TODO: Loans? Shelves?
+    try {
+        const user = await User.findById(id);
+        if (user.loans.length !== 0) return res.status(409).json({ error: "user have active loans" });
+
+        await Shelf.deleteMany({ author: id });
+
+        await user.remove();
+
+        res.status(204).end();
+    }
+    catch (err) {
+        next(err);
+    }
 
     User
         .findByIdAndRemove(id)

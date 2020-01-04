@@ -7,7 +7,9 @@ const expect = require("expect");
 
 const api = supertest(app);
 
-const { clearDatabase, addUserToDb, getTokenForUser, usersInDb } = require("./testutils");
+const { clearDatabase, addUserToDb, getTokenForUser, usersInDb, addShelfToDb, shelvesInDb, addRecordToDb, addItemToDb, addLoantypeToDb, addLocationToDb, loanItemTo } = require("./testutils");
+
+// TODO: Tests for /api/user/search
 
 describe("when there is users in database (user tests)", () => {
     let staffToken = "";
@@ -25,14 +27,14 @@ describe("when there is users in database (user tests)", () => {
 
     describe("and when staff user is logged in", () => {
         test("other users can be received", async () => {
-            const res = await api
-                .get("/api/user")
-                .set({ Authorization: staffToken })
-                .expect(200)
-                .expect("Content-type", /application\/json/);
+            // const res = await api
+            //     .get("/api/user")
+            //     .set({ Authorization: staffToken })
+            //     .expect(200)
+            //     .expect("Content-type", /application\/json/);
 
-            expect(res.body.length).toBe(usersAtStart);
-            expect(res.body[0].id).toBeDefined();
+            // expect(res.body.length).toBe(usersAtStart);
+            // expect(res.body[0].id).toBeDefined();
 
             const res2 = await api
                 .get(`/api/user/${userId}`)
@@ -40,6 +42,7 @@ describe("when there is users in database (user tests)", () => {
                 .expect(200)
                 .expect("Content-type", /application\/json/);
 
+            console.log("Mikä mättää?", res2.body);
             expect(res2.body.id).toBeDefined();
             expect(res2.body._id).not.toBeDefined();
             expect(res2.body.__v).not.toBeDefined();
@@ -49,7 +52,9 @@ describe("when there is users in database (user tests)", () => {
             expect(res2.body.barcode).toBeDefined();
             expect(res2.body.loans).toBeDefined();
             expect(res2.body.name).toBeDefined();
-            expect(res2.body.shelves).toBeDefined(); // TODO: ?
+            expect(res2.body.shelves).toBeDefined();
+            expect(res2.body.tfa).not.toBeDefined();
+            expect(res2.body.TFACode).not.toBeDefined();
         });
 
         test("me can be received", async () => {
@@ -157,16 +162,36 @@ describe("when there is users in database (user tests)", () => {
             expect(res.body.loans).toEqual([]);
             expect(res.body.name).toBe("uusi");
             expect(res.body.shelves).toEqual([]);
+            expect(res.body.tfa).not.toBeDefined();
+            expect(res.body.TFACode).not.toBeDefined();
         });
 
-        test("user can be removed", async () => {
+        test("user can be removed if they have not loaned anything and shelves of this user will be removed too", async () => {
+            await addShelfToDb("Hylly", false, userId, []);
+            expect(await shelvesInDb()).toBe(1);
+
             await api
                 .delete(`/api/user/${userId}`)
                 .set({ Authorization: staffToken })
                 .expect(204);
 
+            expect(await shelvesInDb()).toBe(0);
             expect(await usersInDb()).toBe(usersAtStart - 1);
-        }); // TODO: ?Removes also ratings, loans and shelves?
+        });
+
+        test("user cannot be removed if they have loaned something", async () => {
+            await addShelfToDb("Hylly", false, userId, []);
+            const item = await addItemToDb(await addRecordToDb(), await addLocationToDb(), (await addLoantypeToDb(true, true, 10, 10))._id);
+            await loanItemTo(userId, item._id);
+
+            await api
+                .delete(`/api/user/${userId}`)
+                .set({ Authorization: staffToken })
+                .expect(409);
+
+            expect(await shelvesInDb()).toBe(1);
+            expect(await usersInDb()).toBe(usersAtStart);
+        });
     });
 
 
