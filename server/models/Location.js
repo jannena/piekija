@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 const locationSchema = new mongoose.Schema({
     name: {
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
     totalLoanCount: {
         type: Number,
-        require: true
+        required: true
     }
 });
 
