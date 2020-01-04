@@ -1,12 +1,12 @@
 login       ready
-search      -           not started, enough
+search      -               not started, enough
 user        ready enough
 record      ready enough
-shelf       -           TODO: A few tests
-circulation -           TODO: due dates
+shelf       -               TODO: A few tests
+circulation ready enough
 statistics  ready
 
-item        ready
+item        ready           TODO: Will be added and removed from record?
 location    ready
-loantype    -           TODO: used loantype can currently be removed
+loantype    -               TODO: used loantype can currently be removed
 notes       ready

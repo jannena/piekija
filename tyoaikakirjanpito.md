@@ -61,4 +61,5 @@
 | 31.12. | 1,5 | sekalaista korjailua |
 |  !! | 2020 | !! |
 | 3.1. | 2,5 | ulkosasun viimeistely, kääntämistä |
-| yht. | 124,5 | |
+| 4.1. | 4 | backendin testejä |
+| yht. | 128,5 | |
