@@ -6,7 +6,9 @@ const User = require("../models/User");
 const Location = require("../models/Location");
 
 statisticsRouter.post("/total", async (req, res, next) => {
-    // TODO: Auth
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     try {
         const stats = {
             items: await Item.countDocuments({}).then(n => n),
@@ -22,7 +24,9 @@ statisticsRouter.post("/total", async (req, res, next) => {
 });
 
 statisticsRouter.post("/totalLoans", async (req, res, next) => {
-    // TODO: Auth
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     try {
         const locations = await Location.find({});
         res.json(locations.map(loc => [loc.name, loc.totalLoanCount || 0]));
@@ -33,8 +37,12 @@ statisticsRouter.post("/totalLoans", async (req, res, next) => {
 });
 
 statisticsRouter.post("/notLoanedSince", async (req, res, next) => {
-    // TODO: Auth
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const { location, shelfLocation, date, language } = req.body;
+
+    if (!location || !date) return res.status(400).json({ error: "location or date is missing" });
 
     try {
         const items = await Item

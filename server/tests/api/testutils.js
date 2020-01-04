@@ -43,6 +43,7 @@ const addRecordToDb = async () => {
         timeAdded: new Date(),
         timeModified: new Date(),
         title: "A New Book",
+        alphabetizableTitle: "new book",
         description: "",
         image: "",
         contentType: "a",
@@ -51,10 +52,6 @@ const addRecordToDb = async () => {
         authors: [
             "Virtanen, Juhani,",
             "Virtanen, Maria,"
-        ],
-        genres: [
-            "fantasiakirjallisuus",
-            "tietieskirjallisuus"
         ],
         subjects: [
             "maailma",
@@ -130,11 +127,16 @@ const addLoantypeToDb = async (canBeLoaned, canBePlacedAHold, renewTimes, loanTi
 
 const addItemToDb = async (record, location, loantype) => {
     const newItem = new Item({
+        created: new Date(),
         record,
         location,
         loantype,
         barcode: "moikkuli-" + Math.random(),
-        state: "not loaned"
+        state: "not loaned",
+        shelfLocation: "84.2 TUD",
+
+        lastLoaned: new Date(0),
+        loanTimes: 0
     });
     try {
         return await newItem.save();
@@ -177,16 +179,22 @@ const loanItemTo = async (userId, itemId) => {
     try {
         const user = await User.findById(userId);
         const item = await Item.findById(itemId).populate("loantype");
+        const location = await Location.findById(item.location);
 
         user.loans.push(item._id);
         item.statePersonInCharge = user._id;
         item.stateTimesRenewed = 0;
         item.state = "loaned";
+        item.lastLoaned = new Date();
+        item.loanTimes += 1;
+
+        location.loanTimes = location.loantimes + 1 || 1;
 
         const dueDate = new Date();
         dueDate.setUTCDate(dueDate.getUTCDate() + (item.loantype.loanTime || 1));
         item.stateDueDate = dueDate;
 
+        await location.save();
         await user.save();
         await item.save();
 
