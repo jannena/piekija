@@ -16,7 +16,9 @@ itemRouter.get("/", (req, res, next) => {
 });
 
 itemRouter.post("/", async (req, res, next) => {
-    // TODO: authorization
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const { barcode, record, location, loantype, state, note, shelfLocation } = req.body;
     if (!barcode || !record || !location || !loantype || !state || !shelfLocation)
         return res.status(400).json({ error: "barcode or record or location or loantype or state or shelfLocation is missing" });
@@ -62,7 +64,9 @@ itemRouter.post("/", async (req, res, next) => {
 });
 
 itemRouter.put("/:id", (req, res, next) => {
-    // TODO: authorization
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const { id } = req.params;
     const { location, loantype, state, note, shelfLocation } = req.body;
     console.log(location, loantype, state, note, shelfLocation);
@@ -88,11 +92,16 @@ itemRouter.put("/:id", (req, res, next) => {
 });
 
 itemRouter.delete("/:id", async (req, res, next) => {
-    // TODO: authorization
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const { id } = req.params;
 
     try {
-        const item = await Item.findByIdAndRemove(id);
+        const item = await Item.findById(id);
+        if (item.state === "loaned") return res.status(400).json({ error: "item is loaned to a user" });
+
+        await item.remove();
         await Record.findByIdAndUpdate(item.record, { $pull: { items: id } });
         res.status(204).end();
     }
@@ -103,7 +112,9 @@ itemRouter.delete("/:id", async (req, res, next) => {
 
 
 itemRouter.post("/search", (req, res, next) => {
-    // TODO: authorization
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const { barcode } = req.body;
 
     if (!barcode) return res.status(400).json({ error: "barcode is missing" });

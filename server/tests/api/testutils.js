@@ -276,6 +276,7 @@ const recordsInDb = async () => (await Record.find({})).length;
 const locationsInDb = async () => (await Location.find({})).length;
 const shelvesInDb = async () => (await Shelf.find({})).length;
 const loantypesInDb = async () => (await Loantype.find({})).length;
+const itemsInDb = async () => (await Item.find({})).length;
 const notesInDb = async () => (await Note.find({})).length;
 
 const generateCode = secret => {
@@ -315,6 +316,7 @@ module.exports = {
     locationsInDb,
     shelvesInDb,
     loantypesInDb,
+    itemsInDb,
     notesInDb,
 
     generateCode

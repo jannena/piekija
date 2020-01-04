@@ -6,7 +6,7 @@ shelf       -           TODO: A few tests
 circulation -           TODO: due dates
 statistics  ready
 
-item        -           Not started
+item        ready
 location    ready
 loantype    -           TODO: used loantype can currently be removed
-notes       -           Not started
+notes       ready
