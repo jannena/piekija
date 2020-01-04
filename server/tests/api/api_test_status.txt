@@ -1,7 +1,7 @@
 login       ready
-search                  Not started
+search      enough (not started)
 user        -           TODO: tfa
-record      -           TODO: removeLastChars and changed 
+record      ready enough
 shelf       -           TODO: A few tests
 circulation -           TODO: due dates
 statistics  ready

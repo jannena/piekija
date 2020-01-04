@@ -372,7 +372,7 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     const nonFilingCharactersFromField = getFieldsAndSubfields(parsedMARC, ["245"], ["indicators"]);
     const nonFiling = (nonFilingCharactersFromField.length > 0 && Number(nonFilingCharactersFromField[0].indicators[1])) || 0;
     // Remove last non-letter characters
-    title = removeLastCharacters(getField(parsedMARC, "245", "a")) + " " + removeLastCharacters(getField(parsedMARC, "245", "n"));
+    title = removeLastCharacters(getField(parsedMARC, "245", "a") + " " + removeLastCharacters(getField(parsedMARC, "245", "n")));
     const alphabetizableTitle = title.substring(nonFiling).toLowerCase();
     console.log("non filing characters", nonFilingCharactersFromField, nonFiling);
 
