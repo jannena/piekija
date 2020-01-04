@@ -5,6 +5,7 @@ const Location = require("../../models/Location");
 const Shelf = require("../../models/Shelf");
 const Item = require("../../models/Item");
 const Loantype = require("../../models/Loantype");
+const Note = require("../../models/Note");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const otp = require("speakeasy");
@@ -146,6 +147,21 @@ const addItemToDb = async (record, location, loantype) => {
     }
 };
 
+const addNoteToDb = async () => {
+    try {
+        const note = new Note({
+            title: Math.random() + "hei",
+            content: Math.random() + "content",
+            created: new Date(),
+            modified: new Date()
+        });
+        return await note.save();
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
 const addRecordToShelf = async (shelf, record, note) => {
     return (await Shelf.findByIdAndUpdate(
         shelf,
@@ -252,6 +268,7 @@ const clearDatabase = async () => {
     await Loantype.deleteMany({});
     await Shelf.deleteMany({});
     await Item.deleteMany({});
+    await Note.deleteMany({});
 };
 
 const usersInDb = async () => (await User.find({})).length;
@@ -259,6 +276,7 @@ const recordsInDb = async () => (await Record.find({})).length;
 const locationsInDb = async () => (await Location.find({})).length;
 const shelvesInDb = async () => (await Shelf.find({})).length;
 const loantypesInDb = async () => (await Loantype.find({})).length;
+const notesInDb = async () => (await Note.find({})).length;
 
 const generateCode = secret => {
     return otp.totp({
@@ -274,6 +292,7 @@ module.exports = {
     addShelfToDb,
     addItemToDb,
     addLoantypeToDb,
+    addNoteToDb,
     clearDatabase,
 
     addRecordToShelf,
@@ -296,6 +315,7 @@ module.exports = {
     locationsInDb,
     shelvesInDb,
     loantypesInDb,
+    notesInDb,
 
     generateCode
 };

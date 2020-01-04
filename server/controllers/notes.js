@@ -13,6 +13,9 @@ noteRouter.get("/last", (req, res, next) => {
 });
 
 noteRouter.get("/", (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     Note
         .find({})
         .then(result => {
@@ -22,6 +25,9 @@ noteRouter.get("/", (req, res, next) => {
 });
 
 noteRouter.post("/", (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const { title, content } = req.body;
 
     if (!title || !content) return res.status(400).json({ error: "title or content missing" });
@@ -42,6 +48,9 @@ noteRouter.post("/", (req, res, next) => {
 });
 
 noteRouter.put("/:id", (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const { id } = req.params;
     const { title, content } = req.body;
 
@@ -56,6 +65,9 @@ noteRouter.put("/:id", (req, res, next) => {
 });
 
 noteRouter.delete("/:id", (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
     const { id } = req.params;
 
     Note
