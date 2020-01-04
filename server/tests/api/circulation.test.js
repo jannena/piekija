@@ -3,7 +3,7 @@ const supertest = require("supertest");
 const app = require("../../app");
 const Item = require("../../models/Item");
 
-const { getTokenForUser, clearDatabase, addItemToDb, addLoantypeToDb, addLocationToDb, addRecordToDb, addUserToDb, loanItemTo, itemIsLoanedBy, itemIsNotLoanedBy } = require("./testutils");
+const { getTokenForUser, clearDatabase, addItemToDb, addLoantypeToDb, addLocationToDb, addRecordToDb, addUserToDb, loanItemTo, itemIsLoanedBy, itemIsNotLoanedBy, getItem, getLocation } = require("./testutils");
 
 const [test, afterAll] = [it, after];
 const expect = require("expect");
@@ -13,6 +13,7 @@ const api = supertest(app);
 let users = [];
 let items = [];
 let tokens = [];
+let location = null;
 
 const RENEW_TIMES = 3;
 
@@ -30,7 +31,7 @@ describe("when there are users, records, items, locations and loantypes initiall
         const record = await addRecordToDb();
         const loanableLoantype = await addLoantypeToDb(true, true, RENEW_TIMES, 5);
         const notLoanableLoantype = await addLoantypeToDb(false, false, RENEW_TIMES, 5);
-        const location = await addLocationToDb("Location #1");
+        location = await addLocationToDb("Location #1");
         items = [
             await addItemToDb(record, location._id, loanableLoantype._id),
             await addItemToDb(record, location._id, loanableLoantype._id),
@@ -40,6 +41,9 @@ describe("when there are users, records, items, locations and loantypes initiall
 
     describe("and staff user is logged in", () => {
         test("not loaned and loanable item can be loaned and it will be added to user loans and user will be added to item", async () => {
+            const itemLoanTimesAtStart = (await getItem(items[0]._id)).loanTimes;
+            const locationLoanTimesAtStart = (await getLocation(location._id)).totalLoanCount;
+
             const res = await api
                 .post("/api/circulation/loan")
                 .set(tokens[0])
@@ -50,15 +54,10 @@ describe("when there are users, records, items, locations and loantypes initiall
             expect(res.body.item.stateDueDate).toBeDefined(); // TODO: Check if due date is correct
             expect(res.body.item.statePersonInCharge).toBe(users[1]._id.toString());
 
-            /* const user = await User.findById(users[1]._id);
-            const item = await Item.findById(items[0]._id);
-
-            expect(user.loans.length).toBe(1);
-            expect(user.loans[0]).toBe(items[0]._id);
-            expect(item.statePersonInCharge).toBe(users[1]._id);
-            expect(item.state).toBe("loaned");
-            expect(item.stateTimesRenewed).toBe(0); */
             expect(await itemIsLoanedBy(users[1]._id, items[0]._id)).toBe(true);
+
+            expect((await getItem(items[0]._id)).loanTimes).toBe(itemLoanTimesAtStart + 1);
+            expect((await getLocation(location._id)).totalLoanCount).toBe(locationLoanTimesAtStart + 1);
         });
 
         test("item cannot be loaned if it has not suitable loantype", async () => {
@@ -128,6 +127,9 @@ describe("when there are users, records, items, locations and loantypes initiall
         test(`item can be renewed ${RENEW_TIMES} times but no more`, async () => {
             await loanItemTo(users[1]._id, items[0]._id);
 
+            const itemLoanTimesAtStart = (await getItem(items[0]._id)).loanTimes;
+            const locationLoanTimesAtStart = (await getLocation(location._id)).totalLoanCount;
+
             for (let i = 1; i <= RENEW_TIMES; i++) {
                 const res = await api
                     .post("/api/circulation/renew")
@@ -136,9 +138,11 @@ describe("when there are users, records, items, locations and loantypes initiall
                     .expect(200)
                     .expect("Content-Type", /application\/json/);
 
-                // TODO: ?Check if new dueDate is calculated correctly?
+                // TODO: ?Check if new dueDate is calculated correctly? I trust them!
 
-                const item = await Item.findById(items[0]._id);
+                // TODO: location and item loan count must be reduced
+
+                const item = await getItem(items[0]._id);
                 expect(item.stateTimesRenewed).toBe(i);
             }
 
@@ -151,6 +155,9 @@ describe("when there are users, records, items, locations and loantypes initiall
 
             expect(res.body.error).toBe("renewTimes exeeded");
             // TODO: ??Check if anything changed??
+
+            expect((await getItem(items[0]._id)).loanTimes).toBe(itemLoanTimesAtStart + RENEW_TIMES);
+            expect((await getLocation(location._id)).totalLoanCount).toBe(locationLoanTimesAtStart + RENEW_TIMES);
         });
     });
 

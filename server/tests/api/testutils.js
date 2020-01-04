@@ -83,7 +83,8 @@ const addRecordToDb = async () => {
 
 const addLocationToDb = async name => {
     const newLocation = new Location({
-        name
+        name,
+        totalLoanCount: 0
     });
     try {
         const savedLocation = await newLocation.save();
@@ -268,6 +269,8 @@ const getTokenForUser = user => {
 
 const getUser = async id => (await User.findById(id)).toObject();
 const getShelf = async id => (await Shelf.findById(id)).toObject();
+const getItem = async id => (await Item.findById(id)).toObject();
+const getLocation = async id => (await Location.findById(id)).toObject();
 
 const clearDatabase = async () => {
     await Record.deleteMany({});
@@ -318,6 +321,8 @@ module.exports = {
 
     getUser,
     getShelf,
+    getItem,
+    getLocation,
 
     usersInDb,
     recordsInDb,
