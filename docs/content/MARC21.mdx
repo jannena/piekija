@@ -1,0 +1,37 @@
+# PieKiJa ja MARC21
+
+## PieKiJan tukemat MARC21-kentät
+| Kenttäkoodi | Osakenttäkoodit | Kuvaus |
+| :- | :- | :--- |
+| 020, 022, 024 | a | Standardikoodit |
+| 041 | abdfghjk | Kielet |
+| 044 | a | Maat |
+| 050, 080, 084 | 2a | Luokitus |
+| 100, 110, 700, 710 | ade | Tekijät |
+| 245 | abcn | Nimekkeet |
+| 246 | a | Muut nimekkeet |
+| 260, 264 | abcef | Kustantajat |
+| 490 | a | Sarja |
+| 600, 610, 611, 630, 647, 648, 650, 651, 653, 654, 655, 656, 657, 658, 662 | antrvxyz | Aiheet |
+
+
+## PieKiJan omat MARC21-kentät
+**Kenttään 990** voi lisätä tekstiä ja linkkejä, jotka näkyvät hakutulosten yhteydessä (Ks. kuva 1).
+
+![kuva 1](//localhost:3000/img/marc21-1.png)
+
+Jos kentässä on vain osakenttä a, kyseisen osakentän sisältö näkyy tekstinä. Jos näkyviin halutaan myös linkki, linkin osoite tallennetaan osakenttään u ja linki teksti osakenttään y.
+
+Siis kuvan 1 esittämän laisen tekstin saa käkyviin seuraavanlaisella koodilla.
+>```marc21
+990 |a Verkkoaineisto   |u https://www.osoite.fi   |y osoite.fi
+990 |a HUOM. Vanha painos
+```
+
+<br />
+
+**Kentän 991** osakenttään a voi tallentaa ensisijaisia hakusanoja. Hakusanat erotetaan välilyönneillä.
+
+**Kenttä 992** toimii samoin kuin kenttä 991, mutta kenttään 992 voi tallentaa toissijaisia hakusanoja.
+
+Kentät 991 ja 992 ovat toistettavia.

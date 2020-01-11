@@ -18,17 +18,20 @@ const Navigation = () => {
         <NavTitle title="Aloitus" address="" />
         <NavCategory title="Käyttäjälle">
             <NavTitle title="Hakuohjeet" address="search-help" />
-            <NavTitle title="Käyttäjätili" />
-            <NavTitle title="Hyllyt" />
+            <NavTitle title="Käyttäjätili ja hyllyt" address="user-account" />
         </NavCategory>
         <NavCategory title="Henkilökunnalle">
-            <NavTitle title="Tietueet" />
-            <NavTitle title="Sijainnit, lainaustyypit ja esineet" />
-            <NavTitle title="PieKiJan MARC21-erikoisuudet" />
+            <NavTitle title="Tietueet" address="records" />
+            <NavTitle title="Sijainnit, lainaustyypit ja nimikkeet" address="staff" />
+            <NavTitle title="Lainaaminen" address="circulation" />
+            <NavTitle title="Käyttäjien hallinta" address="users" />
+            <NavTitle title="Etusivu-uutiset" address="notes" />
+            <NavTitle title="Tilastot" address="statistics" />
+            <NavTitle title="PieKiJa ja MARC21" address="marc21" />
         </NavCategory>
         <NavCategory title="Kehittäjälle">
-            <NavTitle title="Asennus" />
-            <NavTitle title="REST API" />
+            <NavTitle title="Asennus" address="installation" />
+            <NavTitle title="REST API" address="rest" />
         </NavCategory>
     </div>;
 };
