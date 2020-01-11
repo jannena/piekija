@@ -210,7 +210,7 @@ export default (slog, def) => {
         "Publication": "Kustantaminen",
         "Distribution": "Jakelu",
         "Manufacture": "Valmistaminen",
-        "Copyright notice data": "Tekijänoikeusvuosi",
+        "Copyright notice date": "Tekijänoikeusvuosi",
         "Publisher": "Julkaisutiedot",
 
         // RecordStandardCodes.j
