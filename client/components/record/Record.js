@@ -69,7 +69,7 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, __ 
     const appearance = MARC21.getSubfields(record.record, "300", ["a", "b", "c", "e", "f", "g"]);
     const series = MARC21.getFieldsAndSubfields(record.record, ["490"], ["a"]).map(s => <div key={s.a}>{s.a}</div>);
 
-    const spelling = MARC21.getSpelling(record.record);
+    // const spelling = MARC21.getSpelling(record.record);
 
     const links = MARC21
         .getFieldsAndSubfields(record.record, ["856"], ["indicators", "y", "u", "z"])
@@ -150,8 +150,8 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, __ 
                         <MARC21Screen parsedMARC={record.record} />
                     </Tab>
                     <Tab>
-                        <div>Spelling1: {spelling.spelling1.join(", ")}</div>
-                        <div>Spelling2: {spelling.spelling2.join(", ")}</div>
+                        <div>Spelling1: {record.result.spelling1.join(", ")}</div>
+                        <div>Spelling2: {record.result.spelling2.join(", ")}</div>
                     </Tab>
                 </Tabs>
             }

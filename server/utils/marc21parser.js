@@ -110,7 +110,7 @@ const stringify = marc => {
 const MARCXMLToMARC = marcxml => {
     const parser = new DOMParser();
     const parsed = parser.parseFromString(marcxml, "application/xml");
-    console.log("parsed marcxml", parsed);
+    logger.log("parsed marcxml", parsed);
 
     const ready = {
         LEADER: "",
@@ -131,7 +131,7 @@ const MARCXMLToMARC = marcxml => {
             };
             // Go through subfields of the field
             Array.prototype.slice.call(el.children).forEach(subfield => {
-                console.log();
+                logger.log();
                 const code = subfield.getAttribute("code");
                 const content = subfield.textContent;
                 // If subfield with same code is not yet in this field, then ...
@@ -141,9 +141,9 @@ const MARCXMLToMARC = marcxml => {
             if (ready.FIELDS[el.getAttribute("tag")] === undefined) ready.FIELDS[el.getAttribute("tag")] = [data];
             else ready.FIELDS[el.getAttribute("tag")].push(data);
         }
-        // console.log(el, el.getAttribute("tag"), el.nodeName);
+        // logger.log(el, el.getAttribute("tag"), el.nodeName);
     });
-    console.log("parsed marc xml", ready);
+    logger.log("parsed marc xml", ready);
     return ready;
 };
 
@@ -243,18 +243,18 @@ const tryParse = marc => {
 
 const getFieldSpelling = (parsedMARC, fields, subfields) => {
     const marc = getFieldsAndSubfields(parsedMARC, fields, subfields);
-    // console.log("marc !!!", marc);
+    // logger.log("marc !!!", marc);
     const ret = [];
     marc.forEach(field => {
         subfields.forEach(subfield => {
-            // console.log(field, subfield);
-            // console.log(field[subfield].map(term => term.split(" ")));
-            // console.log("jyyyy", field[subfield]);
+            // logger.log(field, subfield);
+            // logger.log(field[subfield].map(term => term.split(" ")));
+            // logger.log("jyyyy", field[subfield]);
             try {
-                // console.log("field[subfield]", field[subfield]);
+                // logger.log("field[subfield]", field[subfield]);
                 /* const temp1 = field[subfield].map(term => term.split(" "));
                 const temp = flat(temp1);
-                console.log("temp !!!", temp, "temp1 !!!", temp1);
+                logger.log("temp !!!", temp, "temp1 !!!", temp1);
                 ret.push(temp
                     .map(removeLastCharacters)
                     .map(removeFirstCharacters)
@@ -266,11 +266,11 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
                     .map(s => s.toLowerCase()));
             }
             catch (err) {
-                // console.log("error while making spelling", err);
+                // logger.log("error while making spelling", err);
             }
         });
     });
-    // console.log("ret !!!", ret);
+    // logger.log("ret !!!", ret);
     return ret;
 };
 
@@ -280,7 +280,7 @@ const getFieldSpelling = (parsedMARC, fields, subfields) => {
  * Spelling 3: julkaisija, huomautukset, sarja
 */
 const getSpelling = parsedMARC => {
-    // console.log("parsedMARC !!!", parsedMARC);
+    // logger.log("parsedMARC !!!", parsedMARC);
     const spelling1 = [...new Set([].concat(
         // title
         getFieldSpelling(
@@ -317,7 +317,9 @@ const getSpelling = parsedMARC => {
             parsedMARC,
             ["050", "080", "082", "084"],
             ["a"]
-        )
+        ),
+        // additional 1 (field 991)
+        getFieldSpelling(parsedMARC, ["991"], ["a"])
     ))];
     const spelling2 = [...new Set([].concat(
         // publishersEtc
@@ -351,7 +353,9 @@ const getSpelling = parsedMARC => {
                 "585", "586", "588"
             ],
             ["a"]
-        )
+        ),
+        // additional 2 (field 992)
+        getFieldSpelling(parsedMARC, ["992"], ["a"])
     ))];
     return { spelling1, spelling2 };
 };
@@ -374,7 +378,7 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     // Remove last non-letter characters
     title = removeLastCharacters(getField(parsedMARC, "245", "a") + " " + removeLastCharacters(getField(parsedMARC, "245", "n")));
     const alphabetizableTitle = title.substring(nonFiling).toLowerCase();
-    console.log("non filing characters", nonFilingCharactersFromField, nonFiling);
+    logger.log("non filing characters", nonFilingCharactersFromField, nonFiling);
 
     const language = parsedMARC.FIELDS["008"][0].substring(35, 38);
     const languagesDuplicates = getSubfields(parsedMARC, "041", ["a", "b", "d", "e", "f", "g", "h", "j"]);  // MARC21.getFields(parsedMARC, ["041"], "j");
@@ -420,22 +424,22 @@ const parseMARCToDatabse = (parsedMARC, data) => {
 
     const previewTexts = getFieldsAndSubfields(parsedMARC, ["990"], ["a", "u", "y"]);
     let previewText = [];
-    console.log("----------Try to find previewText", previewTexts);
+    logger.log("----------Try to find previewText", previewTexts);
     previewTexts.forEach(pr => {
-        console.log("Tässä on preview", pr);
+        logger.log("Tässä on preview", pr);
         if (pr["a"] && pr["u"] && pr["y"]) return previewText.push([pr["a"][0], pr["u"][0], pr["y"][0]]);
         else if (pr["a"]) return previewText = [...previewText, ...pr["a"]];
     });
 
     const image = getFieldsAndSubfields(parsedMARC, ["856"], ["indicators", "y", "u", "z", "q"])
         .filter(link => link["q"].some(q => q.match(/image\//)))[0];
-    console.log("trying to get image", image);
+    logger.log("trying to get image", image);
     const imageAddress = (image && image["u"] && image["u"][0]) || "";
 
     // TODO: Add description
     /* const description = getFieldsAndSubfields(parsedMARC, ["856"], ["indicators", "y", "u", "z", "q"])
         .filter(link => link["q"].some(q => q.match(/image\//)))[0];
-    console.log("trying to get image", image);
+    logger.log("trying to get image", image);
     const descriptionText = (description && description["u"] && description["u"][0]) || ""; */
 
     // Remove marc fields 9xx and 8xx expect 856
@@ -447,7 +451,7 @@ const parseMARCToDatabse = (parsedMARC, data) => {
 
     const { spelling1, spelling2 } = getSpelling(parsedMARC);
 
-    // console.log(spelling1, spelling2);
+    // logger.log(spelling1, spelling2);
 
     return {
         timeAdded: new Date(),
@@ -498,4 +502,4 @@ module.exports = {
 };
 
 // const moikkeliskoo = parse("00197ccm a2200085La 4500008004100000100001600041245003600057700000800093700001000101860327s1985 fi a 000 0 fin d1 aJoku ihmeee aKissoja ja koiria :bkaikkialla aasd ayytyy");
-// console.log(moikkeliskoo);
+// logger.log(moikkeliskoo);
