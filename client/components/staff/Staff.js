@@ -71,10 +71,16 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history, __ }
                 <button>{__("Search external databases for this record")}</button>
             </form>
 
-            {searchResult.resultCount && searchResult.records.map(r => <div>{r.title} - {r.id}
-                <a href={`//finna.fi/Record/${r.id}`} target="_blank">{__("View in Finna")}</a>
-                <button onClick={handlePreview(r.fullRecord)}>{__("Preview")}</button>
-            </div>)}
+            <table>
+                <tbody>
+                    {searchResult.resultCount && searchResult.records.map(r => <tr><td>{r.title}</td><td>{r.id}</td>
+                        <td>
+                            <a href={`//finna.fi/Record/${r.id}`} target="_blank">{__("View in Finna")}</a>
+                            <button onClick={handlePreview(r.fullRecord)}>{__("Preview")}</button>
+                        </td>
+                    </tr>)}
+                </tbody>
+            </table>
         </Tab>
         <Tab>
             <StaffLocations />
