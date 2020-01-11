@@ -48,7 +48,7 @@ const StyledMainInfo = styled.div`
     }
 `;
 
-const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
+const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, __ }) => {
     console.log(id);
     console.log("record", record);
 
@@ -56,6 +56,11 @@ const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
         console.log(id);
         if (!isPreview) getRecord(id);
     }, [id]);
+
+    if (!record || !record.record || !record.record.LEADER || !record.record.FIELDS) return <div>
+        {__("Error")}: {__("record corrupted")}
+        {isAdmin && <div><a href="javascript:void(0)" onClick={() => history.push(`/staff/record/${id}`)}>Go to admin panel</a></div>}
+    </div>;
 
     if (state.state === 0) return null;
     if (state.state === 1) return <Loader />
@@ -155,6 +160,7 @@ const Record = ({ state, record, getRecord, id, history, isPreview, __ }) => {
 
 export default connect(
     state => ({
+        isAdmin: state.user && state.user.staff,
         record: state.record.record,
         state: state.loading.record,
         __: __(state)
