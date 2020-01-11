@@ -2,7 +2,8 @@ BEFORE 1.0
 
 - Translate error and success messages
 - Fix simple editor saving
-- Country and language codes lists
+- Add LEADER and 008 editors to MARC editor
+- Add date format
 
 - documentation
 - finish backend tests

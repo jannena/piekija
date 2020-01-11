@@ -62,4 +62,6 @@
 |  !! | 2020 | !! |
 | 3.1. | 2,5 | ulkosasun viimeistely, kääntämistä |
 | 4.1. | 4 | backendin testejä |
-| yht. | 128,5 | |
+| 11.1. | 2,5 | skriptejä, käännöksiä, korjailua |
+| | 2 | käyttöohjeiden kirjoittamista |
+| yht. | 133 | |
