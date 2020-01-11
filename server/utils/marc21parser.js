@@ -207,6 +207,22 @@ const getFieldsAndSubfields = (parsedMARC, fields, subfields) => {
 
 const contentTypes = ["a", "c", "d", "e", "f", "g", "i", "j", "k", "m", "o", "p", "r", "t"];
 
+const languages = [
+    "fin", "swe", "eng", "fre", "spa", "ita", "ger", "rus", "lat", "dan", "nor", "est",
+    "por", "hun", "dut", "ice", "lav",
+
+    "sma", "sme", "smi", "smj", "smn", "sms",
+    "chi", "kor", "jpn", "hin", "ara", "tha", "heb",
+    "sgn", "zxx", "mul"
+];
+
+const countries = [
+    "fi ", "sw ", "xxu", "xxk", "fr ", "it ", "gw ", "ru ", "no ", "dk ", "er ",
+    "po ", "hu ", "ne ", "be ", "ic ", "lv ",
+
+    "cc ", "ja "
+];
+
 /* const contentTypes = {
     a: "Language material",
     c: "Notated music",
@@ -224,11 +240,11 @@ const contentTypes = ["a", "c", "d", "e", "f", "g", "i", "j", "k", "m", "o", "p"
     t: "Manuscript language material"
 }; */
 
-const languages = {
+/* const languages = {
     fin: "Finnish",
     eng: "English",
     swe: "Swedish"
-};
+}; */
 
 const tryParse = marc => {
     try {
@@ -495,7 +511,11 @@ module.exports = {
     getSubfields,
     tryParse,
     getFieldsAndSubfields,
+
     contentTypes,
+    countries,
+    languages,
+
     parseMARCToDatabse,
     getSpelling,
     MARCXMLToMARC // This can be used only in frontend
