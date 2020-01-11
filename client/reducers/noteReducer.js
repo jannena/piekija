@@ -30,10 +30,10 @@ export const getLastNotes = () => dispatch => {
         .catch(onError(dispatch, "FAILURE_NOTES_GET"));
 };
 
-export const getAllNotes = () => dispatch => {
+export const getAllNotes = () => (dispatch, getState) => {
     dispatch({ type: "REQUEST_NOTES_GET_ALL" });
     noteService
-        .getAll()
+        .getAll(getState().token.token)
         .then(notes => {
             dispatch({
                 type: "SUCCESS_NOTES_GET_ALL",

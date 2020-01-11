@@ -7,8 +7,10 @@ const getLast = () => {
     return axios.get(`${baseUrl}/last`).then(response => response.data);
 };
 
-const getAll = () => {
-    return axios.get(baseUrl).then(response => response.data);
+const getAll = token => {
+    return axios
+        .get(baseUrl, { headers: { Authorization: `Bearer ${token}` } })
+        .then(response => response.data);
 };
 
 const create = (title, content, token) => {
