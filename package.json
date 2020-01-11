@@ -9,7 +9,9 @@
     "start:docs": "webpack-dev-server --mode=development --docs=docs --host=0.0.0.0",
     "test": "mocha \"./server/tests/api/shelf.test.js\" --timeout 20000",
     "marctodb": "cross-env LOG=false node --max-old-space-size=4096 ./server/utils/marcToDb.js",
-    "install:piekija": "node ./server/utils/scripts/install.js"
+    "install:piekija": "node ./server/utils/scripts/install.js",
+    "update:records": "cross-env LOG=false node ./server/utils/scripts/updateRecords.js",
+    "staff": "node ./server/utils/scripts/staffMaker.js"
   },
   "repository": {
     "type": "git",
