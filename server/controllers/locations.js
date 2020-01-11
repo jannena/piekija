@@ -30,7 +30,8 @@ locationRouter.post("/", (req, res, next) => {
     if (!name) return res.status(400).json({ error: "name is missing" });
 
     const newLocation = new Location({
-        name
+        name,
+        totalLoanCount: 0
     });
     newLocation
         .save()
@@ -67,12 +68,11 @@ locationRouter.delete("/:id", async (req, res, next) => {
         console.log("Removing location", id, itemUsingThisLocation);
 
         // TODO: Check the http status code
-        // TODO: How about performance?
         if (itemUsingThisLocation) return res.status(409).json({ error: "there are items using this location" });
     }
-    catch(err) {
+    catch (err) {
         return next(err);
-    } 
+    }
 
     Location
         .findByIdAndRemove(id)
