@@ -12,6 +12,7 @@ export default (slog, def) => {
         "renew-button": "Renew",
         "return-button": "Return",
         "create-button": "Create",
+        "add-button": "Add",
 
         // Item states
         "not loaned": "Not loaned",
@@ -95,6 +96,7 @@ export default (slog, def) => {
         "coun-lv ": "Latvia",
         "coun-cc ": "China",
         "coun-ja ": "Japan",
+        "coun-xx ": "No place, unknown, or undetermined",
 
         // Search.js
         "Error": "Error",
@@ -124,6 +126,7 @@ export default (slog, def) => {
         "AddGROUP": "Add GROUP",
         "AddFIELD": "Add FIELD",
         "removethisgroup": "Remove this group",
+        "Remove field": "",
         "withallthese(and)": "With all of these (and)",
         "withanyofthese(or)": "With any of these (or)",
         "is exactly": "is exactly",
@@ -376,6 +379,19 @@ export default (slog, def) => {
 
         // ShowMore.js
         "Show more": "",
-        "Hide": ""
+        "Hide": "",
+
+        // SimpleRecordEditor.js
+        "Basic information": "",
+        "Add author": "",
+        "Add title": "",
+        "Add ISBN": "",
+        "Add EAN": "",
+        "Main author": "",
+        "Other authors": "",
+        "personal": "",
+        "corporate": "",
+        "Sub-title": "",
+        "Year": ""
     }[slog] || def || slog;
 };

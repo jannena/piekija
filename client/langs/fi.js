@@ -12,6 +12,7 @@ export default (slog, def) => {
         "renew-button": "Uusi",
         "return-button": "Palauta",
         "create-button": "Luo",
+        "add-button": "Lisää",
 
         // item states
         "not loaned": "Ei lainassa",
@@ -95,6 +96,7 @@ export default (slog, def) => {
         "coun-lv ": "Latvia",
         "coun-cc ": "Kiina",
         "coun-ja ": "Japani",
+        "coun-xx ": "Tuntematon tai määrittelemätön paikka tai ei paikkaa",
 
         // Search.js
         "Error": "Virhe",
@@ -124,6 +126,7 @@ export default (slog, def) => {
         "AddGROUP": "Lisää RYHMÄ",
         "AddFIELD": "Lisää KENTTÄ",
         "removethisgroup": "Poista tämä ryhmä",
+        "Remove field": "Poista kenttä",
         "withallthese(and)": "Kaikillä näillä (and)",
         "withanyofthese(or)": "Millä tahansa näistä (or)",
         "is exactly": "on täsmälleen",
@@ -376,6 +379,19 @@ export default (slog, def) => {
 
         // ShowMore.js
         "Show more": "Näytä lisää",
-        "Hide": "Piilota"
+        "Hide": "Piilota",
+
+        // SimpleRecordEditor.js
+        "Basic information": "Perustiedot",
+        "Add author": "Lisää tekijä",
+        "Add title": "Lisää otsikko",
+        "Add ISBN": "Lisää ISBN",
+        "Add EAN": "Lisää EAN",
+        "Main author": "Päätekijä",
+        "Other authors": "Muut tekijät",
+        "personal": "yksityinen",
+        "corporate": "yhteisö",
+        "Sub-title": "Alaotsikko",
+        "Year": "Vuosi"
     }[slog] || def || slog;
 };

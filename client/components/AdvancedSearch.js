@@ -70,7 +70,7 @@ const AdvancedSearchField = ({ query, setQuery, removeField, __ }) => {
                 onChange={onChange(2)}
             />
             {optionsByField(query[0], query[1], onChange)}
-            <button type="button" onClick={removeField}>Remove field</button>
+            <button type="button" onClick={removeField}>{__("Remove field")}</button>
         </div>
     );
 };

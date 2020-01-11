@@ -70,7 +70,7 @@ const UserInfo = ({ user, createShelf, updateUser, notify, __ }) => {
             <Tab>
                 <Form onSubmit={handleUpdateMe}>
                     <Input name="name" title={__("Name")} value={user.name} />
-                    <Input type="password" title={__("New password")} description="Leave empty if you do not want to change it." name="password" />
+                    <Input type="password" title={__("New password")} description={__("new-password-info")} name="password" />
                     <Input type="password" title={__("New password again")} name="againPassword" />
                     <Input type="password" title={__("Old password")} name="oldPassword" />
                     <Button title={__("save-button")} />
