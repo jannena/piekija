@@ -2,6 +2,7 @@ import userService from "../services/userService";
 import itemService from "../services/itemService";
 import circulationService from "../services/circulationService";
 import { onError } from "./errorHandingHelper";
+import { notify } from "./notificationReducer";
 
 const init = {
     user: null,
@@ -116,6 +117,7 @@ export const createUser = () => (dispatch, getState) => {
                 type: "PSUCCESS_CIRCULATION_CREATE_USER",
                 user: result
             });
+            dispatch(notify("success", "User created successfully"));
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_CREATE_USER"));
 }
@@ -129,6 +131,7 @@ export const updateUser = (name, username, barcode, password/* , address, email,
                 type: "PSUCCESS_CIRCULATION_UPDATE_USER",
                 user: result
             });
+            dispatch(notify("success", "User updated successfully"));
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_UPDATE_USER"));
 };
@@ -170,7 +173,8 @@ export const returnItemWithId = id => (dispatch, getState) => {
             dispatch({
                 type: "PSUCCESS_CIRCULATION_RETURN",
                 returned: id
-            })
+            });
+            dispatch(notify("success", "Item returned!"));
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_RETURN"));
 };
@@ -188,6 +192,7 @@ export const renewItemWithId = id => (dispatch, getState) => {
                 dueDate: result.dueDate
             });
             console.log("renewed item", result);
+            dispatch(notify("success", "Item renewed!"));
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_RENEW"));
 };
