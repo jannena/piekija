@@ -26,11 +26,11 @@ const Container = ({ loading, history, simpleSearch, setQuery, children, languag
             <header>
                 <div id="header-content">
                     <div id="site-title">{__("PieKiJa")}</div>
-                    <p>Currently loading {loading} things</p>
+                    {/* <p>Currently loading {loading} things</p> */}
                     <div id="search">
                         <form onSubmit={handleSearch}>
-                            <input name="query" style={{ width: "calc(90% - 70px)", margin: 0 }} />
-                            <button style={{ width: 70, margin: 0 }}>{__("Search-button")}</button>
+                            <input placeholder={__("Search-button") + "..."} name="query" style={{ width: "calc(90% - 70px)", margin: 0, fontSize: 20, height: 45 }} />
+                            <button style={{ width: 70, margin: 0, height: 45, position: "relative", top: -3 }}>{__("Search-button")}</button>
                         </form>
                     </div>
                     <nav>
