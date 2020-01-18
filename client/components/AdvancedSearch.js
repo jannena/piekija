@@ -34,8 +34,12 @@ const AdvancedSearchField = ({ query, setQuery, removeField, __ }) => {
             ];
     };
     const optionsByField = (field, value, onChange) => {
+        const languageOptions = [["-", ""], ...MARC21.languages.map(l => [__(`lang-${l}`, l), l])];
+        const countryOptions = [["-", ""], ...MARC21.countries.map(l => [__(`coun-${l}`, l), l])];
         return {
-            "language": <Select options={[["Finnish", "fin"], ["Swedish", "swe"], ["English", "eng"]]} value={value} onChange={onChange(1)} />,
+            "language": <Select options={languageOptions} value={value} onChange={onChange(1)} />,
+            "languages": <Select options={languageOptions} value={value} onChange={onChange(1)} />,
+            "country": <Select options={countryOptions} value={value} onChange={onChange(1)} />,
             "contentType": <Select options={MARC21.contentTypes.map(c => [__(c), c])} value={value} onChange={onChange(1)} />
         }[field]
             || <input
@@ -51,7 +55,6 @@ const AdvancedSearchField = ({ query, setQuery, removeField, __ }) => {
                     [__("content type"), "contentType"],
                     [__("title"), "title"],
                     [__("subject"), "subjects"],
-                    [__("genre"), "genres"],
                     [__("author"), "authors"],
                     [__("year"), "year"],
                     [__("country"), "country"],
