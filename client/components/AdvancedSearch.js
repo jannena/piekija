@@ -184,7 +184,7 @@ const AdvancedSearch = ({ query: q, setQuery: setQ, __ }) => {
                     query={query}
                     setQuery={newQuery => {
                         console.log("updatedQuery", newQuery, JSON.stringify(newQuery));
-                        setQuery(newQuery);
+                        setQuery([...newQuery]);
                     }}
                     __={__}
                 />
