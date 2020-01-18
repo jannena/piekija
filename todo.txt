@@ -1,7 +1,6 @@
 BEFORE 1.0
 
 - Fix simple editor saving
-- Add date format
 
 - documentation
 - finish backend tests
