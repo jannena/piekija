@@ -28,8 +28,8 @@ const ShowMore = ({ data, show, noDiv, buttonContainer, __ }) => {
         <div>
             {showDefault}
         </div>
-        {showAll && <div>{rest}</div>}
-        {button}
+        {rest.length > 0 && showAll && <div>{rest}</div>}
+        {rest.length > 0 && button}
     </div>);
 };
 
