@@ -3,8 +3,6 @@
 ## Yksinkertainen haku
 Yksinkertaista hakua voi käyttää kirjoittamalla sivuston ylälaidassa olevaan tekstikenttään hakusanoja. Haku palauttaa kaikki tulokset, jotka sisältävät minkä tahansa annetun hakusanan. Jos tuloksia on vähän, hakutulokset järjestetään osuvuuden mukaan.
 
-*kuva1*
-
 Yksinkertainen haku tukee myös operaattoreita AND ja OR. Siis haku "kissa OR koira" palauttaa kaikki tulokset, jotka sisältävät vain sanan kissa, vain sanan koira tai molemmat sanat.
 
 Operaattoreita voi käyttää samassa haussa useampia ja operaattorien vaikutusjärjestystä voi muuttaa suluilla. Haku "(kissa AND koira) OR eläimet" palauttaa kaikki tietueet, jotka sisältävät molemmat sanat kissa ja koira tai vaihtoehtoisesti sisältää sanan eläimet.
@@ -14,16 +12,23 @@ Huomattakoon, että operaattori tulee kirjoittaa suuraakkosin ja että operaatto
 ## Tarkennettu haku
 Tarkennetulla haulla voi hakea esimerkiksi vain tietyn tekijän teoksia tai tiettynä vuonna julkaistuja teoksia. Tarkennettu haku löytyy valitsemalla sivuston yläosan valikosta *Haku* ja painamalla *Tarkennettu haku*.
 
-*kuva2*
+Tarkennettu haku koostuu ryhmistä ja kentistä. Hakuehdon voi lisätä painamalla *Lisää KENTTÄ*. Tämän jälkeen ilmestyvästä pudotusvalikosta tulee valita se kenttä, jonka arvoa haluaa hakea. Toisesta pudotusvalikosta valitaan verbi, jolla halutaan hakea. Kolmanteen kenttään kirjoitetaan hakukriteeri.
 
-Tarkennettu haku koostuu ryhmistä ja kentistä. Hakuehdon voi lisätä painamalla *Lisää KENTTÄ*. Tämän jälkeen ilmestyvästä pudotusvalikosta tulee valita se kenttä, jonka arvoa haluaa hakea. Toisesta pudotusvalikosta valitaan halutaanko hakea ............... Kolmanteen kenttään kirjoitetaan hakukriteeri.
+![Kuva 1](/docs/img/search-1.png)
+
+Kuvassa 1 esitetty haku hakee kaikki Tove Janssonin vuoden 1970 jälkeen kirjoittamat ruotsinkieliset kirjat.
+
+![Kuva 2](/docs/img/search-2.png)
+
+Hakuryhmiä käyttämällä voi tehdä monipuolisempia hakuja. Esimerkiksi kuvassa 2 esitetty haku hakee kaikki Tove Janssonin kirjoittamat kirjat, joiden kieli on joko englanti tai ranska.
 
 **Huomionarvoista tarkennetussa haussa**
 * Tekijä tulee kirjoittaa muodossa *Sukunimi, Etunimi*
-* Valmistusmaaksi tulee valita valmistusmaakoodi listasta *linkki tähän*
-* Pääkieleksi tai kieleksi tulee valita kolmemerkkinen kielikoodi listasta *linkki tähän*
 
 ## Haun rajaaminen
 Kun haun on tehnyt, hakutuloksia voi rajata avaamalla valikot *Rajaa hakua*. Jos kyseinen valikko ei ole näkyvissä, hakutuloksia on liikaa. Yritä etsiä paremmilla hakusanoilla.
 
 ## Hakusanojen valitseminen
+Hakusanat jäsennetään suoraan esimerkiksi aiheista, joita tietueisiin on liitetty. Tämän vuoksi kaikki hakusanat eivät ole yhtenäisessä muodossa (esim. perusmuodossa). Tästä johtuen hakusanoja kannattaa kirjoittaa samassakin haussa useampaan muotoon. Esimerkiksi koira-aiheisia kirjoja voisi hakea haulla *koira koirat* tai Suomi-aiheisia hakusanoilla *Suomen Suomi Suomea suomalainen*.
+
+Toisaalta epämääräisiä ja yleisiä hakusanoja, kuten *Suomi*, kannattaa yksinään välttää, sillä ne palauttavat usein paljon sisältöä. Haku *suomen matkaopas* palauttaa kaikki tulokset, jotka sisältävät sanan *suomen*. Tällaisia voisivat olla vaikkapa *suomen kieli* ja *suomen historia*. Sen sijaan operaattorien AND ja OR käyttö hauissa on suositeltua. Haku *suomen AND matkaopas* on huomattavasti edellistä parempi haku.

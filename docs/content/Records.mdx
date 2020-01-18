@@ -3,16 +3,16 @@ Uuden tietueen voi lisätä painamalla henkilökuntanäytön *Tietueet*-välileh
 
 Tietuetta voi myös yrittää hakea Finna-hakupalvelun tietokannasta kirjoittamalla hakusanan (esim. Aineiston nimi tai ISBN) *Tietueet*-välilehdellä olevaan tekstikenttään ja painamalla *Hae tietuetta ulkoisista tietokannoista*. Tietueen voi tallentaa PieKiJan tietokantaan painamalla ensin *Esikatsele* ja sitten *Tallenna tietokantaan*. Finnasta haettua tietuetta ei voi muokata ennen kuin se on tallennettu tietokantaan.
 
-![kuva 1](//localhost:3000/img/records-1.png)
+![kuva 1](/docs/img/records-1.png)
 
 # Tietueen muokkaaminen
 PieKiJan henkilökuntanäytössä ei ole erillistä tietuehakua, vaan tietueen haku on tehtävä käyttäen asiakkaille tarkoitettua yksinkertaista tai tarkennettua hakua.
 
 Kun käyttäjä, jolla on henkilökuntaoikeudet on kirjautuneena sisään, tietuesivun ylälaidassa on painike *Muokkaa tietuetta*.
 
-![kuva 2](//localhost:3000/img/records-2.png)
+![kuva 2](/docs/img/records-2.png)
 
-![kuva 3](//localhost:3000/img/records-3.png)
+![kuva 3](/docs/img/records-3.png)
 
 
 
@@ -24,10 +24,15 @@ Yksinkertainen muokkain on tarkoitettu nopeaan muokkaamiseen ja sen käytön vä
 ## Nimikkeiden hallinta
 Nimikkeet-välilehdellä voi liittää tietueeseen nimikkeitä ja muokata niitä.
 
-![kuva 4](//localhost:3000/img/records-4.png)
+![kuva 4](/docs/img/records-4.png)
 
-Uuden nimikkeen voi lisätä avaamalla *Lisää uusi aineisto*-valikon. Viivakoodiksi valitaan uniikki koodi. Viivakoodia tarvitaan, kun nimike halutaan lainata jollekulle. Jokaisella nimikkeellä on myös lainausmalli ja sijainti (näistä kerrotaan lisää seuraavassa luvussa). Sijainnin lisäksi nimikkeellä on hyllysijainti.
+Uuden nimikkeen voi lisätä avaamalla *Lisää uusi aineisto*-valikon. Viivakoodiksi valitaan uniikki koodi. Viivakoodia tarvitaan, kun nimike halutaan lainata jollekulle. Jokaisella nimikkeellä on myös lainausmalli ja sijainti. Sijainnin lisäksi nimikkeellä on tarkempi hyllysijainti, jonka mukaan nimikkeet on tarkoitus järjestää fyysiseen sijaintiinsa.
 
 Mikäli nimikkeen on tarkoitus olla lainattavissa, nimikkeen tilaksi tulee valita *Ei lainassa*. Muistiinpanoksi voidaan kirjoittaa oikeastaan mitä tahansa nimikkeeseen liittyvää. Muistiinpano näkyy vain henkilökuntanätössä, eikä se näy asiakkaille.
 
 ## MARC-muokkain
+MARC-välilehdellä on täysverinen MARC21-muokkain. Uuden kentän voi lisätä muokkaimen ylälaidassa. Kentälle voi lisätä osakentän jokaisen kentän kohdassa. LEADER-kentällä sekä kentälle 008 on omat muokkaimensa, jotka avautuvat kyseisten kenttien vieressä olevista painikkeista.
+
+MARC21-ohjeita
+- [www.loc.gov](https://www.loc.gov/marc/bibliographic/)
+- [marc21.kansalliskirjasto.fi](https://marc21.kansalliskirjasto.fi/bib/index.htm)

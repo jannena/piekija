@@ -1,0 +1,13 @@
+# Asennus
+1. Suorita komento **npm install**
+2. Suorita komento  **npm run piekija:install**
+3. (Mikäli backend toimii eri ositteessa kuin frontend, tiedostoon *client/globals.js* tulee muuttujaan baseUrl asettaa backendin URL-osoite. Tällöin on huomattava, että frontend sijaitsee hakemistossa *server/build*. Muutoin tätä vaihetta ei tarvita.)
+
+Asennusohjelma kysyy tietokantaosoitteen ja luo tietokantaan ensimmäisen käyttäjän.
+
+Voilà!
+
+Mahdollisten päivitysten jälkeen tulee suorittaa komento *npm run update:records*, joka jäsentää kaikki MARC21-koodit tietokantaan uudelleen.
+
+## Uuden henkilökuntakäyttäjän lisääminen
+Tavallisen käyttäjän voi ylentää henkilökuntakäyttäjäksi komennolla *npm run staff*. Skripri kysyy käyttäjän käyttäjänimen ja antaa sitten tälle henkilökuntaoikeudet.

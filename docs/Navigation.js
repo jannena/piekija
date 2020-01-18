@@ -21,8 +21,8 @@ const Navigation = () => {
             <NavTitle title="Käyttäjätili ja hyllyt" address="user-account" />
         </NavCategory>
         <NavCategory title="Henkilökunnalle">
+            <NavTitle title="Nimityksiä" address="staff" />
             <NavTitle title="Tietueet" address="records" />
-            <NavTitle title="Sijainnit, lainaustyypit ja nimikkeet" address="staff" />
             <NavTitle title="Lainaaminen" address="circulation" />
             <NavTitle title="Käyttäjien hallinta" address="users" />
             <NavTitle title="Etusivu-uutiset" address="notes" />
