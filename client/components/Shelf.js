@@ -11,7 +11,7 @@ import __ from "../langs";
 import io from "../socket";
 
 const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, removeShelf, history, __ }) => {
-    document.title = "Shelf - PieKiJa";
+    document.title = `${__("title-Shelf")} - ${__("PieKiJa")}`;
 
     useEffect(() => {
         if (shelfId && token && user && io) io.emit("change shelf", shelfId, token);

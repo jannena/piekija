@@ -66,7 +66,7 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, __ 
     if (state.state === 1) return <Loader />
     if (state.state === 3) return <p>Error: {state.error}</p>;
 
-    document.title = `${record.result.title} - PieKiJa`;
+    document.title = `${record.result.title} - ${__("PieKiJa")}`;
 
     const appearance = MARC21.getSubfields(record.record, "300", ["a", "b", "c", "e", "f", "g"]);
     const series = MARC21.getFieldsAndSubfields(record.record, ["490"], ["a"]).map(s => <div key={s.a}>{s.a}</div>);

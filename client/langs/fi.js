@@ -1,6 +1,9 @@
 
 export default (slog, def) => {
     return {
+        // Title
+        "PieKiJa": "",
+
         // Essentials
         "cancel-button": "Peruuta",
         "save-button": "Tallenna",
@@ -13,6 +16,14 @@ export default (slog, def) => {
         "return-button": "Palauta",
         "create-button": "Luo",
         "add-button": "Lisää",
+
+        // Titles
+        "title-Frontpage": "Etusivu",
+        "title-Login": "Kirjaudu sisään",
+        "title-User": "Tili",
+        "title-Shelf": "Hylly",
+        "title-Search": "Haku",
+        "title-Staff": "Henkilökunta",
 
         // item states
         "not loaned": "Ei lainassa",
@@ -154,6 +165,7 @@ export default (slog, def) => {
         "Help": "Ohjeet",
 
         // FrontpageNews.js
+        "Welcome": "Tervetuloa",
         "Created on": "Julkaistu",
         "Updated on": "Päivitetty viimeksi",
 

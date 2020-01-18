@@ -1,6 +1,9 @@
 
 export default (slog, def) => {
     return {
+        // Title
+        "PieKiJa": "",
+
         // Essentials
         "cancel-button": "Cancel",
         "save-button": "Save",
@@ -13,6 +16,14 @@ export default (slog, def) => {
         "return-button": "Return",
         "create-button": "Create",
         "add-button": "Add",
+
+        // Titles
+        "title-Frontpage": "Frontpage",
+        "title-Login": "Login",
+        "title-User": "User",
+        "title-Shelf": "Shelf",
+        "title-Search": "Search",
+        "title-Staff": "Staff",
 
         // Item states
         "not loaned": "Not loaned",
@@ -154,6 +165,7 @@ export default (slog, def) => {
         "Help": "Help",
 
         // FrontpageNews.js
+        "Welcome": "",
         "Created on": "",
         "Updated on": "",
 

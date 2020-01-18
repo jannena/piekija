@@ -25,7 +25,7 @@ const Container = ({ loading, history, simpleSearch, setQuery, children, languag
         <div id="container">
             <header>
                 <div id="header-content">
-                    <div id="site-title">PieKiJa/logo/tms.</div>
+                    <div id="site-title">{__("PieKiJa")}</div>
                     <p>Currently loading {loading} things</p>
                     <div id="search">
                         <form onSubmit={handleSearch}>

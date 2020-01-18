@@ -13,6 +13,8 @@ const Login = ({ tryLogin, usetfa, user, __ }) => {
 
     if (user !== null) return <Redirect to="/user" />
 
+    document.title = `${__("title-Login")} - ${__("PieKiJa")}`;
+
     const handleLogin = e => {
         e.preventDefault();
         tryLogin(username, password, code);
