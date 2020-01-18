@@ -11,6 +11,8 @@ import __ from "../langs";
 import io from "../socket";
 
 const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, removeShelf, history, __ }) => {
+    document.title = "Shelf - PieKiJa";
+
     useEffect(() => {
         if (shelfId && token && user && io) io.emit("change shelf", shelfId, token);
     }, [shelfId, token, user, io]);
@@ -26,6 +28,8 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, remo
     if (state.state === 1) return <Loader />;
     if (state.state === 3) return <p>{__("Error")}: {state.error}</p>;
     if (!shelf) return null;
+
+    document.title = `${shelf.name} - PieKiJa`
 
     const isAuthor = () => user && shelf.author.id === user.id;
     const canEdit = () => isAuthor() || (shelf.sharedWith || []).some(u => user.id === u.id);

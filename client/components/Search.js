@@ -12,6 +12,7 @@ import __ from "../langs";
 const resultsPerPage = 20;
 
 const Search = ({ state, type, result, page, sort, nextPage, previousPage, resort, __ }) => {
+    document.title = "Search - PieKija";
 
     const handleResort = e => {
         resort(e.target.value);

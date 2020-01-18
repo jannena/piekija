@@ -14,6 +14,8 @@ import __ from "../langs";
 const UserInfo = ({ user, createShelf, updateUser, notify, __ }) => {
     if (!user) return <div></div>;
 
+    document.title = "User - PieKiJa";
+
     const printShelves = shelves => {
         const mapped = shelves.map(shelf => shelf.id ? <li key={shelf.id.id}><Link to={`/shelf/${shelf.id.id}`}>{shelf.id.name}</Link></li> : null);
         console.log(mapped, mapped.filter(shelf => shelf).length);

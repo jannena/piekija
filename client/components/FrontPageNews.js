@@ -4,6 +4,8 @@ import Loader from "./Loader";
 import __ from "../langs";
 
 const FrontPageNews = ({ news, __ }) => {
+    document.title = "Frontpage - PieKiJa";
+    
     if (!news) return <Loader />;
 
     const printDate = date => {
