@@ -12,7 +12,7 @@ import __ from "../langs";
 
 
 const UserInfo = ({ user, createShelf, updateUser, notify, __ }) => {
-    if (!user) return <div></div>;
+    if (!user) return <div>{__("You logged out succefully")}. <Link to="">{__("Back to frontpage")}</Link>.</div>;
 
     document.title = `${__("title-User")} - ${__("PieKiJa")}`;
 

@@ -11,20 +11,24 @@ const StyledUserMenuItem = styled.div`
 const StyledUserMenuTitle = styled.div`
     display: block;
     line-height: 50px;
+    text-align: center;
 `;
 const isOpenStyle = {
     height: 220,
     backgroundColor: "black",
-    padding: 10,
+    paddingLeft: 10,
     paddingTop: 0,
     width: "20%",
-    zIndex: 1000
+    zIndex: 1000,
+    minWidth: 150,
+    paddingRight: 10
 };
 const isClosedStyle = {
     width: "20%",
-    minWidth: 100,
     paddingLeft: 10,
-    zIndex: 1000
+    zIndex: 1000,
+    minWidth: 150,
+    paddingRight: 10
 };
 
 const MenuItem = ({ title, link }) => <StyledUserMenuItem><Link to={link}>{title}</Link></StyledUserMenuItem>;
@@ -38,7 +42,8 @@ const UserMenu = ({ isLoggedIn, isStaff, user, history, __ }) => {
     }, ref);
 
     const logout = () => {
-        window.localStorage.clear();
+        window.localStorage.removeItem("piekija-token");
+        location.href = "/";
         location.reload();
     };
 
@@ -51,7 +56,7 @@ const UserMenu = ({ isLoggedIn, isStaff, user, history, __ }) => {
         <div style={{ display: isOpen ? "block" : "none" }}>
             <MenuItem title={__("You")} link="/user" />
             {isStaff && <MenuItem title={__("Staff")} link="/staff" />}
-            <StyledUserMenuItem onClick={logout}>{__("Logout")}</StyledUserMenuItem>
+            <StyledUserMenuItem><a href="#" onClick={logout}>{__("Logout")}</a></StyledUserMenuItem>
         </div>
     </div>;
 };

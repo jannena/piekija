@@ -366,6 +366,8 @@ export default (slog, def) => {
         "Disable": "Poista käytöstä",
 
         // UserInfo.js
+        "You logged out succefully": "Kirjauduit onnistuneesti ulos",
+        "Back to frontpage": "Takaisin etusivulle",
         "Loans": "Lainat",
         "Shelves": "Hyllyt",
         "Holds": "Varaukset",

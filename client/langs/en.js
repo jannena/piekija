@@ -366,6 +366,8 @@ export default (slog, def) => {
         "Disable": "",
 
         // UserInfo.js
+        "You logged out succefully": "",
+        "Back to frontpage": "",
         "Loans": "",
         "Shelves": "",
         "Holds": "",
