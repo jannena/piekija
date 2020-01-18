@@ -1,5 +1,7 @@
 
-const languageReducer = (state = "en", action) => {
+const INIT = localStorage.getItem("piekija-language") || "en";
+
+const languageReducer = (state = INIT, action) => {
     switch (action.type) {
         case "SET_LANGUAGE":
             return action.language;
@@ -10,6 +12,7 @@ const languageReducer = (state = "en", action) => {
 export default languageReducer;
 
 export const setLanguage = language => dispatch => {
+    localStorage.setItem("piekija-language", language);
     dispatch({
         type: "SET_LANGUAGE",
         language
