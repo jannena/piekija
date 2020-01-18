@@ -3,6 +3,8 @@ const config = require("./utils/config");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+const path = require("path");
+
 const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
@@ -52,8 +54,13 @@ app.use("/api/*", (req, res, next) => {
 });
 
 // Frontend
-app.use("/docs", express.static(`${__dirname}/build/docs`));
-app.use("*", express.static(`${__dirname}/build`));
+app.use("/docs/img", express.static(path.join(__dirname, "build", "img")));
+app.use("/docs/docs.js", (req, res) => res.sendFile(path.resolve(__dirname, "build/docs/docs.js")));
+app.get("/docs", (req, res) => res.sendFile(path.resolve(__dirname, "build/docs/index.html")));
+app.get("/docs/*", (req, res) => res.sendFile(path.resolve(__dirname, "build/docs/index.html")));
+app.get("/main.js", (req, res) => res.sendFile(path.resolve(__dirname, "build/main.js")));
+app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "build/index.html")));
+app.get("*", express.static(path.resolve(__dirname, "build")));
 
 app.use(errorHandler);
 
