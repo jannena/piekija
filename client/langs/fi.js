@@ -4,6 +4,10 @@ export default (slog, def) => {
         // Title
         "PieKiJa": "",
 
+        // Date formats
+        "date-format": d => `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`,
+        "time-format": d => `${d.getHours()}.${("0" + d.getMinutes()).slice(-2)}.${("0" + d.getSeconds()).slice(-2)}`,
+
         // Essentials
         "cancel-button": "Peruuta",
         "save-button": "Tallenna",
@@ -419,7 +423,7 @@ export default (slog, def) => {
         "Save for preview": "Tallenna esikatselua varten",
         "Add subfield": "Lisää osakenttä",
         "Remove field": "Poista kenttä",
-        
+
         "Record status": "Tietueen tila",
         "Type of record": "Tietueen tyyppi",
         "Bibliographic level": "Tietueen bibliografinen taso",

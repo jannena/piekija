@@ -5,8 +5,7 @@ import { returnItemWithId, renewItemWithId } from "../../reducers/circulationRed
 import __ from "../../langs";
 
 const Loan = ({ loan, staff = false, returnItemWithId, renewItemWithId, __ }) => {
-    const date = new Date(loan.stateDueDate);
-    const dateString = `${date.getUTCDate()}.${date.getUTCMonth() + 1}.${date.getUTCFullYear()}`;
+    const dateString = __("date-format")(new Date(loan.stateDueDate));
 
     const renewTimes = loan.loantype.renewTimes - loan.stateTimesRenewed;
 

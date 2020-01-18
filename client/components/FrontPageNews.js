@@ -10,14 +10,14 @@ const FrontPageNews = ({ news, __ }) => {
 
     const printDate = date => {
         const d = new Date(date);
-        return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
+        return `${__("date-format")(d)} ${__("time-format")(d)}`;
     }
 
     return <>
         <h1>{__("Welcome")}</h1>
         {news.map(n => <div key={n.id} style={{ borderTop: "1px solid black", marginBottom: 20 }}>
             <h2>{n.title}</h2>
-            <div>{__("Created on")} {printDate(n.created)}, {__("Updated on")} {printDate(n.modified)}</div>
+            <div style={{ color: "grey" }}>{__("Created on")} {printDate(n.created)}, {__("Updated on")} {printDate(n.modified)}</div>
             <br />
             <div style={{ padding: "10px 35px" }}>{n.content.split("\n").map(row => <span>{row} <br /></span>)}</div>
         </div>)}

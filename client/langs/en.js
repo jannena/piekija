@@ -4,6 +4,10 @@ export default (slog, def) => {
         // Title
         "PieKiJa": "",
 
+        // Date formats
+        "date-format": d => `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`,
+        "time-format": d => `${d.getHours()}:${("0" + d.getMinutes()).slice(-2)}:${("0" + d.getSeconds()).slice(-2)}`,
+
         // Essentials
         "cancel-button": "Cancel",
         "save-button": "Save",

@@ -40,7 +40,7 @@ const RecordItems = ({ items, locations, loantypes, addItem, removeItem, updateI
 
     const form = data => <>
         <Form onSubmit={handleUpdateItem(data.id)}>
-            <Text title={__("Last loaned")} value={new Date(data.lastLoaned).toISOString()} />
+            <Text title={__("Last loaned")} value={`${__("date-format")(new Date(data.lastLoaned))} ${__("time-format")(new Date(data.lastLoaned))}`} />
             <Text title={__("Loan times")} value={data.loanTimes || 0} />
             <hr />
             <Text id={`${data.id}-barcode`} value={data.barcode} name="barcode" title={__("Barcode")} description={__("staff-item-barcode-info")} />
