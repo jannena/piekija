@@ -42,8 +42,36 @@ export const EditLEADER = ({ __, record, setRecord, close }) => {
     </td></tr>;
 };
 
-export const Edit008 = () => {
-    return <>
-        <p>asd</p>
-    </>;
+const F00806 = "bcdeikmnpqrstu|";
+
+export const Edit008 = ({ __, record, setRecord, close }) => {
+    console.log(record);
+    let i = -1;
+    let F008 = record.FIELDS.filter((c, index) => (c[0] === "008" && (i = index || true)))[0][1][0];
+    console.log(F008);
+
+    const onSave = e => {
+        let A = F008.split("");
+        console.log(A);
+        A[6] = e.target["F008-06"].value;
+        A.splice(7, 4, ...e.target["F008-0710"].value);
+        A.splice(11, 4, ...e.target["F008-1114"].value);
+        A.splice(15, 3, ...e.target["F008-1517"].value);
+        A.splice(35, 3, ...e.target["F008-3537"].value);
+        console.log("Index is", i);
+        record.FIELDS[i][1][0] = A.join("");
+        setRecord(record);
+        close();
+    };
+
+    return <tr><td colSpan={3}>
+        <Form onSubmit={onSave}>
+            <FormSelect id={"F008-06"} title={`06 - ${__("Type of date/Publication status")}`} options={F00806.split("").map(c => [`${c} - ${__(`F00806-${c}`)}`, c])} selected={F008[6]} />
+            <Input id={"F008-0710"} title={`07-10 - ${__("Date 1")}`} options={[]} value={F008.slice(7, 11)} />
+            <Input id={"F008-1114"} title={`11-14 - ${__("Date 2")}`} options={[]} value={F008.slice(11, 15)} />
+            <FormSelect id={"F008-1517"} title={`15-17 - ${__("Place of publication, production, or execution")}`} options={MARC21.countries.map(c => [`${c} - ${__(`coun-${c}`)}`, c])} selected={F008.slice(15, 18)} />
+            <FormSelect id={"F008-3537"} title={`35-37 - ${__("Language")}`} options={MARC21.languages.map(c => [`${c} - ${__(`lang-${c}`)}`, c])} selected={F008.slice(35, 38)} />
+            <Button title={__("save-button")} />
+        </Form>
+    </td></tr>;
 };

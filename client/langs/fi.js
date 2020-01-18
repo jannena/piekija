@@ -55,7 +55,7 @@ export default (slog, def) => {
         "lang-hun": "unkati",
         "lang-dut": "hollanti",
         "lang-ice": "islanti",
-        "lang-lat": "latvia",
+        "lang-lav": "latvia",
 
         "lang-smi": "saame",
         "lang-sma": "eteläsaame",
@@ -363,6 +363,28 @@ export default (slog, def) => {
         "LEADER19-a": "Moniosainen julkaisu",
         "LEADER19-b": "Osa, jolla on itsenäinen nimeke",
         "LEADER19-c": "Osa, jolla on epäitsenäinen nimeke",
+
+        "Type of date/Publication status": "Julkaisuajan tyyppi/Julkaisun tila",
+        "Date 1": "Julkaisuvuosi 1",
+        "Date 2": "Julkaisuvuosi 2",
+        "Place of publication, production, or execution": "Julkaisu-, tuotanto- tai toteuttamismaa",
+        "Language": "Kieli",
+
+        "F00806-b": "Julkaisuvuotta ei annettu, vuosiluku eKr.",
+        "F00806-c": "Jatkuva julkaisu, ilmestyy edelleen",
+        "F00806-d": "Jatkuva julkaisu, lakannut ilmestymästä",
+        "F00806-e": "Tarkka päivämäärä",
+        "F00806-i": "Kokoelman kattama ajanjakso",
+        "F00806-k": "Kokoelman merkittävimmän osan kattama ajanjakso",
+        "F00806-m": "Jakautuu usealle vuodelle",
+        "F00806-n": "Tuntematon",
+        "F00806-p": "Julkaisuvuosi poikkeaa tuotanto- tai äänitysajankohdasta",
+        "F00806-q": "Epävarma julkaisuaika",
+        "F00806-r": "Näköispainos ja alkuperäinen julkaisuvuosi",
+        "F00806-s": "Yksi julkaisuvuosi",
+        "F00806-t": "Julkaisuvuosi ja tekijänoikeusvuosi",
+        "F00806-u": "Jatkuva julkaisu, tila tuntematon",
+        "F00806-|": "Ei koodattu",
 
         // RecordItems.js
         "staff-item-barcode-info": "Yksilöllinen koodi jokaiselle aineistolle",

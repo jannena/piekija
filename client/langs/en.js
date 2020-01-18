@@ -55,7 +55,7 @@ export default (slog, def) => {
         "lang-hun": "Hungarian",
         "lang-dut": "Dutch",
         "lang-ice": "Icelandic",
-        "lang-lat": "Latvian",
+        "lang-lav": "Latvian",
 
         "lang-smi": "Sami",
         "lang-sma": "Southern Sami",
@@ -363,6 +363,28 @@ export default (slog, def) => {
         "LEADER19-a": "Set",
         "LEADER19-b": "Part with independent title",
         "LEADER19-c": "Part with dependent title",
+
+        "Type of date/Production status": "",
+        "Date 1": "",
+        "Date 2": "",
+        "Place of publication, production, or execution": "",
+        "Language": "",
+
+        "F00806-b": "No dates given; B.C. date involved",
+        "F00806-c": "Continuing resource currently published",
+        "F00806-d": "Continuing resource ceased publication",
+        "F00806-e": "Detailed date",
+        "F00806-i": "Inclusive dates of collection",
+        "F00806-k": "Range of years of bulk of collection",
+        "F00806-m": "Multiple dates",
+        "F00806-n": "Dates unknown",
+        "F00806-p": "Date of distribution/release/issue and production/recording session when different",
+        "F00806-q": "Questionable date",
+        "F00806-r": "Reprint/reissue date and original date",
+        "F00806-s": "Single known date/probable date",
+        "F00806-t": "Publication date and copyright date",
+        "F00806-u": "Continuing resource status unknown",
+        "F00806-|": "No attempt to code",
 
         // RecordItems.js
         "staff-item-barcode-info": "Unique code for every item",

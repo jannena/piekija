@@ -202,6 +202,7 @@ const RecordEditor = ({ record, updateRecord, createTemporaryRecord, __ }) => {
                                     <button onClick={onRemoveField(code, i)}>{__("Remove field")}</button>
                                 </td>
                             </tr>
+                            {code === "008" && edit008 && <Edit008 __={__} record={editedRecord} setRecord={setEditedRecord} close={() => setEdit008(false)} />}
                             {fieldData.subfields && Object.entries(fieldData.subfields).map(([subfieldCode, subfieldData]) =>
                                 <React.Fragment key={subfieldCode}>
                                     <tr>
