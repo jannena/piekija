@@ -5,6 +5,7 @@ const Note = require("../models/Note");
 noteRouter.get("/last", (req, res, next) => {
     Note
         .find({})
+        .sort({ created: -1 })
         .limit(5)
         .then(result => {
             res.json(result.map(r => r.toJSON()));
