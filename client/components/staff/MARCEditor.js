@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { getRecord, updateRecord, createTemporaryRecord } from "../../reducers/recordReducer";
 import __ from "../../langs";
+import { EditLEADER, Edit008 } from "./MARCFieldEditors";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
@@ -11,6 +12,8 @@ const RecordEditor = ({ record, updateRecord, createTemporaryRecord, __ }) => {
     console.log("editing", record);
 
     const [editedRecord, setEditedRecord] = useState(null);
+    const [editLEADER, setEditLEADER] = useState(false);
+    const [edit008, setEdit008] = useState(false);
 
     const fieldSortFunction = ([a], [b]) => Number(a) - Number(b);
 
@@ -175,7 +178,9 @@ const RecordEditor = ({ record, updateRecord, createTemporaryRecord, __ }) => {
                     <tr>
                         <td>LEADER</td>
                         <td><input onChange={onLEADERChange} value={editedRecord.LEADER} /></td>
+                        <td><button onClick={() => setEditLEADER(!editLEADER)}>{__("edit-button") + " LEADER"}</button></td>
                     </tr>
+                    {editLEADER && <EditLEADER __={__} record={editedRecord} close={() => setEditLEADER(false)} setRecord={setEditedRecord} />}
                     {editedRecord.FIELDS.map(([code = "000", fieldsData = {}], field) => <React.Fragment key={code}>
                         {fieldsData.map((fieldData, i) => <React.Fragment key={i}>
                             {/* console.log(fieldData, fieldData.subfields) */}
@@ -193,7 +198,7 @@ const RecordEditor = ({ record, updateRecord, createTemporaryRecord, __ }) => {
                                     {fieldData.subfields && <form onSubmit={onAddSubfield(code, field, i)}>
                                         <input name="subfield" minLength="1" maxLength="1" />
                                         <button>{__("Add subfield")}</button>
-                                    </form>}
+                                    </form> || (code === "008" && <button onClick={() => setEdit008(!edit008)}>{`${__("edit-button")} ${code}`}</button>)}
                                     <button onClick={onRemoveField(code, i)}>{__("Remove field")}</button>
                                 </td>
                             </tr>
