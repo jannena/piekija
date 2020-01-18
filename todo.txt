@@ -1,7 +1,8 @@
 BEFORE 1.0
 
 - Fix simple editor saving
+- Fix some caching errors
 
-- documentation
+- REST documentation
 - finish backend tests
 - go through all TODOs

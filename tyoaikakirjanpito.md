@@ -64,4 +64,6 @@
 | 4.1. | 4 | backendin testejä |
 | 11.1. | 2,5 | skriptejä, käännöksiä, korjailua |
 | | 2 | käyttöohjeiden kirjoittamista |
-| yht. | 133 | |
+| 18.1. | 4 | MARC-muokkaimen parantaminen, virhe- ja onnistumisilmoitusten kääntäminen, korjailua |
+| | 1 | käyttöohjeet valmiiksi |
+| yht. | 138 | |
