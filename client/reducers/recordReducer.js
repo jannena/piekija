@@ -105,7 +105,7 @@ export const updateRecord = (recordId, recordMARC) => (dispatch, getState) => {
                     record: MARC21.tryParse(record.record)
                 }
             });
-            dispatch(notify("success", "Successfully updated record!"));
+            dispatch(notify("success", "Record was updated"));
             console.log("TALLENSIN RECORDIN!!!", record.record, MARC21.tryParse(record.record));
         })
         .catch(onError(dispatch, "PFAILURE_RECORD_UPDATE"));
@@ -120,7 +120,7 @@ export const removeRecord = history => (dispatch, getState) => {
                 type: "PSUCCESS_RECORD_REMOVE",
                 record: getState().record.record.id
             });
-            dispatch(notify("success", "Successfully removed record!"));
+            dispatch(notify("success", "Record was removed"));
             history.push("/staff/records");
         })
         .catch(onError(dispatch, "PFAILURE_RECORD_REMOVE"));
@@ -139,7 +139,7 @@ export const createRecord = (recordMARC, history) => (dispatch, getState) => {
                     record: MARC21.tryParse(record.record)
                 }
             });
-            dispatch(notify("success", "Successfully saved to database!"));
+            dispatch(notify("success", "Record was saved to the database"));
             history.push(`/staff/record/${record.id}`);
         })
         .catch(onError(dispatch, "FAILURE_RECORD_CREATE"));
@@ -195,7 +195,7 @@ export const updateItem = (itemId, loantype, location, state, note, shelfLocatio
                 type: "PSUCCESS_RECORD_UPDATE_ITEM",
                 item: result
             });
-            dispatch(notify("success", "Successfully updated the item!"));
+            dispatch(notify("success", "Item was updated"));
         })
         .catch(onError(dispatch, "PFAILURE_RECORD_UPDATE_ITEM"));
 };
@@ -209,7 +209,7 @@ export const removeItem = itemId => (dispatch, getState) => {
                 type: "PSUCCESS_RECORD_REMOVE_ITEM",
                 itemId
             });
-            dispatch(notify("success", "Successfully removed the item!"));
+            dispatch(notify("success", "Item was removed"));
         })
         .catch(onError(dispatch, "PSUCCESS_RECORD_REMOVE_ITEM"));
 };

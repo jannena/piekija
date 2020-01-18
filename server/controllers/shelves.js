@@ -237,7 +237,7 @@ shelfRouter.delete("/:id/shelve", async (req, res, next) => {
                 { author: req.authenticated._id },
                 { sharedWith: req.authenticated._id }
             ]
-        }, { $pull: { records: { _id: record } } }, { multi: true });
+        }, { $pull: { records: { record: record } } }, { multi: true });
         io.socket.to(`shelf-${id}`).emit("remove record", {
             inCharge: {
                 username: req.authenticated.username,

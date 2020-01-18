@@ -31,7 +31,7 @@ const UserInfo = ({ user, createShelf, updateUser, notify, __ }) => {
     const handleUpdateMe = e => {
         const { name, password, againPassword, oldPassword } = e.target;
         if (password.value === againPassword.value) updateUser(oldPassword.value, name.value, password.value);
-        else notify("warning", "passwords does not match");
+        else notify("warning", "Passwords do not match");
     };
 
     return (

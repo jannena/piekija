@@ -17,7 +17,7 @@ const ShelfRecord = ({ record, canEdit, updateRecordInShelf, deleteRecordFromShe
     }
 
     const handleRemoveFromShelf = () => {
-        deleteRecordFromShelf(record._id);
+        deleteRecordFromShelf(record.record.id);
     };
 
     const cancelEditing = () => {

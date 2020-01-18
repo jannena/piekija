@@ -33,7 +33,7 @@ const shelfReducer = (state = init, action) => {
                 ...state,
                 shelf: {
                     ...state.shelf,
-                    records: state.shelf.records.filter(r => { console.log(r._id, action.record.record); return r._id !== action.record.record; })
+                    records: state.shelf.records.filter(r => { console.log(r.record.id, action.record.record); return r.record.id !== action.record.record; })
                 }
             };
         case "UPDATE_RECORD":
@@ -138,7 +138,7 @@ const shelfReducer = (state = init, action) => {
                 ...state,
                 shelf: {
                     ...state.shelf,
-                    records: state.shelf.records.filter(record => record._id !== action.recordId)
+                    records: state.shelf.records.filter(record => record.record.id !== action.recordId)
                 }
             };
     }
@@ -174,7 +174,7 @@ export const createShelf = (name, publicity) => (dispatch, getState) => {
                 type: "SUCCESS_SHELF_CREATE",
                 shelf: response
             });
-            dispatch(notify("success", "Successfully created a shelf!"));
+            dispatch(notify("success", "Shelf was created"));
         })
         .catch(onError(dispatch, "FAILURE_SHELF_CREATE"));
 };
@@ -188,7 +188,7 @@ export const updateShelf = (name, description, publicity) => (dispatch, getState
                 type: "PSUCCESS_SHELF_UPDATE",
                 shelf: response
             });
-            dispatch(notify("success", "Successfully updated the shelf!"));
+            dispatch(notify("success", "Shelf was updated"));
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_UPDATE"));
 };
@@ -218,7 +218,7 @@ export const addRecordToShelf = (recordId, shelfId) => (dispatch, getState) => {
                 record: addedRecord,
                 shelfId: shelf
             });
-            dispatch(notify("success", "Successfully added record to shelf!"));
+            dispatch(notify("success", "Record was added to the shelf"));
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_ADD_RECORD"));
 };
@@ -233,7 +233,7 @@ export const updateRecordInShelf = (record, note) => (dispatch, getState) => {
                 recordId: record,
                 note
             });
-            dispatch(notify("success", "Updated note!"));
+            dispatch(notify("success", "Note was updated"));
             console.log("Changed state!!");
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_UPDATE_RECORD"));
@@ -248,7 +248,7 @@ export const deleteRecordFromShelf = record => (dispatch, getState) => {
                 type: "PSUCCESS_SHELF_REMOVE_RECORD",
                 recordId: record
             });
-            dispatch(notify("success", "Remove record from shelf"));
+            dispatch(notify("success", "Record was removed from the shelf"));
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_REMOVE_ERROR"));
 };
@@ -262,7 +262,7 @@ export const shareShelf = username => (dispatch, getState) => {
                 type: "PSUCCESS_SHELF_SHARE",
                 sharedWith: response
             });
-            dispatch(notify("success", "Shared with", `${response.username} (${response.name})`));
+            dispatch(notify("success", "Shelf was shared with", `${response.username} (${response.name})`));
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_SHARE"));
 };
@@ -276,7 +276,7 @@ export const unshareShelf = username => (dispatch, getState) => {
                 type: "PSUCCESS_SHELF_UNSHARE",
                 username
             });
-            dispatch(notify("success", "unsared with", username));
+            dispatch(notify("success", "Shelf was unshared with", username));
         })
         .catch(onError(dispatch, "PFAILURE_SHELF_UNSHARE"));
 };
@@ -288,14 +288,14 @@ export const localUpdateShelf = data => dispatch => {
         type: "LOCAL_UPDATE",
         info: data.info
     });
-    dispatch(notify("warning", `${data.inCharge.name} updated publicity, description or title`));
+    dispatch(notify("warning", "Publicity, description or title was updated by", data.inCharge.name));
 };
 export const localRemoveShelf = data => dispatch => {
     dispatch({
         type: "LOCAL_REMOVE",
         id: data.id
     });
-    dispatch(notify("error", `${data.inCharge.name} removed shelf`));
+    dispatch(notify("error", "Shelf was removed by", data.inCharge.name));
     data.history.push("/user");
 };
 export const addRecord = data => dispatch => {
@@ -303,33 +303,33 @@ export const addRecord = data => dispatch => {
         type: "ADD_RECORD",
         record: data
     });
-    dispatch(notify("warning", `${data.inCharge.name} added '${data.record.title}'`));
+    dispatch(notify("warning", "A new record was added to the shelf by", data.inCharge.name));
 };
 export const removeRecord = data => dispatch => {
     dispatch({
         type: "REMOVE_RECORD",
         record: data
     });
-    dispatch(notify("warning", `${data.inCharge.name} removed '${data.record.title}'`));
+    dispatch(notify("warning", "Record was remove from the shelf by", data.inCharge.name));
 };
 export const updateRecord = data => dispatch => {
     dispatch({
         type: "UPDATE_RECORD",
         record: data
     });
-    dispatch(notify("warning", `${data.inCharge.name} updated the note to '${data.note}'`));
+    dispatch(notify("warning", "A note was updated by", data.inCharge.name));
 };
 export const localShare = data => dispatch => {
     dispatch({
         type: "LOCAL_SHARE",
         user: data.user
     });
-    dispatch(notify("warning", `${data.inCharge.name} shared shelf with ${data.user.name}`));
+    dispatch(notify("warning", "Shelf was shared with somebody by", data.inCharge.name));
 };
 export const localUnhare = data => dispatch => {
     dispatch({
         type: "LOCAL_UNSHARE",
         user: data.user
     });
-    dispatch(notify("warning", `${data.inCharge.name} unshared shelf with ${data.user.name}`));
+    dispatch(notify("warning", "Shelf was unshared with somebody by", data.inCharge.name));
 };

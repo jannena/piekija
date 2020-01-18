@@ -72,7 +72,7 @@ export const updateUser = (oldPassword, name, password) => async (dispatch, getS
             type: "SAVE_USER",
             user: newMe
         });
-        dispatch(notify("success", "User infomation updated!"));
+        dispatch(notify("success", "User infomation was updated"));
     }
     catch (err) {
         console.log(err);
@@ -91,7 +91,7 @@ export const setTFA = (oldPassword, tfa) => async (dispatch, getState) => {
             tfa: !!TFAQR,
             tfaqr: TFAQR || null
         });
-        dispatch(notify("success", `Two-factor authentication ${!!TFAQR ? "enabled" : "disabled"}!`));
+        dispatch(notify("success", `Two-factor authentication was ${!!TFAQR ? "enabled" : "disabled"}`));
     }
     catch (err) {
         console.log(err);

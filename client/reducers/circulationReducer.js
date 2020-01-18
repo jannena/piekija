@@ -117,7 +117,7 @@ export const createUser = () => (dispatch, getState) => {
                 type: "PSUCCESS_CIRCULATION_CREATE_USER",
                 user: result
             });
-            dispatch(notify("success", "User created successfully"));
+            dispatch(notify("success", "User was created"));
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_CREATE_USER"));
 }
@@ -131,7 +131,7 @@ export const updateUser = (name, username, barcode, password/* , address, email,
                 type: "PSUCCESS_CIRCULATION_UPDATE_USER",
                 user: result
             });
-            dispatch(notify("success", "User updated successfully"));
+            dispatch(notify("success", "User was updated"));
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_UPDATE_USER"));
 };
@@ -174,7 +174,7 @@ export const returnItemWithId = id => (dispatch, getState) => {
                 type: "PSUCCESS_CIRCULATION_RETURN",
                 returned: id
             });
-            dispatch(notify("success", "Item returned!"));
+            dispatch(notify("success", "Item was returned"));
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_RETURN"));
 };
@@ -192,7 +192,7 @@ export const renewItemWithId = id => (dispatch, getState) => {
                 dueDate: result.dueDate
             });
             console.log("renewed item", result);
-            dispatch(notify("success", "Item renewed!"));
+            dispatch(notify("success", "Item was renewed"));
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_RENEW"));
 };

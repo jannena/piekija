@@ -1,8 +1,6 @@
 BEFORE 1.0
 
-- Translate error and success messages
 - Fix simple editor saving
-- Add LEADER and 008 editors to MARC editor
 - Add date format
 
 - documentation

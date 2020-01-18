@@ -39,7 +39,7 @@ export const tryLogin = (username, password, code) => async dispatch => {
         // TODO: Is this best place to do this?
         window.localStorage.setItem("piekija-token", token);
 
-        dispatch(notify("success", "logged in succesfully"));
+        dispatch(notify("success", "Logged in"));
     }
     catch (err) {
         console.log(err);
