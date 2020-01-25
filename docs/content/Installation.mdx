@@ -1,13 +1,18 @@
 # Asennus
-1. Suorita komento **npm install**
-2. Suorita komento  **npm run piekija:install**
-3. (Mikäli backend toimii eri ositteessa kuin frontend, tiedostoon *client/globals.js* tulee muuttujaan baseUrl asettaa backendin URL-osoite. Tällöin on huomattava, että frontend sijaitsee hakemistossa *server/build*. Muutoin tätä vaihetta ei tarvita.)
-
-Asennusohjelma kysyy tietokantaosoitteen ja luo tietokantaan ensimmäisen käyttäjän.
+1. Suorita komento **npm install**.
+2. Suorita komento  **npm run piekija:install**. (Asennusohjelma kysyy MongoDB-tietokantaosoitteen (esim. *mongodb+srv://kayttaja:salasana@localhost:27017/piekija?retryWrites=true&w=majority*) ja luo tietokantaan ensimmäisen käyttäjän.)
+3. Suorita komento **npm run build**.
+4. (Mikäli backend toimii eri ositteessa kuin frontend, tiedostoon *client/globals.js* tulee muuttujaan baseUrl asettaa backendin URL-osoite. Tällöin on huomattava, että frontend sijaitsee hakemistossa *server/build*. Muutoin tätä vaihetta ei tarvita.)
+5. Järjestelmä käynnistyy komennolla **npm start** oletuksena porttiin 3000.
 
 Voilà!
 
-Mahdollisten päivitysten jälkeen tulee suorittaa komento *npm run update:records*, joka jäsentää kaikki MARC21-koodit tietokantaan uudelleen.
+Mahdollisten päivitysten jälkeen tulee suorittaa komento **npm run update:records**, joka jäsentää kaikki MARC21-koodit tietokantaan uudelleen.
+
+## Varmuuskopiointi
+PieKiJan tietokantaan tallennetut tietueet, nimekkeet, lainausmallit ja sijainnit voi varmuuskopioida komennolla **npm run export**. Varmuuskopio tallennetaan PieKiJan juurihakemistoon. Hyllyjä eikä käyttäjiä **ei** varmuuskopioida.
+
+Varmuuskopion voi palauttaa komennolla **npm run import**. Skripti kysyy tiedoston, johon varmuuskopio on tallennettu. Varmuuskopio kannattaa palauttaa vain tyhjään tietokantaan, sillä varmuuskopionpalauttamisskripti ei tarkista, onko se luomassa toisintoa jo jostakin tietokantaan tallennetusta. 
 
 ## Uuden henkilökuntakäyttäjän lisääminen
-Tavallisen käyttäjän voi ylentää henkilökuntakäyttäjäksi komennolla *npm run staff*. Skripri kysyy käyttäjän käyttäjänimen ja antaa sitten tälle henkilökuntaoikeudet.
+Tavallisen käyttäjän voi ylentää henkilökuntakäyttäjäksi komennolla **npm run staff**. Skripti kysyy käyttäjän käyttäjänimen ja antaa sitten tälle henkilökuntaoikeudet.

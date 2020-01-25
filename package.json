@@ -13,9 +13,12 @@
     "build:docs": "webpack --docs=docs --mode=production",
     "test": "mocha \"./server/tests/api/*.test.js\" --timeout 20000",
     "marctodb": "cross-env LOG=false node --max-old-space-size=4096 ./server/utils/marcToDb.js",
+
     "install:piekija": "node ./server/utils/scripts/install.js",
     "update:records": "cross-env LOG=false node ./server/utils/scripts/updateRecords.js",
-    "staff": "node ./server/utils/scripts/staffMaker.js"
+    "staff": "node ./server/utils/scripts/staffMaker.js",
+    "export": "node ./server/utils/scripts/export.js",
+    "import": "cross-env LOG=false node ./server/utils/scripts/import.js"
   },
   "repository": {
     "type": "git",

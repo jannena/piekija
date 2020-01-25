@@ -8,7 +8,7 @@ const rl = readline.createInterface({
     terminal: false
 });
 
-console.log("The sername of the user whoch will be promoted to staff: ");
+console.log("The username of the user which will be promoted to staff: ");
 rl.on("line", line => {
     rl.close();
     run(line);
