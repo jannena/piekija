@@ -1,8 +1,7 @@
 BEFORE 1.0
 
 - Fix simple editor saving
-- Fix some caching errors
 
 - REST documentation
-- finish backend tests
+- Finnish queryValidator and MARC21 tests
 - go through all TODOs

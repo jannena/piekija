@@ -24,9 +24,23 @@ const recordReducer = (state = init, action) => {
                 ...state,
                 record: action.record
             };
+        // TODO: I do not like this implementation!
         case "PSUCCESS_RECORD_ADD_ITEM":
             return {
                 ...state,
+                cache: {
+                    ...state.cache,
+                    [action.item.record]: {
+                        ...state.cache[action.item.record],
+                        result: {
+                            ...state.cache[action.item.record].result,
+                            items: [
+                                ...state.cache[action.item.record].result.items,
+                                action.item
+                            ]
+                        }
+                    }
+                },
                 record: {
                     ...state.record,
                     result: {
@@ -39,6 +53,16 @@ const recordReducer = (state = init, action) => {
             if (!state.record) return state;
             return {
                 ...state,
+                cache: {
+                    ...state.cache,
+                    [action.item.record]: {
+                        ...state.cache[action.item.record],
+                        result: {
+                            ...state.cache[action.item.record].result,
+                            items: state.cache[action.item.record].result.items.map(item => item.id !== action.item.id ? item : action.item)
+                        }
+                    }
+                },
                 record: {
                     ...state.record,
                     result: {
@@ -51,6 +75,16 @@ const recordReducer = (state = init, action) => {
             if (!state.record) return state;
             return {
                 ...state,
+                cache: {
+                    ...state.cache,
+                    [action.item.record]: {
+                        ...state.cache[action.item.record],
+                        result: {
+                            ...state.cache[action.item.record].result,
+                            items: state.cache[action.item.record].result.items.filter(item => item.id !== action.itemId)
+                        }
+                    }
+                },
                 record: {
                     ...state.record,
                     result: {
