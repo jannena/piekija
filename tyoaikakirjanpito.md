@@ -66,4 +66,6 @@
 | | 2 | käyttöohjeiden kirjoittamista |
 | 18.1. | 4 | MARC-muokkaimen parantaminen, virhe- ja onnistumisilmoitusten kääntäminen, korjailua |
 | | 1 | käyttöohjeet valmiiksi |
-| yht. | 138 | |
+| 25.1. | 3,5 | backendin testit "loppuun", varmuuskopiointi |
+| | 1 | käsin testausta, ongelmien etsimistä ja niiden korjaamista |
+| yht. | 142,5 | |
