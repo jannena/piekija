@@ -18,10 +18,9 @@ import { getLastNotes } from "./reducers/noteReducer";
 import { addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf } from "./reducers/shelfReducer";
 import { setSocketIOEventListeners, startWS } from "./socket";
 import FrontPageNews from "./components/FrontPageNews";
+import __ from "./langs";
 
-// TODO: Learn how React router works or make better (clearer) router
-
-const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf, getLastNotes, history }) => {
+const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf, getLastNotes, history, __ }) => {
     useEffect(() => {
         if (token && user) {
             startWS();
@@ -94,7 +93,7 @@ const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRe
                 <Route path="/staff" render={({ history }) => <Staff history={history} />} />
 
                 {/* Not found */}
-                <Route path="*" render={() => <p>Not found</p>} />
+                <Route path="*" render={() => <p>{__("Not found")}</p>} />
             </Switch>
         </Container>
         // </Router>
@@ -105,7 +104,8 @@ export default connect(
     state => ({
         token: state.token.token,
         user: state.user,
-        news: state.notes
+        news: state.notes,
+        __: __(state)
     }),
     { setToken, getUser, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf, getLastNotes }
 )(withRouter(App));

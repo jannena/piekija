@@ -81,7 +81,7 @@ export default (slog, def) => {
 
         "lang-chi": "Chinese",
         "lang-kor": "Korean",
-        "lang-jap": "Japanese",
+        "lang-jpn": "Japanese",
         "lang-hin": "Hindi",
         "lang-ara": "Arabic",
         "lang-tha": "Thai",
@@ -201,6 +201,9 @@ export default (slog, def) => {
         "you do not have permission to do that": "",
         "unknown endpoint": "",
 
+        // app.js
+        "Not found": "Page not found",
+
         // Search.js
         "Error": "Error",
         "Givethesearchquery": "Give the search query",
@@ -282,6 +285,8 @@ export default (slog, def) => {
         "Items": "",
         "MARC": "",
         "Links": "",
+        "Go to admin panel": "",
+        "record corrupted or not found": "",
 
         // RecordTools.js
         "Add to shelf": "",
@@ -347,6 +352,10 @@ export default (slog, def) => {
         "Author": "",
         "records-shelves": "Records",
         "Share with": "",
+        "About shelf": "",
+        "Remove shelf": "",
+        "remove-shelf-confirmation": "Write the name of this shelf and press remove",
+        "remove-shelf-not-possible": "This shelf can be removed only by the owner",
 
         // ShelfRecord.js
         "Record does not exist": "",
@@ -516,6 +525,7 @@ export default (slog, def) => {
 
         // StaffUser.js
         "Create new user": "",
+        "Password": "",
 
         // StaffNotes.js
         "Create new note": "",

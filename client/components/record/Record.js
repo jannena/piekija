@@ -58,13 +58,13 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, __ 
     }, [id]);
 
     if (!record || !record.record || !record.record.LEADER || !record.record.FIELDS) return <div>
-        {__("Error")}: {__("record corrupted")}
-        {isAdmin && <div><a href="javascript:void(0)" onClick={() => history.push(`/staff/record/${id}`)}>Go to admin panel</a></div>}
+        {__("Error")}: {__("record corrupted or not found")}
+        {isAdmin && <div><a href="javascript:void(0)" onClick={() => history.push(`/staff/record/${id}`)}>{__("Go to admin panel")}</a></div>}
     </div>;
 
     if (state.state === 0) return null;
     if (state.state === 1) return <Loader />
-    if (state.state === 3) return <p>Error: {state.error}</p>;
+    if (state.state === 3) return <p>{__("Error")}: {state.error}</p>;
 
     document.title = `${record.result.title} - ${__("PieKiJa")}`;
 

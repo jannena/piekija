@@ -95,10 +95,10 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, remo
                 </Tab>
                 <Tab>
                     {isAuthor() ? <div>
-                        <div>{__("Write the name of this shelf and press remove")}</div>
+                        <div>{__("remove-shelf-confirmation")}</div>
                         <input {...checkName.props} />
-                        <div><button onClick={handleRemoveShelf} disabled={checkName.value !== shelf.name}>Remove</button></div>
-                    </div> : <div>{__("This shelf can be removed only by the owner")}</div>}
+                        <div><button onClick={handleRemoveShelf} disabled={checkName.value !== shelf.name}>{__("remove-button")}</button></div>
+                    </div> : <div>{__("remove-shelf-not-possible")}</div>}
                 </Tab>
             </Tabs>
         </>

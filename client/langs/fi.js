@@ -81,7 +81,7 @@ export default (slog, def) => {
 
         "lang-chi": "kiina",
         "lang-kor": "korea",
-        "lang-jap": "japani",
+        "lang-jpn": "japani",
         "lang-hin": "hindi",
         "lang-ara": "arabia",
         "lang-tha": "thai",
@@ -201,6 +201,9 @@ export default (slog, def) => {
         "you do not have permission to do that": "Käyttöoikeustasosi ei riitä tämän toiminnon suorittamiseen",
         "unknown endpoint": "Tuntematon rajapinta",
 
+        // app.js
+        "Not found": "Sivua ei löytynyt!",
+
         // Search.js
         "Error": "Virhe",
         "Givethesearchquery": "Anna hakulauseke",
@@ -282,6 +285,8 @@ export default (slog, def) => {
         "Items": "Nimikkeet",
         "MARC": "MARC",
         "Links": "Linkit",
+        "Go to admin panel": "Siirry henkilökuntanäyttöön",
+        "record corrupted or not found": "tietue on viallinen tai sitä ei ole olemassa",
 
         // RecordTools.js
         "Add to shelf": "Lisää hyllyyn",
@@ -347,6 +352,10 @@ export default (slog, def) => {
         "Author": "Tekijä",
         "records-shelves": "Tietueet",
         "Share with": "Jaa",
+        "About shelf": "Tietoja hyllystä",
+        "Remove shelf": "Poista hylly",
+        "remove-shelf-confirmation": "Kirjoita hyllyn nimi ja paina 'poista'.",
+        "remove-shelf-not-possible": "Vain hyllyn omistaja voi poistaa hyllyn.",
 
         // ShelfRecord.js
         "Record does not exist": "Tietuetta ei ole olemassa",
@@ -516,6 +525,7 @@ export default (slog, def) => {
 
         // StaffUser.js
         "Create new user": "Lisää uusi käyttäjä",
+        "Password": "Salasana",
 
         // StaffNotes.js
         "Create new note": "Lisää uusi etusivu-uutinen",
