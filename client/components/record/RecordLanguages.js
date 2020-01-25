@@ -23,7 +23,7 @@ const RecordLanguages = ({ record, __ }) => {
     })();
 
     const languageTemplate = (lang, subfield, title) => !!lang[subfield].length && <tr><td>{__(title)}</td><td>
-        {lang["a"].map(l => __(`lang-${l}`, l)).join(", ")}
+        {lang[subfield].map(l => __(`lang-${l}`, l)).join(", ")}
     </td></tr>
 
     return (<>
