@@ -29,7 +29,20 @@ statisticsRouter.post("/totalLoans", async (req, res, next) => {
 
     try {
         const locations = await Location.find({});
-        res.json(locations.map(loc => [loc.name, loc.totalLoanCount || 0]));
+        const items = await Item.aggregate([
+            { $match: {} },
+            {
+                $group: {
+                    _id: "$location",
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+        console.log(items);
+        res.json(locations.map(loc => {
+            const it = items.filter(i => i._id.toString() === loc._id.toString())[0];
+            return [loc.name, loc.totalLoanCount || 0, it ? it.count : 0];
+        }));
     }
     catch (err) {
         next(err);

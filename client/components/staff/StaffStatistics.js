@@ -70,7 +70,7 @@ const StaffStatistics = ({ getLocations, locations, getNotLoanedSince, getTotalL
             <button onClick={handleGetToalLoans}>{__("Get")}</button>
             {statistics && statistics.totalLoans && <>
                 <a href={`data:text/plain;charset=utf-8,${encodeURIComponent(
-                    "Total loans\n" +
+                    "Total loans;Loans;Item count\n" +
                     statistics.totalLoans.map(i => i.join(";")).join("\n")
                 )}`} download="piekija.totalloans.csv">{__("Download CSV")}</a>
             </>}
