@@ -6,14 +6,7 @@ const Record = require("../models/Record");
 
 const io = require("../socket");
 
-// TODO: Erro handlening of socket things!!!!!!!!!!!!
-
-shelfRouter.get("/", (req, res, next) => {
-    Shelf
-        .find({})
-        .then(result => void res.json(result))
-        .catch(next);
-});
+// TODO: Error handling of socket things!!!!!!!!!!!!
 
 shelfRouter.get("/:id", async (req, res, next) => {
     const id = req.params.id;
@@ -39,7 +32,10 @@ shelfRouter.get("/:id", async (req, res, next) => {
                 path: "sharedWith",
                 select: { name: 1, username: 1 }
             });
-            return res.json(shelf);
+            const ret = shelf.toJSON();
+            ret.sharedWith = ret.sharedWith.map(({ tfa, ...u }) => u);
+            delete ret.author.tfa;
+            return res.json(ret);
         }
         else {
             const withoutShared = shelf.toJSON();
@@ -78,12 +74,15 @@ shelfRouter.post("/", async (req, res, next) => {
         });
         await req.authenticated.save();
 
-        await savedShelf.populate({
+        await Shelf.populate(savedShelf, {
             path: "author",
             select: { name: 1, username: 1 }
+        }, (err, retShelf) => {
+            if (err) return next(err);
+            const ret = retShelf.toJSON();
+            delete ret.author.tfa;
+            res.status(201).json(ret);
         });
-
-        res.status(201).json(savedShelf);
     }
     catch (err) {
         next(err);
@@ -356,7 +355,6 @@ shelfRouter.delete("/:id/share", async (req, res, next) => {
     if (!username) return res.status(400).json({ error: "username is missing" });
 
     try {
-        // TODO: Fix error codes
         const shelf = await Shelf.findOne({ _id: id, author: new ObjectId(req.authenticated._id) });
         if (!shelf) return res.status(404).end();
 

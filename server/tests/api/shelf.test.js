@@ -39,6 +39,39 @@ describe("when there is users and shelves in database (shelf tests)", () => {
         records[1] = await addRecordToDb();
     });
 
+    test("shelf can be shared", async () => {
+        await api
+            .post(`/api/shelf/${shelves[1]._id}/share`)
+            .set(tokens[0])
+            .send({
+                username: users[2].username
+            })
+            .expect(201);
+
+        const res = await api
+            .get(`/api/shelf/${shelves[1]._id}`)
+            .set(tokens[0])
+            .expect(200)
+            .expect("Content-type", /application\/json/);
+
+        console.log(res.body);
+
+        expect(res.body.sharedWith[0].username).toBe(users[2].username);
+        expect(res.body.sharedWith[0].id).toBe(users[2]._id.toString());
+        expect(res.body.sharedWith[0]._id).not.toBeDefined();
+        expect(res.body.sharedWith[0].__v).not.toBeDefined();
+        expect(res.body.sharedWith[0].passwordHash).not.toBeDefined();
+        expect(res.body.sharedWith[0].tfa).not.toBeDefined();
+        expect(res.body.sharedWith[0].TFACode).not.toBeDefined();
+
+        const shelves2 = (await getUser(users[2])).shelves;
+        console.log("shelves2=======================", shelves2);
+        console.log(shelves2[0].id, shelves[1]._id.toString());
+        expect(shelves2.length).toBe(1);
+        expect(shelves2[0].author).toBe(false);
+        expect(shelves2[0].id.toString()).toBe(shelves[1]._id.toString());
+    });
+
     test("shelf can be created and it will be added to user's document", async () => {
         const res = await api
             .post("/api/shelf")
@@ -68,9 +101,10 @@ describe("when there is users and shelves in database (shelf tests)", () => {
 
 
         const user = await getUser(users[0]._id);
+        console.log("user täällä!!!!!!!!!!!!", user);
         const shelf = user.shelves[user.shelves.length - 1];
-        expect(shelf.id.name).toBe("My first shelf");
-        expect(shelf.id.id).toBe(res.body.id);
+        // expect(shelf.id.name).toBe("My first shelf");
+        expect(shelf.id.toString()).toBe(res.body.id);
         expect(shelf.author).toBe(true);
     });
 
@@ -79,13 +113,13 @@ describe("when there is users and shelves in database (shelf tests)", () => {
             .post("/api/shelf")
             .set(tokens[0])
             .send({
-                name: "My",
+                name: "",
                 public: false
             })
             .expect(400)
             .expect("Content-type", /application\/json/);
 
-        expect(res.body.error).toBe("name must be at least three characters long");
+        expect(res.body.error).toBe("name or public is missing");
     });
 
     test("if nobody is logged in, shelf cannot be created", async () => {
@@ -142,38 +176,8 @@ describe("when there is users and shelves in database (shelf tests)", () => {
             expect(res.body.author.id).toBeDefined();
         });
 
-        test("shelf can be shared", async () => {
-            await api
-                .post(`/api/shelf/${shelves[1]._id}/share`)
-                .set(tokens[0])
-                .send({
-                    username: users[1].username
-                })
-                .expect(201);
 
-            const res = await api
-                .get(`/api/shelf/${shelves[1]._id}`)
-                .set(tokens[0])
-                .expect(200)
-                .expect("Content-type", /application\/json/);
-
-            expect(res.body.sharedWith[0].username).toBe(users[1].username);
-            expect(res.body.sharedWith[0].id).toBe(users[1]._id.toString());
-            expect(res.body.sharedWith[0]._id).not.toBeDefined();
-            expect(res.body.sharedWith[0].__v).not.toBeDefined();
-            expect(res.body.sharedWith[0].passwordHash).not.toBeDefined();
-            expect(res.body.sharedWith[0].tfa).not.toBeDefined();
-            expect(res.body.sharedWith[0].TFACode).not.toBeDefined();
-
-            const shelves = (await getUser(users[1])).shelves;
-            expect(shelves.length).toBe(2);
-            expect(shelves[1].author).toBe(false);
-            expect(shelves[1].id.id).toBe(shelves[1]._id.toString());
-        });
-
-        test("shelf cannot be shared with non-existsing user", async () => {
-
-        });
+        // test("shelf cannot be shared with non-existsing user", async () => { });
 
         describe("and when shelf has been shared with someome", () => {
             beforeEach(async () => {
@@ -199,8 +203,8 @@ describe("when there is users and shelves in database (shelf tests)", () => {
                 expect(res.body.sharedWith.length).toBe(1);
                 expect(res.body.sharedWith[0].username).toBe("second");
 
-                const shelves = (await getUser(users[2])).shelves;
-                expect(shelves.length).toBe(0);
+                const shelves2 = (await getUser(users[2])).shelves;
+                expect(shelves2.length).toBe(0);
             });
         });
 
@@ -314,6 +318,7 @@ describe("when there is users and shelves in database (shelf tests)", () => {
 
             test("records and notes can be removed", async () => {
                 await addRecordToShelf(shelves[1], records[1], "Great book about WYSIWYG editors");
+                await addRecordToShelf(shelves[1], records[0], "Hahhalishaamaamaa");
                 await api
                     .delete(`/api/shelf/${shelves[1]._id}/shelve`)
                     .set(tokens[0])
@@ -399,20 +404,22 @@ describe("when there is users and shelves in database (shelf tests)", () => {
         });
 
         describe("and when there is records in shared shelf", () => {
-            beforeEach(async () => { });
+            beforeEach(async () => {
+                await addRecordToShelf(shelves[2], records[1], "Great book about WYSIWYG editors #2");
+            });
 
             test("records can be added to shelf", async () => {
                 const res = await api
                     .post(`/api/shelf/${shelves[2]._id}/shelve`)
                     .set(tokens[1])
                     .send({
-                        record: records[1],
+                        record: records[0],
                         note: "moikku"
                     })
                     .expect(201)
                     .expect("Content-type", /application\/json/);
 
-                expect(res.body.record).toBe(records[1].toString());
+                expect(res.body.record.id).toBe(records[0].toString());
                 expect(res.body.note).toBe("moikku");
 
                 const res2 = await api
@@ -421,34 +428,53 @@ describe("when there is users and shelves in database (shelf tests)", () => {
                     .expect(200)
                     .expect("Content-type", /application\/json/);
 
-                expect(res2.body.records[0].note).toBe("moikku");
-                expect(res2.body.records[0].record.id).toBe(records[1].toString());
-                expect(res2.body.records[0].record.title).toBe("A New Book");
+                expect(res2.body.records.length).toBe(2);
+                expect(res2.body.records[1].note).toBe("moikku");
+                expect(res2.body.records[1].record.id).toBe(records[0].toString());
+                expect(res2.body.records[1].record.title).toBe("A New Book");
             });
 
-            test("records can be edited", () => {
-                // TODO: Do the test
-                expect(1).toBe(1);
+            test("records can be edited", async () => {
+                await api
+                    .put(`/api/shelf/${shelves[2]._id}/shelve`)
+                    .set(tokens[1])
+                    .send({
+                        record: records[1],
+                        note: "I do not like writing tests"
+                    })
+                    .expect(200);
+
+                const res = await api
+                    .get(`/api/shelf/${shelves[2]._id}`)
+                    .set(tokens[1])
+                    .expect(200)
+                    .expect("Content-type", /application\/json/);
+
+                expect(res.body.records.length).toBe(1);
+                expect(res.body.records[0].note).toBe("I do not like writing tests");
+                expect(res.body.records[0].record.id).toBe(records[1].toString());
             });
 
-            test("records can be removed", () => {
-                // TODO: Do the test
-                expect(1).toBe(1);
+            test("records can be removed", async () => {
+                await addRecordToShelf(shelves[2], records[0], "Great book about WYSIWYG editors #4564");
+                await api
+                    .delete(`/api/shelf/${shelves[2]._id}/shelve`)
+                    .set(tokens[1])
+                    .send({
+                        record: records[1]
+                    })
+                    .expect(204);
+
+                const res = await api
+                    .get(`/api/shelf/${shelves[2]._id}`)
+                    .set(tokens[1])
+                    .expect(200)
+                    .expect("Content-type", /application\/json/);
+
+                expect(res.body.records.length).toBe(1);
+                expect(res.body.records[0].note).toBe("Great book about WYSIWYG editors #4564");
+                expect(res.body.records[0].record.id).toBe(records[0].toString());
             });
-        });
-
-        describe("when there is records in not-shared public shelf", () => {
-            beforeEach(async () => {});
-
-            test("records cannot be added to unshared shelf", () => {
-                // TODO: Do the test
-                expect(1).toBe(1);
-            });
-
-            test("records cannot be removed from unshared shelf", () => {
-                // TODO: Do the test
-            });
-
         });
 
         test("shelf cannot be edited", async () => {
@@ -470,7 +496,6 @@ describe("when there is users and shelves in database (shelf tests)", () => {
             expect(res.body.name).toBe("Shared private shelf");
             expect(res.body.description).toBe("This is a shelf.");
             expect(res.body.public).toBe(false);
-            // TODO: Check that there is no changes
         });
 
         test("shelf cannot be shared", async () => {
@@ -492,11 +517,21 @@ describe("when there is users and shelves in database (shelf tests)", () => {
         });
 
         describe("and when shelf is shared with someone else", () => {
-            beforeEach(async () => {
+            test("shelf cannot be unshared", async () => {
+                await shareShelfWith(shelves[2]._id, users[2]._id);
 
+                await api
+                    .delete(`/api/shelf/${shelves[2]._id}/share`)
+                    .set(tokens[1])
+                    .send({
+                        username: "third"
+                    })
+                    .expect(404);
+
+                const shelf = (await getShelf(shelves[2]._id)).sharedWith;
+                expect(shelf.length).toBe(2);
+                expect(shelf[1].toString()).toBe(users[2]._id.toString());
             });
-
-            test("shelf cannot be unshared", () => { });
 
         });
 
@@ -560,21 +595,21 @@ describe("when there is users and shelves in database (shelf tests)", () => {
 
         describe("and when shelf is shared with somebody", () => {
             beforeEach(async () => {
-                await shareShelfWith(shelves[0]._id, users[2]);
+                await shareShelfWith(shelves[3]._id, users[2]._id);
             });
 
             test("shelf cannot be unshared", async () => {
                 await api
-                    .delete(`/api/shelf/${shelves[0]._id}/share`)
+                    .delete(`/api/shelf/${shelves[3]._id}/share`)
                     .set(tokens[2])
                     .send({
-                        username: "second"
+                        username: "third"
                     })
-                    .expect(403);
+                    .expect(404);
 
                 const shelf = (await getShelf(shelves[3]._id)).sharedWith;
-                expect(shelf.length).toBe(1);
-                expect(shelf[0].username).toBe("third");
+                expect(shelf.length).toBe(2);
+                expect(shelf[1].toString()).toBe(users[2]._id.toString());
             });
         });
 
@@ -634,7 +669,18 @@ describe("when there is users and shelves in database (shelf tests)", () => {
         });
 
         test("shelf cannot be edited", async () => {
-            // TODO: do the test
+            const res = await api
+                .put(`/api/shelf/${shelves[2]._id}`)
+                .set(tokens[2])
+                .send({
+                    name: "PPrivate shelf232323",
+                    description: "description...121212",
+                    public: true
+                })
+                .expect(403);
+
+            expect(res.body.name).not.toBe("PPrivate shelf232323");
+            expect(res.body.description).not.toBe("description...121212");
         });
 
         test("shelf cannot be removed", async () => {

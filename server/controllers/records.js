@@ -40,12 +40,24 @@ recordRouter.get("/:id", (req, res, next) => {
         .catch(next);
 });
 
-recordRouter.delete("/:id", (req, res, next) => {
+recordRouter.delete("/:id", async (req, res, next) => {
     console.log("????????????????????????????????????", req.authenticated);
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
     if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
     const id = req.params.id;
+
+    try {
+        const record = await Record.findById(id);
+        if (record.items.length !== 0) return res.status(409).json({ error: "there are items attached to this record" });
+
+        await record.remove();
+        res.status(204).end();
+
+    }
+    catch (err) {
+        next(err);
+    }
 
     Record
         .findByIdAndRemove(id)

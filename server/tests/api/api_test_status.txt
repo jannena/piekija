@@ -1,8 +1,8 @@
 login       ready
 search      -               not started, enough
-user        ready enough
+user        ready enough    TODO: error at "user cannot be removed if they have loaned something"
 record      ready enough
-shelf       -               TODO: A few tests
+shelf       ready
 circulation ready enough
 statistics  ready
 

@@ -72,7 +72,6 @@ loantypeRouter.delete("/:id", async (req, res, next) => {
     const id = req.params.id;
 
     try {
-        // TODO: Performance?
         console.log("Trying to remove loantype", id);
         const itemUsingThisLoantype = await Item.findOne({ loantype: id });
         console.log(itemUsingThisLoantype);

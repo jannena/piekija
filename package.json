@@ -11,7 +11,7 @@
     "build": "npm run build:piekija && npm run build:docs",
     "build:piekija": "webpack --mode=production",
     "build:docs": "webpack --docs=docs --mode=production",
-    "test": "mocha \"./server/tests/api/shelf.test.js\" --timeout 20000",
+    "test": "mocha \"./server/tests/api/*.test.js\" --timeout 20000",
     "marctodb": "cross-env LOG=false node --max-old-space-size=4096 ./server/utils/marcToDb.js",
     "install:piekija": "node ./server/utils/scripts/install.js",
     "update:records": "cross-env LOG=false node ./server/utils/scripts/updateRecords.js",

@@ -35,7 +35,7 @@ describe("when there are everything in the database (item tests)", () => {
     });
 
     describe("and when staff user is logged in", () => {
-        test("item can be created", async () => {
+        test("item can be created and will be added to record", async () => {
             const res = await api
                 .post("/api/item")
                 .set(tokens[0])
@@ -59,6 +59,8 @@ describe("when there are everything in the database (item tests)", () => {
             expect(res.body.loantype.name).toBeDefined();
 
             expect(await itemsInDb()).toBe(itemsAtStart + 1);
+
+            // TODO: Will be removed from record?
         });
 
         test("item can be updated", async () => {
@@ -99,13 +101,15 @@ describe("when there are everything in the database (item tests)", () => {
             });
         });
 
-        test("item can be removed", async () => {
+        test("item can be removed and it will be removed from record", async () => {
             await api
                 .delete(`/api/item/${item._id}`)
                 .set(tokens[0])
                 .expect(204);
 
             expect(await itemsInDb()).toBe(itemsAtStart - 1);
+
+            // TODO: Will be removed from record?
         });
 
         test("item can be searched", async () => {
