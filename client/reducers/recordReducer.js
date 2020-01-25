@@ -126,10 +126,10 @@ export const removeRecord = history => (dispatch, getState) => {
         .catch(onError(dispatch, "PFAILURE_RECORD_REMOVE"));
 };
 
-export const createRecord = (recordMARC, history) => (dispatch, getState) => {
+export const createRecord = (recordMARC, ai, history) => (dispatch, getState) => {
     dispatch({ type: "REQUEST_RECORD_CREATE" });
     recordService
-        .createWithMARC(recordMARC, getState().token.token)
+        .createWithMARC(recordMARC, ai, getState().token.token)
         .then(record => {
             console.log(record);
             dispatch({

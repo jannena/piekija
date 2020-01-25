@@ -2,6 +2,10 @@
 const mongoose = require("mongoose");
 
 const RecordSchema = new mongoose.Schema({
+    // juokseva numero
+    ai: {
+        type: Number
+    },
     // MARC21: 130 / 245
     title: {
         type: String,
@@ -121,9 +125,19 @@ const RecordSchema = new mongoose.Schema({
     ]
 });
 
-// RecordSchema.index({ record: "text" });
-// RecordSchema.index({ authors: 1, subjects: 1, languages: 1, year: -1 });
-// RecordSchema.index({ language: -1 });
+RecordSchema.index({ spelling1: -1 });
+RecordSchema.index({ spelling2: -1 });
+RecordSchema.index({ standardCodes: 1 });
+RecordSchema.index({ author: 1 });
+RecordSchema.index({ authors: 1 });
+RecordSchema.index({ subjects: 1 });
+RecordSchema.index({ language: 1 });
+RecordSchema.index({ languages: 1 });
+RecordSchema.index({ year: -1 });
+RecordSchema.index({ series: -1 });
+RecordSchema.index({ classification: -1 });
+RecordSchema.index({ country: -1 });
+RecordSchema.index({ title: -1 });
 
 RecordSchema.set("toJSON", {
     transform: (doc, ret) => {

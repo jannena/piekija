@@ -407,6 +407,7 @@ export default (slog, def) => {
         "Search external databases for this record": "Hae tietuetta ulkoisista tietokannoista",
         "View in Finna": "Tarkastele Finnassa",
         "Preview": "Esikatsele",
+        "Sequential number (optional)": "Juokseva numero (vapaavalintainen)",
 
         // Circulation.js
         "User barcode": "Käyttäjän viivakoodi",

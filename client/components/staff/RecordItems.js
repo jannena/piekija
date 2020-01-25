@@ -9,7 +9,7 @@ import { Form, Input, Button, FormSelect, Text, Grid, DoNotSendButton } from "..
 import { Table, TableRow, TableCell } from "../essentials/Tables";
 import __ from "../../langs";
 
-const RecordItems = ({ items, locations, loantypes, addItem, removeItem, updateItem, getLocations, getLoantypes, __ }) => {
+const RecordItems = ({ record, items, locations, loantypes, addItem, removeItem, updateItem, getLocations, getLoantypes, __ }) => {
     useEffect(() => {
         if (items && locations.length === 0) getLocations();
         if (items && loantypes.length === 0) getLoantypes();
@@ -34,7 +34,7 @@ const RecordItems = ({ items, locations, loantypes, addItem, removeItem, updateI
     };
 
     const itemStateOptions = [
-        [__("not in use"), "not in use"], [__("loaned"), "loaned"], [__("not loaned"), "not loaned"], [__("broken"), "broken"],
+        [__("not loaned"), "not loaned"], [__("not in use"), "not in use"], [__("loaned"), "loaned"], [__("broken"), "broken"],
         [__("placed a hold"), __("placed a hold")], [__("other"), "other"]
     ];
 
@@ -62,10 +62,10 @@ const RecordItems = ({ items, locations, loantypes, addItem, removeItem, updateI
         <>
             <Expandable title={__("Create new item")}>
                 <Form onSubmit={handleCreateItem}>
-                    <Input name="barcode" title={__("Barcode")} description={__("staff-item-barcode-info")} />
+                    <Input name="barcode" value={record.result.ai ? `${record.result.ai}/${items.length + 1}` : ""} title={__("Barcode")} description={__("staff-item-barcode-info")} />
                     <FormSelect name="loantype" title={__("Loantype")} options={loantypes.map(loantype => [loantype.name, loantype.id])} />
                     <FormSelect name="location" title={__("Location")} options={locations.map(location => [location.name, location.id])} />
-                    <Input name="shelfLocation" title={__("Shelf location")} description={__("staff-item-shelf-location-info")} />
+                    <Input name="shelfLocation" value="-" title={__("Shelf location")} description={__("staff-item-shelf-location-info")} />
                     <FormSelect name="state" title={__("State")} options={itemStateOptions} description={__("staff-item-state-info")} />
                     <Input name="note" title={__("Note")} />
                     <Button title={__("save-button")} />
@@ -85,6 +85,7 @@ const RecordItems = ({ items, locations, loantypes, addItem, removeItem, updateI
 
 export default connect(
     state => ({
+        record: state.record.record,
         items: state.record.record.result ? state.record.record.result.items : null,
         locations: state.location,
         loantypes: state.loantype,

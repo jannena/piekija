@@ -7,13 +7,14 @@ const get = id => {
     return axios.get(`${baseUrl}/${id}`).then(response => response.data);
 };
 
-const createWithMARC = (recordMARC, token) => {
+const createWithMARC = (recordMARC, ai, token) => {
     return axios
         .post(
             baseUrl,
             {
                 type: "marc21",
-                data: recordMARC
+                data: recordMARC,
+                ai
             },
             { headers: { Authorization: `Bearer ${token}` } }
         )

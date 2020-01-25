@@ -3,17 +3,6 @@ const Record = require("../models/Record");
 
 const MARC21 = require("../utils/marc21parser");
 
-// Get all records
-// TODO: Remove this
-recordRouter.get("/", (req, res, next) => {
-    Record
-        .find({})
-        .then(result => {
-            res.json(result.map(r => r.toJSON()));
-        })
-        .catch(next);
-});
-
 // Get one record
 recordRouter.get("/:id", (req, res, next) => {
     const id = req.params.id;
@@ -69,11 +58,11 @@ recordRouter.delete("/:id", async (req, res, next) => {
 
 // Add new record to database
 // This endpoint needs marc21 data. That will be parsed to the database.
-recordRouter.post("/", (req, res, next) => {
+recordRouter.post("/", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
     if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
-    const { type, data } = req.body;
+    const { type, data, ai } = req.body;
     if (!type || !data) return res.status(400).json({ error: "type or data is missing" });
 
     console.log("received marc21 data", data);
@@ -82,14 +71,17 @@ recordRouter.post("/", (req, res, next) => {
     if (!parsedMARC) return res.status(400).json({ error: "invalid marc21 data" })
     const record = MARC21.parseMARCToDatabse(parsedMARC, data);
 
-    const newRecord = new Record(record);
+    try {
 
-    newRecord
-        .save()
-        .then(saved => {
-            res.status(201).json(saved.toJSON());
-        })
-        .catch(next);
+        const newAI = ai && isFinite(ai) ? ai : ((await (Record.count({}).then(n => n))) + 1);
+
+        const newRecord = new Record({ ...record, ai: newAI });
+        const saved = await newRecord.save()
+        res.status(201).json(saved.toJSON());
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 recordRouter.put("/:id", (req, res, next) => {

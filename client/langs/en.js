@@ -407,6 +407,7 @@ export default (slog, def) => {
         "Search external databases for this record": "",
         "View in Finna": "",
         "Preview": "",
+        "Sequential number (optional)": "",
 
         // Circulation.js
         "User barcode": "",

@@ -24,9 +24,9 @@ const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRec
     const hasItems = record.result && record.result.items && record.result.items.length !== 0
     const isPreview = record && record.result && record.result.id === "preview";
 
-    const onSaveToDatabase = () => {
-        // TODO: change page to record just created
-        createRecord(record.result.record, history);
+    const onSaveToDatabase = e => {
+        e.preventDefault();
+        createRecord(record.result.record, e.target.ai.value, history);
     };
 
     const onRemoveRecord = () => {
@@ -34,7 +34,10 @@ const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRec
     };
 
     const recordTools = () => {
-        if (record && record.result && record.result.id && record.result.id === "preview") return <button onClick={onSaveToDatabase}>{__("Save to database")}</button>;
+        if (record && record.result && record.result.id && record.result.id === "preview") return <form onSubmit={onSaveToDatabase}>
+            <input id="ai" name="ai" placeholder={__("Sequential number (optional)")} />
+            <button>{__("Save to database")}</button>
+        </form>;
         else return <>
             <button onClick={() => history.push(`/staff/records`)}>{__("Back to staff screen")}</button>
             <button onClick={() => history.push(`/record/${id}`)}>{__("Preview as normal user")}</button>
