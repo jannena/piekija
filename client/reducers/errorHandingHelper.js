@@ -1,10 +1,12 @@
 import { notify } from "./notificationReducer";
 
 export const onError = (dispatch, type) => err => {
-    window.notify = (type, message) => dispatch(notify(type, message));
+    // window.notify = (type, message) => dispatch(notify(type, message));
     try {
         console.log(err, err.response);
         const error = err.response.status === 404 ? "Not found" : err.response.data.error;
+
+        if (!err || !err.response || !err.response.data || !err.response.data.error) return;
         dispatch({
             type,
             error
