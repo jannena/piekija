@@ -241,7 +241,10 @@ export const removeItem = itemId => (dispatch, getState) => {
         .then(result => {
             dispatch({
                 type: "PSUCCESS_RECORD_REMOVE_ITEM",
-                itemId
+                itemId,
+                item: {
+                    record: getState().record.record.result.id
+                }
             });
             dispatch(notify("success", "Item was removed"));
         })
