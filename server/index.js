@@ -11,3 +11,11 @@ server.listen({
 }, () => {
     console.log("Listening on port 3001");
 });
+
+
+
+// const graphql = require("./graphql");
+
+// graphql.listen().then(({ url }) => {
+//     console.log("GraphQL running on", url);
+// })

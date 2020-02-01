@@ -2,6 +2,5 @@ BEFORE 1.0
 
 - Fix simple editor saving
 
-- REST documentation
 - Finnish queryValidator and MARC21 tests
 - go through all TODOs
