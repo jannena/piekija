@@ -124,7 +124,6 @@ userRouter.post("/", async (req, res, next) => {
         const newUser = new User({
             name,
             username,
-            staff,
             passwordHash,
             barcode,
             loans: [],
