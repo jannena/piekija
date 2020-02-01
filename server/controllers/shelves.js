@@ -12,7 +12,6 @@ shelfRouter.get("/:id", async (req, res, next) => {
     const id = req.params.id;
 
     try {
-        // TODO: Is this the best way to do this?
         const shelf = await Shelf.findOne({
             _id: id,
             $or: [

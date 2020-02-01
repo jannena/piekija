@@ -6,7 +6,6 @@ import { EditLEADER, Edit008 } from "./MARCFieldEditors";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
-// TODO: Success and error messages
 
 const RecordEditor = ({ record, updateRecord, createTemporaryRecord, __ }) => {
     console.log("editing", record);
@@ -44,8 +43,7 @@ const RecordEditor = ({ record, updateRecord, createTemporaryRecord, __ }) => {
 
     const onAddField = e => {
         e.preventDefault();
-        // TODO: Fields 001-009!!!!!!!!
-
+        
         const field = e.target.field.value;
         console.log("addign field", field, Number(field), field.length);
         if (field.length !== 3 || isNaN(Number(field))) return console.log("malformatted field code");

@@ -4,7 +4,6 @@ const { PERFORMANCE_LIMIT } = require("../utils/config");
 
 const { validateAdvancedQuery, validateSimpleQuery, queryContainsOps } = require("../utils/queryValidator");
 
-// TODO: pagination
 
 const searchResultsPerPage = 20;
 
@@ -48,7 +47,6 @@ const search = async (req, res, next, simple) => {
             const result = Object.keys(readyQuery).length !== 0 && !queryContainsOps(query) && found <= PERFORMANCE_LIMIT && simple === true && sort === "relevance"
                 // Relevance search
                 // TODO: Add pagination
-                // TODO: previewText
                 ? void (allwords = query.split(" ").map(w => w.toLowerCase())) || await Record.aggregate([
                     { $match: { $or: [{ "spelling1": { "$in": allwords } }, { "spelling2": { "$in": allwords } }] } },
                     { $unwind: "$spelling1" },
@@ -56,7 +54,6 @@ const search = async (req, res, next, simple) => {
                     // { $match: { "spelling1": { "$in": allwords } } },
                     { $match: { $or: [{ "spelling1": { "$in": allwords } }, { "spelling2": { "$in": allwords } }] } },
                     {
-                        /* TODO: Now the record with more spelling2 things is ranked better. Or is it? */
                         $group: {
                             id: { $first: "$_id" }, title: { $first: "$title" }, year: { $first: "$year" },
                             author: { $first: "$author" }, image: { $first: "$image" }, contentType: { $first: "$contentType" },
@@ -90,7 +87,6 @@ const search = async (req, res, next, simple) => {
 
             console.log("found", found, "PERFORMANCE_LIMIT", PERFORMANCE_LIMIT);
 
-            // TODO: classification? maybe not
             if (filter && found < PERFORMANCE_LIMIT) {
                 const subjects = await Record.aggregate([
                     { $match: readyQuery },

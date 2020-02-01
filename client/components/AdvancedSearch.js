@@ -15,8 +15,6 @@ const QueryGroupStyle = {
 
 const MARC21 = require("../../server/utils/marc21parser");
 
-// TODO: Language lists
-
 const AdvancedSearchField = ({ query, setQuery, removeField, __ }) => {
     const onChange = index => e => {
         // const newQuery = [...query];

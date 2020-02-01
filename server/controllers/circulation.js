@@ -19,14 +19,12 @@ circulationRouter.post("/loan", async (req, res, next) => {
         if (!user) return res.status(400).json({ error: "user does not exist" });
         if (!item) return res.status(400).json({ error: "item does not exist" });
 
-        // TODO: Check error code
         if (item.loantype.canBeLoaned === false) return res.status(400).json({ error: "item cannot be loaned because of loantype" });
 
         console.log(user.loans[0], typeof user.loans[0], item._id, typeof item._id);
         if (user.loans && user.loans.some(l => l.toString() === item._id.toString())) return res.status(400).json({ error: "user has already loaned this item" });
 
 
-        // TODO: Check whether item is already loaned!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (item.state === "loaned" && item.statePersonInCharge !== null) return res.status(400).json({ error: "item has already been loaned" });
 
         user.loans.push(item._id);
@@ -103,7 +101,6 @@ circulationRouter.post("/renew", async (req, res, next) => {
         else return res.status(403).json({ error: "you cannot renew this loan" });
 
         const { loanTime, renewTimes } = item.loantype;
-        // TODO: Fix error code
         if (item.stateTimesRenewed >= renewTimes) return res.status(400).json({ error: "renewTimes exeeded" });
 
         const dueDate = new Date();

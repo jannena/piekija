@@ -77,16 +77,15 @@ userRouter.put("/me", async (req, res, next) => {
 });
 
 
-// TODO: REMOVE
-userRouter.get("/", (req, res, next) => {
-    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
-    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+// userRouter.get("/", (req, res, next) => {
+//     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+//     if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
-    User
-        .find({})
-        .then(result => void res.json(result))
-        .catch(next);
-});
+//     User
+//         .find({})
+//         .then(result => void res.json(result))
+//         .catch(next);
+// });
 
 userRouter.get("/:id", (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));

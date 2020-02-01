@@ -50,7 +50,6 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
                         />
                     </div>
                     <SearchFilter />
-                    {/* TODO: Print also where was the match?? Not possible yet */}
                     {result.result.map(record => <RecordPreview key={record.id} __={__} record={record} />)}
                     <div style={{ textAlign: "center", lineHeight: "50px" }}>
                         {page >= 2 && <a href="javascript:void(0);" onClick={previousPage}>&lt;&lt; {__("Previous")}</a>}

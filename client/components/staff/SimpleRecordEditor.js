@@ -7,9 +7,6 @@ import __ from "../../langs";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
-// TODO: Translate
-// TODO: Clean
-
 // TODO: Things go bad after simple editor save
 
 const SimpleRecordEditor = ({ updateRecord, record2, __ }) => {
@@ -209,11 +206,6 @@ const SimpleRecordEditor = ({ updateRecord, record2, __ }) => {
             </div>
 
             <button onClick={handleUpdateRecord}>{__("save-button")}</button>
-
-
-            {/* TODO: Notes */}
-            {/* TODO: Contents */}
-            {/* TODO: Appearance */}
         </div>
     );
 };

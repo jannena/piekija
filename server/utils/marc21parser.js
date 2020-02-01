@@ -388,7 +388,6 @@ const getSpelling = parsedMARC => {
 };
 
 const parseMARCToDatabse = async (parsedMARC, data) => {
-    // TODO: There are catalouging rules.
     const year = (() => {
         try {
             const y = Number(parsedMARC.FIELDS["008"][0].substring(7, 11));
@@ -542,7 +541,6 @@ const parseMARCToDatabse = async (parsedMARC, data) => {
     };
 };
 
-// TODO Create also version that can be used with frontend
 module.exports = {
     parse,
     stringify,

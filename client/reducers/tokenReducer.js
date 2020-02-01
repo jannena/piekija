@@ -36,7 +36,6 @@ export const tryLogin = (username, password, code) => async dispatch => {
             token
         });
 
-        // TODO: Is this best place to do this?
         window.localStorage.setItem("piekija-token", token);
 
         dispatch(notify("success", "Logged in"));

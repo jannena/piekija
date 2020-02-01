@@ -2,18 +2,18 @@ const itemRouter = require("express").Router();
 const Item = require("../models/Item");
 const Record = require("../models/Record");
 
-// TODO: Remove this
-itemRouter.get("/", (req, res, next) => {
-    Item
-        .find({})
-        .populate("record", { title: 1, author: 1 })
-        .populate("location", { name: 1 })
-        .populate("loantype")
-        .then(result => {
-            res.json(result);
-        })
-        .catch(next);
-});
+
+// itemRouter.get("/", (req, res, next) => {
+//     Item
+//         .find({})
+//         .populate("record", { title: 1, author: 1 })
+//         .populate("location", { name: 1 })
+//         .populate("loantype")
+//         .then(result => {
+//             res.json(result);
+//         })
+//         .catch(next);
+// });
 
 itemRouter.post("/", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));

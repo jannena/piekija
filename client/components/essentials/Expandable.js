@@ -18,8 +18,6 @@ const StyledExpandableContent = styled.div`
     display: ${props => props.isOpen ? "block" : "none"}
 `;
 
-// TODO: Add logo?
-
 const Expandable = ({ defaultIsOpen = false, noPadding = false, title, children }) => {
     const [isOpen, setIsOpen] = useState(defaultIsOpen);
 

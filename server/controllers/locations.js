@@ -67,7 +67,6 @@ locationRouter.delete("/:id", async (req, res, next) => {
 
         console.log("Removing location", id, itemUsingThisLocation);
 
-        // TODO: Check the http status code
         if (itemUsingThisLocation) return res.status(409).json({ error: "there are items using this location" });
     }
     catch (err) {

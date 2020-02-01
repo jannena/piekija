@@ -4,8 +4,6 @@ import { tryLogin } from "../reducers/tokenReducer";
 import { Redirect } from "react-router-dom";
 import __ from "../langs";
 
-// TODO: redirection after login
-
 const Login = ({ tryLogin, usetfa, user, __ }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");

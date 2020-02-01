@@ -17,7 +17,6 @@ const StyledTabTitlesContainer = styled.div`
     background-color: black;
 `;
 
-{/* TODO: Fix selected shadow: over border. Make container? */ }
 const StyledSelectedTabTitle = styled.div`
     color: black;
     background-color: white;
@@ -50,8 +49,6 @@ const TabsWithoutRouter = ({ titles, root, addresses, children, history }) => {
         history.push(`/${root}/${addresses[i]}`);
         // setSelectedTab(i);
     };
-
-    // TODO: Show correct selected tab styled after reload
 
     return (
         <div>

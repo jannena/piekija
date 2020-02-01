@@ -55,7 +55,6 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, remo
                 <h2>{shelf.name}</h2>
                 <div style={{ margin: 22 }}>{__("Author")}: {isAuthor() ? __("you") : shelf.author.name}</div>
             </div>
-            {/* TODO: Remove some tabs when author is not logged in */}
             <Tabs titles={titles}>
                 <Tab>
 

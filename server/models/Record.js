@@ -72,7 +72,6 @@ const RecordSchema = new mongoose.Schema({
         ],
         required: true
     },
-    // TODO: How about other 600-662 fields?
 
     series: {
         type: [

@@ -8,7 +8,7 @@ import Expandable from "../essentials/Expandable";
 import Loader from "../Loader";
 // import { Document, View, Page, Text, StyleSheet, PDFDownloadLink, Font } from "@react-pdf/renderer";
 
-// TODO: Too slow: @react-pdf/renderer
+// Too slow: @react-pdf/renderer
 /* const PDFDocument = ({ items }) => {
     Font.register({ family: "Trebuchet MS" })
     Font.register({ family: "'Trebuchet MS', Helvetica, sans-serif" })
