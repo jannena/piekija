@@ -7,8 +7,6 @@ const init = {
     shelf: null
 };
 
-// TODO: Do this need caching?
-
 const shelfReducer = (state = init, action) => {
     const stateToUpdate = { ...state };
     switch (action.type) {

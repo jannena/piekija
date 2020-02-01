@@ -9,17 +9,17 @@ loantypeRouter.get("/", (req, res, next) => {
         .catch(next);
 });
 
-loantypeRouter.get("/:id", (req, res, next) => {
-    const id = req.params.id;
+// loantypeRouter.get("/:id", (req, res, next) => {
+//     const id = req.params.id;
 
-    Loantype
-        .findById(id)
-        .then(result => {
-            if (result) return res.json(result.toJSON());
-            else res.status(404).end();
-        })
-        .catch(next);
-});
+//     Loantype
+//         .findById(id)
+//         .then(result => {
+//             if (result) return res.json(result.toJSON());
+//             else res.status(404).end();
+//         })
+//         .catch(next);
+// });
 
 loantypeRouter.post("/", (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));

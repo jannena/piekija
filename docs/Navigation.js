@@ -32,6 +32,7 @@ const Navigation = () => {
         <NavCategory title="Kehittäjälle">
             <NavTitle title="Asennus" address="installation" />
             <NavTitle title="REST API" address="rest" />
+            <NavTitle title="Advanced search" address="advanced-search-ml" />
         </NavCategory>
     </div>;
 };

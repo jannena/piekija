@@ -13,6 +13,7 @@ import Notes from "./content/Notes.mdx";
 import MARC21 from "./content/MARC21.mdx";
 import Installation from "./content/Installation.mdx";
 import RESTAPI from "./content/RESTAPI.mdx";
+import AdvancedSearch from "./content/AdvancedSearch.mdx";
 
 const Container = () => {
     return <div id="content">
@@ -31,6 +32,7 @@ const Container = () => {
 
         <Route exact path="/docs/installation" component={Installation} />
         <Route exact path="/docs/rest" component={RESTAPI} />
+        <Route exact path="/docs/advanced-search-ml" component={AdvancedSearch} />
     </div>;
 };
 

@@ -111,10 +111,10 @@ userRouter.post("/", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
     if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
-    const { name, username, staff, password, barcode } = req.body;
+    const { name, username, password, barcode } = req.body;
 
-    if (!name || !username || staff === undefined || !password || !barcode)
-        return res.status(400).json({ error: "name or username or staff or password or barcode is missing" });
+    if (!name || !username || !password || !barcode)
+        return res.status(400).json({ error: "name or username or password or barcode is missing" });
 
     if (password.length < 10) return res.status(400).json({ error: "length of password must be at least 10 characters" });
 
@@ -144,7 +144,7 @@ userRouter.put("/:id", async (req, res, next) => {
     if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
     const id = req.params.id;
-    const { username, name, password, staff, barcode } = req.body;
+    const { username, name, password, barcode } = req.body;
 
     const modifiedUser = {};
 
@@ -157,7 +157,6 @@ userRouter.put("/:id", async (req, res, next) => {
 
         if (username) modifiedUser.username = username;
         if (name) modifiedUser.name = name;
-        if (staff !== undefined) modifiedUser.staff = staff;
         if (barcode) modifiedUser.barcode = barcode;
 
         User

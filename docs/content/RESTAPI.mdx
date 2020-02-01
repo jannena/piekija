@@ -1,0 +1,324 @@
+import Template, { TableOfContents } from "../RESTTemplate";
+
+# REST API
+
+## Table of contents
+<TableOfContents />
+
+## Login
+<Template verb="POST" address="/api/login" privileges={0}
+    description="Gives access tokens for users."
+    returns="{token, id, username}"
+    parameters={[["username", "", true], ["password", "", "true"], ["code", "Two-factor authentication code", false]]}
+    errors={["username or password is missing", "wrong username or password", "code needed", "invalid code"]} />
+
+## Search
+<Template verb="POST" address="/api/search/simple" privileges={0}
+    description="Performs simple search."
+    returns={`{
+    result: [{previewText, image, contentType, title, author, year, id}],
+    found,
+    time,
+    filters: {subjects, authors, languages, years}
+}`}
+    parameters={[
+        ["query", "string query", true],
+        ["page", "page number", true],
+        ["sort", "year | relevance | yeardesc | timeAdded | alphapetical | alphapeticaldesc", false],
+        ["filter", "if true, returns filter", false]]}
+    errors={[]} />
+
+<Template verb="POST" address="/api/search/advanced" privileges={0}
+    description="Works the same like the previous but parameter query will be presented on the next page of documentation."
+    parameters={[]}
+    errors={[]}
+    />
+
+
+## Records
+<Template verb="GET" address="/api/record/:id" privileges={1}
+    description="Gets the record."
+    returns="The record"
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="POST" address="/api/record" privileges={2}
+    description="Creates a record with given marc21 data."
+    returns="The saved record"
+    parameters={[["type", "must be 'marc21'", true], ["data", "marc21 data", true]]}
+    errors={["type or data is missing", "invalid marc21 data"]} />
+
+<Template verb="PUT" address="/api/record/:id" privileges={2}
+    description="Updates the record with given marc21 data."
+    returns="The updated record"
+    parameters={[["type", "must be 'marc21'", true], ["data", "marc21 data", true]]}
+    errors={["type or data is missing", "invalid marc21 data"]} />
+
+<Template verb="DELETE" address="/api/record/:id" privileges={2}
+    description="Removes the record."
+    parameters={[]}
+    errors={[]} />
+
+
+## Items
+<Template verb="POST" address="/api/item" privileges={2}
+    description="Creates a new item"
+    return="The new item"
+    parameters={[
+        ["barcode", "", true],
+        ["record", "record id", true],
+        ["location", "location id", true],
+        ["loantype", "loantype id", true],
+        ["state", "not in use | loaned | not loaned | broken | placed a hold | other", true],
+        ["shelfLocation", "string", true]
+    ]}
+    errors={["barcode or record or location or loantype or state or shelfLocation is missing"]} />
+
+<Template verb="PUT" address="/api/item/:id" privileges={2}
+    description="Updates the item."
+    return="The updated item"
+    parameters={[
+        ["record", "record id", true],
+        ["location", "location id", true],
+        ["loantype", "loantype id", true],
+        ["state", "not in use | loaned | not loaned | broken | placed a hold | other", true],
+        ["note", "string", true],
+        ["shelfLocation", "string", true]
+    ]}
+    errors={["location or loantype or state or note or shelfLocation is missing"]} />
+
+<Template verb="DELETE" address="/api/item/:id" privileges={2}
+    description="Removes the item."
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="POST" address="/api/item/search" privileges={2}
+    description="Searches items with barcode"
+    returns="Item that has the given barcode"
+    parameters={[["barcode", "", true]]}
+    errors={["barcode is missing"]} />
+
+## Loantypes
+<Template verb="GET" address="/api/loantype" privileges={0}
+    description="Gets all the loantypes."
+    returns="List of loantypes"
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="POST" address="/api/loantype" privileges={2}
+    description="Creates a new loantype."
+    returns="The new loantype"
+    parameters={[
+        ["name", "string", true],
+        ["canBePlacedAHold", "boolean", true],
+        ["canBeLoanes", "boolean", true],
+        ["renewTimes", "number", true],
+        ["loanTime", "number", true],
+    ]}
+    errors={["name or canBePlacedAHold or canBeLoaned or renewTimes or loanTime is missing"]} />
+
+<Template verb="PUT" address="/api/loantype/:id" privileges={2}
+    description="Updates the loantype."
+    returns="The updated loantype"
+    parameters={[
+        ["name", "string", true],
+        ["canBePlacedAHold", "boolean", true],
+        ["canBeLoanes", "boolean", true],
+        ["renewTimes", "number", true],
+        ["loanTime", "number", true],
+    ]}
+    errors={["name or canBePlacedAHold or canBeLoaned or renewTimes or loanTime is missing"]} />
+
+<Template verb="DELETE" address="/api/loantype/:id" privileges={2}
+    description="Removes the loantype."
+    parameters={[]}
+    errors={["there are items that using this loantype"]} />
+
+## Notes
+<Template verb="GET" address="/api/note" privileges={2}
+    description="Gets all the notes."
+    returns="List of notes"
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="GET" address="/api/note/last" privileges={0}
+    description="Gets five latest notes."
+    returns="List of notes"
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="POST" address="/api/note/" privileges={2}
+    description="Creates a new note."
+    returns="The new note"
+    parameters={[["title", "", true], ["content", "", true]]}
+    errors={["title or content missing"]} />
+
+<Template verb="PUT" address="/api/note/:id" privileges={2}
+    description="Updates the note."
+    returns="The updated note"
+    parameters={[["title", "", true], ["content", "", true]]}
+    errors={["title or content missing"]} />
+
+<Template verb="DELETE" address="/api/note/:id" privileges={2}
+    description="Deletes the note."
+    parameters={[]}
+    errors={[]} /> 
+
+## Locations
+<Template verb="GET" address="/api/location" privileges={0}
+    description="Gets all the locations."
+    returns="List of locations"
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="POST" address="/api/location" privileges={2}
+    description="Creates a new location."
+    returns="The new location"
+    parameters={[["name", "", true]]}
+    errors={["name is missing"]} />
+
+<Template verb="PUT" address="/api/location/:id" privileges={2}
+    description="Updates the location."
+    returns="The updated location"
+    parameters={[["name", "", true]]}
+    errors={["name is missing"]} />
+
+<Template verb="DELETE" address="/api/location/:id" privileges={2}
+    description="Deletes the location."
+    parameters={[]}
+    errors={["there are items using this location"]} /> 
+
+## Users (rest)
+<Template verb="GET" address="/api/user/:id" privileges={2}
+    description="Gets the user."
+    returns="The user"
+    parameters={[]}
+    errors={[]} /> 
+
+<Template verb="POST" address="/api/user" privileges={2}
+    description="Creates a new user."
+    returns="The created user"
+    parameters={[["name", "string", true], ["username", "string", true], ["password", "at least 10 characters, string", true], ["barcode", "string", true]]}
+    errors={["name or username or staff or password or barcode is missing", "name or username or password or barcode is missing"]} /> 
+
+<Template verb="PUT" address="/api/user/:id" privileges={2}
+    description="Updates the user."
+    returns="The Updated user."
+    parameters={[["name", "string", false], ["username", "string", false], ["password", "at least 10 characters, string", false], ["barcode", "string", false]]}
+    errors={["password too short"]} /> 
+
+<Template verb="DELETE" address="/api/user/:id" privileges={2}
+    description="Deletes the user."
+    parameters={[]}
+    errors={["user have active loans"]} />
+
+<Template verb="POST" address="/api/user/search" privileges={2}
+    description="Searches users with name or barcode."
+    returns="One user that matches"
+    parameters={[["barcode", "", false], ["name", "", false]]}
+    errors={["barcode and name missing"]} />
+
+## Shelves
+<Template verb="POST" address="/api/shelf" privileges={1}
+    description="Creates a new shelf."
+    returns="Saved shelf"
+    parameters={[["name", "", true], ["description", "", true], ["public", "", true]]}
+    errors={["name or public is missing"]} />
+
+<Template verb="GET" address="/api/shelf/:id" privileges={0}
+    description="Gets the shelf."
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="PUT" address="/api/shelf/:id" privileges={3}
+    description="Updates the shelf title, description or publicity."
+    returns="Updated shelf"
+    parameters={[["name", "", false], ["description", "", false], ["public", "", false]]}
+    errors={[]} />
+
+<Template verb="DELETE" address="/api/shelf/:id" privileges={3}
+    description="Removes the shelf."
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="POST" address="/api/shelf/:id/shelve" privileges={4}
+    description="Adds a record to the shelf."
+    returns="{record: { id, title }, note}"
+    parameters={[["record", "record id", true], ["note", "", false]]}
+    errors={["record is missing", "record has already been added to this shelf", "record does not exist"]} />
+
+<Template verb="DELETE" address="/api/shelf/:id/shelve" privileges={4}
+    description="Removed a record from the shelf."
+    parameters={[["record", "record id", true]]}
+    errors={["record is missing"]} />
+
+<Template verb="PUT" address="/api/shelf/:id/shelve" privileges={4}
+    description="Updated the note attatched to a record in the shelf."
+    parameters={[["record", "record id", true], ["note", "note", true]]}
+    errors={["record or note is missing"]} />
+
+<Template verb="POST" address="/api/shelf/:id/share" privileges={3}
+    description="Shares the shelf with someone."
+    returns="{id, username, name}"
+    parameters={[["username", "", true]]}
+    errors={["username is missing", "user does not exist", "already shared with this user", "cannot share with the author"]} />
+
+<Template verb="DELETE" address="/api/shelf/:id/share" privileges={3}
+    description="Unshares the shelf with someone."
+    parameters={[["username", "", true]]}
+    errors={["username is missing", "user not found"]} />
+
+## Users (me)
+<Template verb="POST" address="/api/user/me" privileges={1}
+    description="Gets loans and information of the logged-in user"
+    returns="User loans and information"
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="PUT" address="/api/user/me" privileges={1}
+    description="Updates information of the logged-in user"
+    returns="Loans and updated user information"
+    parameters={[
+        ["oldPAssword", "the current password of the user", true],
+        ["name", "the new name of the user", false],
+        ["password", "the new password of the user", false],
+        ["tfa", "is two-factor authentication enabled (true | false)", false]
+    ]}
+    errors={["name and password and tfa are missing", "oldPassword is missing", "wrong oldPassword", "tfa must be true or false", "password too short"]} />
+
+## Statistics
+<Template verb="POST" address="/api/statistics/total" privileges={2}
+    description="Returns total count of users, records and items."
+    returns="{records, users, items}"
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="POST" address="/api/statistics/totalLoans" privileges={2}
+    description="Returns total loan and item counts of all locations."
+    returns="[[0:name, 1:totalLoans, 2:itemCount]]"
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="POST" address="/api/statistics/notLoanedSince" privileges={2}
+    description="Returns items nobody has loaned since the given date."
+    returns="[[0:item barcode, 1:record title, 2:record author]]"
+    parameters={[["location", "location id", true], ["date", "", true]]}
+    errors={["location or date is missing"]} />
+
+## Circulation
+<Template verb="POST" address="/api/circulation/loan" privileges={2}
+    description="Loans the given item to the given user."
+    returns="Updated user and update item document"
+    parameters={[["user", "user id", true], ["item", "item id", "true"]]}
+    errors={["user or item is missing", "user does not exist", "item does not exist", "item cannot be loaned because of loantype", "item has already been loaned", "user has already loaned this item"]} />
+
+<Template verb="POST" address="/api/circulation/return" privileges={2}
+    description="Returns the given item."
+    parameters={[["item", "item id", "true"]]}
+    errors={["item is missing", "item does not exist", "item has not been loaned"]} />
+
+<Template verb="POST" address="/api/circulation/renew" privileges={1}
+    description="Renews the loan of the given item."
+    returns="{id: itemId, dueDate}"
+    parameters={[["item", "item id", "true"]]}
+    errors={["renewTimes exeeded", "you cannot renew this loan"]} />

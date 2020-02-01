@@ -1,0 +1,64 @@
+# Advanced search
+
+## Operators
+- AND
+- OR
+
+## Field names
+- title
+- author
+- authors
+- language
+- languages
+- year
+- contentType
+- series
+- classification
+- standardCodes
+- country
+- subjects
+- spelling
+- spelling1
+- spelling2
+
+## Verbs
+- is
+- not
+- lt
+- gt
+
+## Query pattern
+```
+[operator, [
+    [field, verb, value],
+    [operator, [
+        [field, verb, value],
+        [field, verb, value],
+        [operator, [
+            [field, verb, value],
+            ...
+        ]],
+        ...
+    ]],
+    [field, verb, value],
+    ...
+]]
+```
+
+## Examples
+```
+["AND", [
+    ["author", "is", "Jansson, Tove"],
+    ["subjects", "not", "Moomins"],
+    ["OR", [
+        ["language", "is", "fin"],
+        ["language", "is", "swe"]
+    ]]
+]]
+```
+
+This query returns items that
+
+1. are created by Tove Jansson and
+2. do not have subject 'Moomins' and
+3. have been written in finnish or in swedish.

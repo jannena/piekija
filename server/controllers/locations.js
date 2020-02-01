@@ -2,17 +2,17 @@ const locationRouter = require("express").Router();
 const Location = require("../models/Location");
 const Item = require("../models/Item");
 
-locationRouter.get("/:id", (req, res, next) => {
-    const id = req.params.id;
+// locationRouter.get("/:id", (req, res, next) => {
+//     const id = req.params.id;
 
-    Location
-        .findById(id)
-        .then(result => {
-            if (result) return res.json(result.toJSON());
-            else res.status(404).end();
-        })
-        .catch(next);
-});
+//     Location
+//         .findById(id)
+//         .then(result => {
+//             if (result) return res.json(result.toJSON());
+//             else res.status(404).end();
+//         })
+//         .catch(next);
+// });
 
 locationRouter.get("/", (req, res, next) => {
     Location
