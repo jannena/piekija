@@ -68,4 +68,7 @@
 | | 1 | käyttöohjeet valmiiksi |
 | 25.1. | 3,5 | backendin testit "loppuun", varmuuskopiointi |
 | | 1 | käsin testausta, ongelmien etsimistä ja niiden korjaamista |
-| yht. | 142,5 | |
+| 1.2. | 2 | REST-rajapinnan dokumentaatio |
+| | 1 | tietueiden kuvien ja kuvauksien hakeminen ja tallentaminen |
+| | 1,5 | GraphQL-palvelimen aloittaminen |
+| yht. | 147 | |
