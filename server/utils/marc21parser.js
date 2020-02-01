@@ -1,7 +1,18 @@
-const fromentries = require("object.fromentries");
+// const fromentries = require("object.fromentries");
 const flat = require("array.prototype.flat");
 const logger = require("./logger");
 const { pad, byteLength, utf8_substr, removeLastCharacters, removeFirstCharacters } = require("./stringUtils");
+const axios = require("axios");
+
+try {
+    var iconv = require("iconv-lite");
+    var crypto = require("crypto");
+    var path = require("path");
+    var fs = require("fs");
+}
+catch (err) {
+    logger.log("ERROR 44849333x4");
+}
 
 
 const parse = marc => {
@@ -376,7 +387,7 @@ const getSpelling = parsedMARC => {
     return { spelling1, spelling2 };
 };
 
-const parseMARCToDatabse = (parsedMARC, data) => {
+const parseMARCToDatabse = async (parsedMARC, data) => {
     // TODO: There are catalouging rules.
     const year = (() => {
         try {
@@ -450,13 +461,42 @@ const parseMARCToDatabse = (parsedMARC, data) => {
     const image = getFieldsAndSubfields(parsedMARC, ["856"], ["indicators", "y", "u", "z", "q"])
         .filter(link => link["q"].some(q => q.match(/image\//)))[0];
     logger.log("trying to get image", image);
-    const imageAddress = (image && image["u"] && image["u"][0]) || "";
+    let imageAddress = (image && image["u"] && image["u"][0]) || "";
 
-    // TODO: Add description
-    /* const description = getFieldsAndSubfields(parsedMARC, ["856"], ["indicators", "y", "u", "z", "q"])
-        .filter(link => link["q"].some(q => q.match(/image\//)))[0];
-    logger.log("trying to get image", image);
-    const descriptionText = (description && description["u"] && description["u"][0]) || ""; */
+    try {
+        if (imageAddress) {
+            const imageLocalAddress = crypto.createHash("md5").update(imageAddress).digest("hex") + "." + (image["q"][0].split("/")[1] || ".jpg");
+
+            const response = await axios.get(imageAddress, { responseType: "stream" });
+            const file = fs.createWriteStream(path.resolve(__dirname, "..", "build", "covers", imageLocalAddress));
+
+            response.data.pipe(file);
+
+            imageAddress = "/covers/" + imageLocalAddress;
+        }
+    }
+    catch (err) {
+        logger.log(err);
+    }
+
+
+    const description = getFieldsAndSubfields(parsedMARC, ["856"], ["indicators", "y", "u", "z", "q"])
+        .filter(link => link["q"].some(q => q.match(/text\//)))[0];
+    logger.log("trying to get description", description);
+    const descriptionAddress = (description && description["u"] && description["u"][0]) || "";
+
+    let descriptionText = "";
+    try {
+        if (descriptionAddress) {
+            const response = (await axios.get(descriptionAddress, { responseType: "arraybuffer" }));
+            logger.log(response.headers, response.headers["Content-Type"])
+            descriptionText = iconv.decode(Buffer.from(response.data, "latin1"), "latin1");
+        }
+    }
+    catch (err) {
+        logger.log(err);
+    }
+
 
     // Remove marc fields 9xx and 8xx expect 856
     // logger.log(fromentries(Object.entries(parsedMARC.FIELDS)));
@@ -473,7 +513,7 @@ const parseMARCToDatabse = (parsedMARC, data) => {
         timeAdded: new Date(),
         timeModified: new Date(),
         image: imageAddress,
-        description: "",
+        description: descriptionText,
         contentType,
 
         alphabetizableTitle,

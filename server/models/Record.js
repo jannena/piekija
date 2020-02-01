@@ -26,6 +26,7 @@ const RecordSchema = new mongoose.Schema({
     image: {
         type: String
     },
+    description: String,
     contentType: {
         type: String,
         required: true

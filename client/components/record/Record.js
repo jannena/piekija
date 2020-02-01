@@ -101,6 +101,7 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, __ 
                         {__("Content type")}: {__(record.record.LEADER.substring(6, 7), "Unknown content type")}
                     </div>
                     <RecordTime record={record} />
+                    <div style={{ padding: 10 }}>{record.result.description}</div>
                 </StyledMainInfo>
             </div>
 

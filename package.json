@@ -13,7 +13,6 @@
     "build:docs": "webpack --docs=docs --mode=production",
     "test": "mocha \"./server/tests/api/*.test.js\" --timeout 20000",
     "marctodb": "cross-env LOG=false node --max-old-space-size=4096 ./server/utils/marcToDb.js",
-
     "install:piekija": "node ./server/utils/scripts/install.js",
     "update:records": "cross-env LOG=false node ./server/utils/scripts/updateRecords.js",
     "staff": "node ./server/utils/scripts/staffMaker.js",
@@ -56,6 +55,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "iconv-lite": "^0.5.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.7",
     "object.fromentries": "^2.0.1",

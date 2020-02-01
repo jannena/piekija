@@ -69,7 +69,7 @@ recordRouter.post("/", async (req, res, next) => {
 
     const parsedMARC = MARC21.tryParse(data);
     if (!parsedMARC) return res.status(400).json({ error: "invalid marc21 data" })
-    const record = MARC21.parseMARCToDatabse(parsedMARC, data);
+    const record = await MARC21.parseMARCToDatabse(parsedMARC, data);
 
     try {
 
@@ -84,7 +84,7 @@ recordRouter.post("/", async (req, res, next) => {
     }
 });
 
-recordRouter.put("/:id", (req, res, next) => {
+recordRouter.put("/:id", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
     if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
@@ -95,7 +95,7 @@ recordRouter.put("/:id", (req, res, next) => {
 
     const parsedMARC = MARC21.tryParse(data);
     if (!parsedMARC) return res.status(400).json({ error: "invalid marc21 data" })
-    const { timeAdded, ...record } = MARC21.parseMARCToDatabse(parsedMARC, data);
+    const { timeAdded, ...record } = await MARC21.parseMARCToDatabse(parsedMARC, data);
     console.log(record);
 
     Record
