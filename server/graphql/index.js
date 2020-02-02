@@ -1,4 +1,8 @@
-const { ApolloServer } = require("apollo-server");
+const { ApolloServer, PubSub, ForbiddenError, UserInputError, AuthenticationError } = require("apollo-server");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+
+const config = require("../utils/config");
 
 const Record = require("../models/Record");
 const Shelf = require("../models/Shelf");
@@ -9,16 +13,105 @@ const Loantype = require("../models/Loantype");
 
 const typeDefs = require("./typeDefs");
 
+const pubsub = new PubSub();
+
+
+
+const userHasNotPermissionToModifyShelf = (shelf, user) =>
+    shelf.author.toString() !== user._id.toString() && !shelf.sharedWith.some(u => u.toString() === user._id.toString());
+
+
 const resolvers = {
     Query: {
         record: (root, args) => Record.findById(args.id).populate("items"),
         shelf: (root, args) => Shelf.findById(args.id),
-        user: (root, args) => User.findById(args.id)
+        user: (root, args) => User.findById(args.id),
+        me: (root, args, context) => {
+            if (context.user) return context.user;
+            throw new ForbiddenError("you must login first");
+        }
     },
 
     Mutation: {
-        login: (root, args) => {
+        login: async (root, { username, password }) => {
+            try {
+                const userLoggingIn = await User.findOne({ username });
+                const passwordCorrect = await bcrypt.compare(password, userLoggingIn.passwordHash);
 
+                if (!passwordCorrect) throw new AuthenticationError("wrong username or password");
+
+                const token = jwt.sign({
+                    id: userLoggingIn._id,
+                    username,
+                    name: userLoggingIn.name
+                }, config.SECRET);
+
+                return {
+                    token,
+                    me: userLoggingIn
+                };
+            }
+            catch (err) {
+                console.log(err);
+            }
+        },
+
+        shelveRecord: async (root, { shelf: shelfId, record, note = "" }, { user }) => {
+            if (!user) throw new ForbiddenError("you do not have permission to do that");
+            if (!shelfId || !record) throw new UserInputError("shelf or record is missing");
+
+            const shelf = await Shelf.findById(shelfId);
+            if (!shelf) throw new Error("Shelf not found!");
+            if (shelf.author.toString() !== user._id.toString() && !shelf.sharedWith.some(u => u.toString() === user._id.toString()))
+                throw new ForbiddenError("you do not have permission to do that");
+            if (shelf.records.some(r => r.record.toString() === record)) throw new Error("record has already been added to this shelf");
+
+            await Shelf.findOneAndUpdate({
+                _id: shelfId,
+                "records.record": { $ne: record },
+                $or: [
+                    { author: user._id },
+                    { sharedWith: user._id }
+                ]
+            }, { $push: { records: { record, note } } }, { new: true });
+
+            const shelfRecord = {
+                record,
+                note: note
+            }
+
+            pubsub.publish("SHELF_MODIFICATION_" + shelfId, { shelfModification: { data: shelfRecord, type: "ADD" } });
+
+            return shelfRecord;
+        },
+
+        unshelveRecord: (root, { shelf, record }, { user, staff }) => {
+            if (!shelf || !record) throw new UserInputError("shelf or record is missing");
+
+        },
+
+        editShelfNote: (root, { shelf, record }, { user, staff }) => {
+            if (!shelf || !record) throw new UserInputError("shelf or record or note is missing");
+
+        }
+    },
+
+    Subscription: {
+        shelfModification: {
+            subscribe: async (root, { shelf: shelfId }, { user }) => {
+                if (!user) throw new ForbiddenError("you do not have permission to do that");
+                if (!shelfId) throw new UserInputError("shelf is missing");
+
+                const shelf = await Shelf.findById(shelfId);
+                if (!shelf) throw new UserInputError("invalid shelf");
+
+                if (userHasNotPermissionToModifyShelf(shelf, user))
+                    throw new ForbiddenError("you do not have permission to do that");
+
+                console.log(shelf);
+
+                return pubsub.asyncIterator(["SHELF_MODIFICATION_" + shelf]);
+            }
         }
     },
 
@@ -57,7 +150,16 @@ const resolvers = {
 
 const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    context: async ({ req }) => {
+        const token = req ? req.headers.authorization : null;
+        if (token && token.toLowerCase().startsWith("bearer ")) {
+            const decodedToken = jwt.decode(token.substring(7), config.SECRET);
+            const loggedInUser = await User.findById(decodedToken.id);
+            return { user: loggedInUser, staff: loggedInUser.staff };
+        }
+        return { staff: false, user: false };
+    }
 });
 
 module.exports = server;

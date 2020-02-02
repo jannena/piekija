@@ -59,6 +59,7 @@ app.use("/docs/docs.js", (req, res) => res.sendFile(path.resolve(__dirname, "bui
 app.get("/docs", (req, res) => res.sendFile(path.resolve(__dirname, "build/docs/index.html")));
 app.get("/docs/*", (req, res) => res.sendFile(path.resolve(__dirname, "build/docs/index.html")));
 app.get("/main.js", (req, res) => res.sendFile(path.resolve(__dirname, "build/main.js")));
+app.use("/covers", express.static(path.join(__dirname, "build", "covers")));
 app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "build/index.html")));
 app.get("*", express.static(path.resolve(__dirname, "build")));
 

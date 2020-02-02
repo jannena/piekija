@@ -16,6 +16,7 @@ server.listen({
 
 // const graphql = require("./graphql");
 
-// graphql.listen().then(({ url }) => {
-//     console.log("GraphQL running on", url);
-// })
+// graphql.listen().then(({ url, subscriptionsUrl }) => {
+//     console.log("GraphQL running at", url);
+//     console.log("Listening subscriptions at", subscriptionsUrl);
+// });
