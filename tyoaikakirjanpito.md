@@ -71,4 +71,5 @@
 | 1.2. | 2 | REST-rajapinnan dokumentaatio |
 | | 1 | tietueiden kuvien ja kuvauksien hakeminen ja tallentaminen |
 | | 1,5 | GraphQL-palvelimen aloittaminen |
-| yht. | 147 | |
+| 2.2. | 1 | GraphQL-palvelimen jatkaminen |
+| yht. | 148 | |
