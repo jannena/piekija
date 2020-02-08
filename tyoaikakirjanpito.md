@@ -72,4 +72,5 @@
 | | 1 | tietueiden kuvien ja kuvauksien hakeminen ja tallentaminen |
 | | 1,5 | GraphQL-palvelimen aloittaminen |
 | 2.2. | 1 | GraphQL-palvelimen jatkaminen |
-| yht. | 148 | |
+| 8.2. | 1,5 | GraphQL-palvelimen jatkaminen |
+| yht. | 149,5 | |
