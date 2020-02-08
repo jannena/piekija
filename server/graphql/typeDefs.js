@@ -72,10 +72,30 @@ const typeDefs = gql`
     type Record {
         id: ID!
         ai: Int!
+        timeAdded: Date!
+        timeModified: Date!
         title: String!
         author: String!
-        image: String!
+        authors: [String!]!
+
+        language: [String!]!
+        languages: [String!]!
+        subjects: [String!]!
+        series: [String!]!
+        classification: [String!]!
+        standardCodes: [String!]!
+
         contentType: String!
+        year: Int!
+        country: String
+
+        description: String
+        image: String!
+        
+
+        previewText: [String]
+
+        recordType: String!
         record: String!
         items: [Item!]!
     }
