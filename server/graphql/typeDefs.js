@@ -2,6 +2,7 @@ const { gql } = require("apollo-server");
 
 const typeDefs = gql`
     scalar Date
+    scalar JSON
 
     type Query {
         user(id: ID!): User!
@@ -9,7 +10,7 @@ const typeDefs = gql`
         record(id: ID!): Record!
         me: User!
         search(
-            query: String!,
+            query: JSON!,
             page: Int,
             sort: String,
             filter: Boolean
@@ -43,7 +44,7 @@ const typeDefs = gql`
     type SearchResult {
         result: [Record!]!
         time: Float!
-        filters: [String]
+        filters: JSON
         found: Int!
     }
 

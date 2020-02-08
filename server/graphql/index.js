@@ -13,6 +13,9 @@ const Loantype = require("../models/Loantype");
 
 const typeDefs = require("./typeDefs");
 
+const { validateAdvancedQuery } = require("../utils/queryValidator");
+const { PERFORMANCE_LIMIT } = require("../utils/config");
+
 const pubsub = new PubSub();
 
 
@@ -29,6 +32,79 @@ const resolvers = {
         me: (root, args, context) => {
             if (context.user) return context.user;
             throw new ForbiddenError("you must login first");
+        },
+        search: async (root, { query, page = 0, sort = "timeAdded", filter = false }) => {
+            const firstTime = process.hrtime();
+
+            const readyQuery = validateAdvancedQuery(query);
+            const searchResultsPerPage = 20;
+
+            const found = await Record.countDocuments(readyQuery).then(number => number);
+
+            const sortObject = (() => {
+                switch (sort) {
+                    case "year":
+                    case "relevance":
+                        return { year: -1 };
+                    case "yeardesc":
+                        return { year: 1 };
+                    case "timeAdded":
+                        return { _id: -1 };
+                    case "alphapetical":
+                        return { alphabetizableTitle: 1 };
+                    case "alphapeticaldesc":
+                        return { alphabetizableTitle: -1 };
+                }
+            })();
+
+            const result = await Record
+                .find(readyQuery) // , { title: 1, author: 1, contentType: 1, year: 1, previewText: 1, image: 1 }
+                .sort(sortObject)
+                .skip(searchResultsPerPage * page)
+                .limit(searchResultsPerPage);
+
+            let filters = null;
+            if (filter && PERFORMANCE_LIMIT >= found) {
+                const subjects = await Record.aggregate([
+                    { $match: readyQuery },
+                    { $unwind: "$subjects" },
+                    { $sortByCount: "$subjects" },
+                    { $limit: 100 }
+                ]);
+                const authors = await Record.aggregate([
+                    { $match: readyQuery },
+                    { $unwind: "$authors" },
+                    { $sortByCount: "$authors" },
+                    { $limit: 100 }
+                ]);
+                const years = await Record.aggregate([
+                    { $match: readyQuery },
+                    { $sortByCount: "$year" },
+                    { $limit: 100 }
+                ]);
+                const languages = await Record.aggregate([
+                    { $match: readyQuery },
+                    { $unwind: "$languages" },
+                    { $sortByCount: "$languages" },
+                    { $limit: 100 }
+                ]);
+
+                filters = {
+                    subjects,
+                    authors,
+                    years,
+                    languages
+                };
+            }
+
+            const secondTime = process.hrtime(firstTime);
+
+            return {
+                result,
+                filters,
+                found,
+                time: (secondTime[0] * 1e9 + secondTime[1]) * 1e-6
+            };
         }
     },
 
