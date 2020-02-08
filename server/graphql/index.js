@@ -23,15 +23,28 @@ const pubsub = new PubSub();
 const userHasNotPermissionToModifyShelf = (shelf, user) =>
     shelf.author.toString() !== user._id.toString() && !shelf.sharedWith.some(u => u.toString() === user._id.toString());
 
+const isSameUserLoggedIn = (user, root) => user && user._id && user._id.toString() === root._id.toString();
+
+const ifReturnElseError = (condition, toBeReturned, name, who) => condition
+    ? toBeReturned
+    : (() => { throw new ForbiddenError(`${name} can be received only by ${who}`) })()
 
 const resolvers = {
     Query: {
-        record: (root, args) => Record.findById(args.id).populate("items"),
-        shelf: (root, args) => Shelf.findById(args.id),
-        user: (root, args) => User.findById(args.id),
-        me: (root, args, context) => {
-            if (context.user) return context.user;
-            throw new ForbiddenError("you must login first");
+        record: (root, args, { staff }) => {
+            return Record.findById(args.id).populate("items");
+        },
+        shelf: (root, args, { staff }) => {
+            if (!staff) throw new ForbiddenError("staff only");
+            return Shelf.findById(args.id)
+        },
+        user: (root, args, { staff }) => {
+            if (!staff) throw new ForbiddenError("staff only");
+            return User.findById(args.id)
+        },
+        me: (root, args, { user }) => {
+            if (!user) throw new ForbiddenError("you must login first");
+            return user;
         },
         search: async (root, { query, page = 0, sort = "timeAdded", filter = false }) => {
             const firstTime = process.hrtime();
@@ -64,7 +77,7 @@ const resolvers = {
                 .limit(searchResultsPerPage);
 
             let filters = null;
-            if (filter && PERFORMANCE_LIMIT >= found) {
+            if (found && filter && PERFORMANCE_LIMIT >= found) {
                 const subjects = await Record.aggregate([
                     { $match: readyQuery },
                     { $unwind: "$subjects" },
@@ -240,12 +253,20 @@ const resolvers = {
     },
 
     Item: {
-        statePersonInCharge: root => root.statePersonInCharge
-            ? User.findById(root.statePersonInCharge).populate("loans")
-            : null,
+        statePersonInCharge: (root, args, { staff }) =>
+            ifReturnElseError(staff, root.statePersonInCharge
+                ? User.findById(root.statePersonInCharge).populate("loans")
+                : null, "statePersonInCharge", "staff"),
+        stateTimesRenewed: (root, args, { user, staff }) => ifReturnElseError(
+            staff || isSameUserLoggedIn(user, { _id: root.statePersonInCharge }),
+            root.stateTimesRenewed,
+            "stateTimesRenewed",
+            "staff or user themselves"
+        ),
         record: root => Record.findById(root.record),
         location: root => Location.findById(root.location),
-        loantype: root => Loantype.findById(root.loantype)
+        loantype: root => Loantype.findById(root.loantype),
+        note: (root, args, { staff }) => ifReturnElseError(staff, root.note, "note", "staff")
     },
 
     Record: {
@@ -253,8 +274,17 @@ const resolvers = {
     },
 
     User: {
-        tfa: root => root.TFACode ? true : false,
-        loans: root => Item.find({ _id: { $in: root.loans } })
+        tfa: (root, args, { user }) => isSameUserLoggedIn(user, root)
+            ? (root.TFACode ? true : false)
+            : (() => { throw new ForbiddenError("tfa can be received only by user themselves") })(),
+        loans: (root, args, { user, staff }) => (staff || isSameUserLoggedIn(user, root))
+            ? Item.find({ _id: { $in: root.loans } })
+            : (() => { throw new ForbiddenError("loans can be received only by staff or user themselves") })(),
+        shelves: (root, args, { user }) => isSameUserLoggedIn(user, root)
+            ? root.shelves
+            : (() => { throw new ForbiddenError("shelves can be received only by user themselves") })(),
+        staff: (root, args, { user, staff }) =>
+            ifReturnElseError(staff || isSameUserLoggedIn(user, root), root.staff, "staff", "staff or user themselves")
     },
 
     UserShelf: {
