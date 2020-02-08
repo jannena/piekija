@@ -85,20 +85,68 @@ const resolvers = {
             return shelfRecord;
         },
 
-        unshelveRecord: (root, { shelf, record }, { user, staff }) => {
-            if (!shelf || !record) throw new UserInputError("shelf or record is missing");
+        unshelveRecord: async (root, { shelf: shelfId, record }, { user }) => {
+            if (!user) throw new ForbiddenError("you do not have permission to do that");
+            if (!shelfId || !record) throw new UserInputError("shelf or record is missing");
 
+            const shelf = await Shelf.findById(shelfId);
+            if (!shelf) throw new Error("Shelf not found!");
+            if (shelf.author.toString() !== user._id.toString() && !shelf.sharedWith.some(u => u.toString() === user._id.toString()))
+                throw new ForbiddenError("you do not have permission to do that");
+            if (!shelf.records.some(r => r.record.toString() === record)) throw new UserInputError("shelf does not contain this record");
+
+            await Shelf.findOneAndUpdate({
+                _id: shelfId,
+                $or: [
+                    { author: user._id },
+                    { sharedWith: user._id }
+                ]
+            }, { $pull: { records: { record: record } } }, { multi: true });
+
+            const shelfRecord = {
+                record,
+                note: null
+            };
+
+            pubsub.publish("SHELF_MODIFICATION_" + shelfId, { shelfModification: { data: shelfRecord, type: "REMOVE" } });
+
+            return shelfRecord;
         },
 
-        editShelfNote: (root, { shelf, record }, { user, staff }) => {
-            if (!shelf || !record) throw new UserInputError("shelf or record or note is missing");
+        editShelfNote: async (root, { shelf: shelfId, record, note }, { user }) => {
+            if (!user) throw new ForbiddenError("you do not have permission to do that");
+            if (!shelfId || !record || !note) throw new UserInputError("shelf or record or note is missing");
 
+            const shelf = await Shelf.findById(shelfId);
+            if (!shelf) throw new Error("Shelf not found!");
+            if (shelf.author.toString() !== user._id.toString() && !shelf.sharedWith.some(u => u.toString() === user._id.toString()))
+                throw new ForbiddenError("you do not have permission to do that");
+            if (!shelf.records.some(r => r.record.toString() === record)) throw new UserInputError("shelf does not contain this record");
+
+            await Shelf.findOneAndUpdate({
+                _id: shelfId,
+                "records.record": record,
+                $or: [
+                    { author: user._id },
+                    { sharedWith: user._id }
+                ]
+            }, { $set: { "records.$.note": note } });
+
+            const shelfRecord = {
+                record,
+                note
+            };
+
+            pubsub.publish("SHELF_MODIFICATION_" + shelfId, { shelfModification: { data: shelfRecord, type: "UPDATE" } });
+
+            return shelfRecord;
         }
     },
 
     Subscription: {
         shelfModification: {
             subscribe: async (root, { shelf: shelfId }, { user }) => {
+                console.log(shelfId, typeof user, user._id);
                 if (!user) throw new ForbiddenError("you do not have permission to do that");
                 if (!shelfId) throw new UserInputError("shelf is missing");
 
@@ -110,7 +158,7 @@ const resolvers = {
 
                 console.log(shelf);
 
-                return pubsub.asyncIterator(["SHELF_MODIFICATION_" + shelf]);
+                return pubsub.asyncIterator(["SHELF_MODIFICATION_" + shelfId]);
             }
         }
     },
@@ -148,18 +196,30 @@ const resolvers = {
     }
 };
 
+const authenticate = async token => {
+    if (token && token.toLowerCase().startsWith("bearer ")) {
+        const decodedToken = jwt.decode(token.substring(7), config.SECRET);
+        const loggedInUser = await User.findById(decodedToken.id);
+        return { user: loggedInUser, staff: loggedInUser.staff };
+    }
+    return { staff: false, user: false };
+};
+
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: async ({ req }) => {
+    context: async ({ req, connection }) => {
+        if (connection) return connection.context;
         const token = req ? req.headers.authorization : null;
-        if (token && token.toLowerCase().startsWith("bearer ")) {
-            const decodedToken = jwt.decode(token.substring(7), config.SECRET);
-            const loggedInUser = await User.findById(decodedToken.id);
-            return { user: loggedInUser, staff: loggedInUser.staff };
+        return await authenticate(token);
+    },
+    subscriptions: {
+        onConnect: async (connectionParams) => {
+            console.log("connectionParams", connectionParams);
+            console.log("token, subscription", connectionParams.Authorization);
+            return await authenticate(connectionParams.Authorization);
         }
-        return { staff: false, user: false };
     }
 });
 
-module.exports = server;
+module.exports = server

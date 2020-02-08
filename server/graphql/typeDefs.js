@@ -54,7 +54,7 @@ const typeDefs = gql`
 
     type ShelfRecord {
         record: Record!
-        note: String!
+        note: String
     }
 
     type User {
