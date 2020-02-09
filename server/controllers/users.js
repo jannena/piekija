@@ -10,13 +10,18 @@ userRouter.get("/me", async (req, res, next) => {
 
     try {
         await User.populate(req.authenticated, {
-            path: "shelves.id loans",
-            select: "name loantype record stateDueDate stateTimesRenewed"
+            path: "shelves.id loans holds.record",
+            select: "name loantype record stateDueDate stateTimesRenewed title"
         });
 
         await User.populate(req.authenticated, {
             path: "loans.loantype loans.record",
             select: "title renewTimes"
+        });
+
+        await User.populate(req.authenticated, {
+            path: "holds.record",
+            select: "title"
         });
 
         res.send(req.authenticated);

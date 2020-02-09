@@ -6,13 +6,14 @@ import { connect } from "react-redux";
 import { createShelf } from "../reducers/shelfReducer";
 import { updateUser } from "../reducers/userReducer";
 import { notify } from "../reducers/notificationReducer";
+import { removeAHold } from "../reducers/circulationReducer";
 import Loan from "./staff/Loan";
 import LoanHistory from "./user/LoanHistory";
 import { Form, Input, Button } from "./essentials/forms";
 import __ from "../langs";
 
 
-const UserInfo = ({ user, createShelf, updateUser, notify, __ }) => {
+const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, __ }) => {
     if (!user) return <div>{__("You logged out succefully")}. <Link to="">{__("Back to frontpage")}</Link>.</div>;
 
     document.title = `${__("title-User")} - ${__("PieKiJa")}`;
@@ -33,6 +34,10 @@ const UserInfo = ({ user, createShelf, updateUser, notify, __ }) => {
         const { name, password, againPassword, oldPassword } = e.target;
         if (password.value === againPassword.value) updateUser(oldPassword.value, name.value, password.value);
         else notify("warning", "Passwords do not match");
+    };
+
+    const handleRemoveAHold = id => () => {
+        removeAHold(id);
     };
 
     return (
@@ -70,7 +75,13 @@ const UserInfo = ({ user, createShelf, updateUser, notify, __ }) => {
             </Tab>
 
             <Tab>
-                <p>Coming soon!</p>
+                {user.holds.map(loan =>
+                    <div>
+                        <hr />
+                        <div><Link to={`/record/${loan.record.id}`}>{loan.record.title}</Link></div>
+                        <div>{__("Queue number")}: {loan.queue}</div>
+                        <div><button onClick={handleRemoveAHold(loan.record.id)}>{__("Remove hold")}</button></div>
+                    </div>)}
             </Tab>
 
             <Tab>
@@ -96,5 +107,5 @@ export default connect(
         user: state.user,
         __: __(state)
     }),
-    { createShelf, updateUser, notify }
+    { createShelf, updateUser, notify, removeAHold }
 )(UserInfo);

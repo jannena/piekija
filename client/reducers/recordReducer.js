@@ -99,6 +99,17 @@ const recordReducer = (state = init, action) => {
                 cache: state.cache.filter(record => record.result.id !== action.record),
                 record: {}
             };
+        case "PSUCCESS_CIRCULATION_PLACE_HOLD":
+            return {
+                ...state,
+                record: {
+                    ...state.record,
+                    result: {
+                        ...state.record.result,
+                        holds: action.newHold.queue
+                    }
+                }
+            };
     }
     return state;
 };

@@ -51,6 +51,16 @@ const userReducer = (state = null, action) => {
                     stateTimesRenewed: l.stateTimesRenewed + 1
                 }))
             };
+        case "PSUCCESS_CIRCULATION_PLACE_HOLD":
+            return {
+                ...state,
+                holds: state.holds.concat(action.newHold)
+            };
+        case "PSUCCESS_CIRCULATION_REMOVE_HOLD":
+            return {
+                ...state,
+                holds: state.holds.filter(h => h.record.id !== action.record)
+            };
     }
     return state;
 };

@@ -34,9 +34,10 @@ const userSchema = new mongoose.Schema({
     ],
     holds: [
         {
-            item: {
+            record: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Item"
+                ref: "Record",
+                required: true
             },
             queue: {
                 type: Number,
@@ -72,6 +73,19 @@ const userSchema = new mongoose.Schema({
             accountId: {
                 type: String,
                 required: true
+            }
+        }
+    ],
+    reviews: [
+        {
+            record: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Record"
+            },
+            review: {
+                type: Number,
+                required: true,
+                enum: [1, 2, 3, 4, 5]
             }
         }
     ],

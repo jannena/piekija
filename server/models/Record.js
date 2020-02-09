@@ -118,7 +118,10 @@ const RecordSchema = new mongoose.Schema({
     previewText: Array,
 
     items: [
-
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Item"
+        }
     ],
     holds: [
         {
@@ -147,6 +150,7 @@ RecordSchema.set("toJSON", {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
+        ret.holds = (ret.holds || 0).length;
     }
 })
 

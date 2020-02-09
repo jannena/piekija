@@ -27,8 +27,28 @@ const renew = (itemId, token) => {
     ).then(response => response.data);
 };
 
+const placeAHold = (record, token) => {
+    return axios.post(
+        `${baseUrl}/hold`,
+        { record, location: "coming soon" },
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
+const removeAHold = (record, token) => {
+    return axios.delete(
+        `${baseUrl}/hold`,
+        {
+            headers: { Authorization: `Bearer ${token}` },
+            data: { record, location: "coming soon" }
+        }
+    ).then(response => response.data);
+};
+
 export default {
     loan,
     returnItem,
-    renew
+    renew,
+    placeAHold,
+    removeAHold
 };

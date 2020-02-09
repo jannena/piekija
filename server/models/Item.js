@@ -45,6 +45,10 @@ const itemSchema = new mongoose.Schema({
     stateTimesRenewed: {
         type: Number
     },
+    stateHoldFor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
     loanHistory: Array,
     lastLoaned: {
         required: true,

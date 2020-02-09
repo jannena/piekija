@@ -113,4 +113,11 @@ recordRouter.put("/:id", async (req, res, next) => {
         .catch(next);
 });
 
+recordRouter.post(":/id/review", async (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+
+    req.authenticated.reviews = [];
+    req.authenticated.save();
+});
+
 module.exports = recordRouter;

@@ -10,6 +10,7 @@ import RecordSubjects from "./RecordSubjects";
 import RecordTools from "./RecordTools";
 import { connect } from "react-redux";
 import { getRecord } from "../../reducers/recordReducer";
+import { placeAHold } from "../../reducers/circulationReducer";
 import Loader from "../Loader";
 import RecordPublisherInfo from "./RecordPublisherInfo";
 import RecordAuthors from "./RecordAuthors";
@@ -48,7 +49,7 @@ const StyledMainInfo = styled.div`
     }
 `;
 
-const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, __ }) => {
+const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isRecordInUsersHolds, placeAHold, __ }) => {
     console.log(id);
     console.log("record", record);
 
@@ -84,6 +85,10 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, __ 
         if (state === "not loaned") return "#00d400";
         else if (state === "not in use") return "white";
         else return "#ff3c3c";
+    };
+
+    const handlePlaceAHold = () => {
+        placeAHold(record.result.id);
     };
 
     return !record || !record.result || record.result.id !== id
@@ -148,6 +153,11 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, __ 
                                 )}
                             </tbody>
                         </table>
+                        <hr />
+                        <div>{__("Holds")}: {record.result.holds || 0}</div>
+                        {!(isRecordInUsersHolds(record.result.id)[0])
+                            ? <button onClick={handlePlaceAHold}>{__("Place a hold")}</button>
+                            : <div>{__("Your queue number")}: {isRecordInUsersHolds(record.result.id)[0].queue}</div>}
                     </Tab>
                     <Tab>
                         <MARC21Screen parsedMARC={record.record} />
@@ -166,7 +176,11 @@ export default connect(
         isAdmin: state.user && state.user.staff,
         record: state.record.record,
         state: state.loading.record,
+        isRecordInUsersHolds: id => state.user && state.user.holds && state.user.holds.some && state.user.holds.filter(({ record: r }) => {
+            console.log("TESTTESTTESTTESTTEST", r.id, id);
+            return r.id === id
+        }),
         __: __(state)
     }),
-    { getRecord }
+    { getRecord, placeAHold }
 )(Record);

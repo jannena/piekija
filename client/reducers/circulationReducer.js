@@ -197,4 +197,34 @@ export const renewItemWithId = id => (dispatch, getState) => {
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_RENEW"));
 };
 
+export const placeAHold = recordId => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_CIRCULATION_PLACE_HOLD" });
+    circulationService
+        .placeAHold(recordId, getState().token.token)
+        .then(result => {
+            dispatch({
+                type: "PSUCCESS_CIRCULATION_PLACE_HOLD",
+                newHold: result
+            });
+            console.log("renewed item", result);
+            dispatch(notify("success", "A new hold was created"));
+        })
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_PLACE_HOLD"));
+};
+
+export const removeAHold = recordId => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_CIRCULATION_REMOVE_HOLD" });
+    circulationService
+        .removeAHold(recordId, getState().token.token)
+        .then(result => {
+            dispatch({
+                type: "PSUCCESS_CIRCULATION_REMOVE_HOLD",
+                record: recordId
+            });
+            console.log("renewed item", result);
+            dispatch(notify("success", "A new hold was removed"));
+        })
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_REMOVE_HOLD"));
+};
+
 export const renewItem = () => (dispatch, getState) => dispatch(renewItemWithId(getState().circulation.item.id));
