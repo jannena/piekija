@@ -31,16 +31,11 @@ userRouter.get("/me/loanhistory", async (req, res, next) => {
 
     try {
         await User.populate(req.authenticated, {
-            path: "loanHistory.item",
-            select: "record"
-        });
-
-        await User.populate(req.authenticated, {
-            path: "loanHistory.item.record",
+            path: "loanHistory.record",
             select: "title"
         });
 
-        res.send(req.authenticated.loanHistory);
+        res.send(req.authenticated.loanHistory.filter(l => l.returned !== null));
     }
     catch (err) {
         return next(err);

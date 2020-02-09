@@ -54,6 +54,10 @@ const userSchema = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Item"
             },
+            record: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Record"
+            },
             loaned: Date,
             returned: Date
         }

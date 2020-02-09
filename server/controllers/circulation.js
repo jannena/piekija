@@ -83,6 +83,7 @@ circulationRouter.post("/return", async (req, res, next) => {
         if (user.loanHistoryRetention === true && user.loanHistory) user.loanHistory = user.loanHistory
             .map(h => (h.returned === null && h.item.toString() === item._id.toString()) ? {
                 item: h.item,
+                record: item.record,
                 loaned: h.loaned,
                 returned: new Date()
             } : h);

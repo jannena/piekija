@@ -8,7 +8,7 @@ import { setLH } from "../../reducers/userReducer";
 
 const LoanHistory = ({ user, getLoanHistory, setLH, __ }) => {
     useEffect(() => {
-        getLoanHistory();
+        if (!user.loanHistory) getLoanHistory();
     }, []);
 
     const oldPassword = useField("password");
@@ -34,7 +34,7 @@ const LoanHistory = ({ user, getLoanHistory, setLH, __ }) => {
             {user.loanHistory.map(loan =>
                 <div>
                     <hr />
-                    <div><Link to={`/record/${loan.item.record.id}`}>{loan.item.record.title}</Link></div>
+                    <div><Link to={`/record/${loan.record.id}`}>{loan.record.title}</Link></div>
                     <div>{__("Loaned on")}: {__("date-format")(new Date(loan.loaned))}</div>
                     <div>{__("Returned on")}: {loan.returned ? __("date-format")(new Date(loan.returned)) : __("loaned")}</div>
                 </div>)}
