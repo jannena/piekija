@@ -73,4 +73,5 @@
 | | 1,5 | GraphQL-palvelimen aloittaminen |
 | 2.2. | 1 | GraphQL-palvelimen jatkaminen |
 | 8.2. | 1,5 | GraphQL-palvelimen jatkaminen |
-| yht. | 149,5 | |
+| 9.2. | 2,5 | lainaushistoria, ja varaamisen aloittaminen |
+| yht. | 152 | |
