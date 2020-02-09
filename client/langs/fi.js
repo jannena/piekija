@@ -378,6 +378,7 @@ export default (slog, def) => {
         "You logged out succefully": "Kirjauduit onnistuneesti ulos",
         "Back to frontpage": "Takaisin etusivulle",
         "Loans": "Lainat",
+        "Loan history": "Lainaushistoria",
         "Shelves": "Hyllyt",
         "Holds": "Varaukset",
         "Edit me": "Muokkaa tietoja",
@@ -575,6 +576,11 @@ export default (slog, def) => {
         "personal": "yksityinen",
         "corporate": "yhteisö",
         "Sub-title": "Alaotsikko",
-        "Year": "Vuosi"
+        "Year": "Vuosi",
+
+        // LoanHistory.js
+        "Loaned on": "Lainattu",
+        "Returned on": "Palautettu",
+        "loan-history-warning": "Varoitus: lainaushistorian poistaminen käytöstä tyhjentää koko lainaushistorian.",
     }[slog] || def || slog;
 };

@@ -118,9 +118,12 @@ const RecordSchema = new mongoose.Schema({
     previewText: Array,
 
     items: [
+
+    ],
+    holds: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Item"
+            ref: "User"
         }
     ]
 });

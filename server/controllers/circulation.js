@@ -28,6 +28,11 @@ circulationRouter.post("/loan", async (req, res, next) => {
         if (item.state === "loaned" && item.statePersonInCharge !== null) return res.status(400).json({ error: "item has already been loaned" });
 
         user.loans.push(item._id);
+        if (user.loanHistoryRetention === true) user.loanHistory = [...user.loanHistory, {
+            item: item._id.toString(),
+            loaned: new Date(),
+            returned: null
+        }];
         item.statePersonInCharge = user._id;
         item.stateTimesRenewed = 0;
         item.state = "loaned";
@@ -75,6 +80,12 @@ circulationRouter.post("/return", async (req, res, next) => {
 
         // console.log(typeof user.loans[0]._id.toString(), typeof itemId, user.loans[0]._id.toString() === itemId);
         user.loans = user.loans.filter(l => l.toString() !== itemId);
+        if (user.loanHistoryRetention === true && user.loanHistory) user.loanHistory = user.loanHistory
+            .map(h => (h.returned === null && h.item.toString() === item._id.toString()) ? {
+                item: h.item,
+                loaned: h.loaned,
+                returned: new Date()
+            } : h);
         item.statePersonInCharge = null;
         item.stateDueDate = null;
         item.stateTimesRenewed = null;
@@ -125,6 +136,12 @@ circulationRouter.post("/renew", async (req, res, next) => {
     }
 });
 
-// TODO: place a hold: circulationRouter.post("/?", (req, res, next) => {});
+circulationRouter.post("/hold", (req, res, next) => {
+    const { item: itemId } = req.body;
+});
+
+circulationRouter.delete("/hold", (req, res, next) => {
+
+});
 
 module.exports = circulationRouter;

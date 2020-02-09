@@ -7,6 +7,7 @@ import { createShelf } from "../reducers/shelfReducer";
 import { updateUser } from "../reducers/userReducer";
 import { notify } from "../reducers/notificationReducer";
 import Loan from "./staff/Loan";
+import LoanHistory from "./user/LoanHistory";
 import { Form, Input, Button } from "./essentials/forms";
 import __ from "../langs";
 
@@ -35,7 +36,7 @@ const UserInfo = ({ user, createShelf, updateUser, notify, __ }) => {
     };
 
     return (
-        <Tabs titles={[__("Loans"), __("Shelves"), __("Holds"), __("Edit me"), __("Two-factor authentication")]}>
+        <Tabs titles={[__("Loans"), __("Loan history"), __("Shelves"), __("Holds"), __("Edit me"), __("Two-factor authentication")]}>
             <Tab>
                 <h2>{user.name}</h2>
                 <div>{user.username}</div>
@@ -44,6 +45,9 @@ const UserInfo = ({ user, createShelf, updateUser, notify, __ }) => {
                 <div>
                     {user.loans.map(loan => <Loan key={loan.id} loan={loan} staff={false} />)}
                 </div>
+            </Tab>
+            <Tab>
+                <LoanHistory />
             </Tab>
             <Tab>
                 <h3>{__("Shelves")}</h3>

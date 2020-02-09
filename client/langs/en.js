@@ -378,6 +378,7 @@ export default (slog, def) => {
         "You logged out succefully": "",
         "Back to frontpage": "",
         "Loans": "",
+        "Loan history": "",
         "Shelves": "",
         "Holds": "",
         "Edit me": "",
@@ -575,6 +576,11 @@ export default (slog, def) => {
         "personal": "",
         "corporate": "",
         "Sub-title": "",
-        "Year": ""
+        "Year": "",
+
+        // LoanHistory.js
+        "Loaned on": "",
+        "Returned on": "",
+        "loan-history-warning": "Warning: disabling loan history will clear loan history.",
     }[slog] || def || slog;
 };

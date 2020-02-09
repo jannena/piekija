@@ -26,6 +26,27 @@ userRouter.get("/me", async (req, res, next) => {
     }
 });
 
+userRouter.get("/me/loanhistory", async (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+
+    try {
+        await User.populate(req.authenticated, {
+            path: "loanHistory.item",
+            select: "record"
+        });
+
+        await User.populate(req.authenticated, {
+            path: "loanHistory.item.record",
+            select: "title"
+        });
+
+        res.send(req.authenticated.loanHistory);
+    }
+    catch (err) {
+        return next(err);
+    }
+});
+
 
 
 userRouter.put("/me", async (req, res, next) => {
@@ -33,9 +54,9 @@ userRouter.put("/me", async (req, res, next) => {
 
     console.log("ruumis", req.body, req.authenticated);
 
-    const { name, password, tfa, oldPassword } = req.body;
+    const { name, password, tfa, loanhistory, oldPassword } = req.body;
 
-    if (!name && !password && tfa === undefined) return res.status(400).json({ error: "name and password and tfa are missing" });
+    if (!name && !password && tfa === undefined && loanhistory === undefined) return res.status(400).json({ error: "name and password and tfa and loanhistory are missing" });
     if (!oldPassword) return res.status(400).json({ error: "oldPassword is missing" });
 
     try {
@@ -57,6 +78,13 @@ userRouter.put("/me", async (req, res, next) => {
         // Clear two-factor authentication
         else if (tfa === false) usertoBeSaved.TFACode = "";
         else if (tfa !== undefined) return res.status(400).json({ error: "tfa must be true or false" });
+
+        // Loan history
+        if (loanhistory === true) usertoBeSaved.loanHistoryRetention = loanhistory;
+        else if (loanhistory === false) {
+            usertoBeSaved.loanHistoryRetention = false;
+            usertoBeSaved.loanHistory = [];
+        }
 
         // Then, everything else but two-factor authentication
         if (password && password.length < 10) return res.status(400).json({ error: "password too short" });
@@ -127,6 +155,10 @@ userRouter.post("/", async (req, res, next) => {
             passwordHash,
             barcode,
             loans: [],
+            holds: [],
+            loanHistoryRetention: true,
+            loanHistory: [],
+            connectedAccounts: [],
             shelves: []
         });
 

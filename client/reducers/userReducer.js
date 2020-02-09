@@ -1,12 +1,23 @@
 import userService from "../services/userService";
 import { notify } from "./notificationReducer";
+import { onError } from "./errorHandingHelper";
 
 // TODO: Update to user loader
 
 const userReducer = (state = null, action) => {
     switch (action.type) {
         case "SAVE_USER":
-            return { ...action.user, loans: state.loans }
+            return { ...action.user, loans: state.loans };
+        case "GET_LOANHISTORY":
+            return {
+                ...state,
+                loanHistory: action.loanhistory
+            };
+        case "SET_LOANHISTORY":
+            return {
+                ...state,
+                loanHistoryRetention: action.loanhistory
+            };
         case "SET_USER":
             return action.user;
         case "SET_TFA":
@@ -61,6 +72,17 @@ export const getUser = () => async (dispatch, getState) => {
     }
 };
 
+export const getLoanHistory = () => (dispatch, getState) => {
+    userService.getLoanHistory(getState().token.token)
+        .then(loanhistory => {
+            dispatch({
+                type: "GET_LOANHISTORY",
+                loanhistory
+            });
+        })
+        .catch(onError(dispatch, "PFAILURE_LOANHISTORY_GET"));
+};
+
 export const updateUser = (oldPassword, name, password) => async (dispatch, getState) => {
     try {
         const newMe = await userService.updateMe({
@@ -97,4 +119,18 @@ export const setTFA = (oldPassword, tfa) => async (dispatch, getState) => {
         console.log(err);
         dispatch(notify("error", err.response.data.error));
     }
+};
+
+export const setLH = (oldPassword, loanhistory) => (dispatch, getState) => {
+    userService.updateMe({
+        oldPassword,
+        loanhistory
+    }, getState().token.token)
+        .then(() => {
+            dispatch({
+                type: "SET_LOANHISTORY",
+                loanhistory
+            });
+        })
+        .catch(onError(dispatch, "PFAILURE_LOANHISTORY_EDIT"))
 };

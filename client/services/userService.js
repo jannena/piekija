@@ -7,6 +7,10 @@ const me = token => {
     return axios.get(`${baseUrl}/me`, { headers: { Authorization: `Bearer ${token}` } }).then(response => response.data);
 };
 
+const getLoanHistory = token => {
+    return axios.get(`${baseUrl}/me/loanhistory`, { headers: { Authorization: `Bearer ${token}` } }).then(response => response.data);
+};
+
 const updateMe = (data, token) => {
     return axios.put(
         `${baseUrl}/me`,
@@ -47,6 +51,7 @@ const update = (userId, name, username, barcode, password, address = null, email
 
 export default {
     me,
+    getLoanHistory,
     updateMe,
     search,
     create,

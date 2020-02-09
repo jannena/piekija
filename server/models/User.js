@@ -32,6 +32,45 @@ const userSchema = new mongoose.Schema({
             ref: "Item"
         }
     ],
+    holds: [
+        {
+            item: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Item"
+            },
+            queue: {
+                type: Number,
+                required: true
+            }
+        }
+    ],
+    loanHistoryRetention: {
+        type: Boolean,
+        required: true
+    },
+    loanHistory: [
+        {
+            item: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Item"
+            },
+            loaned: Date,
+            returned: Date
+        }
+    ],
+    connectedAccounts: [
+        {
+            account: {
+                type: String,
+                required: true,
+                enum: ["google", "piekija"]
+            },
+            accountId: {
+                type: String,
+                required: true
+            }
+        }
+    ],
     shelves: [
         {
             id: {
@@ -54,6 +93,7 @@ userSchema.set("toJSON", {
         delete ret.passwordHash;
         ret.tfa = !!ret.TFACode;
         delete ret.TFACode;
+        ret.loanHistory = null;
     }
 });
 
