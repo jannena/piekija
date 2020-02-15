@@ -159,6 +159,9 @@ circulationRouter.post("/hold", async (req, res, next) => {
         if (record.holds.some(h => h.toString() === req.authenticated._id.toString()))
             return res.status(400).json({ error: "current user has already placed a hold for this item" });
 
+        const location = await Location.findById(locationId);
+        if (!location) return res.status(400).json({ error: "Invalid location" });
+
         const items = await Item.find({ record: recordId }, { state: 1, loantype: 1 });
         if (items.length === 0) return res.status(400).json({ error: "there are not items attached to this record" });
 
@@ -177,7 +180,8 @@ circulationRouter.post("/hold", async (req, res, next) => {
 
         req.authenticated.holds = [...req.authenticated.holds, {
             record: record._id,
-            queue: record.holds.length
+            queue: record.holds.length,
+            location: location._id
         }];
 
         console.log(req.authenticated.holds);
@@ -195,7 +199,11 @@ circulationRouter.post("/hold", async (req, res, next) => {
                 id: record._id,
                 title: record.title
             },
-            queue: record.holds.length
+            queue: record.holds.length,
+            location: {
+                name: location.name,
+                id: location._id
+            }
         });
     }
     catch (err) {

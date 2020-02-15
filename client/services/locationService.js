@@ -3,8 +3,8 @@ import { baseUrl as b } from "../globals";
 
 const baseUrl = `${b}/location`;
 
-const getAll = token => {
-    return axios.get(baseUrl, { headers: { Authorization: `Bearer ${token}` } }).then(response => response.data);
+const getAll = () => {
+    return axios.get(baseUrl).then(response => response.data);
 };
 
 const create = (name, token) => {

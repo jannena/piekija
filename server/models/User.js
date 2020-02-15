@@ -42,6 +42,11 @@ const userSchema = new mongoose.Schema({
             queue: {
                 type: Number,
                 required: true
+            },
+            location: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Location",
+                required: true
             }
         }
     ],

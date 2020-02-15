@@ -20,8 +20,8 @@ userRouter.get("/me", async (req, res, next) => {
         });
 
         await User.populate(req.authenticated, {
-            path: "holds.record",
-            select: "title"
+            path: "holds.record holds.location",
+            select: "title name"
         });
 
         res.send(req.authenticated);

@@ -27,10 +27,10 @@ const renew = (itemId, token) => {
     ).then(response => response.data);
 };
 
-const placeAHold = (record, token) => {
+const placeAHold = (record, location, token) => {
     return axios.post(
         `${baseUrl}/hold`,
-        { record, location: "coming soon" },
+        { record, location },
         { headers: { Authorization: `Bearer ${token}` } }
     ).then(response => response.data);
 };

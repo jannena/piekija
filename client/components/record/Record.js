@@ -11,6 +11,7 @@ import RecordTools from "./RecordTools";
 import { connect } from "react-redux";
 import { getRecord } from "../../reducers/recordReducer";
 import { placeAHold } from "../../reducers/circulationReducer";
+import { getLocations } from "../../reducers/locationReducer";
 import Loader from "../Loader";
 import RecordPublisherInfo from "./RecordPublisherInfo";
 import RecordAuthors from "./RecordAuthors";
@@ -18,6 +19,7 @@ import styled from "styled-components";
 import ShowMore from "../essentials/ShowMore";
 import "../../css/record.css";
 import __ from "../../langs";
+import Select from "../Select";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
@@ -49,13 +51,16 @@ const StyledMainInfo = styled.div`
     }
 `;
 
-const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isRecordInUsersHolds, placeAHold, __ }) => {
+const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isRecordInUsersHolds, placeAHold, locations, getLocations, __ }) => {
     console.log(id);
     console.log("record", record);
 
     useEffect(() => {
         console.log(id);
-        if (!isPreview) getRecord(id);
+        if (!isPreview) {
+            getRecord(id);
+            getLocations();
+        }
     }, [id]);
 
     if (!record || !record.record || !record.record.LEADER || !record.record.FIELDS) return <div>
@@ -87,8 +92,10 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
         else return "#ff3c3c";
     };
 
-    const handlePlaceAHold = () => {
-        placeAHold(record.result.id);
+    const handlePlaceAHold = e => {
+        e.preventDefault();
+        const { pickup: { value: pickup } } = e.target;
+        placeAHold(record.result.id, pickup);
     };
 
     return !record || !record.result || record.result.id !== id
@@ -156,8 +163,15 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
                         {record.result.items.length > 0
                             ? <><hr /><div>{__("Holds")}: {record.result.holds || 0}</div>
                                 {!(isRecordInUsersHolds(record.result.id)[0])
-                                    ? <button onClick={handlePlaceAHold}>{__("Place a hold")}</button>
-                                    : <div>{__("Your queue number")}: {isRecordInUsersHolds(record.result.id)[0].queue}</div>}</>
+                                    ? <form onSubmit={handlePlaceAHold}>
+                                        <Select name="pickup" options={[[__("Select pick-up location"), null], ...locations.map(l => [l.name, l.id])]} />
+                                        <button>{__("Place a hold")}</button>
+                                    </form>
+                                    : <>
+                                        <div>{__("Your queue number")}: {isRecordInUsersHolds(record.result.id)[0].queue}</div>
+                                        <div>{__("Pick-up location")}: {isRecordInUsersHolds(record.result.id)[0].location.name}</div>
+                                    </>}
+                            </>
                             : <p>{__("No items")}</p>}
                     </Tab>
                     <Tab>
@@ -177,11 +191,12 @@ export default connect(
         isAdmin: state.user && state.user.staff,
         record: state.record.record,
         state: state.loading.record,
+        locations: state.location,
         isRecordInUsersHolds: id => state.user && state.user.holds && state.user.holds.some && state.user.holds.filter(({ record: r }) => {
             console.log("TESTTESTTESTTESTTEST", r.id, id);
             return r.id === id
         }),
         __: __(state)
     }),
-    { getRecord, placeAHold }
+    { getRecord, placeAHold, getLocations }
 )(Record);

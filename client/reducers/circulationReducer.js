@@ -197,16 +197,15 @@ export const renewItemWithId = id => (dispatch, getState) => {
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_RENEW"));
 };
 
-export const placeAHold = recordId => (dispatch, getState) => {
+export const placeAHold = (recordId, location) => (dispatch, getState) => {
     dispatch({ type: "PREQUEST_CIRCULATION_PLACE_HOLD" });
     circulationService
-        .placeAHold(recordId, getState().token.token)
+        .placeAHold(recordId, location, getState().token.token)
         .then(result => {
             dispatch({
                 type: "PSUCCESS_CIRCULATION_PLACE_HOLD",
                 newHold: result
             });
-            console.log("renewed item", result);
             dispatch(notify("success", "A new hold was created"));
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_PLACE_HOLD"));
