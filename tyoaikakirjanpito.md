@@ -74,4 +74,5 @@
 | 2.2. | 1 | GraphQL-palvelimen jatkaminen |
 | 8.2. | 1,5 | GraphQL-palvelimen jatkaminen |
 | 9.2. | 2,5 | lainaushistoria, ja varaamisen aloittaminen |
-| yht. | 152 | |
+| 15.2. | 2,5 | varaustoiminnallisuuksien jatkaminen |
+| yht. | 154,5 | |
