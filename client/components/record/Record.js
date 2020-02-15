@@ -153,11 +153,12 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
                                 )}
                             </tbody>
                         </table>
-                        <hr />
-                        <div>{__("Holds")}: {record.result.holds || 0}</div>
-                        {!(isRecordInUsersHolds(record.result.id)[0])
-                            ? <button onClick={handlePlaceAHold}>{__("Place a hold")}</button>
-                            : <div>{__("Your queue number")}: {isRecordInUsersHolds(record.result.id)[0].queue}</div>}
+                        {record.result.items.length > 0
+                            ? <><hr /><div>{__("Holds")}: {record.result.holds || 0}</div>
+                                {!(isRecordInUsersHolds(record.result.id)[0])
+                                    ? <button onClick={handlePlaceAHold}>{__("Place a hold")}</button>
+                                    : <div>{__("Your queue number")}: {isRecordInUsersHolds(record.result.id)[0].queue}</div>}</>
+                            : <p>{__("No items")}</p>}
                     </Tab>
                     <Tab>
                         <MARC21Screen parsedMARC={record.record} />
