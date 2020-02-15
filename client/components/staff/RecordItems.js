@@ -35,7 +35,7 @@ const RecordItems = ({ record, items, locations, loantypes, addItem, removeItem,
 
     const itemStateOptions = [
         [__("not loaned"), "not loaned"], [__("not in use"), "not in use"], [__("loaned"), "loaned"], [__("broken"), "broken"],
-        [__("placed a hold"), __("placed a hold")], [__("other"), "other"]
+        [__("placed a hold"), "placed a hold"], [__("other"), "other"]
     ];
 
     const form = data => <>
