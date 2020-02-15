@@ -24,13 +24,16 @@ userRouter.get("/me", async (req, res, next) => {
             select: "title holds name"
         });
 
-        const user = req.authenticated.toObject();
+        // const user = req.authenticated.toObject();
 
-        user.holds = (user.holds || []).map(hold => {
+        const holds = req.authenticated.holds.map(hold => {
             const queue = hold.record.holds.map(h => h.toString()).indexOf(req.authenticated._id.toString());
-            console.log("Calculated queue number", queue);
+
             return {
-                ...hold,
+                location: {
+                    id: hold.location._id,
+                    name: hold.location.name
+                },
                 record: {
                     id: hold.record._id,
                     title: hold.record.title
@@ -39,7 +42,10 @@ userRouter.get("/me", async (req, res, next) => {
             };
         });
 
-        res.send(user);
+        res.send({
+            ...req.authenticated.toJSON(),
+            holds
+        });
     }
     catch (err) {
         return next(err);
@@ -52,7 +58,7 @@ userRouter.get("/me/loanhistory", async (req, res, next) => {
     try {
         await User.populate(req.authenticated, {
             path: "loanHistory.record",
-            select: "title"
+            select: "title id"
         });
 
         res.send(req.authenticated.loanHistory.filter(l => l.returned !== null));
