@@ -180,7 +180,6 @@ circulationRouter.post("/hold", async (req, res, next) => {
 
         req.authenticated.holds = [...req.authenticated.holds, {
             record: record._id,
-            queue: record.holds.length,
             location: location._id
         }];
 
@@ -232,9 +231,6 @@ circulationRouter.delete("/hold", async (req, res, next) => {
 
         await record.save();
         await req.authenticated.save();
-
-
-        // TODO: Päivitä vuoronumerot
 
         res.status(204).end();
     }

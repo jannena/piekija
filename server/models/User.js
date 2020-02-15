@@ -39,10 +39,6 @@ const userSchema = new mongoose.Schema({
                 ref: "Record",
                 required: true
             },
-            queue: {
-                type: Number,
-                required: true
-            },
             location: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Location",

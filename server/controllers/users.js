@@ -21,10 +21,25 @@ userRouter.get("/me", async (req, res, next) => {
 
         await User.populate(req.authenticated, {
             path: "holds.record holds.location",
-            select: "title name"
+            select: "title holds name"
         });
 
-        res.send(req.authenticated);
+        const user = req.authenticated.toObject();
+
+        user.holds = (user.holds || []).map(hold => {
+            const queue = hold.record.holds.map(h => h.toString()).indexOf(req.authenticated._id.toString());
+            console.log("Calculated queue number", queue);
+            return {
+                ...hold,
+                record: {
+                    id: hold.record._id,
+                    title: hold.record.title
+                },
+                queue: queue + 1
+            };
+        });
+
+        res.send(user);
     }
     catch (err) {
         return next(err);
