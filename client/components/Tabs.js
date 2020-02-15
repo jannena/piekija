@@ -41,7 +41,7 @@ export const Tab = ({ children }) => {
 const TabsWithoutRouter = ({ titles, root, addresses, children, history }) => {
     const [selectedTab, setSelectedTab] = useState(0);
     if (titles.length !== addresses.length || titles.length !== children.length) {
-        console.error("length of titles, addresses and children are not equal.");
+        console.error(`length of titles (${titles.length}), addresses (${addresses.length}) and children (${children.length}) are not equal.`);
         return <div>Error</div>;
     }
 

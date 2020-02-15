@@ -10,6 +10,7 @@ import StaffLoantypes from "./StaffLoantypes";
 import Circulation from "./Circulation";
 import StaffUser from "./StaffUser";
 import StaffNotes from "./StaffNotes";
+import StaffHolds from "./StaffHolds";
 import __ from "../../langs";
 import StaffStatistics from "./StaffStatistics";
 
@@ -58,8 +59,8 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history, __ }
     };
 
     return <AddressedTabs
-        titles={[__("Welcome"), __("Records"), __("Locations"), __("Loantypes"), __("Users"), __("Circulation"), __("Notes"), __("Statistics")]}
-        addresses={["", "records", "locations", "loantypes", "users", "circulation", "notes", "statistics"]}
+        titles={[__("Welcome"), __("Records"), __("Locations"), __("Loantypes"), __("Users"), __("Circulation"), __("Holds"), __("Notes"), __("Statistics")]}
+        addresses={["", "records", "locations", "loantypes", "users", "circulation", "holds", "notes", "statistics"]}
         root="staff">
         <Tab>
             <p>{__("Welcome")}</p>
@@ -101,6 +102,9 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history, __ }
         </Tab>
         <Tab>
             <Circulation history={history} />
+        </Tab>
+        <Tab>
+            <StaffHolds />
         </Tab>
         <Tab>
             <StaffNotes />

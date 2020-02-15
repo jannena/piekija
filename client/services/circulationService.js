@@ -45,10 +45,19 @@ const removeAHold = (record, token) => {
     ).then(response => response.data);
 };
 
+const getHolds = (location, token) => {
+    return axios.patch(
+        `${baseUrl}/hold`,
+        { location },
+        { headers: { Authorization: `Bearer ${token}` }, }
+    ).then(response => response.data);
+};
+
 export default {
     loan,
     returnItem,
     renew,
     placeAHold,
-    removeAHold
+    removeAHold,
+    getHolds
 };

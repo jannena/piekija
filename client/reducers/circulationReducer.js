@@ -6,7 +6,8 @@ import { notify } from "./notificationReducer";
 
 const init = {
     user: null,
-    item: null
+    item: null,
+    holds: null
 };
 
 const circulationReducer = (state = init, action) => {
@@ -88,6 +89,11 @@ const circulationReducer = (state = init, action) => {
                 ...state,
                 user: { ...action.user, loans: state.user && state.user.loans }
             };
+        case "PSUCCESS_CIRCULATION_GET_HOLDS":
+            return {
+                ...state,
+                holds: action.holds
+            }
     }
     return state;
 };
@@ -220,10 +226,22 @@ export const removeAHold = recordId => (dispatch, getState) => {
                 type: "PSUCCESS_CIRCULATION_REMOVE_HOLD",
                 record: recordId
             });
-            console.log("renewed item", result);
             dispatch(notify("success", "A new hold was removed"));
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_REMOVE_HOLD"));
+};
+
+export const getHolds = locationId => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_CIRCULATION_GET_HOLDS" });
+    circulationService
+        .getHolds(locationId, getState().token.token)
+        .then(result => {
+            dispatch({
+                type: "PSUCCESS_CIRCULATION_GET_HOLDS",
+                holds: result
+            });
+        })
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_GET_HOLD"));
 };
 
 export const renewItem = () => (dispatch, getState) => dispatch(renewItemWithId(getState().circulation.item.id));

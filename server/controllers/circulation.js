@@ -4,6 +4,7 @@ const User = require("../models/User");
 const Item = require("../models/Item");
 const Record = require("../models/Record");
 const Location = require("../models/Location");
+const Loantype = require("../models/Loantype");
 
 circulationRouter.post("/loan", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
@@ -119,7 +120,8 @@ circulationRouter.post("/renew", async (req, res, next) => {
         if (item.statePersonInCharge.toString() === req.authenticated._id.toString() || req.authenticated.staff === true) console.log("You can renew this item");
         else return res.status(403).json({ error: "you cannot renew this loan" });
 
-        // TODO: Tarkista varaukset
+        const record = await Record.findById(item.record);
+        if (record.holds.length > 0) return res.status(400).json({ error: "there are holds" });
 
         const { loanTime, renewTimes } = item.loantype;
         if (item.stateTimesRenewed >= renewTimes) return res.status(400).json({ error: "renewTimes exeeded" });
@@ -249,9 +251,88 @@ circulationRouter.put("/hold", async (req, res, next) => {
 
 });
 
-circulationRouter.get("/hold", async (req, res, next) => {
-    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
-    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+circulationRouter.patch("/hold", async (req, res, next) => {
+    // if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    // if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+
+    const { location: locationId } = req.body;
+
+    if (!locationId) return res.status(400).json({ error: "location is missing" });
+
+    try {
+        const goodLoantypes = (await Loantype.find({ canBeLoaned: true, canBePlacedAHold: true })).map(lt => lt._id);
+        const { items } = (await Item
+            .find(
+                { location: locationId, state: "placed a hold", statePersonInCharge: null, loantype: { $in: goodLoantypes } },
+                { barcode: 1, record: 1, shelfLocation: 1 }
+            )
+            .limit(50)
+            .populate("record", "title author holds")
+        )
+            .map(item => ({
+                barcode: item.barcode,
+                shelfLocation: item.shelfLocation,
+                record: {
+                    id: item.record.id,
+                    title: item.record.title,
+                    author: item.record.author,
+                    for: item.record.holds[0]
+                }
+            }))
+            .reduce(({ items, records }, add) => {
+                if (records.some(r => r === add.record.id.toString())) return { items, records };
+                return {
+                    items: [...items, add],
+                    records: [...records, add.record.id.toString()]
+                };
+            }, { items: [], records: [] })
+
+        res.send(items);
+        // const result = await Item.aggregate([
+        //     { $match: { location: locationId } },
+        //     {
+        //         $lookup: {
+        //             from: 'records',
+        //             as: 'record',
+        //             let: {
+        //                 record: "$record",
+        //                 id: "$_id"
+        //             },
+        //             pipeline: [
+        //                 { $match: { $expr: { $eq: ["$_id", "$$record"] } } },
+        //                 {
+        //                     $project: {
+        //                         holds: 1
+        //                     }
+        //                 },
+        //                 { $match: { include: true } }
+        //             ]
+        //         }
+        //     },
+        //     {
+        //         $project: {
+        //             include: {
+        //                 $cond: {
+        //                     if: {
+        //                         $and: [
+        //                             { $isArray: "$record.0.holds" },
+        //                             { $gt: [{ $size: ["$record.0.holds"] }, 0] }
+        //                         ]
+        //                     },
+        //                     then: true,
+        //                     else: false
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     { $match: { "record.0.include": true } }
+        // ]);
+        // res.send(result);
+
+    }
+    catch (err) {
+        next(err);
+    }
 
     // TODO: Palauta kaikki aktiiviset varaukset
 });
