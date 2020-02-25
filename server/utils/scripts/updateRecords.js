@@ -18,7 +18,7 @@ const run = async () => {
         for (let i = 0; i < recordsLength; i++) {
             try {
                 const parsed = MARC21.tryParse(records[i].record);
-                await Record.findByIdAndUpdate(records[i]._id, MARC21.parseMARCToDatabse(parsed, records[i].record));
+                await Record.findByIdAndUpdate(records[i]._id, await MARC21.parseMARCToDatabse(parsed, records[i].record));
             }
             catch (err) {
                 console.log(err);
