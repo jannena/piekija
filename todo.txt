@@ -12,7 +12,7 @@ MUUT:
 - Korjaa yksinkertaisen muokkaimen tallennus
 
 - päivitä testit
-- päivitä APIn testit
+- päivitä dokumentaatio ja ohjeet
 
 
 MUUT TESTIT:
