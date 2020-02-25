@@ -173,8 +173,10 @@ circulationRouter.post("/hold", async (req, res, next) => {
         });
 
         const potentialItems = items
-            .filter(i => i.loantype.canBePlacedAHold === true && (i.state === "not loaned" || i.state === "placed a hold"))
+            .filter(i => i.loantype.canBePlacedAHold === true && (i.state === "loaned" || i.state === "not loaned" || i.state === "placed a hold"))
             .map(i => i._id);
+
+        // TODO: Jos tila on 'lainassa', ei saa muuttaa tilaksi 'varattu'
 
         if (potentialItems.length === 0) return res.status(400).json({ error: "loantype denies placing a hold for any items of this record" });
 
@@ -188,7 +190,7 @@ circulationRouter.post("/hold", async (req, res, next) => {
         console.log(req.authenticated.holds);
 
         console.log(potentialItems);
-        await Item.updateMany({ _id: { $in: potentialItems } }, { $set: { state: "placed a hold" } });
+        await Item.updateMany({ _id: { $in: potentialItems }, state: { $ne: "loaned" } }, { $set: { state: "placed a hold" } });
 
         await req.authenticated.save();
         await record.save();

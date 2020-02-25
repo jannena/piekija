@@ -1,6 +1,46 @@
-BEFORE 1.0
+MUUT:
+- Korjaa asennusskripti
+- Korjaa muutkin käyttäjän lisäämiseen liittyvät jutut.
+- ?????Päivitä tietueidenpäivitysskripti tietueiden tallentamisen suhteen?????
+- Linkki nimike-välilehdeltä nimike-kohtaan linkki lainaa ja palauta -välilehdelle
+- Paremmat latausruudut (ainakin sijainnit, lainaustyypit käyttäjät ja lainaus-palautus)
+- Tietuenäyttöön uudet välilehdet: arvostelut, sisällysluettelo katso myös.
+- Käyttäjäkohtaiset sisältöpohjaiset suositukset
+- spellingiin: 511a ja 979a
+- sisällysluetteloksi 979-kentät
+- hakurajauksiin aineistolaji
+- hakutuloksiin nimikkeiden määrä
+- tilien yhdistäminen toisiinsa
+- Google-kirjautuminen
+- hyllyihin katso myös -välilehti
+- Korjaa yksinkertaisen muokkaimen tallennus
 
-- Fix simple editor saving
 
-- Finnish queryValidator and MARC21 tests
-- go through all TODOs
+MUUT TESTIT:
+- queryValidator
+- MARC21
+
+
+E2E-testit
+- tavallinen käyttäjä (tietojen muokkaus, varaaminen, uusiminen)
+- ?hyllyt? (toimiikohan websocketien kanssa)
+- lainaus-palautus-varaus
+- henkilökunta (sijainnit, lainausmallit, etusivu-uutiset, tilastot)
+- tietueiden muokkaus
+
+VARAUKSET:
+(?lainaa ja palauta -välilehdelle valinta nykyisen sijainnin valitsemiseksi?)
+
+1. Varaukset välilehdelle nappi, josta voi siirtyä suoraan lainaa ja palauta -välilehdelle.
+2. Jos lainaa ja palauta -välilehdellä hakee varatun nimikkeen, näkyviin varauspainike. Kun nappia painaa:
+    1. Jos noutopaikka on nykyinen sijainti, nimikkeen tilaksi 'Noudettavissa'.
+    2. Muutoin nimikkeen tilaksi tulee 'Kuljetuksessa'.
+3. Jos varaus oli viimeinen, niiden nimikkeiden, joiden tila on 'Varattu', tila muuttuu tilaksi 'Ei lainassa'.
+
+1. Jos lainaa ja palauta -välilehdellä hakee tiedot nimikkeestä, jonka tila on 'Kuljetuksessa',
+    näkyviin nappi, josta tilaksi voi vaihtaa 'Noudettavissa'.
+
+1. Jos lainaus palautetaan, näytä tieto, että nimike on varattu.
+
+
+- Entäs sitten kun nimikkeitä on jo noutopaikalla ja joku on jo toisaalla varannut nimikkeen.

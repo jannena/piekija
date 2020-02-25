@@ -75,4 +75,5 @@
 | 8.2. | 1,5 | GraphQL-palvelimen jatkaminen |
 | 9.2. | 2,5 | lainaushistoria, ja varaamisen aloittaminen |
 | 15.2. | 2,5 | varaustoiminnallisuuksien jatkaminen |
-| yht. | 154,5 | |
+| 25.2. | 0,5 | viimeisten ominaisuuksien suunnittelua |
+| yht. | 155 | |
