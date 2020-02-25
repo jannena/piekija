@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getNotLoanedSince, getTotalLoans, getTotal } from "../../reducers/statisticsReducer";
-import { getLocations } from "../../reducers/locationReducer";
 import __ from "../../langs";
 import { Form, FormSelect, Input, Button } from "../essentials/forms";
 import Expandable from "../essentials/Expandable";
@@ -36,11 +35,7 @@ import Loader from "../Loader";
     </Document>;
 }; */
 
-const StaffStatistics = ({ getLocations, locations, getNotLoanedSince, getTotalLoans, getTotal, language, statistics, loading, __ }) => {
-    useEffect(() => {
-        if (!locations || locations.length === 0) getLocations();
-    }, []);
-
+const StaffStatistics = ({ locations, getNotLoanedSince, getTotalLoans, getTotal, language, statistics, loading, __ }) => {
     const handleGetTotal = e => {
         e.preventDefault();
         getTotal();
@@ -110,5 +105,5 @@ export default connect(
         loading: state.loading.statistics,
         __: __(state)
     }),
-    { getTotal, getNotLoanedSince, getLocations, getTotalLoans }
+    { getTotal, getNotLoanedSince, getTotalLoans }
 )(StaffStatistics);

@@ -14,13 +14,14 @@ import AdvancedSearch from "./components/AdvancedSearch";
 import Staff from "./components/staff/Staff";
 import StaffEditRecord from "./components/staff/StaffEditRecord";
 import { getLastNotes } from "./reducers/noteReducer";
+import { getLocations } from "./reducers/locationReducer";
 
 import { addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf } from "./reducers/shelfReducer";
 import { setSocketIOEventListeners, startWS } from "./socket";
 import FrontPageNews from "./components/FrontPageNews";
 import __ from "./langs";
 
-const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf, getLastNotes, history, __ }) => {
+const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf, locations, getLocations, getLastNotes, history, __ }) => {
     useEffect(() => {
         if (token && user) {
             startWS();
@@ -44,6 +45,10 @@ const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRe
             );
         }
     }, [token, user]);
+
+    useEffect(() => {
+        getLocations();
+    }, []);
 
     useEffect(() => {
         if (!token) return;
@@ -107,5 +112,5 @@ export default connect(
         news: state.notes,
         __: __(state)
     }),
-    { setToken, getUser, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf, getLastNotes }
+    { setToken, getUser, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf, getLastNotes, getLocations }
 )(withRouter(App));

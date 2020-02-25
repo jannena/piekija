@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import Select from "../Select";
 import { connect } from "react-redux";
 import { addItem, removeItem, updateItem } from "../../reducers/recordReducer";
-import { getLocations } from "../../reducers/locationReducer";
 import { getLoantypes } from "../../reducers/loantypeReducer";
 import Expandable from "../essentials/Expandable";
 import { Form, Input, Button, FormSelect, Text, Grid, DoNotSendButton } from "../essentials/forms";
@@ -11,9 +10,8 @@ import __ from "../../langs";
 import { withRouter } from "react-router-dom";
 import { searchForItem } from "../../reducers/circulationReducer";
 
-const RecordItems = ({ record, items, locations, loantypes, addItem, removeItem, updateItem, getLocations, getLoantypes, searchForItem, history, __ }) => {
+const RecordItems = ({ record, items, locations, loantypes, addItem, removeItem, updateItem, getLoantypes, searchForItem, history, __ }) => {
     useEffect(() => {
-        if (items && locations.length === 0) getLocations();
         if (items && loantypes.length === 0) getLoantypes();
     }, [locations, loantypes, items]);
 
@@ -98,5 +96,5 @@ export default connect(
         loantypes: state.loantype,
         __: __(state)
     }),
-    { addItem, getLoantypes, getLocations, removeItem, updateItem, searchForItem }
+    { addItem, getLoantypes, removeItem, updateItem, searchForItem }
 )(withRouter(RecordItems));

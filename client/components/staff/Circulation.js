@@ -2,8 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { searchForUser, searchForItem, clearUser, clearItem, loanItem, returnItem } from "../../reducers/circulationReducer";
 import __ from "../../langs";
+import Select from "../Select";
 
-const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clearItem, loanItem, returnItem, history, __ }) => {
+const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clearItem, loanItem, returnItem, locations, history, __ }) => {
     const searchUser = e => {
         e.preventDefault();
         searchForUser({ barcode: e.target.user.value });
@@ -15,6 +16,12 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
     };
 
     return (<>
+        <div>
+            <span>{__("Select current location")}</span> <Select name="current-location" options={locations.map(({ id, name }) => [name, id])} />
+        </div>
+
+        <hr />
+
         <div>
             <div style={{ display: "flex" }}>
                 <form onSubmit={searchUser}>
@@ -68,6 +75,7 @@ export default connect(
     state => ({
         user: state.circulation.user,
         item: state.circulation.item,
+        locations: state.location,
         __: __(state)
     }),
     { searchForItem, searchForUser, clearItem, clearUser, loanItem, returnItem }

@@ -1,16 +1,11 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getHolds } from "../../reducers/circulationReducer";
-import { getLocations } from "../../reducers/locationReducer";
 import __ from "../../langs";
 import Select from "../Select";
 import { Link } from "react-router-dom";
 
-const StaffHolds = ({ holds, locations, getHolds, getLocations, __ }) => {
-    useEffect(() => {
-        if (!locations || locations.length === 0) getLocations();
-    }, []);
-
+const StaffHolds = ({ holds, locations, getHolds, __ }) => {
     const handleGetHolds = e => {
         e.preventDefault();
         const { location: { value: location = "" } } = e.target;
@@ -39,5 +34,5 @@ export default connect(
         locations: state.location,
         __: __(state)
     }),
-    { getHolds, getLocations }
+    { getHolds }
 )(StaffHolds);

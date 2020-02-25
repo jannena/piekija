@@ -11,7 +11,6 @@ import RecordTools from "./RecordTools";
 import { connect } from "react-redux";
 import { getRecord } from "../../reducers/recordReducer";
 import { placeAHold } from "../../reducers/circulationReducer";
-import { getLocations } from "../../reducers/locationReducer";
 import Loader from "../Loader";
 import RecordPublisherInfo from "./RecordPublisherInfo";
 import RecordAuthors from "./RecordAuthors";
@@ -51,7 +50,7 @@ const StyledMainInfo = styled.div`
     }
 `;
 
-const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isRecordInUsersHolds, placeAHold, locations, getLocations, __ }) => {
+const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isRecordInUsersHolds, placeAHold, locations, __ }) => {
     console.log(id);
     console.log("record", record);
 
@@ -59,7 +58,6 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
         console.log(id);
         if (!isPreview) {
             getRecord(id);
-            getLocations();
         }
     }, [id]);
 
@@ -198,5 +196,5 @@ export default connect(
         }),
         __: __(state)
     }),
-    { getRecord, placeAHold, getLocations }
+    { getRecord, placeAHold }
 )(Record);
