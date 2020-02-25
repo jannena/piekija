@@ -437,7 +437,7 @@ export default (slog, def) => {
         "Hold this item for its hold placer": "Varaa nimike sen varaajalle",
         "Send this item for its hold placer": "Kuljeta nimike sen varaajalle",
         "after-number-holds": "varausta",
-        "Reserved for": "Varattu käyttäjällw",
+        "Reserved for": "Varattu käyttäjälle",
         "Pick-up location of current item": "Nykyisen nimikkeen noutopaikka",
         "Mark as pick-up": "Merkitse noudettavaksi",
         "Select location": "Valitse sijainti",

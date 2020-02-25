@@ -16,7 +16,10 @@ circulationRouter.post("/loan", async (req, res, next) => {
 
     try {
         const user = await User.findById(userId);
-        const item = await Item.findById(itemId).populate("loantype");
+        const item = await Item.findById(itemId)
+            .populate("loantype")
+            .populate("location")
+            .populate("record", { title: 1, author: 1 });
 
         if (!user) return res.status(400).json({ error: "user does not exist" });
         if (!item) return res.status(400).json({ error: "item does not exist" });
@@ -47,7 +50,7 @@ circulationRouter.post("/loan", async (req, res, next) => {
         dueDate.setUTCDate(dueDate.getUTCDate() + (item.loantype.loanTime || 1));
         item.stateDueDate = dueDate;
 
-        user.holds = user.holds.filter(hold => hold.record.toString() !== item.record.toString());
+        user.holds = user.holds.filter(hold => hold.record.toString() !== item.record._id.toString());
 
         // TODO: Populate
 
@@ -57,6 +60,11 @@ circulationRouter.post("/loan", async (req, res, next) => {
         await location.save();
         await user.save();
         await item.save();
+
+        await Item.populate(item, {
+            path: "statePersonInCharge",
+            select: { name: true, username: true, barcode: true }
+        })
 
         // TODO: Send only relevant data
         res.json({ user, item });
@@ -75,7 +83,10 @@ circulationRouter.post("/return", async (req, res, next) => {
     if (!itemId) return res.status(400).json({ error: "item is missing" });
 
     try {
-        const item = await Item.findById(itemId);
+        const item = await Item.findById(itemId)
+            .populate("loantype")
+            .populate("location")
+            .populate("record", { title: 1, author: 1 });
         if (!item) return res.status(400).json({ error: "item does not exist" });
 
         const record = await Record.findById(item.record);
@@ -107,8 +118,8 @@ circulationRouter.post("/return", async (req, res, next) => {
         await item.save();
 
         await Item.populate(item, {
-            path: "loantype location statePersonInCharge",
-            select: "name title author username barcode"
+            path: "statePersonInCharge",
+            select: "name username barcode"
         })
 
         res.status(200).json(item);
@@ -283,7 +294,11 @@ circulationRouter.put("/hold", async (req, res, next) => {
     if (!itemId || !locationId) return res.status(400).json({ error: "item or location is missing" });
 
     try {
-        const item = await Item.findById(itemId);
+        const item = await Item.findById(itemId)
+            .populate("loantype")
+            .populate("location")
+            .populate("record", { title: 1, author: 1 });
+
         const record = await Record.findById(item.record);
 
         const isForCurrentLocation = item.stateFirstHoldLocation.toString() === locationId;
@@ -319,6 +334,11 @@ circulationRouter.put("/hold", async (req, res, next) => {
             default:
                 return res.status(400).json({ error: "item does not have state 'placed a hold' or 'being carried'" });
         }
+
+        await Item.populate(item, {
+            path: "stateHoldFor stateFirstHoldLocation",
+            select: { name: 1, username: 1, barcode: 1 }
+        });
 
         res.json(item);
     }

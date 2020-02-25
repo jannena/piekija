@@ -17,6 +17,8 @@ const circulationReducer = (state = init, action) => {
                 ...state,
                 user: action.user
             };
+
+        case "PSUCCESS_CIRCULATION_RESERVE_ITEM":
         case "PSUCCESS_CIRCULATION_ITEM":
             return {
                 ...state,
@@ -246,16 +248,16 @@ export const getHolds = locationId => (dispatch, getState) => {
 };
 
 export const reserveItem = () => (dispatch, getState) => {
-    dispatch({ type: "PREQUEST_CIRCULATION_RESERVE_HOLD" });
+    dispatch({ type: "PREQUEST_CIRCULATION_RESERVE_ITEM" });
     circulationService
         .reserveItem(getState().circulation.item.id, getState().currentLocation, getState().token.token)
         .then(result => {
             dispatch({
-                type: "PSUCCESS_CIRCULATION_RESERVE_HOLD",
+                type: "PSUCCESS_CIRCULATION_RESERVE_ITEM",
                 item: result
             });
         })
-        .catch(onError(dispatch, "PFAILURE_CIRCULATION_RESERVE_HOLD"));
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_RESERVE_ITEM"));
 };
 
 export const renewItem = () => (dispatch, getState) => dispatch(renewItemWithId(getState().circulation.item.id));

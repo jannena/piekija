@@ -95,12 +95,12 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
                 </button>}
             </div>
         </>}
-        {(item && item.state === "pick-up") && <>
+        {(item && (item.state === "pick-up" || item.state === "being carried")) && <>
             <div>{__("Reserved for")}: {item.stateHoldFor.name} ({item.stateHoldFor.barcode})</div>
         </>}
         {(item && item.state === "being carried") && <>
             <div>{__("Pick-up location of current item")}: {item.stateFirstHoldLocation.name}</div>
-            <button onClick={handleHoldReservation}>{__("Mark as pick-up")}</button>
+            {item.stateFirstHoldLocation === currentLocation && <button onClick={handleHoldReservation}>{__("Mark as pick-up")}</button>}
         </>}
     </>);
 };
