@@ -40,13 +40,13 @@ const circulationReducer = (state = init, action) => {
         case "PSUCCESS_CIRCULATION_RETURN":
             return {
                 ...state,
-                item: state.item && state.item.id === action.returned ? {
+                item: action.item || (state.item && state.item.id === action.returned ? {
                     ...state.item,
                     state: "not loaned",
                     statePersonInCharge: null,
                     stateDueDate: null,
                     stateTimesRenewed: null
-                } : state.item,
+                } : state.item),
                 user: !state.user ? state.user : {
                     ...state.user,
                     loans: state.user.loans.filter(l => l.id !== action.returned)
@@ -175,10 +175,11 @@ export const returnItemWithId = id => (dispatch, getState) => {
     dispatch({ type: "PREQUEST_CIRCULATION_RETURN" });
     circulationService
         .returnItem(id, getState().token.token)
-        .then(() => {
+        .then(item => {
             dispatch({
                 type: "PSUCCESS_CIRCULATION_RETURN",
-                returned: id
+                returned: id,
+                item: item
             });
             dispatch(notify("success", "Item was returned"));
         })
@@ -242,6 +243,19 @@ export const getHolds = locationId => (dispatch, getState) => {
             });
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_GET_HOLD"));
+};
+
+export const reserveItem = () => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_CIRCULATION_RESERVE_HOLD" });
+    circulationService
+        .reserveItem(getState().circulation.item.id, getState().currentLocation, getState().token.token)
+        .then(result => {
+            dispatch({
+                type: "PSUCCESS_CIRCULATION_RESERVE_HOLD",
+                item: result
+            });
+        })
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_RESERVE_HOLD"));
 };
 
 export const renewItem = () => (dispatch, getState) => dispatch(renewItemWithId(getState().circulation.item.id));

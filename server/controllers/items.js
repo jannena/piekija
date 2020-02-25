@@ -124,7 +124,9 @@ itemRouter.post("/search", (req, res, next) => {
         .populate("statePersonInCharge", { name: true, username: true, barcode: true })
         .populate("loantype")
         .populate("record", { title: 1, author: 1 })
-        .populate("location")
+        .populate("location", { name: 1 })
+        .populate("stateFirstHoldLocation", { name: 1 })
+        .populate("stateHoldFor", { barcode: 1, name: 1 })
         /* .populate({
             path: "stateInfo.personInCharge",
             populate: {

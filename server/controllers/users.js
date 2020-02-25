@@ -2,6 +2,7 @@ const userRouter = require("express").Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Shelf = require("../models/Shelf");
+const Item = require("../models/Item");
 const otp = require("speakeasy");
 const QRCode = require("qrcode");
 
@@ -26,10 +27,15 @@ userRouter.get("/me", async (req, res, next) => {
 
         // const user = req.authenticated.toObject();
 
-        const holds = req.authenticated.holds.map(hold => {
-            const queue = hold.record.holds.map(h => h.toString()).indexOf(req.authenticated._id.toString());
+        const holds = [];
 
-            return {
+        for (let i = 0; i < req.authenticated.holds.length; i++) {
+            const hold = req.authenticated.holds[i];
+
+            const queue = hold.record.holds.map(h => h.toString()).indexOf(req.authenticated._id.toString());
+            const itemForMe = await Item.findOne({ record: hold.record._id, stateHoldFor: req.authenticated._id });
+
+            holds.push({
                 location: {
                     id: hold.location._id,
                     name: hold.location.name
@@ -38,9 +44,31 @@ userRouter.get("/me", async (req, res, next) => {
                     id: hold.record._id,
                     title: hold.record.title
                 },
-                queue: queue + 1
-            };
-        });
+                queue: queue + 1,
+                state: (itemForMe && itemForMe.state) || "placed a hold"
+            });
+        }
+
+        // const holds = req.authenticated.holds.map(async hold => {
+        //     console.log(hold);
+
+        //     const queue = hold.record.holds.map(h => h.toString()).indexOf(req.authenticated._id.toString());
+
+        //     const itemForMe = await Item.findOne({ record: hold.record._id, stateHoldFor: req.authenticated._id });
+
+        //     return {
+        //         location: {
+        //             id: hold.location._id,
+        //             name: hold.location.name
+        //         },
+        //         record: {
+        //             id: hold.record._id,
+        //             title: hold.record.title
+        //         },
+        //         queue: queue + 1,
+        //         state: (itemForMe && itemForMe.state) || "placed a hold"
+        //     };
+        // });
 
         res.send({
             ...req.authenticated.toJSON(),
@@ -144,6 +172,8 @@ userRouter.get("/:id", (req, res, next) => {
 
     User
         .findById(id)
+        .populate("holds.$.record", { title: 1 })
+        .populate("holds.$.location", { name: 1 })
         .then(result => {
             if (!result) return res.status(404).end();
             else {

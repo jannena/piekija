@@ -49,7 +49,15 @@ const getHolds = (location, token) => {
     return axios.patch(
         `${baseUrl}/hold`,
         { location },
-        { headers: { Authorization: `Bearer ${token}` }, }
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
+const reserveItem = (item, location, token) => {
+    return axios.put(
+        `${baseUrl}/hold`,
+        { item, location },
+        { headers: { Authorization: `Bearer ${token}` } }
     ).then(response => response.data);
 };
 
@@ -59,5 +67,6 @@ export default {
     renew,
     placeAHold,
     removeAHold,
-    getHolds
+    getHolds,
+    reserveItem
 };

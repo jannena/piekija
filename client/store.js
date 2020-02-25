@@ -13,7 +13,8 @@ import loadingReducer from "./reducers/loadingReducer";
 import circulationReducer from "./reducers/circulationReducer";
 import noteReducer from "./reducers/noteReducer";
 import languageReducer from "./reducers/languageReducer";
-import statisticsReducer from "./reducers/statisticsReducer"
+import statisticsReducer from "./reducers/statisticsReducer";
+import currentLocationReducer from "./reducers/currentLocationReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 const reducer = combineReducers({
@@ -30,7 +31,8 @@ const reducer = combineReducers({
     circulation: circulationReducer,
     notes: noteReducer,
     language: languageReducer,
-    statistics: statisticsReducer
+    statistics: statisticsReducer,
+    currentLocation: currentLocationReducer
 });
 
 const store = createStore(reducer, composeWithDevTools(

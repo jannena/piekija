@@ -37,15 +37,19 @@ const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUs
                 <div><button onClick={handleCreateNewUser}>{__("Create new user")}</button></div>
             </>}
             {/* TODO: User list */}
-            {user && <Tabs titles={[__("Loans"), __("edit-button")]}>
+            {user && <Tabs titles={[__("Loans"), __("Holds"), __("edit-button")]}>
                 <Tab>
                     <div>
                         <button onClick={clearUser}>{__("clear-button")}</button>
                         <div>{__("Name")}: {user.name}</div>
                         <div>{__("Barcode")}: {user.barcode}</div>
                         <div>{__("Loans")}: {user.loans.length}</div>
+                        <div>{__("Holds")}: {user.holds.length}</div>
                         <div>{user.loans.map(loan => <Loan key={loan.id} loan={loan} staff={true} />)}</div>
                     </div>
+                </Tab>
+                <Tab>
+                    <div>{user.holds.map(hold => <p>{JSON.stringify(hold)}</p>)}</div>
                 </Tab>
                 <Tab>
                     <Form onSubmit={handleUpdateUser}>

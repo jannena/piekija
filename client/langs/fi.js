@@ -424,6 +424,9 @@ export default (slog, def) => {
         "Show record": "Näytä tietue",
         "Loan item to": "Lainaa käyttäjälle",
         "circulation-for": "käyttäjälle",
+        "circulation-placed-a-hold-info": "Tälle nimikkeelle on varauksia",
+        "Hold this item for its hold placer": "Varaa nimike sen varaajalle",
+        "Send this item for its hold placer": "Kuljeta nimike sen varaajalle",
 
         // Loan.js
         "Renew times left": "Uusimiskertoja jäljellä",

@@ -424,6 +424,9 @@ export default (slog, def) => {
         "Show record": "",
         "Loan item to": "",
         "circulation-for": "for",
+        "circulation-placed-a-hold-info": "There are holds for this item",
+        "Hold this item for its hold placer": "",
+        "Send this item for its hold placer": "",
 
         // Loan.js
         "Renew times left": "",

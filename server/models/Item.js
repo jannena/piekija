@@ -33,7 +33,7 @@ const itemSchema = new mongoose.Schema({
     state: {
         type: String,
         required: true,
-        enum: ["not in use", "loaned", "not loaned", "broken", "placed a hold", "other"]
+        enum: ["not in use", "loaned", "not loaned", "broken", "placed a hold", "being carried", "pick-up", "other"]
     },
     statePersonInCharge: {
         type: mongoose.Schema.Types.ObjectId,
@@ -48,6 +48,10 @@ const itemSchema = new mongoose.Schema({
     stateHoldFor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
+    },
+    stateFirstHoldLocation: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Location"
     },
     loanHistory: Array,
     lastLoaned: {

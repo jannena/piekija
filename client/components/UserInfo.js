@@ -79,9 +79,10 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, __ }) =>
                     <div>
                         <hr />
                         <div><Link to={`/record/${loan.record.id}`}>{loan.record.title}</Link></div>
-                        <div>{__("Queue number")}: {loan.queue}</div>
+                        {loan.queue !== 0 && <div>{__("Queue number")}: {loan.queue}</div>}
+                        {loan.queue === 0 && <div>{__("State")}: {loan.state}</div>}
                         <div>{__("Pick-up location")}: {loan.location && loan.location.name}</div>
-                        <div><button onClick={handleRemoveAHold(loan.record.id)}>{__("Remove hold")}</button></div>
+                        {loan.state === "placed a hold" && <div><button onClick={handleRemoveAHold(loan.record.id)}>{__("Remove hold")}</button></div>}
                     </div>)}
             </Tab>
 

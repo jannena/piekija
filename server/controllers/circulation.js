@@ -40,13 +40,14 @@ circulationRouter.post("/loan", async (req, res, next) => {
         item.statePersonInCharge = user._id;
         item.stateTimesRenewed = 0;
         item.state = "loaned";
-
         item.lastLoaned = new Date();
         item.loanTimes = item.loanTimes + 1 || 1;
 
         const dueDate = new Date();
         dueDate.setUTCDate(dueDate.getUTCDate() + (item.loantype.loanTime || 1));
         item.stateDueDate = dueDate;
+
+        user.holds = user.holds.filter(hold => hold.record.toString() !== item.record.toString());
 
         // TODO: Populate
 
@@ -77,13 +78,12 @@ circulationRouter.post("/return", async (req, res, next) => {
         const item = await Item.findById(itemId);
         if (!item) return res.status(400).json({ error: "item does not exist" });
 
+        const record = await Record.findById(item.record);
+
         // if (!item.statePersonInCharge) return res.status(400).json({ error: "item has not been loaned" });
         const user = await User.findById(item.statePersonInCharge);
         if (!user) return res.status(400).json({ error: "item has not been loaned" });
         // TODO: Remove from every possible place where can be marked as loaned
-
-
-        // TODO: Siirrä varausjonoa eteenpäin
 
 
         // console.log(typeof user.loans[0]._id.toString(), typeof itemId, user.loans[0]._id.toString() === itemId);
@@ -98,12 +98,20 @@ circulationRouter.post("/return", async (req, res, next) => {
         item.statePersonInCharge = null;
         item.stateDueDate = null;
         item.stateTimesRenewed = null;
-        item.state = "not loaned";
+        item.stateHoldFor = null;
+
+        if (record.holds.length > 0) item.state = "placed a hold";
+        else item.state = "not loaned";
 
         await user.save();
         await item.save();
 
-        res.status(200).end();
+        await Item.populate(item, {
+            path: "loantype location statePersonInCharge",
+            select: "name title author username barcode"
+        })
+
+        res.status(200).json(item);
     }
     catch (err) {
         next(err);
@@ -161,6 +169,11 @@ circulationRouter.post("/hold", async (req, res, next) => {
         if (record.holds.some(h => h.toString() === req.authenticated._id.toString()))
             return res.status(400).json({ error: "current user has already placed a hold for this item" });
 
+        console.log("trying", recordId, "already", req.authenticated.holds.map(hold => hold.record.toString()).join(", "));
+
+        // if (req.authenticated.holds.some(hold => hold.record.toString() === recordId.toString()))
+        //     return res.status(400).json({ error: "cannot place a hold for item you have already loaned" });
+
         const location = await Location.findById(locationId);
         if (!location) return res.status(400).json({ error: "Invalid location" });
 
@@ -173,7 +186,7 @@ circulationRouter.post("/hold", async (req, res, next) => {
         });
 
         const potentialItems = items
-            .filter(i => i.loantype.canBePlacedAHold === true && (i.state === "loaned" || i.state === "not loaned" || i.state === "placed a hold"))
+            .filter(i => i.loantype.canBePlacedAHold === true && (["loaned", "not loaned", "placed a hold", "being carried", "pick-up"].indexOf(i.state) > -1))
             .map(i => i._id);
 
         // TODO: Jos tila on 'lainassa', ei saa muuttaa tilaksi 'varattu'
@@ -188,9 +201,12 @@ circulationRouter.post("/hold", async (req, res, next) => {
         }];
 
         console.log(req.authenticated.holds);
-
         console.log(potentialItems);
-        await Item.updateMany({ _id: { $in: potentialItems }, state: { $ne: "loaned" } }, { $set: { state: "placed a hold" } });
+
+        if (record.holds.length === 1) await Item.updateMany(
+            { _id: { $in: potentialItems }, state: { $nin: ["loaned", "being carried", "pick-up"] } },
+            { $set: { state: "placed a hold", stateFirstHoldLocation: locationId } }
+        );
 
         await req.authenticated.save();
         await record.save();
@@ -225,12 +241,28 @@ circulationRouter.delete("/hold", async (req, res, next) => {
         if (!record) return res.status(400).json({ error: "record does not exist" });
         // if (!record.holds || record.holds.length === 0) return res.status(400).json({ error: "no holds" });
 
+        const itemReserverdForUser = await Item.findOne({ record: recordId, stateHoldFor: req.authenticated._id });
+        if (itemReserverdForUser) return res.status(400).json({ error: "Hold can not be removed anymore" });
+
+        const isCurrentUserFirstHolder = (record.holds[0] && record.holds[0].toString()) === req.authenticated._id.toString();
+
         record.holds = (record.holds || []).filter(h => h.toString() !== req.authenticated._id.toString());
 
         req.authenticated.holds = req.authenticated.holds.filter(h => h.record.toString() !== record._id.toString());
 
         if (record.holds.length === 0) {
-            await Item.updateMany({ record: recordId, state: "placed a hold" }, { $set: { state: "not loaned" } });
+            await Item.updateMany(
+                { record: recordId, state: "placed a hold" },
+                { $set: { state: "not loaned", stateFirstHoldLocation: null } }
+            );
+        }
+        else if (isCurrentUserFirstHolder) {
+            const nextFirstHolder = await User.findById(record.holds[0]);
+            const nextPickupLocation = nextFirstHolder.holds.filter(hold => hold.record.toString() === record._id.toString());
+            await Item.updateMany(
+                { record: recordId, state: "placed a hold" },
+                { $set: { state: "not loaned", stateFirstHoldLocation: nextPickupLocation.location } }
+            );
         }
 
         await record.save();
@@ -247,15 +279,57 @@ circulationRouter.put("/hold", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
     if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
-    const { barcode } = req.body;
+    const { item: itemId, location: locationId } = req.body;
+    if (!itemId || !locationId) return res.status(400).json({ error: "item or location is missing" });
 
-    // TODO: Varaa tietty nimike käyttäjälle
+    try {
+        const item = await Item.findById(itemId);
+        const record = await Record.findById(item.record);
 
+        const isForCurrentLocation = item.stateFirstHoldLocation.toString() === locationId;
+
+        switch (item.state) {
+            case "placed a hold":
+                if (isForCurrentLocation) item.state = "pick-up";
+                else item.state = "being carried";
+
+                item.stateHoldFor = record.holds[0] || null;
+
+                await item.save();
+
+                record.holds = record.holds.slice(1);
+                await record.save();
+
+                if (record.holds.length <= 1) await Item.updateMany({ _id: { $in: record.items }, state: "placed a hold" }, { $set: { state: "not loaned" } });
+                break;
+
+            case "being carried":
+                if (isForCurrentLocation) {
+                    item.state = "pick-up";
+                    await item.save();
+
+                    record.holds = record.holds.slice(1);
+                    await record.save();
+                }
+                else {
+                    return res.status(400).json({ error: "current location is not the pick-up location if the item" });
+                }
+                break;
+
+            default:
+                return res.status(400).json({ error: "item does not have state 'placed a hold' or 'being carried'" });
+        }
+
+        res.json(item);
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 circulationRouter.patch("/hold", async (req, res, next) => {
-    // if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
-    // if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
+    if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
     const { location: locationId } = req.body;
 
@@ -270,16 +344,19 @@ circulationRouter.patch("/hold", async (req, res, next) => {
             )
             .limit(50)
             .populate("record", "title author holds")
+            .populate("stateFirstHoldLocation", "name")
         )
             .map(item => ({
                 barcode: item.barcode,
                 shelfLocation: item.shelfLocation,
+                pickupLocation: item.stateFirstHoldLocation,
                 record: {
                     id: item.record.id,
                     title: item.record.title,
                     author: item.record.author,
                     for: item.record.holds[0]
-                }
+                },
+                queue: item.record.holds.length
             }))
             .reduce(({ items, records }, add) => {
                 if (records.some(r => r === add.record.id.toString())) return { items, records };
@@ -290,47 +367,6 @@ circulationRouter.patch("/hold", async (req, res, next) => {
             }, { items: [], records: [] })
 
         res.send(items);
-        // const result = await Item.aggregate([
-        //     { $match: { location: locationId } },
-        //     {
-        //         $lookup: {
-        //             from: 'records',
-        //             as: 'record',
-        //             let: {
-        //                 record: "$record",
-        //                 id: "$_id"
-        //             },
-        //             pipeline: [
-        //                 { $match: { $expr: { $eq: ["$_id", "$$record"] } } },
-        //                 {
-        //                     $project: {
-        //                         holds: 1
-        //                     }
-        //                 },
-        //                 { $match: { include: true } }
-        //             ]
-        //         }
-        //     },
-        //     {
-        //         $project: {
-        //             include: {
-        //                 $cond: {
-        //                     if: {
-        //                         $and: [
-        //                             { $isArray: "$record.0.holds" },
-        //                             { $gt: [{ $size: ["$record.0.holds"] }, 0] }
-        //                         ]
-        //                     },
-        //                     then: true,
-        //                     else: false
-        //                 }
-        //             }
-        //         }
-        //     },
-        //     { $match: { "record.0.include": true } }
-        // ]);
-        // res.send(result);
-
     }
     catch (err) {
         next(err);
