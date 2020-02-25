@@ -35,6 +35,8 @@ export default (slog, def) => {
         "not in use": "Not in use",
         "broken": "Broken",
         "placed a hold": "Placed a hold",
+        "being carried": "Being carried",
+        "pick-up": "Pick-up",
         "other": "Other",
 
         // Content types
@@ -287,6 +289,9 @@ export default (slog, def) => {
         "Links": "",
         "Go to admin panel": "",
         "record corrupted or not found": "",
+        "Your queue number": "",
+        "Select pick-up location": "",
+        "Place a hold": "",
 
         // RecordTools.js
         "Add to shelf": "",
@@ -384,6 +389,7 @@ export default (slog, def) => {
         "Edit me": "",
         "Two-factor authentication": "",
         "My shelves": "",
+        "No shelves": "",
         "Shared with me": "",
         "Create shelf": "",
         "Name": "",
@@ -391,6 +397,9 @@ export default (slog, def) => {
         "New password again": "",
         "Old password": "",
         "new-password-info": "Leave empty if you do not want to change it.",
+        "Remove hold": "",
+        "Pick-up location": "",
+        "Queue number": "",
 
         // Staff.js
         "Forbidden!": "",
@@ -427,6 +436,13 @@ export default (slog, def) => {
         "circulation-placed-a-hold-info": "There are holds for this item",
         "Hold this item for its hold placer": "",
         "Send this item for its hold placer": "",
+        "after-number-holds": "holds",
+        "Reserved for": "",
+        "Pick-up location of current item": "",
+        "Mark as pick-up": "",
+        "Select location": "",
+        "Select current location": "",
+        "Not selected": "",
 
         // Loan.js
         "Renew times left": "",

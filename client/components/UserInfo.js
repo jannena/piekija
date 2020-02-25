@@ -21,7 +21,7 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, __ }) =>
     const printShelves = shelves => {
         const mapped = shelves.map(shelf => shelf.id ? <li key={shelf.id.id}><Link to={`/shelf/${shelf.id.id}`}>{shelf.id.name}</Link></li> : null);
         console.log(mapped, mapped.filter(shelf => shelf).length);
-        if (mapped.filter(shelf => shelf).length === 0) return <p>No shelves</p>;
+        if (mapped.filter(shelf => shelf).length === 0) return <p>{__("No shelves")}</p>;
         return mapped
     };
 
@@ -80,9 +80,9 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, __ }) =>
                         <hr />
                         <div><Link to={`/record/${loan.record.id}`}>{loan.record.title}</Link></div>
                         {loan.queue !== 0 && <div>{__("Queue number")}: {loan.queue}</div>}
-                        {loan.queue === 0 && <div>{__("State")}: {loan.state}</div>}
+                        {loan.queue === 0 && <div>{__("State")}: {__(loan.state)}</div>}
                         <div>{__("Pick-up location")}: {loan.location && loan.location.name}</div>
-                        {loan.state === "placed a hold" && <div><button onClick={handleRemoveAHold(loan.record.id)}>{__("Remove hold")}</button></div>}
+                        {loan.queue !== 0 && <div><button onClick={handleRemoveAHold(loan.record.id)}>{__("Remove hold")}</button></div>}
                     </div>)}
             </Tab>
 

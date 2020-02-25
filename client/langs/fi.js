@@ -35,6 +35,8 @@ export default (slog, def) => {
         "not in use": "Ei käytössä",
         "broken": "Rikki",
         "placed a hold": "Varattu",
+        "being carried": "Kuljetettavana",
+        "pick-up": "Noudettavissa",
         "other": "Muu",
 
         // Content types
@@ -287,6 +289,9 @@ export default (slog, def) => {
         "Links": "Linkit",
         "Go to admin panel": "Siirry henkilökuntanäyttöön",
         "record corrupted or not found": "tietue on viallinen tai sitä ei ole olemassa",
+        "Your queue number": "Vuoronumerosi",
+        "Select pick-up location": "Valitse noutopaikka",
+        "Place a hold": "Varaa",
 
         // RecordTools.js
         "Add to shelf": "Lisää hyllyyn",
@@ -384,6 +389,7 @@ export default (slog, def) => {
         "Edit me": "Muokkaa tietoja",
         "Two-factor authentication": "Kaksivaiheinen tunnistautuminen",
         "My shelves": "Hyllyni",
+        "No shelves": "Ei hyllyjä",
         "Shared with me": "Jaettu kanssani",
         "Create shelf": "Luo hylly",
         "Name": "Nimi",
@@ -391,6 +397,9 @@ export default (slog, def) => {
         "New password again": "Uusi salasana uudelleen",
         "Old password": "Vanha salasana",
         "new-password-info": "Jätä tyhjäksi, jos et halua vaihtaa salasanaa.",
+        "Remove hold": "Poista varaus",
+        "Pick-up location": "Noutopaikka",
+        "Queue number": "Vuoronumero",
 
         // Staff.js
         "Forbidden!": "Pääsy kielletty!",
@@ -427,6 +436,13 @@ export default (slog, def) => {
         "circulation-placed-a-hold-info": "Tälle nimikkeelle on varauksia",
         "Hold this item for its hold placer": "Varaa nimike sen varaajalle",
         "Send this item for its hold placer": "Kuljeta nimike sen varaajalle",
+        "after-number-holds": "varausta",
+        "Reserved for": "Varattu käyttäjällw",
+        "Pick-up location of current item": "Nykyisen nimikkeen noutopaikka",
+        "Mark as pick-up": "Merkitse noudettavaksi",
+        "Select location": "Valitse sijainti",
+        "Select current location": "Valitse nykyinen sijainti",
+        "Not selected": "Ei valittu",
 
         // Loan.js
         "Renew times left": "Uusimiskertoja jäljellä",
