@@ -164,25 +164,29 @@ userRouter.put("/me", async (req, res, next) => {
 //         .catch(next);
 // });
 
-userRouter.get("/:id", (req, res, next) => {
+userRouter.get("/:id", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
     if (!req.authenticated.staff) return next(new Error("FORBIDDEN"));
 
     const id = req.params.id;
 
-    User
-        .findById(id)
-        .populate("holds.$.record", { title: 1 })
-        .populate("holds.$.location", { name: 1 })
-        .then(result => {
-            if (!result) return res.status(404).end();
-            else {
-                const { tfa, ...sendable } = result.toJSON();
-                console.log("sendable", sendable);
-                res.json(sendable);
-            }
-        })
-        .catch(next);
+    try {
+        const user = await User.findById(id);
+
+        if (!user) return res.status(404).end();
+
+        await User.populate(user, {
+            path: "holds.record holds.name",
+            select: "title name"
+        });
+
+        const { connectedAccounts, tfa, shelves, ...sendable } = user.toJSON();
+        console.log("sendable", sendable);
+        res.json(sendable);
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 
@@ -244,7 +248,7 @@ userRouter.put("/:id", async (req, res, next) => {
         User
             .findByIdAndUpdate(id, { $set: modifiedUser }, { new: true })
             .then(result => {
-                const { tfa, ...sendable } = result.toJSON();
+                const { tfa, connectedAccounts, shelves, ...sendable } = result.toJSON();
                 res.json(sendable);
             })
             .catch(next);
@@ -299,6 +303,10 @@ userRouter.post("/search", async (req, res, next) => {
                     path: "record location loantype",
                     select: "title name renewTimes"
                 }
+            })
+            .populate({
+                path: "holds.record holds.location",
+                select: "name title"
             });
         res.json(result);
     }

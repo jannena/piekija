@@ -5,6 +5,7 @@ import Loan from "./Loan";
 import { Tabs, Tab } from "../Tabs";
 import { Form, Input, Button } from "../essentials/forms";
 import __ from "../../langs";
+import { Link } from "react-router-dom";
 
 const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUser, __ }) => {
     const handleUserSearch = e => {
@@ -49,7 +50,13 @@ const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUs
                     </div>
                 </Tab>
                 <Tab>
-                    <div>{user.holds.map(hold => <p>{JSON.stringify(hold)}</p>)}</div>
+                    <div>{user.holds.map(hold => <React.Fragment key={hold._id}>
+                        <div>
+                            <Link to={`/staff/record/${hold.record.id}`}>{hold.record.title}</Link>
+                            <div>{__("Pick-up location")}: {hold.location.name}</div>
+                        </div>
+                        <hr />
+                    </React.Fragment>)}</div>
                 </Tab>
                 <Tab>
                     <Form onSubmit={handleUpdateUser}>
