@@ -46,7 +46,9 @@ const run = async file => {
             const r = data.records[i];
             try {
                 const parsedMARC = marc21.tryParse(r.record);
-                const newRecord = new Record({ ...marc21.parseMARCToDatabse(parsedMARC, r.record), ai: r.ai });
+                // console.log(parsedMARC);
+                // console.log(marc21.parseMARCToDatabse(parsedMARC, r.record));
+                const newRecord = new Record({ ...(await marc21.parseMARCToDatabse(parsedMARC, r.record)), ai: r.ai });
                 const saved = await newRecord.save();
                 realRecordIds[r.id] = saved._id.toString();
             }
