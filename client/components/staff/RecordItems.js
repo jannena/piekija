@@ -8,8 +8,10 @@ import Expandable from "../essentials/Expandable";
 import { Form, Input, Button, FormSelect, Text, Grid, DoNotSendButton } from "../essentials/forms";
 import { Table, TableRow, TableCell } from "../essentials/Tables";
 import __ from "../../langs";
+import { withRouter } from "react-router-dom";
+import { searchForItem } from "../../reducers/circulationReducer";
 
-const RecordItems = ({ record, items, locations, loantypes, addItem, removeItem, updateItem, getLocations, getLoantypes, __ }) => {
+const RecordItems = ({ record, items, locations, loantypes, addItem, removeItem, updateItem, getLocations, getLoantypes, searchForItem, history, __ }) => {
     useEffect(() => {
         if (items && locations.length === 0) getLocations();
         if (items && loantypes.length === 0) getLoantypes();
@@ -25,12 +27,17 @@ const RecordItems = ({ record, items, locations, loantypes, addItem, removeItem,
     };
 
     const handleUpdateItem = id => e => {
-        const { barcode, loantype, location, state, note, shelfLocation } = e.target;
+        const { loantype, location, state, note, shelfLocation } = e.target;
         updateItem(id, loantype.value, location.value, state.value, note.value, shelfLocation.value);
     };
 
     const handleRemoveItem = id => e => {
         removeItem(id);
+    };
+
+    const handleMoveToItem = barcode => e => {
+        searchForItem(barcode);
+        history.push("/staff/circulation");
     };
 
     const itemStateOptions = [
@@ -43,7 +50,7 @@ const RecordItems = ({ record, items, locations, loantypes, addItem, removeItem,
             <Text title={__("Last loaned")} value={`${__("date-format")(new Date(data.lastLoaned))} ${__("time-format")(new Date(data.lastLoaned))}`} />
             <Text title={__("Loan times")} value={data.loanTimes || 0} />
             <hr />
-            <Text id={`${data.id}-barcode`} value={data.barcode} name="barcode" title={__("Barcode")} description={__("staff-item-barcode-info")} />
+            <Text id={`${data.id}-barcode`} value={<a href="#" onClick={handleMoveToItem(data.barcode)}>{data.barcode}</a>} name="barcode" title={__("Barcode")} description={__("staff-item-barcode-info")} />
             <FormSelect id={`${data.id}-loantype`} selected={data.loantype ? data.loantype.id : ""} title={__("Loantype")} name="loantype" options={loantypes.map(loantype => [loantype.name, loantype.id])} />
             <FormSelect id={`${data.id}-location`} selected={data.location ? data.location.id : ""} title={__("Location")} name="location" options={locations.map(location => [location.name, location.id])} />
             <Input id={`${data.id}-shelfLocation`} value={data.shelfLocation} name="shelfLocation" title={__("Shelf location")} description={__("staff-item-shelf-location-info")} />
@@ -91,5 +98,5 @@ export default connect(
         loantypes: state.loantype,
         __: __(state)
     }),
-    { addItem, getLoantypes, getLocations, removeItem, updateItem }
-)(RecordItems);
+    { addItem, getLoantypes, getLocations, removeItem, updateItem, searchForItem }
+)(withRouter(RecordItems));
