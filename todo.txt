@@ -1,6 +1,4 @@
 MUUT:
-- Korjaa muutkin käyttäjän lisäämiseen liittyvät jutut.
-- ?????Päivitä tietueidenpäivitysskripti tietueiden tallentamisen suhteen?????
 - Paremmat latausruudut (ainakin sijainnit, lainaustyypit käyttäjät ja lainaus-palautus)
 - Tietuenäyttöön uudet välilehdet: arvostelut, sisällysluettelo, katso myös.
 - Käyttäjäkohtaiset sisältöpohjaiset suositukset
@@ -12,6 +10,9 @@ MUUT:
 - Google-kirjautuminen
 - hyllyihin katso myös -välilehti
 - Korjaa yksinkertaisen muokkaimen tallennus
+
+- päivitä testit
+- päivitä APIn testit
 
 
 MUUT TESTIT:
