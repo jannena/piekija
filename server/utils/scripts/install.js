@@ -61,7 +61,11 @@ const run = async (values) => {
         barcode: "admin",
         name: "Admin",
         username: values[2],
-        passwordHash: await bcrypt.hash(values[3], 13)
+        passwordHash: await bcrypt.hash(values[3], 13),
+        loanHistoryRetention: true,
+        loanHistory: [],
+        holds: [],
+        loans: []
     });
     try {
         await adminUser.save();

@@ -1,8 +1,6 @@
 MUUT:
-- Korjaa asennusskripti
 - Korjaa muutkin käyttäjän lisäämiseen liittyvät jutut.
 - ?????Päivitä tietueidenpäivitysskripti tietueiden tallentamisen suhteen?????
-- Linkki nimike-välilehdeltä nimike-kohtaan linkki lainaa ja palauta -välilehdelle
 - Paremmat latausruudut (ainakin sijainnit, lainaustyypit käyttäjät ja lainaus-palautus)
 - Tietuenäyttöön uudet välilehdet: arvostelut, sisällysluettelo, katso myös.
 - Käyttäjäkohtaiset sisältöpohjaiset suositukset
