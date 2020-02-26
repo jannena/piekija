@@ -49,11 +49,20 @@ const update = (userId, name, username, barcode, password, address = null, email
     ).then(response => response.data);
 };
 
+const disconnectGoogleAccount = token => {
+    return axios.delete(
+        `${b}/google/disconnect`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    );
+};
+
 export default {
     me,
     getLoanHistory,
     updateMe,
     search,
     create,
-    update
+    update,
+
+    disconnectGoogleAccount
 };

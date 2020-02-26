@@ -20,6 +20,7 @@ const searchRouter = require("./controllers/search");
 const circulationRouter = require("./controllers/circulation");
 const noteRouter = require("./controllers/notes");
 const statisticsRouter = require("./controllers/statistics");
+const googleRouter = require("./controllers/google");
 
 const errorHandler = require("./middleware/error");
 const { authenticationMiddleware } = require("./middleware/authentication");
@@ -48,6 +49,7 @@ app.use("/api/search", searchRouter);
 app.use("/api/circulation", circulationRouter);
 app.use("/api/note", noteRouter);
 app.use("/api/statistics", statisticsRouter);
+app.use("/api/google", googleRouter);
 
 app.use("/api/*", (req, res, next) => {
     next(new Error("APINOTFOUND"));

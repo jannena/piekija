@@ -37,6 +37,7 @@ export const tryLogin = (username, password, code) => async dispatch => {
         });
 
         window.localStorage.setItem("piekija-token", token);
+        document.cookie = `piekija-token=${token}`;
 
         dispatch(notify("success", "Logged in"));
     }

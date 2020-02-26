@@ -40,7 +40,12 @@ const run = async (values) => {
         `SECRET=${crypto.randomBytes(32).toString("hex")}`,
         `DATABASE_URI=${values[0]}`,
         "TEST_DATABASE_URI=",
-        `PERFORMANCE_LIMIT=${values[1] || 10000}`
+        `PERFORMANCE_LIMIT=${values[1] || 10000}`,
+        ``,
+        "GOOGLE_USE_GOOGLE_LOGIN=false",
+        "GOOGLE_CLIENT_ID=null",
+        "GOOGLE_CLIENT_SECRET=null",
+        "GOOGLE_REDIRECT_URI=null"
     ];
 
     console.log("\r\n\r\nYOUR CONFIGURATION FILE\r\n------");

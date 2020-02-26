@@ -61,6 +61,11 @@ const userReducer = (state = null, action) => {
                 ...state,
                 holds: state.holds.filter(h => h.record.id !== action.record)
             };
+        case "PSUCCESS_GOOGLE_DISCONNECT":
+            return {
+                ...state,
+                connectedAccounts: state.connectedAccounts.filter(({ account }) => account !== "google")
+            };
     }
     return state;
 };
@@ -143,4 +148,15 @@ export const setLH = (oldPassword, loanhistory) => (dispatch, getState) => {
             });
         })
         .catch(onError(dispatch, "PFAILURE_LOANHISTORY_EDIT"))
+};
+
+export const disconnectGoogleAccount = () => (dispatch, getState) => {
+    userService
+        .disconnectGoogleAccount(getState().token.token)
+        .then(() => {
+            dispatch({
+                type: "PSUCCESS_GOOGLE_DISCONNECT"
+            });
+        })
+        .catch(onError(dispatch, "PFAILURE_GOOGLE_DISCONNECT"));
 };

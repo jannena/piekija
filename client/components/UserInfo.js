@@ -4,16 +4,17 @@ import TFAForm from "./TFAForm";
 import { Tabs, Tab } from "./Tabs";
 import { connect } from "react-redux";
 import { createShelf } from "../reducers/shelfReducer";
-import { updateUser } from "../reducers/userReducer";
+import { updateUser, disconnectGoogleAccount } from "../reducers/userReducer";
 import { notify } from "../reducers/notificationReducer";
 import { removeAHold } from "../reducers/circulationReducer";
 import Loan from "./staff/Loan";
 import LoanHistory from "./user/LoanHistory";
 import { Form, Input, Button } from "./essentials/forms";
 import __ from "../langs";
+import { baseUrl } from "../globals";
 
 
-const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, __ }) => {
+const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconnectGoogleAccount, __ }) => {
     if (!user) return <div>{__("You logged out succefully")}. <Link to="">{__("Back to frontpage")}</Link>.</div>;
 
     document.title = `${__("title-User")} - ${__("PieKiJa")}`;
@@ -40,8 +41,11 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, __ }) =>
         removeAHold(id);
     };
 
+    const googleAccount = user.connectedAccounts.filter(({ account }) => account === "google")[0];
+    const piekijaAccounts = user.connectedAccounts.filter(({ account }) => account === "piekija");
+
     return (
-        <Tabs titles={[__("Loans"), __("Loan history"), __("Shelves"), __("Holds"), __("Edit me"), __("Two-factor authentication")]}>
+        <Tabs titles={[__("Loans"), __("Loan history"), __("Shelves"), __("Holds"), __("Edit me"), __("Two-factor authentication"), __("Connected accounts")]}>
             <Tab>
                 <h2>{user.name}</h2>
                 <div>{user.username}</div>
@@ -100,6 +104,23 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, __ }) =>
                 <h3>{__("Two-factor authentication")}</h3>
                 <TFAForm />
             </Tab>
+
+            <Tab>
+                <h3>Google</h3>
+                {googleAccount
+                    ? <>
+                        {googleAccount.data.image && <img width={50} src={googleAccount.data.image} />}
+                        <span>{googleAccount.accountId}</span>
+                        <button onClick={disconnectGoogleAccount}>{__("disconnect-button")}</button>
+                    </>
+                    : <button onClick={() => {
+                        document.cookie = `piekija-token=${window.localStorage.getItem("piekija-token")}`;
+                        location.href = `${baseUrl}/google/login`;
+                    }}>{__("connect-button")}</button>}
+                <h3>{__("Other Piekija accounts")}</h3>
+                {piekijaAccounts.length === 0 && <div>{__("You can combine Piekija accounts so you do not have to log out and login again to switch account.")}</div>}
+                {piekijaAccounts.map(a => <div>{a.id} <button>{__("switch-button")}</button></div>)}
+            </Tab>
         </Tabs>
     );
 };
@@ -109,5 +130,5 @@ export default connect(
         user: state.user,
         __: __(state)
     }),
-    { createShelf, updateUser, notify, removeAHold }
+    { createShelf, updateUser, notify, removeAHold, disconnectGoogleAccount }
 )(UserInfo);

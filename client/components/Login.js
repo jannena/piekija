@@ -4,6 +4,8 @@ import { tryLogin } from "../reducers/tokenReducer";
 import { Redirect } from "react-router-dom";
 import __ from "../langs";
 
+import { baseUrl } from "../globals";
+
 const Login = ({ tryLogin, usetfa, user, __ }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -42,6 +44,11 @@ const Login = ({ tryLogin, usetfa, user, __ }) => {
 
                 <button style={inputStyle}>{__("Log in -button")}</button>
             </form>
+
+            <button onClick={() => {
+                document.cookie = "piekija-token=null";
+                location.href = `${baseUrl}/google/login`;
+            }}>{__("Login with Google")}</button>
         </div>
     );
 };

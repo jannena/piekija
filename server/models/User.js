@@ -74,9 +74,13 @@ const userSchema = new mongoose.Schema({
             accountId: {
                 type: String,
                 required: true
+            },
+            data: {
+                type: Object
             }
         }
     ],
+    nonce: String,
     reviews: [
         {
             record: {

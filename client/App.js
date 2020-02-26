@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { BrowserRouter as Router, Route, Switch, withRouter } from "react-router-dom";
 import Search from "./components/Search";
 import Record from "./components/record/Record";
@@ -20,6 +20,8 @@ import { addRecord, removeRecord, updateRecord, localShare, localUnhare, localUp
 import { setSocketIOEventListeners, startWS } from "./socket";
 import FrontPageNews from "./components/FrontPageNews";
 import __ from "./langs";
+
+import { parse as pqs } from "query-string";
 
 const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf, locations, getLocations, getLastNotes, history, __ }) => {
     useEffect(() => {
@@ -68,6 +70,19 @@ const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRe
         // <Router>
         <Container>
             <Switch>
+                {/* Google login screen */}
+                <Route exact path="/set_token" render={({ history, location }) => {
+                    const params = pqs(location.search);
+                    console.log("params trying", params, params.token);
+                    if (params.token) {
+                        window.localStorage.setItem("piekija-token", params.token);
+                        setToken(params.token);
+                    }
+                    // TODO: HUOM TODO!!!!!!!!!!: Tokenin kuljettaminen URL-osoitteessa ei liene kovin hyvä tapa!!
+                    document.cookie = "piekija-token=null";
+                    history.push("/user");
+                }} />
+
                 {/* Screens open for everyone */}
                 <Route exact path="/" render={() => <FrontPageNews />} />
                 <Route exact path="/search" render={({ location, history }) =>
