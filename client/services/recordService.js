@@ -44,11 +44,19 @@ const review = (score, review, record, token) => {
     ).then(response => response.data);
 };
 
+const removeReview = (record, token) => {
+    return axios.delete(
+        `${baseUrl}/${record}/review`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    ).then(response => response.data);
+};
+
 export default {
     get,
     remove,
     createWithMARC,
     updateMARC,
 
-    review
+    review,
+    removeReview
 };

@@ -77,4 +77,6 @@
 | 15.2. | 2,5 | varaustoiminnallisuuksien jatkaminen |
 | 25.2. | 0,5 | viimeisten ominaisuuksien suunnittelua |
 | | 4 | varaaminen, skriptien korjauksia, E2E-testien aloittelua |
-| yht. | 159 | |
+| 26.2. | 2,5 | Google-kirjautuminen |
+| | 1,5 | arvostelujen aloittaminen |
+| yht. | 163 | |

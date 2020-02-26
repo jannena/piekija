@@ -186,7 +186,7 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
                             <div><input type="number" name="score" min="1" max="6" /></div>
                             <button>{__("review-button")}</button>
                         </form>
-                        {record.result.reviews.map(r => <Review review={r} user={true} />)}
+                        {record.result.reviews.map(r => <Review key={r.id} review={r} user={true} />)}
                     </Tab>
                     <Tab>
                         <MARC21Screen parsedMARC={record.record} />

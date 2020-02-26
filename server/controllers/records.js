@@ -11,7 +11,7 @@ recordRouter.get("/:id", async (req, res, next) => {
 
     try {
         const result = await Record
-            .findById(id, { reviews: { $slice: -10 }, items: 1, spelling1: 1, spelling2: 1, record: 1, reviews: 1, holds: 1 })
+            .findById(id, { reviews: { $slice: -10 }, /* items: 1, spelling1: 1, spelling2: 1, record: 1, reviews: 1, holds: 1 */ })
             .populate({
                 path: "items",
                 populate: {
@@ -26,7 +26,7 @@ recordRouter.get("/:id", async (req, res, next) => {
             })
             .populate({
                 path: "reviews",
-                select: "reviewer review score"
+                select: "reviewer review score record"
             });
 
         if (!result) return res.status(404).end();
@@ -40,7 +40,8 @@ recordRouter.get("/:id", async (req, res, next) => {
         record.reviews = record.reviews.map(r => ({
             ...r,
             reviewer: {
-                name: r.reviewer.name
+                name: r.reviewer.name,
+                id: r.reviewer.id
             }
         }));
 
@@ -188,8 +189,27 @@ recordRouter.post("/:id/review", async (req, res, next) => {
     }
 });
 
-recordRouter.delete(":/id/review", async (req, res, next) => {
+recordRouter.delete("/:id/review", async (req, res, next) => {
+    if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
 
+    const { id } = req.params;
+
+    try {
+        const review = await Review.findOne({ reviewer: req.authenticated._id, record: id });
+        if (!review) return res.status(204).json();
+
+        await Record.findByIdAndUpdate(id, { $pull: { reviews: review._id } });
+        await User.findByIdAndUpdate(req.authenticated._id, { $pull: { reviews: review._id } });
+
+        await Review.findByIdAndRemove(review._id);
+
+        // TODO: Remember totalReviews
+
+        res.status(204).end();
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 module.exports = recordRouter;
