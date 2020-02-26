@@ -66,6 +66,11 @@ const userReducer = (state = null, action) => {
                 ...state,
                 connectedAccounts: state.connectedAccounts.filter(({ account }) => account !== "google")
             };
+        case "PSUCCESS_REVIEW":
+            return {
+                ...state,
+                reviews: state.reviews.concat(action.reviews)
+            };
     }
     return state;
 };

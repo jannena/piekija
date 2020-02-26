@@ -25,6 +25,16 @@ userRouter.get("/me", async (req, res, next) => {
             select: "title holds name"
         });
 
+        await User.populate(req.authenticated, {
+            path: "reviews",
+            select: "record score review"
+        })
+
+        await User.populate(req.authenticated, {
+            path: "reviews.record",
+            select: "title author"
+        });
+
         // const user = req.authenticated.toObject();
 
         const holds = [];

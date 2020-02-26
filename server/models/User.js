@@ -83,15 +83,8 @@ const userSchema = new mongoose.Schema({
     nonce: String,
     reviews: [
         {
-            record: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Record"
-            },
-            review: {
-                type: Number,
-                required: true,
-                enum: [1, 2, 3, 4, 5]
-            }
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Review"
         }
     ],
     shelves: [

@@ -1,13 +1,12 @@
 MUUT:
 - Paremmat latausruudut (ainakin sijainnit, lainaustyypit käyttäjät ja lainaus-palautus)
-- Tietuenäyttöön uudet välilehdet: arvostelut, sisällysluettelo, katso myös.
+- Tietuenäyttöön uudet välilehdet: sisällysluettelo, katso myös.
 - Käyttäjäkohtaiset sisältöpohjaiset suositukset
 - spellingiin: 511a ja 979a
 - sisällysluetteloksi 979-kentät
 - hakurajauksiin aineistolaji
 - hakutuloksiin nimikkeiden määrä
 - tilien yhdistäminen toisiinsa
-- Google-kirjautuminen
 - hyllyihin katso myös -välilehti
 - Korjaa yksinkertaisen muokkaimen tallennus
 

@@ -1,32 +1,54 @@
 const recordRouter = require("express").Router();
 const Record = require("../models/Record");
+const Review = require("../models/Review");
+const User = require("../models/User");
 
 const MARC21 = require("../utils/marc21parser");
 
 // Get one record
-recordRouter.get("/:id", (req, res, next) => {
+recordRouter.get("/:id", async (req, res, next) => {
     const id = req.params.id;
 
-    Record
-        .findById(id)
-        .populate({
-            path: "items",
-            populate: {
-                path: "location"
+    try {
+        const result = await Record
+            .findById(id, { reviews: { $slice: -10 }, items: 1, spelling1: 1, spelling2: 1, record: 1, reviews: 1, holds: 1 })
+            .populate({
+                path: "items",
+                populate: {
+                    path: "location"
+                }
+            })
+            .populate({
+                path: "items",
+                populate: {
+                    path: "loantype",
+                }
+            })
+            .populate({
+                path: "reviews",
+                select: "reviewer review score"
+            });
+
+        if (!result) return res.status(404).end();
+
+        await Record.populate(result, {
+            path: "reviews.reviewer",
+            select: "name"
+        });
+
+        const record = result.toJSON();
+        record.reviews = record.reviews.map(r => ({
+            ...r,
+            reviewer: {
+                name: r.reviewer.name
             }
-        })
-        .populate({
-            path: "items",
-            populate: {
-                path: "loantype"
-            }
-        })
-        // .populate("items", { state: 1, location: 1 })
-        .then(result => {
-            if (result) res.json(result.toJSON());
-            else res.status(404).end();
-        })
-        .catch(next);
+        }));
+
+        res.json(record);
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 recordRouter.delete("/:id", async (req, res, next) => {
@@ -113,11 +135,61 @@ recordRouter.put("/:id", async (req, res, next) => {
         .catch(next);
 });
 
-recordRouter.post(":/id/review", async (req, res, next) => {
+recordRouter.post("/:id/review", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
 
-    req.authenticated.reviews = [];
-    req.authenticated.save();
+    const { id } = req.params;
+
+    const { score, review } = req.body;
+
+    if (!score || !review) return res.status(400).json({ error: "score or review is missing" });
+
+    try {
+        const usersReviewsForThisRecord = await Review.countDocuments({ record: id, reviewer: req.authenticated._id }).then(number => number);
+        if (usersReviewsForThisRecord > 0) return res.status(400).json({ error: "user has already reviewed this record" });
+
+        const record = await Record.findById(id);
+        if (!record) return res.status(400).json({ error: "record not found" });
+
+        const newReview = new Review({
+            reviewer: req.authenticated._id,
+            record: id,
+            score,
+            review
+        });
+        const saved = await newReview.save();
+
+        await User.findByIdAndUpdate(req.authenticated._id, { $push: { reviews: saved._id } });
+
+        const totalReviews = (record.totalReviews && record.totalReviews.average && record.totalReviews.reviews)
+            ? {
+                reviews: record.totalReviews.reviews + 1,
+                average: (record.totalReviews.reviews * record.totalReviews.average + score) / (record.totalReviews.reviews + 1)
+            }
+            : {
+                reviews: 1,
+                average: score
+            }
+        await Record.findByIdAndUpdate(id, { $set: { totalReviews }, $push: { reviews: saved._id } });
+
+        await Review.populate(saved, {
+            path: "reviewer",
+            select: "name"
+        });
+
+        const ret = saved.toJSON();
+        console.log(ret);
+        delete ret.reviewer.tfa;
+
+        res.status(201).json(ret);
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+recordRouter.delete(":/id/review", async (req, res, next) => {
+
 });
 
 module.exports = recordRouter;

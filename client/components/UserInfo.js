@@ -12,6 +12,7 @@ import LoanHistory from "./user/LoanHistory";
 import { Form, Input, Button } from "./essentials/forms";
 import __ from "../langs";
 import { baseUrl } from "../globals";
+import Review from "./Review";
 
 
 const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconnectGoogleAccount, __ }) => {
@@ -45,7 +46,7 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconne
     const piekijaAccounts = user.connectedAccounts.filter(({ account }) => account === "piekija");
 
     return (
-        <Tabs titles={[__("Loans"), __("Loan history"), __("Shelves"), __("Holds"), __("Edit me"), __("Two-factor authentication"), __("Connected accounts")]}>
+        <Tabs titles={[__("Loans"), __("Loan history"), __("Shelves"), __("Holds"), __("Edit me"), __("Connected accounts"), __("Reviews")]}>
             <Tab>
                 <h2>{user.name}</h2>
                 <div>{user.username}</div>
@@ -91,6 +92,7 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconne
             </Tab>
 
             <Tab>
+                <h2>{__("Edit me")}</h2>
                 <Form onSubmit={handleUpdateMe}>
                     <Input name="name" title={__("Name")} value={user.name} />
                     <Input type="password" title={__("New password")} description={__("new-password-info")} name="password" />
@@ -98,10 +100,7 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconne
                     <Input type="password" title={__("Old password")} name="oldPassword" />
                     <Button title={__("save-button")} />
                 </Form>
-            </Tab>
-
-            <Tab>
-                <h3>{__("Two-factor authentication")}</h3>
+                <h2>{__("Two-factor authentication")}</h2>
                 <TFAForm />
             </Tab>
 
@@ -120,6 +119,11 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconne
                 <h3>{__("Other Piekija accounts")}</h3>
                 {piekijaAccounts.length === 0 && <div>{__("You can combine Piekija accounts so you do not have to log out and login again to switch account.")}</div>}
                 {piekijaAccounts.map(a => <div>{a.id} <button>{__("switch-button")}</button></div>)}
+            </Tab>
+
+            <Tab>
+                <h3>Reviews</h3>
+                {user.reviews.map(r => <Review review={r} record={true} />)}
             </Tab>
         </Tabs>
     );

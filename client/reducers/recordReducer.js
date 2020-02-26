@@ -110,6 +110,17 @@ const recordReducer = (state = init, action) => {
                     }
                 }
             };
+        case "PSUCCESS_REVIEW":
+            return {
+                ...state,
+                record: {
+                    ...state.record,
+                    result: {
+                        ...state.record.result,
+                        reviews: state.record.result.reviews.concat(action.review)
+                    }
+                }
+            };
     }
     return state;
 };
@@ -260,4 +271,17 @@ export const removeItem = itemId => (dispatch, getState) => {
             dispatch(notify("success", "Item was removed"));
         })
         .catch(onError(dispatch, "PSUCCESS_RECORD_REMOVE_ITEM"));
+};
+
+export const review = (score, review) => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_REVIEW" });
+    recordService
+        .review(score, review, getState().record.record.result.id, getState().token.token)
+        .then(review => {
+            dispatch({
+                type: "PSUCCESS_REVIEW",
+                review
+            })
+        })
+        .catch(onError(dispatch, "PFAILURE_REVIEW"));
 };

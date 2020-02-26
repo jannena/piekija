@@ -9,7 +9,7 @@ import RecordStandardCodes from "./RecordStandardCodes";
 import RecordSubjects from "./RecordSubjects";
 import RecordTools from "./RecordTools";
 import { connect } from "react-redux";
-import { getRecord } from "../../reducers/recordReducer";
+import { getRecord, review } from "../../reducers/recordReducer";
 import { placeAHold } from "../../reducers/circulationReducer";
 import Loader from "../Loader";
 import RecordPublisherInfo from "./RecordPublisherInfo";
@@ -19,6 +19,7 @@ import ShowMore from "../essentials/ShowMore";
 import "../../css/record.css";
 import __ from "../../langs";
 import Select from "../Select";
+import Review from "../Review";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
@@ -50,7 +51,7 @@ const StyledMainInfo = styled.div`
     }
 `;
 
-const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isRecordInUsersHolds, placeAHold, locations, __ }) => {
+const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isRecordInUsersHolds, placeAHold, locations, review, __ }) => {
     console.log(id);
     console.log("record", record);
 
@@ -94,6 +95,12 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
         e.preventDefault();
         const { pickup: { value: pickup } } = e.target;
         placeAHold(record.result.id, pickup);
+    };
+
+    const handleReview = e => {
+        e.preventDefault();
+        const { review: r, score } = e.target;
+        review(Number(score.value) || 3, r.value);
     };
 
     return !record || !record.result || record.result.id !== id
@@ -146,7 +153,7 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
 
 
             {
-                !isPreview && <Tabs titles={[__("Items"), __("MARC"), __("spelling")]}>
+                !isPreview && <Tabs titles={[__("Items"), `${__("Reviews")} (${(record.result.totalReviews && record.result.totalReviews.reviews) || 0})`, __("MARC"), __("spelling")]}>
                     <Tab>
                         <table style={{ width: "100%" }}>
                             <tbody>
@@ -173,6 +180,15 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
                             : <p>{__("No items")}</p>}
                     </Tab>
                     <Tab>
+                        <p>{__("Write a review")}</p>
+                        <form onSubmit={handleReview}>
+                            <div><textarea name="review" /></div>
+                            <div><input type="number" name="score" min="1" max="6" /></div>
+                            <button>{__("review-button")}</button>
+                        </form>
+                        {record.result.reviews.map(r => <Review review={r} user={true} />)}
+                    </Tab>
+                    <Tab>
                         <MARC21Screen parsedMARC={record.record} />
                     </Tab>
                     <Tab>
@@ -196,5 +212,5 @@ export default connect(
         }),
         __: __(state)
     }),
-    { getRecord, placeAHold }
+    { getRecord, placeAHold, review }
 )(Record);

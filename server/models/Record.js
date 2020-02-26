@@ -128,6 +128,17 @@ const RecordSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         }
+    ],
+
+    totalReviews: {
+        reviews: Number,
+        average: Number
+    },
+    reviews: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Review"
+        }
     ]
 });
 
@@ -152,6 +163,6 @@ RecordSchema.set("toJSON", {
         delete ret.__v;
         ret.holds = (ret.holds || 0).length;
     }
-})
+});
 
 module.exports = mongoose.model("Record", RecordSchema);
