@@ -86,6 +86,9 @@ googleRouter.use("/", async (req, res, next) => {
             return res.cookie("piekija-token", token).redirect("//localhost:3000/set_token?token=" + token);
         }
         else {
+            const userAlreadyHavingThisGoogleAccount = await User.findOne({ "connectedAccounts.accountId": profile.email });
+            if (userAlreadyHavingThisGoogleAccount) return res.status(400).json({ error: "this Google account could not been attached to this Piekija account" });
+
             await User.findOneAndUpdate({ _id: userId, "connectedAccounts.accountId": { $ne: profile.email } }, {
                 $push: {
                     connectedAccounts: {
