@@ -53,7 +53,7 @@ const StyledMainInfo = styled.div`
     }
 `;
 
-const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isRecordInUsersHolds, placeAHold, locations, review, __ }) => {
+const Record = ({ state, isLoggedIn, isAdmin, record, getRecord, id, history, isPreview, isRecordInUsersHolds, placeAHold, locations, review, __ }) => {
     console.log(id);
     console.log("record", record);
 
@@ -168,7 +168,7 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
                                 )}
                             </tbody>
                         </table>
-                        {record.result.items.length > 0
+                        {isLoggedIn && (record.result.items.length > 0
                             ? <><hr /><div>{__("Holds")}: {record.result.holds || 0}</div>
                                 {!(isRecordInUsersHolds(record.result.id)[0])
                                     ? <form onSubmit={handlePlaceAHold}>
@@ -180,7 +180,7 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
                                         <div>{__("Pick-up location")}: {isRecordInUsersHolds(record.result.id)[0].location.name}</div>
                                     </>}
                             </>
-                            : <p>{__("No items")}</p>}
+                            : <p>{__("No items")}</p>)}
                     </Tab>
                     <Tab>
                         <Expandable title={__("Write a review")}>
@@ -216,6 +216,7 @@ export default connect(
             console.log("TESTTESTTESTTESTTEST", r.id, id);
             return r.id === id
         }),
+        isLoggedIn: state.user && state.user.staff && typeof state.user.staff === "boolean",
         __: __(state)
     }),
     { getRecord, placeAHold, review }
