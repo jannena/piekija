@@ -561,6 +561,9 @@ export default (slog, def) => {
         // StaffUser.js
         "Create new user": "Lisää uusi käyttäjä",
         "Password": "Salasana",
+        "I am sure": "Olen varma",
+        "User must not have active loans or holds.": "Käyttäjällä ei saa olla aktiivisia lainoja tai varauksia.",
+        "Remove user": "Poista käyttäjä",
 
         // StaffNotes.js
         "Create new note": "Lisää uusi etusivu-uutinen",

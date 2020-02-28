@@ -561,6 +561,9 @@ export default (slog, def) => {
         // StaffUser.js
         "Create new user": "",
         "Password": "",
+        "I am sure": "",
+        "User must not have active loans or holds.": "",
+        "Remove user": "",
 
         // StaffNotes.js
         "Create new note": "",

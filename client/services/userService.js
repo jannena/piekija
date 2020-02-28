@@ -49,6 +49,13 @@ const update = (userId, name, username, barcode, password, address = null, email
     ).then(response => response.data);
 };
 
+const remove = (userId, token) => {
+    return axios.delete(
+        `${baseUrl}/${userId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+    );
+};
+
 const disconnectGoogleAccount = token => {
     return axios.delete(
         `${b}/google/disconnect`,
@@ -63,6 +70,7 @@ export default {
     search,
     create,
     update,
+    remove,
 
     disconnectGoogleAccount
 };

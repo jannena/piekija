@@ -277,6 +277,7 @@ userRouter.delete("/:id", async (req, res, next) => {
     try {
         const user = await User.findById(id);
         if (user.loans.length !== 0) return res.status(409).json({ error: "user have active loans" });
+        if (user.holds.length !== 0) return res.status(409).json({ error: "user have active holds" });
 
         await Shelf.deleteMany({ author: id });
 

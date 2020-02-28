@@ -96,6 +96,11 @@ const circulationReducer = (state = init, action) => {
                 ...state,
                 holds: action.holds
             }
+        case "PSUCCESS_CIRCULATION_REMOVE_USER":
+            return {
+                ...state,
+                user: null
+            };
     }
     return state;
 };
@@ -129,6 +134,19 @@ export const createUser = () => (dispatch, getState) => {
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_CREATE_USER"));
 }
+
+export const removeUser = () => (dispatch, getState) => {
+    dispatch({ type: "PREQUEST_CIRCULATION_REMOVE_USER" });
+    userService
+        .remove(getState().circulation.user.id, getState().token.token)
+        .then(() => {
+            dispatch({
+                type: "PSUCCESS_CIRCULATION_REMOVE_USER",
+            });
+            dispatch(notify("success", "User was removed"));
+        })
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_REMOVE_USER"));
+};
 
 export const updateUser = (name, username, barcode, password/* , address, email, phone */) => (dispatch, getState) => {
     dispatch({ type: "PREQUEST_CIRCULATION_UPDATE_USER" });

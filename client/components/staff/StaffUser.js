@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { searchForUser, clearUser, createUser, updateUser } from "../../reducers/circulationReducer";
+import { searchForUser, clearUser, createUser, updateUser, removeUser } from "../../reducers/circulationReducer";
 import Loan from "./Loan";
 import { Tabs, Tab } from "../Tabs";
 import { Form, Input, Button } from "../essentials/forms";
 import __ from "../../langs";
 import { Link } from "react-router-dom";
 
-const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUser, __ }) => {
+const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUser, removeUser, __ }) => {
+    const [imsure, setImsure] = useState(false);
+
     const handleUserSearch = e => {
         e.preventDefault();
         const { barcode, name } = e.target;
@@ -24,6 +26,11 @@ const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUs
         updateUser(name.value, username.value, barcode.value, password.value);
     };
 
+    const handleRemoveUser = e => {
+        e.preventDefault();
+        removeUser();
+    };
+
     return (
         <>
             {!user && <>
@@ -38,7 +45,7 @@ const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUs
                 <div><button onClick={handleCreateNewUser}>{__("Create new user")}</button></div>
             </>}
             {/* TODO: User list */}
-            {user && <Tabs titles={[__("Loans"), __("Holds"), __("edit-button")]}>
+            {user && <Tabs titles={[__("Loans"), __("Holds"), __("edit-button"), __("Remove user")]}>
                 <Tab>
                     <div>
                         <button onClick={clearUser}>{__("clear-button")}</button>
@@ -72,6 +79,11 @@ const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUs
                         phone: <input username="phone" />*/}
                     </Form>
                 </Tab>
+                <Tab>
+                    <p>{__("User must not have active loans or holds.")}</p>
+                    <div><input type="checkbox" checked={imsure} onChange={e => setImsure(e.target.checked)} /> {__("I am sure")}</div>
+                    <button disabled={!imsure} onClick={handleRemoveUser}>{__("Remove user")}</button>
+                </Tab>
             </Tabs>}
         </>
     );
@@ -82,5 +94,5 @@ export default connect(
         user: state.circulation.user,
         __: __(state)
     }),
-    { searchForUser, clearUser, createUser, updateUser }
+    { searchForUser, clearUser, createUser, updateUser, removeUser }
 )(StaffUser);
