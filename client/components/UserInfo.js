@@ -9,13 +9,15 @@ import { notify } from "../reducers/notificationReducer";
 import { removeAHold } from "../reducers/circulationReducer";
 import Loan from "./staff/Loan";
 import LoanHistory from "./user/LoanHistory";
-import { Form, Input, Button } from "./essentials/forms";
+import { Form, Input, Button, Text, Grid, DoNotSendButton } from "./essentials/forms";
 import __ from "../langs";
 import { baseUrl } from "../globals";
 import Review from "./Review";
+import { Table, TableRow, TableCell } from "./essentials/Tables";
+import { removeReview } from "../reducers/recordReducer";
 
 
-const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconnectGoogleAccount, __ }) => {
+const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconnectGoogleAccount, removeReview, __ }) => {
     if (!user) return <div>{__("You logged out succefully")}. <Link to="">{__("Back to frontpage")}</Link>.</div>;
 
     document.title = `${__("title-User")} - ${__("PieKiJa")}`;
@@ -123,7 +125,22 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconne
 
             <Tab>
                 <h3>Reviews</h3>
-                {user.reviews.map(r => <Review key={r.id} review={r} record={true} forceRemoveReview={true} />)}
+                {/* {user.reviews.map(r => <Review key={r.id} review={r} record={true} forceRemoveReview={true} />)} */}
+                <Table titles={[__("Record")]} widths={[100]} data={user.reviews} form={data => <div>
+                    <Form>
+                        <Text title={__("Reviewed on")} value={__("date-format")(new Date(data.timeAdded || 0))} />
+                        <Text title={__("Review")} value={data.review} />
+                        <Text title={__("Score")} value={data.score} />
+                        <Text title={__("Public")} value={String(data.public)} />
+                        <DoNotSendButton title={__("remove-button")} onClick={() => {
+                            removeReview(data.record.id, data.id);
+                        }} />
+                    </Form>
+                </div>}>
+                    {user.reviews.map(r => <TableRow key={r.id}>
+                        <TableCell>{r.record.title}</TableCell>
+                    </TableRow>)}
+                </Table>
             </Tab>
         </Tabs>
     );
@@ -134,5 +151,5 @@ export default connect(
         user: state.user,
         __: __(state)
     }),
-    { createShelf, updateUser, notify, removeAHold, disconnectGoogleAccount }
+    { createShelf, updateUser, notify, removeAHold, disconnectGoogleAccount, removeReview }
 )(UserInfo);
