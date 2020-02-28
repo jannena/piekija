@@ -82,7 +82,7 @@ const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUs
                 <Tab>
                     <p>{__("User must not have active loans or holds.")}</p>
                     <div><input type="checkbox" checked={imsure} onChange={e => setImsure(e.target.checked)} /> {__("I am sure")}</div>
-                    <button disabled={!imsure} onClick={handleRemoveUser}>{__("Remove user")}</button>
+                    <button className="remove-user-button" disabled={!imsure} onClick={handleRemoveUser}>{__("Remove user")}</button>
                 </Tab>
             </Tabs>}
         </>

@@ -106,7 +106,20 @@ describe("staff screens work", () => {
         cy.contains("Loans: 0"); // EVO
         cy.contains("Holds: 0"); // EVO
 
-        // TODO: Removing user
+        cy.contains("Remove user").click() // EVO
+        cy.get("input[type='checkbox']").check();
+        cy.get(".remove-user-button").click();
+        cy.contains("User was removed"); // EVO
+
+        // Create new user again
+        cy.contains("Create new user").click(); // EVO
+        cy.contains("Edit").click(); // EVO
+        cy.get("#name").clear().type("Tämä on minun nimeni");
+        cy.get("#username").clear().type("myusername");
+        cy.get("#barcode").clear().type("myusername");
+        cy.get("#password").clear().type("1234567890");
+        cy.contains("Save").click(); // EVO
+        cy.contains("User was updated"); // EVO
     });
 
     it("front page news can be created AND edited AND removed", () => {

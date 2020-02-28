@@ -79,4 +79,5 @@
 | | 4 | varaaminen, skriptien korjauksia, E2E-testien aloittelua |
 | 26.2. | 2,5 | Google-kirjautuminen |
 | | 1,5 | arvostelujen aloittaminen |
-| yht. | 163 | |
+| 28.2. | 4,5 | arvostelujen ja E2E-testien jatkaminen |
+| yht. | 167,5 | |

@@ -1,14 +1,11 @@
 MUUT:
 - Paremmat latausruudut (ainakin sijainnit, lainaustyypit käyttäjät ja lainaus-palautus)
-- Tietuenäyttöön uudet välilehdet: sisällysluettelo, katso myös.
-- Käyttäjäkohtaiset sisältöpohjaiset suositukset
+- Tietuenäyttöön uudet välilehdet: sisällysluettelo (979)
 - spellingiin: 511a ja 979a
-- sisällysluetteloksi 979-kentät
 - hakurajauksiin aineistolaji
-- hakutuloksiin nimikkeiden määrä
 - tilien yhdistäminen toisiinsa
-- hyllyihin katso myös -välilehti
 - Korjaa yksinkertaisen muokkaimen tallennus
+- EHDOTTOMASTI: Lisää Google-kirjautumista varten kertakäyttöinen 'code', jonka avulla saa tietokannasta tokenin!!!
 
 - päivitä testit
 - päivitä dokumentaatio ja ohjeet
@@ -23,7 +20,7 @@ E2E-testit
 - tavallinen käyttäjä (tietojen muokkaus, varaaminen, uusiminen)
 - ?hyllyt? (toimiikohan websocketien kanssa)
 - lainaus-palautus-varaus
-- henkilökunta (sijainnit, lainausmallit, etusivu-uutiset, tilastot)
+- henkilökunta (tilastot)
 - tietueiden muokkaus
 
 VARAUKSET:
