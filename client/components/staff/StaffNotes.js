@@ -30,15 +30,14 @@ const StaffNotes = ({ notes, getAllNotes, createNote, updateNote, removeNote, __
         <Form onSubmit={handleUpdateNote(data.id)}>
             <Input id={`${data.id}-title`} name="title" title={__("Title")} description="" value={data.title} />
             <Textarea id={`${data.id}-content`} name="content" title={__("Content")} description="" value={data.content} />
-            <Button title={__("save-button")} />
+            <Button className="note-save-button" title={__("save-button")} />
         </Form>
         <Form onSubmit={handleRemoveNote(data.id)}>
-            <Button title={__("remove-button")}></Button>
+            <Button className="note-remove-button" title={__("remove-button")}></Button>
         </Form>
     </>;
 
     return (<>
-        <div>{__("Notes")}</div>
         <Expandable title={__("Create new note")}>
             <Form onSubmit={handleCreateNote}>
                 <Input title={__("Title")} name="title" description="" />

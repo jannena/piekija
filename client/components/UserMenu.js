@@ -31,7 +31,7 @@ const isClosedStyle = {
     paddingRight: 10
 };
 
-const MenuItem = ({ title, link }) => <StyledUserMenuItem><Link to={link}>{title}</Link></StyledUserMenuItem>;
+const MenuItem = ({ title, link, id }) => <StyledUserMenuItem><Link id={id} to={link}>{title}</Link></StyledUserMenuItem>;
 
 const UserMenu = ({ isLoggedIn, isStaff, user, history, __ }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -52,10 +52,10 @@ const UserMenu = ({ isLoggedIn, isStaff, user, history, __ }) => {
         : history.push("/login");
 
     return <div ref={ref} style={isOpen ? isOpenStyle : isClosedStyle}>
-        <StyledUserMenuTitle onClick={handleMenuClick}>{isLoggedIn ? user.name : __("Log in")}</StyledUserMenuTitle>
+        <StyledUserMenuTitle id="log-in-user-menu" onClick={handleMenuClick}>{isLoggedIn ? user.name : __("Log in")}</StyledUserMenuTitle>
         <div style={{ display: isOpen ? "block" : "none" }}>
             <MenuItem title={__("You")} link="/user" />
-            {isStaff && <MenuItem title={__("Staff")} link="/staff" />}
+            {isStaff && <MenuItem id="staff-link" title={__("Staff")} link="/staff" />}
             <StyledUserMenuItem><a href="#" onClick={logout}>{__("Logout")}</a></StyledUserMenuItem>
         </div>
     </div>;

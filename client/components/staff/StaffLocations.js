@@ -33,8 +33,8 @@ const StaffLocations = ({ locations, getLocations, createLocation, updateLocatio
         <Form onSubmit={handleUpdateLocation(data.id)}>
             <Input id={`${data.id}-name`} name="name" title={__("Location name")} value={data.name} description={__("location-name-info")} />
             <Grid>
-                <DoNotSendButton onClick={handleRemoveLocation(data.id)} title={__("remove-button")} />
-                <Button title={__("save-button")} />
+                <DoNotSendButton className="location-remove-button" onClick={handleRemoveLocation(data.id)} title={__("remove-button")} />
+                <Button className="location-save-button" title={__("save-button")} />
             </Grid>
         </Form>
     </div>

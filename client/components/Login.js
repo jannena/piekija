@@ -42,7 +42,7 @@ const Login = ({ tryLogin, usetfa, user, __ }) => {
                     <input style={inputStyle} value={code} onChange={e => setCode(e.target.value)} />
                 </>}
 
-                <button style={inputStyle}>{__("Log in -button")}</button>
+                <button id="log-in-button" style={inputStyle}>{__("Log in -button")}</button>
             </form>
 
             <button onClick={() => {

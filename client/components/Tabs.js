@@ -51,7 +51,7 @@ const TabsWithoutRouter = ({ titles, root, addresses, children, history }) => {
     };
 
     return (
-        <div>
+        <div className="tabs addressed-tabs">
             <StyledTabTitlesContainer>
                 {titles.map((title, i) => i === selectedTab
                     ? <StyledSelectedTabTitle key={i} onClick={handleTabChange(i)}>{title}</StyledSelectedTabTitle>
@@ -74,7 +74,7 @@ export const Tabs = ({ titles, children }) => {
     const [selectedTab, setSelectedTab] = useState(0);
 
     return (
-        <div>
+        <div className="tabs">
             <StyledTabTitlesContainer>
                 {titles.map((title, i) => i === selectedTab
                     ? <StyledSelectedTabTitle key={i} onClick={() => setSelectedTab(i)}>{title}</StyledSelectedTabTitle>

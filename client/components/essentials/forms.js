@@ -58,9 +58,9 @@ export const Button = ({ title, className }) => {
     </div>;
 };
 
-export const DoNotSendButton = ({ title, onClick }) => {
+export const DoNotSendButton = ({ title, onClick, className }) => {
     return <div style={{ textAlign: "center", margin: "20px 0px" }}>
-        <button style={{ backgroundColor: "#ff5c5c" }} onClick={onClick} type="button">{title}</button>
+        <button className={className} style={{ backgroundColor: "#ff5c5c" }} onClick={onClick} type="button">{title}</button>
     </div>;
 };
 

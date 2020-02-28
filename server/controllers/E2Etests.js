@@ -33,7 +33,8 @@ router.post("/reset", async (req, res) => {
         loanHistoryRetention: true,
         loanHistory: [],
         connectedAccounts: [],
-        shelves: []
+        shelves: [],
+        staff: true
     });
     await admin.save();
 
