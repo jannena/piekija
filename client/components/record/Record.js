@@ -20,6 +20,8 @@ import "../../css/record.css";
 import __ from "../../langs";
 import Select from "../Select";
 import Review from "../Review";
+import Expandable from "../essentials/Expandable";
+import { Form, Checkbox, FormSelect, Textarea, Button } from "../essentials/forms";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
@@ -99,8 +101,8 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
 
     const handleReview = e => {
         e.preventDefault();
-        const { review: r, score } = e.target;
-        review(Number(score.value) || 3, r.value);
+        const { review: r, score, isPublic } = e.target;
+        review(Number(score.value) || 3, r.value, isPublic.checked);
     };
 
     return !record || !record.result || record.result.id !== id
@@ -119,6 +121,7 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
                     </div>
                     <RecordTime record={record} />
                     <div style={{ padding: 10 }}>{record.result.description}</div>
+                    <div>{__("Average review score")}: {((record.result.totalReviews && record.result.totalReviews.average) || 0).toFixed(2)}</div>
                 </StyledMainInfo>
             </div>
 
@@ -180,12 +183,14 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
                             : <p>{__("No items")}</p>}
                     </Tab>
                     <Tab>
-                        <p>{__("Write a review")}</p>
-                        <form onSubmit={handleReview}>
-                            <div><textarea name="review" /></div>
-                            <div><input type="number" name="score" min="1" max="6" /></div>
-                            <button>{__("review-button")}</button>
-                        </form>
+                        <Expandable title={__("Write a review")}>
+                            <Form onSubmit={handleReview}>
+                                <Textarea name="review" title={__("Review")} />
+                                <Checkbox name="isPublic" title={__("Is public review?")} />
+                                <FormSelect name="score" title={__("score")} options={[[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6]]} />
+                                <Button title={__("review-button")} />
+                            </Form>
+                        </Expandable>
                         {record.result.reviews.map(r => <Review key={r.id} review={r} user={true} />)}
                     </Tab>
                     <Tab>

@@ -27,7 +27,7 @@ userRouter.get("/me", async (req, res, next) => {
 
         await User.populate(req.authenticated, {
             path: "reviews",
-            select: "record score review"
+            select: "record score review timeAdded public"
         })
 
         await User.populate(req.authenticated, {

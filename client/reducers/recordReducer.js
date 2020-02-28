@@ -286,10 +286,10 @@ export const removeItem = itemId => (dispatch, getState) => {
         .catch(onError(dispatch, "PSUCCESS_RECORD_REMOVE_ITEM"));
 };
 
-export const review = (score, review) => (dispatch, getState) => {
+export const review = (score, review, isPublic) => (dispatch, getState) => {
     dispatch({ type: "PREQUEST_REVIEW" });
     recordService
-        .review(score, review, getState().record.record.result.id, getState().token.token)
+        .review(score, review, getState().record.record.result.id, isPublic, getState().token.token)
         .then(review => {
             dispatch({
                 type: "PSUCCESS_REVIEW",

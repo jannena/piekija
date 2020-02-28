@@ -9,6 +9,7 @@ const Review = ({ __, removeReview, review, record = false, user = false, showRe
         <div>
             {record && <div><Link to={`/record/${review.record.id}`}>{review.record.author}{review.record.author ? ": " : ""}{review.record.title}</Link></div>}
             {user && <div>{review.reviewer.name}</div>}
+            {review.timeAdded && <div>{__("date-format")(new Date(review.timeAdded))}</div>}
             <div>{review.review}</div>
             <div>{review.score}</div>
             {(showRemove || forceRemoveReview) && <div><button onClick={() => {

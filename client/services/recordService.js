@@ -36,10 +36,10 @@ const remove = (id, token) => {
     return axios.delete(`${baseUrl}/${id}`, { headers: { Authorization: `Bearer ${token}` } }).then(response => response.data);
 };
 
-const review = (score, review, record, token) => {
+const review = (score, review, record, isPublic, token) => {
     return axios.post(
         `${baseUrl}/${record}/review`,
-        { score, review },
+        { score, review, public: isPublic },
         { headers: { Authorization: `Bearer ${token}` } }
     ).then(response => response.data);
 };

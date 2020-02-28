@@ -26,7 +26,7 @@ recordRouter.get("/:id", async (req, res, next) => {
             })
             .populate({
                 path: "reviews",
-                select: "reviewer review score record"
+                select: "reviewer review score record timeAdded"
             });
 
         if (!result) return res.status(404).end();
@@ -141,9 +141,9 @@ recordRouter.post("/:id/review", async (req, res, next) => {
 
     const { id } = req.params;
 
-    const { score, review } = req.body;
+    const { score, review, public: isPublic } = req.body;
 
-    if (!score || !review) return res.status(400).json({ error: "score or review is missing" });
+    if (!score || !review) return res.status(400).json({ error: "score or review or public is missing" });
 
     try {
         const usersReviewsForThisRecord = await Review.countDocuments({ record: id, reviewer: req.authenticated._id }).then(number => number);
@@ -156,7 +156,9 @@ recordRouter.post("/:id/review", async (req, res, next) => {
             reviewer: req.authenticated._id,
             record: id,
             score,
-            review
+            review,
+            public: isPublic,
+            timeAdded: new Date()
         });
         const saved = await newReview.save();
 
@@ -171,7 +173,10 @@ recordRouter.post("/:id/review", async (req, res, next) => {
                 reviews: 1,
                 average: score
             }
-        await Record.findByIdAndUpdate(id, { $set: { totalReviews }, $push: { reviews: saved._id } });
+        const updateObject = isPublic === true
+            ? { $set: { totalReviews }, $push: { reviews: saved._id } }
+            : { $set: { totalReviews } }
+        await Record.findByIdAndUpdate(id, updateObject);
 
         await Review.populate(saved, {
             path: "reviewer",
