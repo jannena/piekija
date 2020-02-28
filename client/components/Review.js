@@ -8,10 +8,10 @@ const Review = ({ __, removeReview, review, record = false, user = false, showRe
     return <>
         <div>
             {record && <div><Link to={`/record/${review.record.id}`}>{review.record.author}{review.record.author ? ": " : ""}{review.record.title}</Link></div>}
-            {user && <div>{review.reviewer.name}</div>}
-            {review.timeAdded && <div>{__("date-format")(new Date(review.timeAdded))}</div>}
-            <div>{review.review}</div>
-            <div>{review.score}</div>
+            {user && <div><b>{review.reviewer.name}</b> ({review.timeAdded && <span>{__("date-format")(new Date(review.timeAdded))}</span>})</div>}
+
+            <div style={{ padding: 5, paddingLeft: 0 }}>{__("Score")}: {review.score}</div>
+            <div style={{ padding: 5 }}>{review.review.split("\n").map(row => <span>{row} <br /></span>)}</div>
             {(showRemove || forceRemoveReview) && <div><button onClick={() => {
                 removeReview(typeof review.record === "string" ? review.record : review.record.id, review.id);
             }}>{__("remove-button")}</button></div>}

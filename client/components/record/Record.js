@@ -186,11 +186,12 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
                         <Expandable title={__("Write a review")}>
                             <Form onSubmit={handleReview}>
                                 <Textarea name="review" title={__("Review")} />
-                                <Checkbox name="isPublic" title={__("Is public review?")} />
+                                <Checkbox name="isPublic" checked={true} title={__("Is public review?")} />
                                 <FormSelect name="score" title={__("score")} options={[[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6]]} />
                                 <Button title={__("review-button")} />
                             </Form>
                         </Expandable>
+                        <hr />
                         {record.result.reviews.map(r => <Review key={r.id} review={r} user={true} />)}
                     </Tab>
                     <Tab>
