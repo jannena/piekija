@@ -6,6 +6,7 @@ These tests tests (user is not logged in)
 - advanced and basic search filtering
 - advanced and basic search sorting
 - that record screen works
+- language selection
 */
 
 
@@ -25,11 +26,19 @@ describe("search works", () => {
         cy.contains("Imaginaerum").click();
         cy.contains("0.00");
         cy.contains("Imaginaerum / Nightwish");
-        cy.contains("kelttiläinen kansanmusiikki")
+        cy.contains("kelttiläinen kansanmusiikki");
 
         // Only English version
         cy.contains("Show more").click();
         cy.contains("Marco Hietala");
+
+        cy.get(".select-language").select("fi");
+
+        cy.get(".select-language").select("en");
+        cy.contains("Standard codes");
+        cy.contains("Countries");
+        cy.contains("Appearance");
+
         cy.contains("Hide");
         cy.contains("MARC").click();
         cy.contains("Reviews").click();

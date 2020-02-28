@@ -48,9 +48,8 @@ const Container = ({ loading, history, simpleSearch, setQuery, children, languag
                 <Notifications />
             </main>
             <footer>
-                <div>This is the footer.</div>
                 <div>
-                    <Select selected={language} options={[["Suomi", "fi"], ["English", "en"]]} onChange={e => setLanguage(e.target.value)} />
+                    <Select className="select-language" selected={language} options={[["Suomi", "fi"], ["English", "en"]]} onChange={e => setLanguage(e.target.value)} />
                 </div>
             </footer>
         </div>
