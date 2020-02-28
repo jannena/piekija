@@ -187,7 +187,7 @@ const Record = ({ state, isAdmin, record, getRecord, id, history, isPreview, isR
                             <Form onSubmit={handleReview}>
                                 <Textarea name="review" title={__("Review")} />
                                 <Checkbox name="isPublic" checked={true} title={__("Is public review?")} />
-                                <FormSelect name="score" title={__("score")} options={[[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6]]} />
+                                <FormSelect name="score" title={__("Score")} options={[[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6]]} />
                                 <Button title={__("review-button")} />
                             </Form>
                         </Expandable>

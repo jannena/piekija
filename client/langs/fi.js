@@ -20,6 +20,10 @@ export default (slog, def) => {
         "return-button": "Palauta",
         "create-button": "Luo",
         "add-button": "Lisää",
+        "review-button": "Arvostele",
+        "connect-button": "Yhdistä",
+        "disconnect-button": "Katkaise yhteys",
+        "switch-button": "Vaihda",
 
         // Titles
         "title-Frontpage": "Etusivu",
@@ -271,6 +275,7 @@ export default (slog, def) => {
         "Pasword": "Salasana",
         "Log in -button": "Kirjaudu sisään",
         "Two-factor authentication code": "Kaksivaiheisen tunnistautumisen koodi",
+        "Login with Google": "Kirjaudu Google-tilin avulla",
 
         // UserMenu.js
         "Log in": "Kirjaudu sisään",
@@ -292,6 +297,11 @@ export default (slog, def) => {
         "Your queue number": "Vuoronumerosi",
         "Select pick-up location": "Valitse noutopaikka",
         "Place a hold": "Varaa",
+        "Reviews": "Arvostelut",
+        "Write a review": "Kirjoita arvostelu",
+        "Review": "Arvostelu",
+        "Score": "Arvosana",
+        "Is public review?": "Onko julkinen arvostelu?",
 
         // RecordTools.js
         "Add to shelf": "Lisää hyllyyn",
@@ -400,6 +410,10 @@ export default (slog, def) => {
         "Remove hold": "Poista varaus",
         "Pick-up location": "Noutopaikka",
         "Queue number": "Vuoronumero",
+        "Reviewed on": "Arvostelupäivä",
+        "Connected accounts": "Yhdistetyt tilit",
+        "Other Piekija accounts": "Muut Piekija-tilit",
+        "piekija-account-info": "Voit yhdistää tiliisi muita Piekija-tilejä, jolloin sinun ei tarvitse kirjautua ulos ja sisään vaihtaaksesi tiliä.",
 
         // Staff.js
         "Forbidden!": "Pääsy kielletty!",

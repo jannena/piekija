@@ -20,6 +20,10 @@ export default (slog, def) => {
         "return-button": "Return",
         "create-button": "Create",
         "add-button": "Add",
+        "review-button": "Review",
+        "connect-button": "Connect",
+        "disconnect-button": "Disconnect",
+        "switch-button": "Switch",
 
         // Titles
         "title-Frontpage": "Frontpage",
@@ -271,6 +275,7 @@ export default (slog, def) => {
         "Pasword": "",
         "Log in -button": "Log in",
         "Two-factor authentication code": "",
+        "Login with Google": "",
 
         // UserMenu.js
         "Log in": "",
@@ -292,6 +297,11 @@ export default (slog, def) => {
         "Your queue number": "",
         "Select pick-up location": "",
         "Place a hold": "",
+        "Reviews": "",
+        "Write a review": "",
+        "Review": "",
+        "Score": "",
+        "Is public review?": "",
 
         // RecordTools.js
         "Add to shelf": "",
@@ -400,6 +410,10 @@ export default (slog, def) => {
         "Remove hold": "",
         "Pick-up location": "",
         "Queue number": "",
+        "Reviewed on": "",
+        "Connected accounts": "",
+        "Other Piekija accounts": "",
+        "piekija-account-info": "You can combine Piekija accounts so you do not have to log out and login again to switch account.",
 
         // Staff.js
         "Forbidden!": "",

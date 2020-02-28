@@ -119,19 +119,18 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconne
                         location.href = `${baseUrl}/google/login`;
                     }}>{__("connect-button")}</button>}
                 <h3>{__("Other Piekija accounts")}</h3>
-                {piekijaAccounts.length === 0 && <div>{__("You can combine Piekija accounts so you do not have to log out and login again to switch account.")}</div>}
+                {piekijaAccounts.length === 0 && <div>{__("piekija-account-info")}</div>}
                 {piekijaAccounts.map(a => <div>{a.id} <button>{__("switch-button")}</button></div>)}
             </Tab>
 
             <Tab>
-                <h3>Reviews</h3>
                 {/* {user.reviews.map(r => <Review key={r.id} review={r} record={true} forceRemoveReview={true} />)} */}
-                <Table titles={[__("Record")]} widths={[100]} data={user.reviews} form={data => <div>
+                <Table titles={[__("Title")]} widths={[100]} data={user.reviews} form={data => <div>
                     <Form>
                         <Text title={__("Reviewed on")} value={__("date-format")(new Date(data.timeAdded || 0))} />
                         <Text title={__("Review")} value={data.review} />
                         <Text title={__("Score")} value={data.score} />
-                        <Text title={__("Public")} value={String(data.public)} />
+                        <Text title={__("Is public review?")} value={String(data.public)} />
                         <DoNotSendButton title={__("remove-button")} onClick={() => {
                             removeReview(data.record.id, data.id);
                         }} />
