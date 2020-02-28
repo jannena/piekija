@@ -29,14 +29,14 @@ const Container = ({ loading, history, simpleSearch, setQuery, children, languag
                     {/* <p>Currently loading {loading} things</p> */}
                     <div id="search">
                         <form onSubmit={handleSearch}>
-                            <input placeholder={__("Search-button") + "..."} name="query" style={{ width: "calc(90% - 70px)", margin: 0, fontSize: 20, height: 45 }} />
-                            <button style={{ width: 70, margin: 0, height: 45, position: "relative", top: -3 }}>{__("Search-button")}</button>
+                            <input id="main-search-field" placeholder={__("Search-button") + "..."} name="query" style={{ width: "calc(90% - 70px)", margin: 0, fontSize: 20, height: 45 }} />
+                            <button id="search-button" style={{ width: 70, margin: 0, height: 45, position: "relative", top: -3 }}>{__("Search-button")}</button>
                         </form>
                     </div>
                     <nav>
                         <ul>
                             <li><Link to="/">{__("Frontpage")}</Link></li>
-                            <li><Link to="/search">{__("Search-menu")}</Link></li>
+                            <li><Link id="menu-search-link" to="/search">{__("Search-menu")}</Link></li>
                             <li><a href="/docs">{__("Help")}</a></li>
                         </ul>
                         <UserMenu />

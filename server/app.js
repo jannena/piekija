@@ -21,6 +21,7 @@ const circulationRouter = require("./controllers/circulation");
 const noteRouter = require("./controllers/notes");
 const statisticsRouter = require("./controllers/statistics");
 const googleRouter = require("./controllers/google");
+const E2EtestRouter = require("./controllers/E2Etests");
 
 const errorHandler = require("./middleware/error");
 const { authenticationMiddleware } = require("./middleware/authentication");
@@ -54,6 +55,9 @@ app.use("/api/google", googleRouter);
 app.use("/api/*", (req, res, next) => {
     next(new Error("APINOTFOUND"));
 });
+
+console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+if (process.env.NODE_ENV === "development") app.use("/debug", E2EtestRouter);
 
 // Frontend
 app.use("/docs/img", express.static(path.join(__dirname, "build", "img")));

@@ -47,6 +47,7 @@ const Search = ({ state, type, result, page, sort, nextPage, previousPage, resor
                         } /> */}
                         <Select onChange={handleResort} defaultSelected={sort}
                             options={sortOptions}
+                            className="sort-select"
                         />
                     </div>
                     <SearchFilter />

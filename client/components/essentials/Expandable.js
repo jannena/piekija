@@ -22,11 +22,11 @@ const Expandable = ({ defaultIsOpen = false, noPadding = false, title, children 
     const [isOpen, setIsOpen] = useState(defaultIsOpen);
 
     return <StyledExpandable>
-        <StyledExpandableTitle onClick={() => setIsOpen(!isOpen)}>
+        <StyledExpandableTitle className="expandable-title" onClick={() => setIsOpen(!isOpen)}>
             <div style={{ fontSize: "2em", fontWeight: "bold", marginRight: 10 }}>{isOpen ? "-" : "+"}</div>
             <div>{title}</div>
         </StyledExpandableTitle>
-        <StyledExpandableContent noPadding={noPadding} isOpen={isOpen}>{children}</StyledExpandableContent>
+        <StyledExpandableContent className="expandable-content" noPadding={noPadding} isOpen={isOpen}>{children}</StyledExpandableContent>
     </StyledExpandable>;
 };
 

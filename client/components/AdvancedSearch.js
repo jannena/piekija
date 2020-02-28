@@ -43,6 +43,7 @@ const AdvancedSearchField = ({ query, setQuery, removeField, __ }) => {
             || <input
                 value={value}
                 onChange={onChange(1)}
+                className="advanced-search-value"
             />
     };
     return (
@@ -64,14 +65,16 @@ const AdvancedSearchField = ({ query, setQuery, removeField, __ }) => {
                 ]}
                 selected={query[0]}
                 onChange={onChange(0)}
+                className="advanced-search-operator"
             />
             <Select
                 options={operatorsByField(query[0])}
                 selected={query[2]}
                 onChange={onChange(2)}
+                className="advanced-search-verb"
             />
             {optionsByField(query[0], query[1], onChange)}
-            <button type="button" onClick={removeField}>{__("Remove field")}</button>
+            <button className="advanced-search-remove-field" type="button" onClick={removeField}>{__("Remove field")}</button>
         </div>
     );
 };
@@ -91,7 +94,7 @@ const AdvancedSearchGroup = ({ query, setQuery, removeGroup, __ }) => {
     // console.log(setQuery.toString());
 
     return (
-        <div style={QueryGroupStyle}>
+        <div className="advanced-search-group" style={QueryGroupStyle}>
             <Select
                 options={[[__("withallthese(and)"), "AND"], [__("withanyofthese(or)"), "OR"]]}
                 selected={query[0]}
@@ -99,9 +102,10 @@ const AdvancedSearchGroup = ({ query, setQuery, removeGroup, __ }) => {
                     query[0] = e.target.value;
                     setQuery(query);
                 }}
+                className="advanced-search-group-verb"
             />
-            <button type="button" onClick={addNewField}>{__("AddFIELD")}</button>
-            <button type="button" onClick={addNewGroup}>{__("AddGROUP")}</button>
+            <button className="advanced-search-add-field" type="button" onClick={addNewField}>{__("AddFIELD")}</button>
+            <button className="advanced-search-add-group" type="button" onClick={addNewGroup}>{__("AddGROUP")}</button>
             {removeGroup && <button onClick={removeGroup}>{__("removethisgroup")}</button>}
             {/* If, second element of the array is an array, element is a group.
                     Else, element is a field
@@ -186,7 +190,7 @@ const AdvancedSearch = ({ query: q, setQuery: setQ, __ }) => {
                     }}
                     __={__}
                 />
-                <Button title={__("Search-button")} />
+                <Button className="advanced-search-button" title={__("Search-button")} />
                 {/* <button type="submit" onClick={search}>Search</button> */}
             </form>
         </Expandable>

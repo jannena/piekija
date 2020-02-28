@@ -52,9 +52,9 @@ export const Text = props => <InputTemplate {...props}>
     <span>{props.value}</span>
 </InputTemplate>;
 
-export const Button = ({ title }) => {
+export const Button = ({ title, className }) => {
     return <div style={{ textAlign: "center", margin: "20px 0px" }}>
-        <button>{title}</button>
+        <button className={className}>{title}</button>
     </div>;
 };
 
