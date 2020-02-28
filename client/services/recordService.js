@@ -44,9 +44,9 @@ const review = (score, review, record, token) => {
     ).then(response => response.data);
 };
 
-const removeReview = (record, token) => {
+const removeReview = (record, review, token) => {
     return axios.delete(
-        `${baseUrl}/${record}/review`,
+        `${baseUrl}/${record}/review/${review}`,
         { headers: { Authorization: `Bearer ${token}` } }
     ).then(response => response.data);
 };

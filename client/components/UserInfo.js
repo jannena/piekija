@@ -123,7 +123,7 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconne
 
             <Tab>
                 <h3>Reviews</h3>
-                {user.reviews.map(r => <Review key={r.id} review={r} record={true} />)}
+                {user.reviews.map(r => <Review key={r.id} review={r} record={true} forceRemoveReview={true} />)}
             </Tab>
         </Tabs>
     );

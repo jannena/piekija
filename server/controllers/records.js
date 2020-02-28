@@ -189,23 +189,29 @@ recordRouter.post("/:id/review", async (req, res, next) => {
     }
 });
 
-recordRouter.delete("/:id/review", async (req, res, next) => {
+recordRouter.delete("/:id/review/:reviewId", async (req, res, next) => {
     if (!req.authenticated) return next(new Error("UNAUTHORIZED"));
 
-    const { id } = req.params;
+    const { id, reviewId } = req.params;
 
     try {
-        const review = await Review.findOne({ reviewer: req.authenticated._id, record: id });
+        const review = await Review.findOne({ reviewer: req.authenticated._id, record: id, _id: reviewId });
         if (!review) return res.status(204).json();
 
-        await Record.findByIdAndUpdate(id, { $pull: { reviews: review._id } });
+
+        const record = await Record.findById(id);
+
+        const totalReviews = {
+            reviews: record.totalReviews.reviews - 1,
+            average: (record.totalReviews.average * record.totalReviews.reviews - review.score) / ((record.totalReviews.reviews - 1) || 1)
+        };
+
+        await Record.findByIdAndUpdate(id, { $set: { totalReviews }, $pull: { reviews: review._id } });
         await User.findByIdAndUpdate(req.authenticated._id, { $pull: { reviews: review._id } });
 
         await Review.findByIdAndRemove(review._id);
 
-        // TODO: Remember totalReviews
-
-        res.status(204).end();
+        res.status(204).json(totalReviews);
     }
     catch (err) {
         next(err);

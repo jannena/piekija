@@ -69,12 +69,12 @@ const userReducer = (state = null, action) => {
         case "PSUCCESS_REVIEW":
             return {
                 ...state,
-                reviews: state.reviews.concat(action.reviews)
+                reviews: state.reviews.concat(action.review)
             };
         case "PSUCCESS_UNREVIEW":
             return {
                 ...state,
-                reviews: state.reviews.filter(r => r.record.id !== action.record)
+                reviews: state.reviews.filter(r => r.id !== action.review)
             };
     }
     return state;

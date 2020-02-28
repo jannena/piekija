@@ -122,16 +122,18 @@ const recordReducer = (state = init, action) => {
                 }
             };
         case "PSUCCESS_UNREVIEW":
-            return {
-                ...state,
-                record: {
-                    ...state.record,
-                    result: {
-                        ...state.record.result,
-                        reviews: state.record.result.reviews.filter(r => r.record !== action.record)
+            if (state.record && state.record.result && state.record.result.id === action.record)
+                return {
+                    ...state,
+                    record: {
+                        ...state.record,
+                        result: {
+                            ...state.record.result,
+                            reviews: state.record.result.reviews.filter(r => r.id !== action.review),
+                            totalReviews: action.totalReviews
+                        }
                     }
-                }
-            };
+                };
     }
     return state;
 };
@@ -297,14 +299,16 @@ export const review = (score, review) => (dispatch, getState) => {
         .catch(onError(dispatch, "PFAILURE_REVIEW"));
 };
 
-export const removeReview = recordId => (dispatch, getState) => {
+export const removeReview = (recordId, reviewId) => (dispatch, getState) => {
     dispatch({ type: "PREQUEST_UNREVIEW" });
     recordService
-        .removeReview(recordId, getState().token.token)
-        .then(review => {
+        .removeReview(recordId, reviewId, getState().token.token)
+        .then(totalReviews => {
             dispatch({
                 type: "PSUCCESS_UNREVIEW",
-                record: recordId
+                record: recordId,
+                review: reviewId,
+                totalReviews
             })
         })
         .catch(onError(dispatch, "PFAILURE_UNREVIEW"));
