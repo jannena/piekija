@@ -62,7 +62,6 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconne
                 <LoanHistory />
             </Tab>
             <Tab>
-                <h3>{__("Shelves")}</h3>
                 <Tabs titles={[__("My shelves"), __("Shared with me")]}>
                     <Tab>
                         <form onSubmit={createNewShelf}>
@@ -94,16 +93,21 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconne
             </Tab>
 
             <Tab>
-                <h2>{__("Edit me")}</h2>
-                <Form onSubmit={handleUpdateMe}>
-                    <Input name="name" title={__("Name")} value={user.name} />
-                    <Input type="password" title={__("New password")} description={__("new-password-info")} name="password" />
-                    <Input type="password" title={__("New password again")} name="againPassword" />
-                    <Input type="password" title={__("Old password")} name="oldPassword" />
-                    <Button title={__("save-button")} />
-                </Form>
-                <h2>{__("Two-factor authentication")}</h2>
-                <TFAForm />
+                <Tabs titles={[__("Edit me"), __("Two-factor authentication")]}>
+                    <Tab>
+                        <Form onSubmit={handleUpdateMe}>
+                            <Input name="name" title={__("Name")} value={user.name} />
+                            <Input type="password" title={__("New password")} description={__("new-password-info")} name="password" />
+                            <Input type="password" title={__("New password again")} name="againPassword" />
+                            <Input type="password" title={__("Old password")} name="oldPassword" />
+                            <Button title={__("save-button")} />
+                        </Form>
+                    </Tab>
+
+                    <Tab>
+                        <TFAForm />
+                    </Tab>
+                </Tabs>
             </Tab>
 
             <Tab>
@@ -131,7 +135,7 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconne
                         <Text title={__("Review")} value={data.review} />
                         <Text title={__("Score")} value={data.score} />
                         <Text title={__("Is public review?")} value={String(data.public)} />
-                        <DoNotSendButton title={__("remove-button")} onClick={() => {
+                        <DoNotSendButton className="review-remove-button" title={__("remove-button")} onClick={() => {
                             removeReview(data.record.id, data.id);
                         }} />
                     </Form>

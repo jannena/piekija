@@ -20,9 +20,9 @@ const TFAForm = ({ setTFA, tfa, tfaqr, __ }) => {
     return (<>
         {tfaqr && <div>
             <p>{__("scan-qr-code-info")}</p>
-            <img src={tfaqr} />
+            <img id="tfaqr" src={tfaqr} />
         </div>}
-        {__("Current password")} <input {...oldPassword.props} />
+        {__("Current password")} <input id="current-password" {...oldPassword.props} />
         {tfa
             ? <p>{__("Enabled")} <button onClick={handleTFADisable}>{__("Disable")}</button></p>
             : <p>{__("Disabled")} <button onClick={handleTFAEnable}>{__("Enable")}</button></p>

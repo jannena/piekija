@@ -179,13 +179,15 @@ recordRouter.post("/:id/review", async (req, res, next) => {
         await Record.findByIdAndUpdate(id, updateObject);
 
         await Review.populate(saved, {
-            path: "reviewer",
-            select: "name"
+            path: "reviewer record",
+            select: "name title"
         });
 
         const ret = saved.toJSON();
         console.log(ret);
         delete ret.reviewer.tfa;
+        delete ret.reviewer.loanHistory;
+
 
         res.status(201).json(ret);
     }

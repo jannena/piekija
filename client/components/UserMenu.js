@@ -54,7 +54,7 @@ const UserMenu = ({ isLoggedIn, isStaff, user, history, __ }) => {
     return <div ref={ref} style={isOpen ? isOpenStyle : isClosedStyle}>
         <StyledUserMenuTitle id="log-in-user-menu" onClick={handleMenuClick}>{isLoggedIn ? user.name : __("Log in")}</StyledUserMenuTitle>
         <div style={{ display: isOpen ? "block" : "none" }}>
-            <MenuItem title={__("You")} link="/user" />
+            <MenuItem id="user-link" title={__("You")} link="/user" />
             {isStaff && <MenuItem id="staff-link" title={__("Staff")} link="/staff" />}
             <StyledUserMenuItem><a href="#" onClick={logout}>{__("Logout")}</a></StyledUserMenuItem>
         </div>
