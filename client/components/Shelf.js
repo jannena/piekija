@@ -27,7 +27,7 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, remo
     const checkName = useField("text");
 
     if (state.state === 1) return <Loader />;
-    if (state.state === 3) return <p>{__("Error")}: {state.error}</p>;
+    if (state.state === 3) return <p>{__("Error")}: {__(state.error)}</p>;
     if (!shelf) return null;
 
     document.title = `${shelf.name} - PieKiJa`

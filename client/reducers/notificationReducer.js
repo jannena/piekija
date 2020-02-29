@@ -1,17 +1,6 @@
 
 const notificationReducer = (state = [], action) => {
-    console.log("Start of action name", action.type, action.type.split("_"));
-    const type = action.type.split("_")[0] === "FAILURE" ? "FAILURE" : action.type;
-    if (type === "FAILURE") console.log("Halloo!");
-    switch (type) {
-        case "FAILURE":
-            return [
-                ...state,
-                {
-                    type: "error",
-                    message: action.error
-                }
-            ];
+    switch (action.type) {
         case "NOTIFY":
             return [
                 ...state,

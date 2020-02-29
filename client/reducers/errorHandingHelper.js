@@ -6,12 +6,12 @@ export const onError = (dispatch, type) => err => {
         console.log(err, err.response);
         const error = err.response.status === 404 ? "Not found" : err.response.data.error;
 
-        if (!err || !err.response || !err.response.data || !err.response.data.error) return;
+        if ((!err || !err.response || !err.response.data || !err.response.data.error) && (!err || !err.response || err.response.status !== 404)) return;
         dispatch({
             type,
             error
         });
-        dispatch(notify("error", err.response.data.error));
+        if (err.response.data && err.response.data.error) dispatch(notify("error", err.response.data.error));
         // setTimeout(() => dispatch({
         //     type: "REMOVE_FIRST_NOTIFICATION"
         // }), 8000);
