@@ -183,14 +183,14 @@ const Record = ({ state, isLoggedIn, isAdmin, record, getRecord, id, history, is
                             : <p>{__("No items")}</p>)}
                     </Tab>
                     <Tab>
-                        <Expandable title={__("Write a review")}>
+                        {isLoggedIn ? <Expandable title={__("Write a review")}>
                             <Form onSubmit={handleReview}>
                                 <Textarea name="review" title={__("Review")} />
                                 <Checkbox name="isPublic" checked={true} title={__("Is public review?")} />
                                 <FormSelect name="score" title={__("Score")} options={[[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6]]} />
                                 <Button title={__("review-button")} />
                             </Form>
-                        </Expandable>
+                        </Expandable> : <p>{__("Log in to write a review.")}</p>}
                         <hr />
                         {record.result.reviews.map(r => <Review key={r.id} review={r} user={true} />)}
                     </Tab>
