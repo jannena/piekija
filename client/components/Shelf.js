@@ -3,12 +3,13 @@ import Loader from "./Loader";
 import ShelfRecord from "./ShelfRecord";
 import ShelfSharing from "./ShelfSharing";
 import { connect } from "react-redux";
-import { getShelf, updateShelf, removeShelf } from "../reducers/shelfReducer";
+import { getShelf, updateShelf, removeShelf, deleteRecordFromShelf } from "../reducers/shelfReducer";
 import { Tabs, Tab } from "./Tabs";
 import { useField } from "../hooks";
 import { withRouter } from "react-router-dom";
 import __ from "../langs";
 import io from "../socket";
+import { Form, Input, Checkbox, Textarea, Button, DoNotSendButton, Grid } from "./essentials/forms";
 
 const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, removeShelf, history, __ }) => {
     document.title = `${__("title-Shelf")} - ${__("PieKiJa")}`;
@@ -73,13 +74,15 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, remo
                 <Tab>
                     {isOpen && isAuthor()
                         ? <>
-                            <form onSubmit={saveShelf}>
-                                <div><input name="name" defaultValue={shelf.name} /></div>
-                                <div><textarea name="description" defaultValue={shelf.description} /></div>
-                                <div><input name="public" id="public" type="checkbox" defaultChecked={shelf.public} /> <label htmlFor="public">{__("Public shelf")}</label></div>
-                                <button>{__("save-button")}</button>
-                            </form>
-                            <button onClick={() => setIsOpen(false)}>{__("cancel-button")}</button>
+                            <Form onSubmit={saveShelf}>
+                                <Input name="name" title={__("Name")} value={shelf.name} />
+                                <Textarea name="description" title="description" title={__("Description")} value={deleteRecordFromShelf.description} />
+                                <Checkbox name="public" title={__("Public shelf")} />
+                                <Grid>
+                                    <DoNotSendButton title={__("cancel-button")} onClick={() => setIsOpen(false)} />
+                                    <Button title={__("save-button")} />
+                                </Grid>
+                            </Form>
                         </>
 
                         : <>
