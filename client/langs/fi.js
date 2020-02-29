@@ -303,6 +303,7 @@ export default (slog, def) => {
         "Score": "Arvosana",
         "Is public review?": "Onko julkinen arvostelu?",
         "Log in to write a review.": "Kirjaudu sisään, jos haluat kirjoittaa arvostelun.",
+        "You have already reviewed this record.": "Olet jo arvostellut tämän tietueen.",
 
         // RecordTools.js
         "Add to shelf": "Lisää hyllyyn",

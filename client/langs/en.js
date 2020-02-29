@@ -303,6 +303,7 @@ export default (slog, def) => {
         "Score": "",
         "Is public review?": "",
         "Log in to write a review.": "",
+        "You have already reviewed this record.": "",
 
         // RecordTools.js
         "Add to shelf": "",

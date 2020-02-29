@@ -53,7 +53,7 @@ const StyledMainInfo = styled.div`
     }
 `;
 
-const Record = ({ state, isLoggedIn, isAdmin, record, getRecord, id, history, isPreview, isRecordInUsersHolds, placeAHold, locations, review, __ }) => {
+const Record = ({ state, isLoggedIn, isAdmin, record, getRecord, id, history, isPreview, isRecordInUsersHolds, placeAHold, locations, review, hasReviewed, __ }) => {
     console.log(id);
     console.log("record", record);
 
@@ -183,14 +183,16 @@ const Record = ({ state, isLoggedIn, isAdmin, record, getRecord, id, history, is
                             : <p>{__("No items")}</p>)}
                     </Tab>
                     <Tab>
-                        {isLoggedIn ? <Expandable title={__("Write a review")}>
+                        {(isLoggedIn && !hasReviewed) && <Expandable title={__("Write a review")}>
                             <Form onSubmit={handleReview}>
                                 <Textarea name="review" title={__("Review")} />
                                 <Checkbox name="isPublic" checked={true} title={__("Is public review?")} />
                                 <FormSelect name="score" title={__("Score")} options={[[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6]]} />
                                 <Button title={__("review-button")} />
                             </Form>
-                        </Expandable> : <p>{__("Log in to write a review.")}</p>}
+                        </Expandable>}
+                        {!isLoggedIn && <p>{__("Log in to write a review.")}</p>}
+                        {hasReviewed && <p>{__("You have already reviewed this record.")}</p>}
                         <hr />
                         {record.result.reviews.map(r => <Review key={r.id} review={r} user={true} />)}
                     </Tab>
@@ -207,7 +209,7 @@ const Record = ({ state, isLoggedIn, isAdmin, record, getRecord, id, history, is
 };
 
 export default connect(
-    state => ({
+    (state, ownProps) => ({
         isAdmin: state.user && state.user.staff,
         record: state.record.record,
         state: state.loading.record,
@@ -217,6 +219,11 @@ export default connect(
             return r.id === id
         }),
         isLoggedIn: state.user && state.user.staff && typeof state.user.staff === "boolean",
+        hasReviewed: state.user && state.user.reviews && state.user.reviews.some(r => r.record.id === ownProps.id),
+        // testi: (() => {
+        //     console.log("ösadkfölkasjdfölkjasdfölkjasdfölkjasdflkjhsdafölkjasdfölkjsadfölkjsadföljkasdf", state, state && state.user);
+        //     if (state && state.user) console.log("IM HERE!!!", state.user.reviews, state.user.reviews.some(r => r.id === ownProps.id), ownProps.id);
+        // })(),
         __: __(state)
     }),
     { getRecord, placeAHold, review }
