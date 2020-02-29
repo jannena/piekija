@@ -111,12 +111,19 @@ const search = async (req, res, next, simple) => {
                     { $sortByCount: "$languages" },
                     { $limit: 100 }
                 ]);
+                const contentTypes = await Record.aggregate([
+                    { $match: readyQuery },
+                    { $unwind: "$contentType" },
+                    { $sortByCount: "$contentType" },
+                    { $limit: 100 }
+                ]);
 
                 filters = {
                     subjects,
                     authors,
                     years,
-                    languages
+                    languages,
+                    contentTypes
                 };
             }
 
