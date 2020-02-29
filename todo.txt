@@ -1,6 +1,5 @@
 MUUT:
 - Tietuenäyttöön uudet välilehdet: sisällysluettelo (979)
-- spellingiin: 511a ja 979a
 - hakurajauksiin aineistolaji
 - tilien yhdistäminen toisiinsa
 - Korjaa yksinkertaisen muokkaimen tallennus
