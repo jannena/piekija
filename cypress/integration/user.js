@@ -169,6 +169,8 @@ describe("when user is logged in", () => {
         cy.contains("My new name");
         cy.contains("Score: 4") // EVO
         cy.contains("I love this book. Amo questo libro. Ce livre, Je l'aime. Ich liebe diese Buch. Rakastan tätä kirjaa.");
+        cy.contains("You have already reviewed this record.");
+        cy.contains("Write a review");
 
 
         cy.get("#main-search-field").type("Imaginaerum");

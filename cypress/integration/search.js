@@ -33,6 +33,9 @@ describe("search works", () => {
         cy.contains("Marco Hietala");
 
         cy.get(".select-language").select("fi");
+        cy.contains("Standardikoodit");
+        cy.contains("Valmistusmaat");
+        cy.contains("Ulkoasu");
 
         cy.get(".select-language").select("en");
         cy.contains("Standard codes");
@@ -42,6 +45,7 @@ describe("search works", () => {
         cy.contains("Hide");
         cy.contains("MARC").click();
         cy.contains("Reviews").click();
+        cy.contains("Log in to write a review."); // EVO
         cy.contains("spelling").click();
         cy.contains("Items").click();
 
