@@ -33,6 +33,18 @@ const init = {
         state: 0,
         error: null
     },
+    circulation_user: {
+        state: 0,
+        error: null
+    },
+    circulation_item: {
+        state: 0,
+        error: null
+    },
+    circulation_holds: {
+        state: 0,
+        error: null
+    },
     user: {
         state: 0,
         error: null
@@ -47,7 +59,9 @@ const init = {
 
 const loadingReducer = (state = init, action) => {
     const { type } = action;
-    let [stateType = "", reducer = "", actionName = ""] = type.split("_");
+    let [stateType = "", reducer = "", ...restActionName] = type.split("_");
+
+    const actionName = restActionName.join("");
 
     const updateToState = ["", "REQUEST", "SUCCESS", "FAILURE", "PREQUEST", "PSUCCESS", "PFAILURE"].indexOf(stateType) || 3;
 
@@ -95,6 +109,34 @@ const loadingReducer = (state = init, action) => {
                 statistics: { state: updateToState, error: action.error || null },
                 loading
             };
+        case "LOCATION":
+            return {
+                ...state,
+                location: { state: updateToState, error: action.error || null },
+                loading
+            };
+        case "LOANTYPE":
+            return {
+                ...state,
+                loantype: { state: updateToState, error: action.error || null },
+                loading
+            };
+        case "CIRCULATION":
+            if (actionName.includes("HOLDS")) return {
+                ...state,
+                circulation_holds: { state: updateToState, error: action.error || null },
+                loading
+            }
+            else if (actionName.includes("USER")) return {
+                ...state,
+                circulation_user: { state: updateToState, error: action.error || null },
+                loading
+            }
+            else if (actionName.includes("ITEM")) return {
+                ...state,
+                circulation_item: { state: updateToState, error: action.error || null },
+                loading
+            }
     }
     return state;
 };

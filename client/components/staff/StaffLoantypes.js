@@ -5,8 +5,9 @@ import Expandable from "../essentials/Expandable";
 import { Form, Input, Button, Checkbox, Grid, DoNotSendButton } from "../essentials/forms";
 import { Table, TableRow, TableCell } from "../essentials/Tables";
 import __ from "../../langs";
+import Loader from "../Loader";
 
-const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes, removeLoantype, updateLoantype, __ }) => {
+const StaffLoantypes = ({ state, loantypes, createLoantype, getLoantypes, removeLoantype, updateLoantype, __ }) => {
     useEffect(() => {
         getLoantypes();
     }, []);
@@ -39,6 +40,9 @@ const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes, removeLoantyp
         </Form>
     </>;
 
+    if (state.state === 1) return <Loader />;
+    if (state.state === 3) return <p>{__("Error")}: {__(state.error)}</p>;
+
     return (
         <>
             <Expandable title={__("Create new loantype")}>
@@ -67,6 +71,7 @@ const StaffLoantypes = ({ loantypes, createLoantype, getLoantypes, removeLoantyp
 export default connect(
     state => ({
         loantypes: state.loantype,
+        state: state.loading.loantype,
         __: __(state)
     }),
     { createLoantype, getLoantypes, removeLoantype, updateLoantype }

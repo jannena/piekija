@@ -5,8 +5,9 @@ import Expandable from "../essentials/Expandable";
 import { Form, Input, Button, Text, DoNotSendButton, Grid } from "../essentials/forms";
 import { Table, TableCell, TableRow } from "../essentials/Tables";
 import __ from "../../langs";
+import Loader from "../Loader";
 
-const StaffLocations = ({ locations, getLocations, createLocation, updateLocation, removeLocation, __ }) => {
+const StaffLocations = ({ state, locations, getLocations, createLocation, updateLocation, removeLocation, __ }) => {
     useEffect(() => {
         getLocations();
     }, []);
@@ -39,6 +40,9 @@ const StaffLocations = ({ locations, getLocations, createLocation, updateLocatio
         </Form>
     </div>
 
+    if (state.state === 1) return <Loader />
+    if (state.state === 3) return <p>{__("Error")}: {__(state.error)}</p>;
+
     return (
         <div>
             <Expandable title={__("Create new location")}>
@@ -59,6 +63,7 @@ const StaffLocations = ({ locations, getLocations, createLocation, updateLocatio
 export default connect(
     state => ({
         locations: state.location,
+        state: state.loading.location,
         __: __(state)
     }),
     { getLocations, createLocation, updateLocation, removeLocation }

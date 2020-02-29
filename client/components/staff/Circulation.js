@@ -5,8 +5,9 @@ import __ from "../../langs";
 import Select from "../Select";
 import { setCurrentLocation } from "../../reducers/currentLocationReducer";
 import itemService from "../../services/itemService";
+import Loader from "../Loader";
 
-const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clearItem, loanItem, returnItem, setCurrentLocation, currentLocation, locations, reserveItem, history, __ }) => {
+const Circulation = ({ uState, iState, user, item, searchForItem, searchForUser, clearUser, clearItem, loanItem, returnItem, setCurrentLocation, currentLocation, locations, reserveItem, history, __ }) => {
     const searchUser = e => {
         e.preventDefault();
         searchForUser({ barcode: e.target.user.value });
@@ -47,6 +48,9 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
                     <button>{__("search-button")}</button>
                 </form>
                 {user && <button onClick={clearUser}>{__("clear-button")}</button>}
+                {uState.state === 4 && <Loader center={false} small={true} />}
+                {uState.state === 6 && <p>{__("Error")}: {__(uState.error)}</p>}
+                {(uState.state === 5 && !user) && <p>{__("User not found")}</p>}
             </div>
             {user && <div style={{ paddingLeft: 10 }}>
                 <div>{__("Barcode")}: {user.barcode}</div>
@@ -64,6 +68,9 @@ const Circulation = ({ user, item, searchForItem, searchForUser, clearUser, clea
                     <button>{__("search-button")}</button>
                 </form>
                 {item && <button onClick={clearItem}>{__("clear-button")}</button>}
+                {iState.state === 4 && <Loader center={false} small={true} />}
+                {iState.state === 6 && <p>{__("Error")}: {__(iState.error)}</p>}
+                {(iState.state === 5 && !item) && <p>{__("Item not found")}</p>}
             </div>
             {item && <div style={{ paddingLeft: 10 }}>
                 <div>{__("Title")}: {item.record && item.record.title}</div>
@@ -111,6 +118,8 @@ export default connect(
         item: state.circulation.item,
         locations: state.location,
         currentLocation: state.currentLocation,
+        uState: state.loading.circulation_user,
+        iState: state.loading.circulation_item,
         __: __(state)
     }),
     { searchForItem, searchForUser, clearItem, clearUser, loanItem, returnItem, setCurrentLocation, reserveItem }

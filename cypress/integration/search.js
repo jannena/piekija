@@ -46,6 +46,7 @@ describe("search works", () => {
         cy.contains("MARC").click();
         cy.contains("Reviews").click();
         cy.contains("Log in to write a review."); // EVO
+        cy.contains("Write a review").should("not.exist"); // EVO
         cy.contains("spelling").click();
         cy.contains("Items").click();
 

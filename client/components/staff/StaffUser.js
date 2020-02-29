@@ -6,8 +6,9 @@ import { Tabs, Tab } from "../Tabs";
 import { Form, Input, Button } from "../essentials/forms";
 import __ from "../../langs";
 import { Link } from "react-router-dom";
+import Loader from "../Loader";
 
-const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUser, removeUser, __ }) => {
+const StaffUser = ({ state, users, clearUser, user, searchForUser, createUser, updateUser, removeUser, __ }) => {
     const [imsure, setImsure] = useState(false);
 
     const handleUserSearch = e => {
@@ -41,6 +42,8 @@ const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUs
                         <div><button>{__("search-button")}</button></div>
                     </form>
                 </div>
+                {state.state === 4 && <Loader />}
+                {state.state === 5 && <p>{__("User not found")}</p>}
                 <hr />
                 <div><button onClick={handleCreateNewUser}>{__("Create new user")}</button></div>
             </>}
@@ -92,6 +95,7 @@ const StaffUser = ({ users, clearUser, user, searchForUser, createUser, updateUs
 export default connect(
     state => ({
         user: state.circulation.user,
+        state: state.loading.circulation_user,
         __: __(state)
     }),
     { searchForUser, clearUser, createUser, updateUser, removeUser }

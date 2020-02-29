@@ -1,5 +1,4 @@
 MUUT:
-- Paremmat latausruudut (ainakin sijainnit, lainaustyypit käyttäjät ja lainaus-palautus)
 - Tietuenäyttöön uudet välilehdet: sisällysluettelo (979)
 - spellingiin: 511a ja 979a
 - hakurajauksiin aineistolaji
@@ -18,7 +17,7 @@ MUUT TESTIT:
 
 E2E-testit
 - lainaus-palautus-varaus (myös lainaus ja palautus)
-- henkilökunta (tilastot)
+- henkilökunta (tilastot)?
 - tietueiden muokkaus
 
 VARAUKSET:

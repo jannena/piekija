@@ -1,19 +1,19 @@
 import React from "react";
 import styled, { keyframes, css } from "styled-components";
 
-const Loader = () => {
+const Loader = ({ small = false, center = true }) => {
     const spin = keyframes`
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     `;
 
     const Div = styled.div`
-        border: 10px solid lightgrey;
-        border-top: 10px solid black;
-        width: 100px;
-        height: 100px;
+        border: ${small ? 5 : 10}px solid lightgrey;
+        border-top: ${small ? 5 : 10}px solid black;
+        width: ${small ? 40 : 100}px;
+        height: ${small ? 40 : 100}px;
         border-radius: 50%;
-        margin: auto;
+        margin: ${center ? "auto" : "5px"};
         animation: ${spin} 2s linear infinite;
     `;
 

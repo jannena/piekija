@@ -117,7 +117,7 @@ export const searchForUser = query => (dispatch, getState) => {
                 user: user[0]
             });
         })
-        .catch(onError(dispatch, "PFIALURE_CIRCULATION_USER"));
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_USER"));
 };
 
 export const createUser = () => (dispatch, getState) => {
@@ -172,7 +172,7 @@ export const searchForItem = barcode => (dispatch, getState) => {
                 item
             });
         })
-        .catch(onError(dispatch, "PFIALURE_CIRCULATION_ITEM"));
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_ITEM"));
 };
 
 export const clearItem = () => dispatch => dispatch({ type: "CLEAR_ITEM" });
@@ -262,7 +262,7 @@ export const getHolds = locationId => (dispatch, getState) => {
                 holds: result
             });
         })
-        .catch(onError(dispatch, "PFAILURE_CIRCULATION_GET_HOLD"));
+        .catch(onError(dispatch, "PFAILURE_CIRCULATION_GET_HOLDS"));
 };
 
 export const reserveItem = () => (dispatch, getState) => {
