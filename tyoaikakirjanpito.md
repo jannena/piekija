@@ -80,4 +80,5 @@
 | 26.2. | 2,5 | Google-kirjautuminen |
 | | 1,5 | arvostelujen aloittaminen |
 | 28.2. | 4,5 | arvostelujen ja E2E-testien jatkaminen |
-| yht. | 167,5 | |
+| 29.2. | 4 | E2E-testien jatkaminen, korjauksia |
+| yht. | 171,5 | |

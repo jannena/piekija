@@ -304,6 +304,8 @@ export default (slog, def) => {
         "Is public review?": "Onko julkinen arvostelu?",
         "Log in to write a review.": "Kirjaudu sisään, jos haluat kirjoittaa arvostelun.",
         "You have already reviewed this record.": "Olet jo arvostellut tämän tietueen.",
+        "No items": "Ei nimikkeitä",
+        "Table of contents": "Sisällysluettelo",
 
         // RecordTools.js
         "Add to shelf": "Lisää hyllyyn",
@@ -459,6 +461,8 @@ export default (slog, def) => {
         "Select location": "Valitse sijainti",
         "Select current location": "Valitse nykyinen sijainti",
         "Not selected": "Ei valittu",
+        "User not found": "Käyttäjää ei löytynyt",
+        "Item not found": "Nimikettä ei löytynyt",
 
         // Loan.js
         "Renew times left": "Uusimiskertoja jäljellä",

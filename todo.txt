@@ -1,6 +1,4 @@
 MUUT:
-- Tietuenäyttöön uudet välilehdet: sisällysluettelo (979)
-- hakurajauksiin aineistolaji
 - tilien yhdistäminen toisiinsa
 - Korjaa yksinkertaisen muokkaimen tallennus
 - EHDOTTOMASTI: Lisää Google-kirjautumista varten kertakäyttöinen 'code', jonka avulla saa tietokannasta tokenin!!!

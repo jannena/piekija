@@ -8,16 +8,6 @@ const RecordNotes = ({ record, __ }) => {
         {MARC21
             .getFields(record.record, ["500"], "a")
             .map(n => <tr key={n}><td>{__("General note")}</td><td>{n}</td></tr>)}
-    </>
-
-    // TODO: What if subfields s, t and r are used?
-    const g505 = () => <>
-        {MARC21
-            .getFieldsAndSubfields(record.record, ["505"], ["indicators", "a"])
-            .map(n => <tr key={n["a"][0]}>
-                <td>{__(["Contents", "Incomplete contents", "Partial contents", "", "", "", "", "", ""][n.indicators[0]]) + ": "}</td>
-                <td>{n["a"].join("").split("--").map(part => <div key={part}>{part}</div>)}</td>
-            </tr>)}
     </>;
 
     const g520 = () => <>
@@ -32,7 +22,6 @@ const RecordNotes = ({ record, __ }) => {
     return (<>
         {/* TODO: Add note titles */}
         {g500()}
-        {g505()}
         {g520()}
         {MARC21
             .getFields(record.record, [

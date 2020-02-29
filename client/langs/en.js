@@ -304,6 +304,8 @@ export default (slog, def) => {
         "Is public review?": "",
         "Log in to write a review.": "",
         "You have already reviewed this record.": "",
+        "No items": "",
+        "Table of contents": "",
 
         // RecordTools.js
         "Add to shelf": "",
@@ -459,6 +461,8 @@ export default (slog, def) => {
         "Select location": "",
         "Select current location": "",
         "Not selected": "",
+        "User not found": "",
+        "Item not found": "",
 
         // Loan.js
         "Renew times left": "",

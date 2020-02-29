@@ -22,6 +22,7 @@ import Select from "../Select";
 import Review from "../Review";
 import Expandable from "../essentials/Expandable";
 import { Form, Checkbox, FormSelect, Textarea, Button } from "../essentials/forms";
+import RecordContents from "./RecordContents";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 const { removeLastCharacters } = require("../../../server/utils/stringUtils");
@@ -86,6 +87,9 @@ const Record = ({ state, isLoggedIn, isAdmin, record, getRecord, id, history, is
             {console.log("Linkki", link)}
             <a href={link.u} target="_blank">{(link.y && link.y.length > 0) ? link.y : link.z}</a>
         </div>);
+
+    const hiddenTableOfContents = [];
+    if (MARC21.getFieldsAndSubfields(record.record, ["505", "979"], ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]).length === 0) hiddenTableOfContents.push(1);
 
     const colorByState = state => {
         if (state === "not loaned") return "#00d400";
@@ -156,7 +160,7 @@ const Record = ({ state, isLoggedIn, isAdmin, record, getRecord, id, history, is
 
 
             {
-                !isPreview && <Tabs titles={[__("Items"), `${__("Reviews")} (${(record.result.totalReviews && record.result.totalReviews.reviews) || 0})`, __("MARC"), __("spelling")]}>
+                !isPreview && <Tabs titles={[__("Items"), __("Table of contents"), `${__("Reviews")} (${(record.result.totalReviews && record.result.totalReviews.reviews) || 0})`, __("MARC"), __("spelling")]} hidden={hiddenTableOfContents}>
                     <Tab>
                         <table style={{ width: "100%" }}>
                             <tbody>
@@ -168,19 +172,21 @@ const Record = ({ state, isLoggedIn, isAdmin, record, getRecord, id, history, is
                                 )}
                             </tbody>
                         </table>
-                        {isLoggedIn && (record.result.items.length > 0
-                            ? <><hr /><div>{__("Holds")}: {record.result.holds || 0}</div>
-                                {!(isRecordInUsersHolds(record.result.id)[0])
-                                    ? <form onSubmit={handlePlaceAHold}>
-                                        <Select name="pickup" options={[[__("Select pick-up location"), null], ...locations.map(l => [l.name, l.id])]} />
-                                        <button>{__("Place a hold")}</button>
-                                    </form>
-                                    : <>
-                                        <div>{__("Your queue number")}: {isRecordInUsersHolds(record.result.id)[0].queue}</div>
-                                        <div>{__("Pick-up location")}: {isRecordInUsersHolds(record.result.id)[0].location.name}</div>
-                                    </>}
-                            </>
-                            : <p>{__("No items")}</p>)}
+                        {isLoggedIn && (record.result.items.length > 0 && <><hr /><div>{__("Holds")}: {record.result.holds || 0}</div>
+                            {!(isRecordInUsersHolds(record.result.id)[0])
+                                ? <form onSubmit={handlePlaceAHold}>
+                                    <Select name="pickup" options={[[__("Select pick-up location"), null], ...locations.map(l => [l.name, l.id])]} />
+                                    <button>{__("Place a hold")}</button>
+                                </form>
+                                : <>
+                                    <div>{__("Your queue number")}: {isRecordInUsersHolds(record.result.id)[0].queue}</div>
+                                    <div>{__("Pick-up location")}: {isRecordInUsersHolds(record.result.id)[0].location.name}</div>
+                                </>}
+                        </>)}
+                        {record.result.items.length === 0 && <p>{__("No items")}</p>}
+                    </Tab>
+                    <Tab>
+                        <RecordContents record={record} />
                     </Tab>
                     <Tab>
                         {(isLoggedIn && !hasReviewed) && <Expandable title={__("Write a review")}>

@@ -70,8 +70,11 @@ const TabsWithoutRouter = ({ titles, root, addresses, children, history }) => {
 
 export const AddressedTabs = withRouter(TabsWithoutRouter);
 
-export const Tabs = ({ titles, children }) => {
+export const Tabs = ({ titles: t, children: c, hidden = [] }) => {
     const [selectedTab, setSelectedTab] = useState(0);
+
+    const children = hidden.length > 0 ? c.filter((child, i) => hidden.indexOf(i) === -1) : c;
+    const titles = hidden.length > 0 ? t.filter((child, i) => hidden.indexOf(i) === -1) : t;
 
     return (
         <div className="tabs">
