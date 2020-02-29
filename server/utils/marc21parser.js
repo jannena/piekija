@@ -346,7 +346,7 @@ const getSpelling = parsedMARC => {
             ["a"]
         ),
         // Specific contents
-        getFieldSpelling(parsedMARC, ["979"], ["a"]),
+        getFieldSpelling(parsedMARC, ["979"], ["b", "c", "d", "e"]),
         // additional 1 (field 991)
         getFieldSpelling(parsedMARC, ["991"], ["a"])
     ))];
