@@ -35,7 +35,7 @@ const Notifications = ({ notifications, unnotify, __ }) => {
         {notifications.map(({ timeout, type, message: [message, extension] }) =>
             <div style={notificationStyle(type)}>
                 <div>{__(message)} {extension}</div>
-                <div onClick={() => unnotify(timeout)} style={removeNotificationStyle}>x</div>
+                <div className="close-notification" onClick={() => unnotify(timeout)} style={removeNotificationStyle}>x</div>
             </div>
         )}
     </div>);

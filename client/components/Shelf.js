@@ -77,7 +77,7 @@ const Shelf = ({ state, shelfId, shelf, token, user, getShelf, updateShelf, remo
                             <Form onSubmit={saveShelf}>
                                 <Input name="name" title={__("Name")} value={shelf.name} />
                                 <Textarea name="description" title="description" title={__("Description")} value={deleteRecordFromShelf.description} />
-                                <Checkbox name="public" title={__("Public shelf")} />
+                                <Checkbox name="public" title={__("Public shelf")} checked={shelf.public} />
                                 <Grid>
                                     <DoNotSendButton title={__("cancel-button")} onClick={() => setIsOpen(false)} />
                                     <Button title={__("save-button")} />

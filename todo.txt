@@ -17,9 +17,7 @@ MUUT TESTIT:
 
 
 E2E-testit
-- tavallinen käyttäjä (tietojen muokkaus, varaaminen, uusiminen)
-- ?hyllyt? (toimiikohan websocketien kanssa)
-- lainaus-palautus-varaus
+- lainaus-palautus-varaus (myös lainaus ja palautus)
 - henkilökunta (tilastot)
 - tietueiden muokkaus
 

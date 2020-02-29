@@ -36,6 +36,17 @@ const userReducer = (state = null, action) => {
                 ...state,
                 shelves: state.shelves.concat({ note: "", id: { id: action.shelf.id, name: action.shelf.name }, author: true })
             };
+        case "PSUCCESS_SHELF_UPDATE":
+            return {
+                ...state,
+                shelves: state.shelves.map(shelf => shelf.id.id !== action.shelf.id ? shelf : {
+                    author: true,
+                    id: {
+                        name: action.shelf.name,
+                        id: action.shelf.id
+                    }
+                })
+            };
         case "PSUCCESS_SHELF_REMOVE":
             return {
                 ...state,
