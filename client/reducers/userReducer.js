@@ -7,7 +7,7 @@ import { onError } from "./errorHandingHelper";
 const userReducer = (state = null, action) => {
     switch (action.type) {
         case "SAVE_USER":
-            return { ...action.user, loans: state.loans };
+            return { ...action.user, holds: state.holds, reviews: state.reviews, loanhistory: state.loanhistory, loans: state.loans };
         case "GET_LOANHISTORY":
             return {
                 ...state,
