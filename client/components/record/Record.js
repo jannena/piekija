@@ -175,8 +175,8 @@ const Record = ({ state, isLoggedIn, isAdmin, record, getRecord, id, history, is
                         {isLoggedIn && (record.result.items.length > 0 && <><hr /><div>{__("Holds")}: {record.result.holds || 0}</div>
                             {!(isRecordInUsersHolds(record.result.id)[0])
                                 ? <form onSubmit={handlePlaceAHold}>
-                                    <Select name="pickup" options={[[__("Select pick-up location"), null], ...locations.map(l => [l.name, l.id])]} />
-                                    <button>{__("Place a hold")}</button>
+                                    <Select className="pickup-location" name="pickup" options={[[__("Select pick-up location"), null], ...locations.map(l => [l.name, l.id])]} />
+                                    <button id="place-a-hold-button">{__("Place a hold")}</button>
                                 </form>
                                 : <>
                                     <div>{__("Your queue number")}: {isRecordInUsersHolds(record.result.id)[0].queue}</div>

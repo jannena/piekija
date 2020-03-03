@@ -82,7 +82,7 @@ const UserInfo = ({ user, createShelf, updateUser, notify, removeAHold, disconne
 
             <Tab>
                 {user.holds.map(loan =>
-                    <div>
+                    <div className="hold">
                         <hr />
                         <div><Link to={`/record/${loan.record.id}`}>{loan.record.title}</Link></div>
                         {loan.queue !== 0 && <div>{__("Queue number")}: {loan.queue}</div>}

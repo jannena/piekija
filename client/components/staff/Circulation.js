@@ -35,7 +35,7 @@ const Circulation = ({ uState, iState, user, item, searchForItem, searchForUser,
                     options={[[__("Not selected"), null], ...locations.map(({ id, name }) => [name, id])]}
                     defaultSelected={currentLocation}
                 />
-                <button>{__("save-button")}</button>
+                <button id="set-location-button">{__("save-button")}</button>
             </form>
         </div>
 
@@ -45,7 +45,7 @@ const Circulation = ({ uState, iState, user, item, searchForItem, searchForUser,
             <div style={{ display: "flex" }}>
                 <form onSubmit={searchUser}>
                     <label htmlFor="user">{__("User barcode")}</label> <input id="user" name="user" />
-                    <button>{__("search-button")}</button>
+                    <button id="search-user-button">{__("search-button")}</button>
                 </form>
                 {user && <button onClick={clearUser}>{__("clear-button")}</button>}
                 {uState.state === 4 && <Loader center={false} small={true} />}
@@ -55,7 +55,7 @@ const Circulation = ({ uState, iState, user, item, searchForItem, searchForUser,
             {user && <div style={{ paddingLeft: 10 }}>
                 <div>{__("Barcode")}: {user.barcode}</div>
                 <div>{__("Name")}: {user.name} ({user.loans.length} {__("after-number-loans")}, {user.holds.length} {__("after-number-holds")})</div>
-                <button onClick={() => history.push("/staff/users")}>{__("Show user")}</button>
+                <button id="search-item-button" onClick={() => history.push("/staff/users")}>{__("Show user")}</button>
             </div>}
         </div>
 
@@ -107,7 +107,7 @@ const Circulation = ({ uState, iState, user, item, searchForItem, searchForUser,
         </>}
         {(item && item.state === "being carried") && <>
             <div>{__("Pick-up location of current item")}: {item.stateFirstHoldLocation.name}</div>
-            {item.stateFirstHoldLocation === currentLocation && <button onClick={handleHoldReservation}>{__("Mark as pick-up")}</button>}
+            {item.stateFirstHoldLocation.id === currentLocation && <button onClick={handleHoldReservation}>{__("Mark as pick-up")}</button>}
         </>}
     </>);
 };

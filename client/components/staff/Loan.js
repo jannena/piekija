@@ -9,14 +9,14 @@ const Loan = ({ loan, staff = false, returnItemWithId, renewItemWithId, __ }) =>
 
     const renewTimes = loan.loantype.renewTimes - loan.stateTimesRenewed;
 
-    return (<div>
+    return (<div className="loan">
         <hr />
         <div><Link to={`${staff === true ? "/staff" : ""}/record/${loan.record.id}`}>{loan.record.title}</Link> {staff ? <span>({loan.barcode})</span> : null}</div>
         <div>{__("Due date")}: {dateString}</div>
         {staff && <div>{__("Location")}: {loan.location.name}</div>}
         <div>{__("Renew times left")}: {renewTimes}</div>
-        {staff && <button onClick={() => returnItemWithId(loan.id)}>{__("return-button")}</button>}
-        {renewTimes > 0 && <button onClick={() => renewItemWithId(loan.id)}>{__("renew-button")}</button>}
+        {staff && <button className="return-button" onClick={() => returnItemWithId(loan.id)}>{__("return-button")}</button>}
+        {renewTimes > 0 && <button className="renew-button" onClick={() => renewItemWithId(loan.id)}>{__("renew-button")}</button>}
     </div>);
 };
 
