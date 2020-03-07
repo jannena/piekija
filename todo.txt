@@ -1,6 +1,4 @@
 MUUT:
-(- tilien yhdistäminen toisiinsa)
-- vielä latausruutuja (ainakin kirjautuminen, ?varaus?, ?lainaus?)
 - Korjaa yksinkertaisen muokkaimen tallennus
 - EHDOTTOMASTI: Lisää Google-kirjautumista varten kertakäyttöinen 'code', jonka avulla saa tietokannasta tokenin!!!
 
@@ -14,7 +12,6 @@ MUUT TESTIT:
 
 
 E2E-testit
-- lainaus-palautus-varaus (myös lainaus ja palautus) (valmiit, testaa vielä)
 - tietueiden muokkaus
 
 VARAUKSET:

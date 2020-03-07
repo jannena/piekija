@@ -172,6 +172,7 @@ export default (slog, def) => {
         "name is missing": "",
 
         "username or password is missing": "",
+        "wrong username or password": "",
         "code needed": "",
         "invalid code": "",
 

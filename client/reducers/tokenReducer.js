@@ -29,12 +29,14 @@ export default tokenReducer;
 
 export const tryLogin = (username, password, code) => async dispatch => {
     try {
+        dispatch({ type: "PREQUEST_LOGIN" });
         const { token } = await loginService.login(username, password, code);
         if (!token) throw new Error("did not return token!!!");
         dispatch({
             type: "SET_TOKEN",
             token
         });
+        dispatch({ type: "PSUCCESS_LOGIN" });
 
         window.localStorage.setItem("piekija-token", token);
         document.cookie = `piekija-token=${token}`;
@@ -50,6 +52,7 @@ export const tryLogin = (username, password, code) => async dispatch => {
         }
         else {
             dispatch(notify("error", err.response.data.error));
+            dispatch({ type: "PFAILURE_LOGIN", error: err.response.data.error });
         }
     }
 };

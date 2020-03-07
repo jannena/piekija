@@ -5,8 +5,9 @@ import { Redirect } from "react-router-dom";
 import __ from "../langs";
 
 import { baseUrl } from "../globals";
+import Loader from "./Loader";
 
-const Login = ({ tryLogin, usetfa, user, __ }) => {
+const Login = ({ state, tryLogin, usetfa, user, __ }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [code, setCode] = useState("");
@@ -30,6 +31,7 @@ const Login = ({ tryLogin, usetfa, user, __ }) => {
 
     return (
         <div style={{ margin: "auto", width: "100%", maxWidth: 500 }}>
+            <p>{state.state === 6 && __(state.error)}</p>
             <form onSubmit={handleLogin}>
                 <label for="username">{__("Username")}</label>
                 <input style={inputStyle} id="username" value={username} onChange={e => setUsername(e.target.value)} />
@@ -45,6 +47,8 @@ const Login = ({ tryLogin, usetfa, user, __ }) => {
                 <button id="log-in-button" style={inputStyle}>{__("Log in -button")}</button>
             </form>
 
+            {state.state === 4 && <Loader />}
+
             <button onClick={() => {
                 document.cookie = "piekija-token=null";
                 location.href = `${baseUrl}/google/login`;
@@ -57,7 +61,8 @@ export default connect(
     state => ({
         usetfa: state.token.usetfa,
         user: state.user,
-        __: __(state)
+        __: __(state),
+        state: state.loading.login
     }),
     { tryLogin }
 )(Login);

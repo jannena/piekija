@@ -172,6 +172,7 @@ export default (slog, def) => {
         "name is missing": "Jotakin kenttää ei ole täytetty",
 
         "username or password is missing": "Käyttäjänimi tai salasana puuttuu",
+        "wrong username or password": "Virheellinen käyttäjänimi tai salasana",
         "code needed": "Kaksivaiheisen tunnistautumisen koodi tarvitaan",
         "invalid code": "Virheellinen kaksivaiheisen tunnistautumisen koodi",
 

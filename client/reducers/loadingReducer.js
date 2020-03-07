@@ -53,6 +53,10 @@ const init = {
         state: 0,
         error: null
     },
+    login: {
+        state: 0,
+        error: null
+    },
     others: {},
     loading: 0
 };
@@ -137,6 +141,12 @@ const loadingReducer = (state = init, action) => {
                 circulation_item: { state: updateToState, error: action.error || null },
                 loading
             }
+        case "LOGIN":
+            return {
+                ...state,
+                login: { state: updateToState, error: action.error || null },
+                loading
+            };
     }
     return state;
 };
