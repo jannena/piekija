@@ -27,7 +27,7 @@ const StaffHolds = ({ state, holds, locations, getHolds, currentLocation, __ }) 
                 <div>{__("Holds")}: {hold.queue}</div>
                 <div>{__("Shelf location")}: {hold.shelfLocation}</div>
                 <div>{__("For")}: {hold.record.for}</div>
-                <div>{__("Pick-up location")}: {hold.pickupLocation.name}</div>
+                <div>{__("Pick-up location")}: {hold.pickupLocation && hold.pickupLocation.name}</div>
             </div>
         </div>)}
     </div>;

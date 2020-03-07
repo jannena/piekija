@@ -55,7 +55,7 @@ const Circulation = ({ uState, iState, user, item, searchForItem, searchForUser,
             {user && <div style={{ paddingLeft: 10 }}>
                 <div>{__("Barcode")}: {user.barcode}</div>
                 <div>{__("Name")}: {user.name} ({user.loans.length} {__("after-number-loans")}, {user.holds.length} {__("after-number-holds")})</div>
-                <button id="search-item-button" onClick={() => history.push("/staff/users")}>{__("Show user")}</button>
+                <button onClick={() => history.push("/staff/users")}>{__("Show user")}</button>
             </div>}
         </div>
 
@@ -65,7 +65,7 @@ const Circulation = ({ uState, iState, user, item, searchForItem, searchForUser,
             <div style={{ display: "flex" }}>
                 <form onSubmit={searchItem}>
                     <label htmlFor="item">{__("Item barcode")}: </label> <input id="item" name="item" />
-                    <button>{__("search-button")}</button>
+                    <button id="search-item-button">{__("search-button")}</button>
                 </form>
                 {item && <button onClick={clearItem}>{__("clear-button")}</button>}
                 {iState.state === 4 && <Loader center={false} small={true} />}

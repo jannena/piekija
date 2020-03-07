@@ -272,7 +272,7 @@ circulationRouter.delete("/hold", async (req, res, next) => {
             const nextPickupLocation = nextFirstHolder.holds.filter(hold => hold.record.toString() === record._id.toString());
             await Item.updateMany(
                 { record: recordId, state: "placed a hold" },
-                { $set: { state: "not loaned", stateFirstHoldLocation: nextPickupLocation.location } }
+                { $set: { state: "placed a hold", stateFirstHoldLocation: nextPickupLocation[0].location } }
             );
         }
 
@@ -315,7 +315,7 @@ circulationRouter.put("/hold", async (req, res, next) => {
                 record.holds = record.holds.slice(1);
                 await record.save();
 
-                if (record.holds.length <= 1) await Item.updateMany({ _id: { $in: record.items }, state: "placed a hold" }, { $set: { state: "not loaned" } });
+                if (record.holds.length === 0) await Item.updateMany({ _id: { $in: record.items }, state: "placed a hold" }, { $set: { state: "not loaned" } });
                 break;
 
             case "being carried":

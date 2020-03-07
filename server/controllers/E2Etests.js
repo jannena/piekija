@@ -102,7 +102,7 @@ router.post("/initrecords", async (req, res) => {
     const loantype = await lt.save();
 
     const lc = new Location({
-        name: "This is a location",
+        name: "This is a new location",
         totalLoanCount: 0
     });
     const location = await lc.save();

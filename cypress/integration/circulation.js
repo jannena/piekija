@@ -11,11 +11,12 @@ describe("when staff user is logged in", () => {
         cy.get("#username").type("basicuser");
         cy.get("#current-password").type("salasana");
         cy.get("#log-in-button").click();
+        cy.get(".close-notification").first().click();
 
         cy.get("#main-search-field").type("Imaginaerum");
         cy.get("#search-button").click();
         cy.contains("Imaginaerum").click();
-        cy.get(".pickup-location").select("This is a new location");
+        cy.get("select.pickup-location").select("This is a new location");
         cy.contains("Not loaned"); // EVO
         cy.contains("Loaned").should("not.exist"); // EVO
         cy.get("#place-a-hold-button").click();
@@ -23,14 +24,15 @@ describe("when staff user is logged in", () => {
         cy.contains("A new hold was created"); // EVO
         cy.contains("Holds: 1"); // EVO
         cy.contains("Your queue number: 1"); // EVO
-        cy.contains("Pick-up location: This is a location"); // EVO
+        cy.contains("Pick-up location: This is a new location"); // EVO
+        cy.get(".close-notification").first().click();
 
 
         // AGAIN
-        cy.get("#main-search-field").type("Liitu-ukko");
+        cy.get("#main-search-field").clear().type("Liitu-ukko");
         cy.get("#search-button").click();
         cy.contains("Liitu-ukko").click();
-        cy.get(".pickup-location").select("This is the second location");
+        cy.get("select.pickup-location").select("This is the second location");
         cy.contains("Not loaned"); // EVO
         cy.contains("Loaned").should("not.exist"); // EVO
         cy.get("#place-a-hold-button").click();
@@ -45,9 +47,9 @@ describe("when staff user is logged in", () => {
         cy.contains("Holds").click(); // EVO
         cy.contains("Liitu-ukko");
         cy.contains("Imaginaerum");
-        cy.contains("Queue  number: 1"); // EVO
+        cy.contains("Queue number: 1"); // EVO
         cy.contains("Pick-up location: This is a new location"); // EVO
-        cy.contains("Pick-up-location: This is the second location"); // EVO
+        cy.contains("Pick-up location: This is the second location"); // EVO
     });
 
     it("another user can place a hold and their queue number will be correct", () => {
@@ -56,6 +58,7 @@ describe("when staff user is logged in", () => {
         cy.get("#username").type("usicbaser");
         cy.get("#current-password").type("salasana");
         cy.get("#log-in-button").click();
+        cy.get(".close-notification").first().click();
 
         cy.get("#main-search-field").type("Imaginaerum");
         cy.get("#search-button").click();
@@ -71,7 +74,8 @@ describe("when staff user is logged in", () => {
         cy.contains("Pick-up location: This is the second location"); // EVO
 
         // AGAIN
-        cy.get("#main-search-field").type("Liitu-ukko");
+        cy.get("#main-search-field").clear().type("Liitu-ukko");
+        cy.get(".close-notification").first().click();
         cy.get("#search-button").click();
         cy.contains("Liitu-ukko").click();
         cy.get(".pickup-location").select("This is a new location");
@@ -82,7 +86,7 @@ describe("when staff user is logged in", () => {
         cy.contains("A new hold was created"); // EVO
         cy.contains("Holds: 2"); // EVO
         cy.contains("Your queue number: 2"); // EVO
-        cy.contains("Pick-up location: This is a location"); // EVO
+        cy.contains("Pick-up location: This is a new location"); // EVO
     });
 
     it("staff can receive correct pick-up location", () => {
@@ -91,6 +95,7 @@ describe("when staff user is logged in", () => {
         cy.get("#username").type("adminuser");
         cy.get("#current-password").type("salasana");
         cy.get("#log-in-button").click();
+        cy.get(".close-notification").first().click();
 
         cy.get("#log-in-user-menu").click();
         cy.get("#staff-link").click();
@@ -100,8 +105,8 @@ describe("when staff user is logged in", () => {
         cy.contains("Get").click(); // EVO
         cy.contains("Imaginaerum");
         cy.contains("Liitu-ukko");
-        cy.contains("Holds: 1");
-        cy.contains("Holds: 2").should("not.exist");
+        cy.contains("Holds: 2");
+        cy.contains("Holds: 1").should("not.exist");
         cy.contains("Pick-up location: This is a new location"); // EVO
         cy.contains("Pick-up location: This is the second location"); // EVO
 
@@ -113,7 +118,7 @@ describe("when staff user is logged in", () => {
         cy.get("#search-item-button").click();
         cy.contains("Imaginaerum");
         cy.contains("State: Placed a hold"); // EVO
-        cy.contanins("There are holds for this item"); // EVO
+        cy.contains("There are holds for this item"); // EVO
         cy.contains("Hold this item for its hold placer"); // EVO
 
         cy.get("#item").clear().type("2/1");
@@ -133,8 +138,8 @@ describe("when staff user is logged in", () => {
         cy.get("#log-in-button").click();
 
         cy.contains("Holds").click(); // EVO
-        cy.get(".hold button").eq(1).click();
-        cy.contains("A new hold was removed"); // EVO
+        cy.get(".hold button").eq(0).click();
+        cy.contains("A hold was removed"); // EVO
         cy.contains("Imaginaerum").should("not.exist");
     });
 
@@ -156,25 +161,30 @@ describe("when staff user is logged in", () => {
         cy.get("#username").type("adminuser");
         cy.get("#current-password").type("salasana");
         cy.get("#log-in-button").click();
+        cy.get(".close-notification").first().click();
 
         cy.get("#log-in-user-menu").click();
-        cy.get("#staff-user").click();
+        cy.get("#staff-link").click();
         cy.contains("Holds").click(); // EVO
         cy.get(".tabs select").select("This is a new location");
         cy.contains("Get").click(); // EVO
 
-        cy.contains("Holds: 1"); // EVO
-        cy.contains("Pick-up location: This is the second location");
-        cy.contains("Pick-up location: This is a new location").should("not.exist");
+        cy.contains("Holds: 2"); // EVO
+        cy.contains("Imaginaerum");
+        cy.contains("Liitu-ukko");
+        cy.contains("Holds: 1");
+        cy.contains("Pick-up location: This is the second location"); // EVO
+        cy.contains("Pick-up location: This is a new location").should("not.exist"); // EVO
     });
 
     it("staff can reserve item for hold placer", () => {
+        cy.contains("Circulation").click(); // EVO
         cy.get(".tabs select").select("This is a new location");
         cy.get("#set-location-button").click();
 
         cy.contains("Circulation").click(); // EVO
         cy.get("#item").type("1/2");
-        cy.get("#item-search-button").click();
+        cy.get("#search-item-button").click();
         cy.contains("Send this item for its hold placer").click(); // EVO
         cy.contains("Pick-up location of current item: This is the second location");
         cy.contains("Reserved for: Usic Baser (usicbaser)");
@@ -183,10 +193,12 @@ describe("when staff user is logged in", () => {
         cy.get(".tabs select").select("This is the second location");
         cy.get("#set-location-button").click();
 
+        cy.contains("Mark as pick-up"); // EVO
+
         cy.get("#item").clear().type("2/1");
-        cy.get("#item-search-button").click();
+        cy.get("#search-item-button").click();
         cy.contains("Hold this item for its hold placer").click(); // EVO
-        cy.contains("Mark as pick-up").click(); // EVO
+        // cy.contains("Mark as pick-up").click(); // EVO
     });
 
     it("first user get correct notifications on holds tab", () => {
@@ -198,7 +210,7 @@ describe("when staff user is logged in", () => {
 
         cy.contains("Holds").click(); // EVO
         cy.contains("State: Being carried"); // EVO
-        cy.contains("State: Pick-up"); // EVO
+        // cy.contains("State: Pick-up"); // EVO
 
         cy.get("#main-search-field").type("Imaginaerum");
         cy.get("#search-button").click();
@@ -206,7 +218,7 @@ describe("when staff user is logged in", () => {
         cy.contains("Being carried"); // EVO
         cy.contains("Not loaned"); // EVO
 
-        cy.get("#main-search-field").type("Liitu-ukko");
+        cy.get("#main-search-field").clear().type("Liitu-ukko");
         cy.get("#search-button").click();
         cy.contains("Liitu-ukko").click();
         cy.contains("Pick-up") // EVO
@@ -219,27 +231,31 @@ describe("when staff user is logged in", () => {
         cy.get("#username").type("adminuser");
         cy.get("#current-password").type("salasana");
         cy.get("#log-in-button").click();
+        cy.get(".close-notification").first().click();
 
         cy.get("#log-in-user-menu").click();
         cy.get("#staff-link").click();
 
         cy.contains("Circulation").click(); // EVO
         cy.get("#item").type("2/1");
-        cy.get("#item-search-button").click();
-        cy.get("#user").type("usicbaser");
-        cy.get("#user-search-button").click();
-        cy.contains("Reserved for: Usic Baser"); // EVO
+        cy.get("#search-item-button").click();
+        cy.get("#user").type("basicuser");
+        cy.get("#search-user-button").click();
+        cy.contains("Reserved for: Basic User"); // EVO
         cy.contains("State: Pick-up"); // EVO
-        cy.contains("Loan item to Usic Baser").click(); // EVO
-        cy.contains("State: Loaned for Admin User (adminuser)");
+        cy.contains("Loan item to Basic User").click(); // EVO
+        cy.contains("State: Loaned for Basic User (basicuser)");
 
         cy.get(".tabs select").select("This is the second location");
         cy.get("#set-location-button").click();
 
         cy.get("#item").clear().type("1/2");
-        cy.get("#item-search-button").click();
-        cy.contains("Mark pick-up").click(); // EVO
-        cy.contains("Loan item for Usic Baser (usicbaser)").click(); // EVO
+        cy.get("#search-item-button").click();
+        cy.contains("Mark as pick-up").click(); // EVO
+        cy.contains("State: Pick-up");
+        cy.get("#user").clear().type("usicbaser");
+        cy.get("#search-user-button").click();
+        cy.contains("Loan item to Usic Baser").click(); // EVO
     });
 
     it("item states are correct", () => {
@@ -251,7 +267,7 @@ describe("when staff user is logged in", () => {
         cy.contains("Loaned"); // EVO
         cy.contains("Not loaned"); // EVO
 
-        cy.get("#main-search-field").type("Liitu-ukko");
+        cy.get("#main-search-field").clear().type("Liitu-ukko");
         cy.get("#search-button").click();
         cy.contains("Liitu-ukko").click();
         cy.contains("Placed a hold"); // EVO
@@ -263,15 +279,24 @@ describe("when staff user is logged in", () => {
         cy.get("#username").type("adminuser");
         cy.get("#current-password").type("salasana");
         cy.get("#log-in-button").click();
+        cy.get(".close-notification").first().click();
 
         cy.get("#log-in-user-menu").click();
         cy.get("#staff-link").click();
         cy.contains("Circulation").click(); // EVO
 
         cy.get("#user").type("usicbaser");
-        cy.get("#user-search-button").click();
-        cy.get("Users").click(); // EVO
-        cy.get("Loans").click(); // EVO
+        cy.get("#search-user-button").click();
+
+        cy.get(".tabs select").select("This is a new location");
+        cy.get("#set-location-button").click();
+        cy.get("#item").type("2/2");
+        cy.get("#search-item-button").click();
+        cy.contains("Send this item for its hold placer").click();
+        cy.contains("Loan item to Usic Baser").click();
+
+        cy.contains("Users").click(); // EVO
+        cy.contains("Loans").click(); // EVO
         cy.get(".loan .return-button").eq(1).click();
         cy.contains("Item was returned");
         cy.contains("Liitu-ukko").should("not.exist");
@@ -294,11 +319,11 @@ describe("when staff user is logged in", () => {
         cy.contains("Loaned"); // EVO
         cy.contains("Not loaned"); // EVO
 
-        cy.get("#main-search-field").type("Liitu-ukko");
+        cy.get("#main-search-field").clear().type("Liitu-ukko");
         cy.get("#search-button").click();
         cy.contains("Liitu-ukko").click();
-        cy.contains("Placed a hold"); // EVO
-        cy.contains("Placed a hold"); // EVO
+        cy.contains("Not loaned"); // EVO
+        cy.contains("Loaned"); // EVO
     });
 
     it("user can renew items", () => {
@@ -317,4 +342,5 @@ describe("when staff user is logged in", () => {
 
 
     // TODO: Can be loaned to user after becoming 'not loaned' after 'placed a hold'
+    // TODO: When all locations does not have all items
 });

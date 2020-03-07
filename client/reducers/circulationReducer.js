@@ -247,7 +247,7 @@ export const removeAHold = recordId => (dispatch, getState) => {
                 type: "PSUCCESS_CIRCULATION_REMOVE_HOLD",
                 record: recordId
             });
-            dispatch(notify("success", "A new hold was removed"));
+            dispatch(notify("success", "A hold was removed"));
         })
         .catch(onError(dispatch, "PFAILURE_CIRCULATION_REMOVE_HOLD"));
 };

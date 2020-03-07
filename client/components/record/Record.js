@@ -224,7 +224,7 @@ export default connect(
             console.log("TESTTESTTESTTESTTEST", r.id, id);
             return r.id === id
         }),
-        isLoggedIn: state.user && state.user.staff && typeof state.user.staff === "boolean",
+        isLoggedIn: state.user && typeof state.user.staff === "boolean",
         hasReviewed: state.user && state.user.reviews && state.user.reviews.some(r => r.record.id === ownProps.id),
         // testi: (() => {
         //     console.log("ösadkfölkasjdfölkjasdfölkjasdfölkjasdflkjhsdafölkjasdfölkjsadfölkjsadföljkasdf", state, state && state.user);
