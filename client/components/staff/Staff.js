@@ -68,8 +68,8 @@ const Staff = ({ isStaffUser, createRecord, createTemporaryRecord, history, __ }
         <Tab>
             <div>
                 <form onSubmit={createEmptyRecordFromTemplate}>
-                    <input name="ai" placeholder={__("Sequential number (optional)")} />
-                    <button>{__("Create empty record from template")}</button>
+                    <input id="ai" name="ai" placeholder={__("Sequential number (optional)")} />
+                    <button id="create-record-template">{__("Create empty record from template")}</button>
                 </form>
             </div>
             {/* <button onClick={() => setShowScanner(!showScanner)}>{__("Add record by scanning EAN code")}</button> */}

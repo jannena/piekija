@@ -71,7 +71,7 @@ export const Edit008 = ({ __, record, setRecord, close }) => {
             <Input id={"F008-1114"} title={`11-14 - ${__("Date 2")}`} options={[]} value={F008.slice(11, 15)} />
             <FormSelect id={"F008-1517"} title={`15-17 - ${__("Place of publication, production, or execution")}`} options={MARC21.countries.map(c => [`${c} - ${__(`coun-${c}`)}`, c])} selected={F008.slice(15, 18)} />
             <FormSelect id={"F008-3537"} title={`35-37 - ${__("Language")}`} options={MARC21.languages.map(c => [`${c} - ${__(`lang-${c}`)}`, c])} selected={F008.slice(35, 38)} />
-            <Button title={__("save-button")} />
+            <Button className="save-008-button" title={__("save-button")} />
         </Form>
     </td></tr>;
 };

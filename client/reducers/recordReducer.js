@@ -168,7 +168,7 @@ export const updateRecord = (recordId, recordMARC) => (dispatch, getState) => {
         .then(record => {
             console.log(record);
             dispatch({
-                type: "PSUCCESS_RECORD_GET",
+                type: "SUCCESS_RECORD_GET",
                 record: {
                     result: record,
                     record: MARC21.tryParse(record.record)

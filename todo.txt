@@ -1,14 +1,10 @@
 MUUT:
 - Korjaa yksinkertaisen muokkaimen tallennus
 
-
 TESTIT:
 - APIt
 - queryValidator
 - MARC21
-
-E2E-testit
-- tietueiden muokkaus
 
 VARAUKSET:
 - Entäs sitten kun nimikkeitä on jo noutopaikalla ja joku on jo toisaalla varannut nimikkeen.

@@ -50,14 +50,14 @@ const RecordItems = ({ record, items, locations, loantypes, addItem, removeItem,
             <hr />
             <Text id={`${data.id}-barcode`} value={<a href="#" onClick={handleMoveToItem(data.barcode)}>{data.barcode}</a>} name="barcode" title={__("Barcode")} description={__("staff-item-barcode-info")} />
             <FormSelect id={`${data.id}-loantype`} selected={data.loantype ? data.loantype.id : ""} title={__("Loantype")} name="loantype" options={loantypes.map(loantype => [loantype.name, loantype.id])} />
-            <FormSelect id={`${data.id}-location`} selected={data.location ? data.location.id : ""} title={__("Location")} name="location" options={locations.map(location => [location.name, location.id])} />
-            <Input id={`${data.id}-shelfLocation`} value={data.shelfLocation} name="shelfLocation" title={__("Shelf location")} description={__("staff-item-shelf-location-info")} />
+            <FormSelect className="edit-location" id={`${data.id}-location`} selected={data.location ? data.location.id : ""} title={__("Location")} name="location" options={locations.map(location => [location.name, location.id])} />
+            <Input className="edit-shelfLocation" id={`${data.id}-shelfLocation`} value={data.shelfLocation} name="shelfLocation" title={__("Shelf location")} description={__("staff-item-shelf-location-info")} />
             {/* <Input id={`${data.id}-state`} value={data.state} name="state" title={__("State")} /> */}
-            <FormSelect name="state" selected={data.state} title={__("State")} options={itemStateOptions} description={__("staff-item-state-info")} />
-            <Input id={`${data.id}-note`} value={data.note} name="note" title={__("Note")} />
+            <FormSelect className="edit-state" name="state" selected={data.state} title={__("State")} options={itemStateOptions} description={__("staff-item-state-info")} />
+            <Input className="edit-note" id={`${data.id}-note`} value={data.note} name="note" title={__("Note")} />
             <Grid>
-                <DoNotSendButton onClick={handleRemoveItem(data.id)} title={__("delete-button")} />
-                <Button title={__("save-button")} />
+                <DoNotSendButton className="remove-item-button" onClick={handleRemoveItem(data.id)} title={__("delete-button")} />
+                <Button className="save-item-button" title={__("save-button")} />
             </Grid>
         </Form>
     </>;
@@ -73,7 +73,7 @@ const RecordItems = ({ record, items, locations, loantypes, addItem, removeItem,
                     <Input name="shelfLocation" value="-" title={__("Shelf location")} description={__("staff-item-shelf-location-info")} />
                     <FormSelect name="state" title={__("State")} options={itemStateOptions} description={__("staff-item-state-info")} />
                     <Input name="note" title={__("Note")} />
-                    <Button title={__("save-button")} />
+                    <Button className="create-item-button" title={__("save-button")} />
                 </Form>
             </Expandable>
             <Table widths={[25, 25, 25, 25]} titles={[__("Barcode"), __("Loantype"), __("Location"), __("State")]} data={items} form={form}>

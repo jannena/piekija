@@ -25,7 +25,7 @@ const RecordTools = ({ record, user, addRecordToShelf, history, __ }) => {
                 <Select name="shelf" options={user.shelves.map(shelf => [shelf.id.name, shelf.id.id])} />
                 <button>{__("Add to shelf")}</button>
             </form>
-            {user.staff === true && <button onClick={handleEditRecord}>{__("Edit record")}</button>}
+            {user.staff === true && <button onClick={handleEditRecord} id="edit-record-button">{__("Edit record")}</button>}
         </div>
     );
 };

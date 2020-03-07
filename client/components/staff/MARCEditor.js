@@ -43,7 +43,7 @@ const RecordEditor = ({ record, updateRecord, createTemporaryRecord, __ }) => {
 
     const onAddField = e => {
         e.preventDefault();
-        
+
         const field = e.target.field.value;
         console.log("addign field", field, Number(field), field.length);
         if (field.length !== 3 || isNaN(Number(field))) return console.log("malformatted field code");
@@ -168,15 +168,15 @@ const RecordEditor = ({ record, updateRecord, createTemporaryRecord, __ }) => {
                     <tr>
                         <td>{__("Add field")}</td>
                         <td><form onSubmit={onAddField}>
-                            <input name="field" maxLength="3" minLength="3" />
-                            <button>{__("Add field")}</button>
+                            <input id="MARC-field" name="field" maxLength="3" minLength="3" />
+                            <button id="add-MARC-field">{__("Add field")}</button>
                         </form></td>
                     </tr>
                     <tr><td colSpan="3" style={fieldSeparatorStyle}><hr /></td></tr>
                     <tr>
                         <td>LEADER</td>
                         <td><input onChange={onLEADERChange} value={editedRecord.LEADER} /></td>
-                        <td><button onClick={() => setEditLEADER(!editLEADER)}>{__("edit-button") + " LEADER"}</button></td>
+                        <td><button id="edit-LEADER-button" onClick={() => setEditLEADER(!editLEADER)}>{__("edit-button") + " LEADER"}</button></td>
                     </tr>
                     {editLEADER && <EditLEADER __={__} record={editedRecord} close={() => setEditLEADER(false)} setRecord={setEditedRecord} />}
                     {editedRecord.FIELDS.map(([code = "000", fieldsData = {}], field) => <React.Fragment key={code}>
@@ -187,17 +187,17 @@ const RecordEditor = ({ record, updateRecord, createTemporaryRecord, __ }) => {
                                 <td id={`field-${code}`}>{code} <a href="#top">{__("back-to-top")}</a></td>
                                 <td>
                                     {fieldData.indicators ? <>
-                                        <input style={indicatorInputStyle} value={fieldData.indicators[0]} onChange={onIndicatorChange(field, i, 0)} />
-                                        <input style={indicatorInputStyle} value={fieldData.indicators[1]} onChange={onIndicatorChange(field, i, 1)} />
+                                        <input className={`MARC-indicator-${code}-1`} style={indicatorInputStyle} value={fieldData.indicators[0]} onChange={onIndicatorChange(field, i, 0)} />
+                                        <input className={`MARC-indicator-${code}-2`} style={indicatorInputStyle} value={fieldData.indicators[1]} onChange={onIndicatorChange(field, i, 1)} />
                                     </>
                                         : <input value={fieldData} onChange={onFieldChange(code)} />}
                                 </td>
                                 <td style={{ display: "flex" }}>
                                     {fieldData.subfields && <form onSubmit={onAddSubfield(code, field, i)}>
-                                        <input name="subfield" minLength="1" maxLength="1" />
-                                        <button>{__("Add subfield")}</button>
-                                    </form> || (code === "008" && <button onClick={() => setEdit008(!edit008)}>{`${__("edit-button")} ${code}`}</button>)}
-                                    <button onClick={onRemoveField(code, i)}>{__("Remove field")}</button>
+                                        <input className={`MARC-subfield-${code}-${i}`} name="subfield" minLength="1" maxLength="1" />
+                                        <button className={`MARC-add-subfield-${code}-${i}`}>{__("Add subfield")}</button>
+                                    </form> || (code === "008" && <button id="open-008-editor" onClick={() => setEdit008(!edit008)}>{`${__("edit-button")} ${code}`}</button>)}
+                                    <button className={`MARC-remove-field-${code}-${i}`} onClick={onRemoveField(code, i)}>{__("Remove field")}</button>
                                 </td>
                             </tr>
                             {code === "008" && edit008 && <Edit008 __={__} record={editedRecord} setRecord={setEditedRecord} close={() => setEdit008(false)} />}
@@ -209,14 +209,14 @@ const RecordEditor = ({ record, updateRecord, createTemporaryRecord, __ }) => {
                                     {subfieldData.map((value, n) => <tr key={n}>
                                         <td></td>
                                         <td>
-                                            <input value={value} onChange={onSubfieldChange(field, i, subfieldCode, n)} />
-                                            <button onClick={onRemoveSubfield(field, i, subfieldCode, n)}>x</button>
+                                            <input className={`MARC-field-${code}-${i}-subfield-${subfieldCode}-${n}`} value={value} onChange={onSubfieldChange(field, i, subfieldCode, n)} />
+                                            <button className={`MARC-remove-subfield-${code}-${i}-subfield-${subfieldCode}-${n}`} onClick={onRemoveSubfield(field, i, subfieldCode, n)}>x</button>
                                         </td>
                                     </tr>)}
                                 </React.Fragment>)}
                         </React.Fragment>)}
                     </React.Fragment>)}
-                    <tr><td colSpan={3}><button onClick={onSave}>{__("save-button")}</button></td></tr>
+                    <tr><td colSpan={3}><button id="save-MARC-button" onClick={onSave}>{__("save-button")}</button></td></tr>
                     <tr><td colSpan={3}><button onClick={onPreviewSave}>{__("Save for preview")}</button></td></tr>
                 </tbody>
             </table>

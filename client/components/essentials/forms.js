@@ -45,7 +45,7 @@ export const Textarea = props => <InputTemplate {...props}>
 </InputTemplate>;
 
 export const Input = props => <InputTemplate {...props}>
-    <input style={{ width: "100%" }} id={props.id || props.name} name={props.name} type={props.type} defaultValue={props.value} />
+    <input style={{ width: "100%" }} className={props.className} id={props.id || props.name} name={props.name} type={props.type} defaultValue={props.value} />
 </InputTemplate>
 
 export const Text = props => <InputTemplate {...props}>
@@ -74,7 +74,7 @@ export const Grid = ({ children }) => {
 export const FormSelect = props => {
     console.log(props);
     return <InputTemplate {...props}>
-        <select id={props.id || props.name} name={props.name} defaultValue={props.selected}>
+        <select className={props.className} id={props.id || props.name} name={props.name} defaultValue={props.selected}>
             {props.options.map(o => <option key={o[1]} value={o[1]}>{o[0]}</option>)}
         </select>
     </InputTemplate>

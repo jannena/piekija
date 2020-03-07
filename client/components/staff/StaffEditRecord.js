@@ -40,7 +40,7 @@ const StaffEditRecord = ({ state, id, record, getRecord, removeRecord, createRec
         </form>;
         else return <>
             <button onClick={() => history.push(`/staff/records`)}>{__("Back to staff screen")}</button>
-            <button onClick={() => history.push(`/record/${id}`)}>{__("Preview as normal user")}</button>
+            <button id="preview-as-user" onClick={() => history.push(`/record/${id}`)}>{__("Preview as normal user")}</button>
         </>;
     };
 
