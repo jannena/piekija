@@ -36,7 +36,7 @@ import Template, { TableOfContents } from "../RESTTemplate";
 
 
 ## Records
-<Template verb="GET" address="/api/record/:id" privileges={1}
+<Template verb="GET" address="/api/record/:id" privileges={0}
     description="Gets the record."
     returns="The record"
     parameters={[]}
@@ -45,17 +45,28 @@ import Template, { TableOfContents } from "../RESTTemplate";
 <Template verb="POST" address="/api/record" privileges={2}
     description="Creates a record with given marc21 data."
     returns="The saved record"
-    parameters={[["type", "must be 'marc21'", true], ["data", "marc21 data", true]]}
+    parameters={[["type", "must be 'marc21'", true], ["data", "marc21 data (JSON)", true]]}
     errors={["type or data is missing", "invalid marc21 data"]} />
 
 <Template verb="PUT" address="/api/record/:id" privileges={2}
     description="Updates the record with given marc21 data."
     returns="The updated record"
-    parameters={[["type", "must be 'marc21'", true], ["data", "marc21 data", true]]}
+    parameters={[["type", "must be 'marc21'", true], ["data", "marc21 data (JSON)", true]]}
     errors={["type or data is missing", "invalid marc21 data"]} />
 
 <Template verb="DELETE" address="/api/record/:id" privileges={2}
     description="Removes the record."
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="POST" address="/api/record/:id/review" privileges={1}
+    description="Creates a review for the record."
+    returns="The review"
+    parameters={[["review", "string", true], ["score", "1-6", ], ["public", "", true]]}
+    errors={["score or review or public is missing", "user has already reviewed this record", "record not found"]} />
+
+<Template verb="DELETE" address="/api/record/:id/review/:reviewId" privileges={2}
+    description="Removes the review."
     parameters={[]}
     errors={[]} />
 
@@ -69,7 +80,7 @@ import Template, { TableOfContents } from "../RESTTemplate";
         ["record", "record id", true],
         ["location", "location id", true],
         ["loantype", "loantype id", true],
-        ["state", "not in use | loaned | not loaned | broken | placed a hold | other", true],
+        ["state", "not in use | loaned | not loaned | pick-up | being carried | broken | placed a hold | other", true],
         ["shelfLocation", "string", true]
     ]}
     errors={["barcode or record or location or loantype or state or shelfLocation is missing"]} />
@@ -269,9 +280,15 @@ import Template, { TableOfContents } from "../RESTTemplate";
     errors={["username is missing", "user not found"]} />
 
 ## Users (me)
-<Template verb="POST" address="/api/user/me" privileges={1}
+<Template verb="GET" address="/api/user/me" privileges={1}
     description="Gets loans and information of the logged-in user"
-    returns="User loans and information"
+    returns="User's loans and information"
+    parameters={[]}
+    errors={[]} />
+
+<Template verb="GET" address="/api/user/me/loanhistory" privileges={1}
+    description="Gets the loan hisotry of logged in user"
+    returns="User's loan history"
     parameters={[]}
     errors={[]} />
 
@@ -322,3 +339,26 @@ import Template, { TableOfContents } from "../RESTTemplate";
     returns="{id: itemId, dueDate}"
     parameters={[["item", "item id", "true"]]}
     errors={["renewTimes exeeded", "you cannot renew this loan"]} />
+
+<Template verb="POST" address="/api/circulation/hold" privileges={1}
+    description="Places a hold for the given record"
+    returns="{record:{}, queue:number, location:{}}"
+    parameters={[["record", "The record", true], ["location", "The pick-up location", true]]}
+    errors={["record or location is missing", "record does not exist", "current user has already placed a hold for this item", "Invalid location", "there are not items attached to this record", "loantype denies placing a hold for any items of this record"]} />
+
+<Template verb="DELETE" address="/api/circulation/hold" privileges={1}
+    description="Removes the hold of the given record"
+    parameters={[["record", "The record", true]]}
+    errors={["record is missing", "record does not exist", "Hold can not be removed anymore"]} />
+
+<Template verb="PUT" address="/api/circulation/hold" privileges={2}
+    description="Reserves specific item for first hold placer"
+    returns="item with updated stateHoldFor and stateFirstHoldLocation"
+    parameters={[["item", "", true], ["location", "The current location of staff member", true]]}
+    errors={["item or location is missing", "current location is not the pick-up location if the item", "item does not have state 'placed a hold' or 'being carried'"]} />
+
+<Template verb="PATCH" address="/api/circulation/hold" privileges={2}
+    description="Gets items (with holds) of current location"
+    returns="List of items"
+    parameters={[["location", "", true]]}
+    errors={["location is missing"]} />

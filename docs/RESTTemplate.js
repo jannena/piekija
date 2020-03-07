@@ -67,7 +67,9 @@ const tableOfContents = [
         "GET /api/record/:id",
         "POST /api/record",
         "PUT /api/record/:id",
-        "DELETE /api/record/:id"
+        "DELETE /api/record/:id",
+        "POST /api/record/:id/review",
+        "DELETE /api/record/:id/review/:reviewId"
     ],
 
     [
@@ -127,7 +129,8 @@ const tableOfContents = [
 
     [
         "Users (me)",
-        "POST /api/user/me",
+        "GET /api/user/me",
+        "GET /api/user/me/loanhistory",
         "PUT /api/user/me",
     ],
 
@@ -143,6 +146,10 @@ const tableOfContents = [
         "POST /api/circulation/loan",
         "POST /api/circulation/return",
         "POST /api/circulation/renew",
+        "POST /api/circulation/hold",
+        "DELETE /api/circulation/hold",
+        "PUT /api/circulation/hold",
+        "PATCH /api/circulation/hold",
     ]
 ];
 

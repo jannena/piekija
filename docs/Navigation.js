@@ -18,12 +18,12 @@ const Navigation = () => {
         <NavTitle title="Aloitus" address="" />
         <NavCategory title="Käyttäjälle">
             <NavTitle title="Hakuohjeet" address="search-help" />
-            <NavTitle title="Käyttäjätili ja hyllyt" address="user-account" />
+            <NavTitle title="Käyttäjätili, varaaminen ja hyllyt" address="user-account" />
         </NavCategory>
         <NavCategory title="Henkilökunnalle">
             <NavTitle title="Nimityksiä" address="staff" />
             <NavTitle title="Tietueet" address="records" />
-            <NavTitle title="Lainaaminen" address="circulation" />
+            <NavTitle title="Lainaaminen ja varaukset" address="circulation" />
             <NavTitle title="Käyttäjien hallinta" address="users" />
             <NavTitle title="Etusivu-uutiset" address="notes" />
             <NavTitle title="Tilastot" address="statistics" />

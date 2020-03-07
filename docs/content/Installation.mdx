@@ -5,9 +5,25 @@
 4. (Mikäli backend toimii eri ositteessa kuin frontend, tiedostoon *client/globals.js* tulee muuttujaan baseUrl asettaa backendin URL-osoite. Tällöin on huomattava, että frontend sijaitsee hakemistossa *server/build*. Muutoin tätä vaihetta ei tarvita.)
 5. Järjestelmä käynnistyy komennolla **npm start** oletuksena porttiin 3000.
 
-Voilà!
-
 Mahdollisten päivitysten jälkeen tulee suorittaa komento **npm run update:records**, joka jäsentää kaikki MARC21-koodit tietokantaan uudelleen.
+
+## Konfiguraatiotiedosto
+Konfiguraatiotiedosto on Piekijan juurihakemistossa sijaitseva *.env*-tiedosto. Se ilmestyy, komento **npm run piekija:install** suoritetaan.
+
+| Asetus | Kuvaus |
+| :-- | :-- |
+| SECRET | merkkijono, jolla salataan JWT:t |
+| DATABASE_URI | tietokantaosoite |
+| TEST_DATABSE_URI | testien tietokantaosoite |
+| PERFORMANCE_LIMIT | Jos hakutuloksia on yli tämän määrän, haun yhteydessä ei palauteta hakutuloksen rajausvaihtoehtoja eikä hakua rajata osuvuuden mukaan. |
+| GOOGLE_USE_GOOGLE_LOGIN | Otetaanko Google-tilin avulla kirjautuminen käyttöön (true tai false) |
+| GOOGLE_CLIENT_ID | |
+| GOOGLE_CLIENT_SECRET | |
+| GOOGLE_REDIRECT_URI | |
+| ENABLE_GRAPHQL | Otetaanko GraphQL-palvelin käyttöön (true tai false) |
+| ENABLE_ALL_CORS | Sallitaanko pyynnöt backendiin kaikista origineista (true tai false) |
+| CORS_ORIGIN | puolipisteettä erotettuna kaikki ne originit, joista pyynnöt sallitaan |
+| PORT | porttinumero |
 
 ## Varmuuskopiointi
 PieKiJan tietokantaan tallennetut tietueet, nimekkeet, lainausmallit ja sijainnit voi varmuuskopioida komennolla **npm run export**. Varmuuskopio tallennetaan PieKiJan juurihakemistoon. Hyllyjä eikä käyttäjiä **ei** varmuuskopioida.

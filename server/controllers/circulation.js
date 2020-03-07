@@ -222,8 +222,6 @@ circulationRouter.post("/hold", async (req, res, next) => {
         await req.authenticated.save();
         await record.save();
 
-        // TODO: Lisää johonkin tieto, että henkilökunta tietää toimia varauksen eteen.
-
         res.status(201).json({
             record: {
                 id: record._id,

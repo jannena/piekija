@@ -3,7 +3,6 @@ MUUT:
 - EHDOTTOMASTI: Lisää Google-kirjautumista varten kertakäyttöinen 'code', jonka avulla saa tietokannasta tokenin!!!
 
 - päivitä testit
-- päivitä dokumentaatio ja ohjeet
 
 
 MUUT TESTIT:
