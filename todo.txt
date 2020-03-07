@@ -1,14 +1,11 @@
 MUUT:
 - Korjaa yksinkertaisen muokkaimen tallennus
-- EHDOTTOMASTI: Lisää Google-kirjautumista varten kertakäyttöinen 'code', jonka avulla saa tietokannasta tokenin!!!
-
-- päivitä testit
 
 
-MUUT TESTIT:
+TESTIT:
+- APIt
 - queryValidator
 - MARC21
-
 
 E2E-testit
 - tietueiden muokkaus

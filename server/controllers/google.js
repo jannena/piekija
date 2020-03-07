@@ -2,10 +2,12 @@ const googleRouter = require("express").Router();
 const axios = require("axios");
 const qs = require("querystring");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 const config = require("../utils/config");
 
 const User = require("../models/User");
+const Code = require("../models/Code");
 
 const { GOOGLE_LOGIN: GOOGLE } = require("../utils/config");
 
@@ -83,7 +85,14 @@ googleRouter.use("/", async (req, res, next) => {
             };
             const token = jwt.sign(tokenData, config.SECRET);
 
-            return res.cookie("piekija-token", token).redirect("//localhost:3000/set_token?token=" + token);
+            const newCode = new Code({
+                created: new Date(),
+                giveMe: crypto.createHash("md5").update(`${token}${profile.email}${Math.random()}${Math.random()}`).digest("hex"),
+                iReturn: token
+            });
+            await newCode.save();
+
+            return res.cookie("piekija-token", token).redirect("//localhost:3000/set_token?token=" + newCode.giveMe);
         }
         else {
             const userAlreadyHavingThisGoogleAccount = await User.findOne({ "connectedAccounts.accountId": profile.email });

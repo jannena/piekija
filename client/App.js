@@ -21,6 +21,8 @@ import { setSocketIOEventListeners, startWS } from "./socket";
 import FrontPageNews from "./components/FrontPageNews";
 import __ from "./langs";
 
+import axios from "axios";
+import { baseUrl } from "./globals";
 import { parse as pqs } from "query-string";
 
 const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRecord, localShare, localUnhare, localUpdateShelf, localRemoveShelf, locations, getLocations, getLastNotes, history, __ }) => {
@@ -75,10 +77,17 @@ const App = ({ token, user, getUser, setToken, addRecord, removeRecord, updateRe
                     const params = pqs(location.search);
                     console.log("params trying", params, params.token);
                     if (params.token) {
-                        window.localStorage.setItem("piekija-token", params.token);
-                        setToken(params.token);
+                        axios.post(`${baseUrl}/code/giveme`, { giveMe: params.token })
+                            .then(response => response.data)
+                            .then(({ iReturn }) => {
+                                window.localStorage.setItem("piekija-token", iReturn);
+                                setToken(iReturn);
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
                     }
-                    // TODO: HUOM TODO!!!!!!!!!!: Tokenin kuljettaminen URL-osoitteessa ei liene kovin hyvä tapa!!
+
                     document.cookie = "piekija-token=null";
                     history.push("/user");
                 }} />
