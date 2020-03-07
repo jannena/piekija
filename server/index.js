@@ -6,17 +6,19 @@ const server = http.createServer(app);
 // Start the socket.io server
 require("./socket").start(server);
 
+const PORT = process.env.PORT || 3001;
 server.listen({
-    port: 3001
+    port: PORT
 }, () => {
-    console.log("Listening on port 3001");
+    console.log(`Listening on port ${PORT}`);
 });
 
 
 
 const graphql = require("./graphql");
+const { ENABLE_GRAPHQL } = require("./utils/config");
 
-graphql.listen().then(({ url, subscriptionsUrl }) => {
+if (ENABLE_GRAPHQL) graphql.listen().then(({ url, subscriptionsUrl }) => {
     console.log("GraphQL running at", url);
     console.log("Listening subscriptions at", subscriptionsUrl);
 });

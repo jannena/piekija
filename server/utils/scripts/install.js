@@ -45,17 +45,27 @@ const run = async (values) => {
         "GOOGLE_USE_GOOGLE_LOGIN=false",
         "GOOGLE_CLIENT_ID=null",
         "GOOGLE_CLIENT_SECRET=null",
-        "GOOGLE_REDIRECT_URI=null"
+        "GOOGLE_REDIRECT_URI=null",
+        "",
+        "ENABLE_GRAPHQL=false",
+        "",
+        "ENABLE_ALL_CORS=false",
+        "CORS_ORIGIN=http://localhost:3000;http://example.com",
+        "",
+        "PORT=3001"
     ];
 
     console.log("\r\n\r\nYOUR CONFIGURATION FILE\r\n------");
     console.log(config.join("\r\n"));
     console.log("------\r\n\r\n");
 
-    console.log(fs.existsSync(path.resolve(__dirname + "/../../../.env"))
+    const configFile = path.resolve(__dirname + "/../../../.env");
+    console.log(`\r\nCONFIG FILE: ${configFile}\r\n`);
+
+    console.log(fs.existsSync(configFile)
         ? "Config file already exists. Another one will not be created. \r\n\r\n"
         : "Config file does not exist. Creating...\r\n");
-    if (!fs.existsSync(path.resolve(__dirname + "/../../../.env"))) fs.writeFileSync(path.resolve(__dirname + "/../../../.env"), config.join("\n"));
+    if (!fs.existsSync(configFile)) fs.writeFileSync(configFile, config.join("\n"));
 
     await mongoose.connect(values[0], { useNewUrlParser: true, useUnifiedTopology: true });
 

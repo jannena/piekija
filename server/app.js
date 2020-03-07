@@ -29,13 +29,17 @@ const { authenticationMiddleware } = require("./middleware/authentication");
 console.log(config.DATABASE_URI);
 
 mongoose
-    .connect(config.DATABASE_URI, { useNewUrlParser: true })
+    .connect(config.DATABASE_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     .then(() => console.log("Connected to database"))
     .catch(() => console.log("Could not connect to database"));
-mongoose.set("useFindAndModify", false);
 
 app.use(bodyParser.json());
-app.use(cors());
+
+if (config.CORS === true) app.use(cors());
+else if (config.CORS_ORIGIN.length > 0) app.use(cors({
+    origin: config.CORS_ORIGIN,
+    optionsSuccessStatus: 200
+}));
 
 app.use(authenticationMiddleware);
 
