@@ -7,16 +7,12 @@ import __ from "../../langs";
 
 const MARC21 = require("../../../server/utils/marc21parser");
 
-// TODO: Things go bad after simple editor save
-
 const SimpleRecordEditor = ({ updateRecord, record2, __ }) => {
     const [record, setRecord] = useState(null);
     useEffect(() => {
         setRecord(record2);
     }, [record2]);
     if (!record || !record.result || !record.record) return <Loader />
-
-    window.testailenvaan = record;
 
     const handleAddField = field => (data = { subfields: { a: [""] }, indicators: [" ", " "] }) => e => {
         e.preventDefault();
@@ -58,12 +54,24 @@ const SimpleRecordEditor = ({ updateRecord, record2, __ }) => {
     };
 
     const handleChangeYear = e => {
-        // TODO: Fix
         const edited = record.record.FIELDS["008"][0].split("");
-        console.log("!!!!!!!!!!!!", e.target.value, [...(e.target.value), ...new Array(Math.max(0, 4 - e.target.value.length)).fill(" ")]);
-        edited.splice(7, 4, ...[...(e.target.value), ...new Array(Math.max(0, 4 - e.target.value.length)).fill(" ")]);
+        const newYear = e.target.value + "    ";
+        console.log("new year", newYear);
+        for (let i = 0; i < newYear.length; i++) {
+            edited[7 + i] = newYear[i];
+        }
+        console.log("after editing new year", newYear);
         record.record.FIELDS["008"][0] = edited.join("");
-        setRecord({ ...record });
+        setRecord({
+            ...record,
+            record: {
+                ...record.record,
+                FIELDS: {
+                    ...record.record.FIELDS,
+                    ["008"]: [edited.join("")]
+                }
+            }
+        });
     };
 
     const handleUpdateRecord = () => {
@@ -93,11 +101,11 @@ const SimpleRecordEditor = ({ updateRecord, record2, __ }) => {
 
             <div>
                 {__("Year")}
-                <input type="number" placeholder="year" maxLength="4"
+                <input type="text" placeholder="year" maxLength="4"
                     onChange={handleChangeYear}
                     value={record.record.FIELDS["008"] &&
                         record.record.FIELDS["008"][0] &&
-                        record.record.FIELDS["008"][0].substring(7, 11)}
+                        record.record.FIELDS["008"][0].substring(7, 11).trimEnd()}
                 />
             </div>
 
