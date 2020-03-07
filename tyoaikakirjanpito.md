@@ -59,7 +59,6 @@
 | 25.12. | 1,5 | tilastohakua, yksinkertaista muokkainta |
 | 27.12. | 4 | sekalaista korjailua ja lisäilyä (yksinkertaista muokkainta, hyllyjä, ulkoasua) |
 | 31.12. | 1,5 | sekalaista korjailua |
-|  !! | 2020 | !! |
 | 3.1. | 2,5 | ulkosasun viimeistely, kääntämistä |
 | 4.1. | 4 | backendin testejä |
 | 11.1. | 2,5 | skriptejä, käännöksiä, korjailua |
@@ -82,4 +81,5 @@
 | 28.2. | 4,5 | arvostelujen ja E2E-testien jatkaminen |
 | 29.2. | 4 | E2E-testien jatkaminen, korjauksia |
 | 3.3. | 1,5 | E2E-testejä |
-| yht. | 173 | |
+| 8.3. - 9.3. | 4,5 | E2E-testit loppuun, ohjeiden ja dokumentaation päivittäminen |
+| yht. | 177,5 | VALMIS |
