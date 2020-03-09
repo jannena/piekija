@@ -2,7 +2,7 @@
 1. Suorita komento **npm install**.
 2. Suorita komento  **npm run piekija:install**. (Asennusohjelma kysyy MongoDB-tietokantaosoitteen (esim. *mongodb+srv://kayttaja:salasana@localhost:27017/piekija?retryWrites=true&w=majority*) ja luo tietokantaan ensimmäisen käyttäjän.)
 3. Suorita komento **npm run build**.
-4. (Mikäli backend toimii eri ositteessa kuin frontend, tiedostoon *client/globals.js* tulee muuttujaan baseUrl asettaa backendin URL-osoite. Tällöin on huomattava, että frontend sijaitsee hakemistossa *server/build*. Muutoin tätä vaihetta ei tarvita.)
+4. (Mikäli backend toimii eri ositteessa kuin frontend, tiedostoon *client/globals.js* tulee muuttujiin baseUrl (muotoa //osoite.fi/api) ja wsBaseUrl (muotoa //osoite.fi/) muuttaa backendin URL-osoite. Tällöin on huomattava, että frontend sijaitsee hakemistossa *server/build*. Muutoin tätä vaihetta ei tarvita.)
 5. Järjestelmä käynnistyy komennolla **npm start** oletuksena porttiin 3000.
 
 Mahdollisten päivitysten jälkeen tulee suorittaa komento **npm run update:records**, joka jäsentää kaikki MARC21-koodit tietokantaan uudelleen.

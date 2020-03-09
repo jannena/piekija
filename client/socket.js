@@ -1,10 +1,11 @@
 import openSocket from "socket.io-client";
+import { wsBaseUrl } from "./globals";
 
-let io = openSocket(`//${location.hostname}:3001`);
+const io = openSocket(wsBaseUrl);
 export default io;
 
 export const startWS = () => {
-    console.log("[SIO] Connect to", `//${location.hostname}:3001`);
+    console.log("[SIO] Connect to", wsBaseUrl);
     // io = openSocket(`//${location.hostname}:3001`);
 };
 
