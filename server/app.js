@@ -66,6 +66,10 @@ console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 if (process.env.NODE_ENV === "development") app.use("/debug", E2EtestRouter);
 
 // Frontend
+app.use("/robots.txt", (req, res) => {
+    res.type("text/plain").send(`User-agent: *
+Disallow: /`);
+});
 app.use("/docs/img", express.static(path.join(__dirname, "build", "img")));
 app.use("/docs/docs.js", (req, res) => res.sendFile(path.resolve(__dirname, "build/docs/docs.js")));
 app.get("/docs", (req, res) => res.sendFile(path.resolve(__dirname, "build/docs/index.html")));
